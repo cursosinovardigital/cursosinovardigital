@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inovar Digital | Onde o seu negócio digital acontece</title>
+    
+    <meta name="description" content="A maior plataforma de estratégias digitais. Aprenda a vender no automático e dominar o meio de funil.">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --hot-orange: #ff4000;
+            --hot-bg: #f5f3ef;
+            --text-dark: #053d4e;
+            --white: #ffffff;
+        }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--hot-bg); 
+            color: var(--text-dark); 
+            margin: 0; 
+            overflow-x: hidden;
+        }
+
+        /* HEADER LITERAL HOTMART */
+        header {
+            background: var(--white);
+            padding: 12px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .logo { font-weight: 900; font-size: 1.5rem; color: var(--hot-orange); cursor: pointer; }
+        .logo span { color: #000; }
+
+        nav.top-menu { display: flex; gap: 25px; align-items: center; }
+        nav.top-menu a { 
+            text-decoration: none; 
+            color: var(--text-dark); 
+            font-weight: 500; 
+            font-size: 0.95rem;
+            transition: 0.2s;
+        }
+        nav.top-menu a:hover { color: var(--hot-orange); }
+
+        .auth-buttons { display: flex; gap: 15px; align-items: center; }
+        .btn-login { color: var(--hot-orange); text-decoration: none; font-weight: 600; padding: 10px 20px; border: 1px solid #ddd; border-radius: 8px; }
+        .btn-signup { background: var(--hot-orange); color: var(--white); text-decoration: none; font-weight: 700; padding: 12px 24px; border-radius: 8px; transition: 0.3s; }
+        .btn-signup:hover { transform: scale(1.05); filter: brightness(1.1); }
+
+        /* HERO SECTION FLUIDA */
+        .hero {
+            padding: 80px 6%;
+            display: flex;
+            align-items: center;
+            background: var(--white);
+            gap: 40px;
+        }
+        .hero-text { flex: 1; }
+        .hero-text h1 { font-size: 3.5rem; font-weight: 900; line-height: 1.1; margin-bottom: 25px; color: #000; }
+        .hero-text h1 span { color: var(--hot-orange); }
+        .hero-text p { font-size: 1.2rem; color: #4b5563; margin-bottom: 35px; max-width: 500px; }
+
+        .hero-image { flex: 1; text-align: right; }
+        .hero-image img { width: 100%; max-width: 550px; border-radius: 20px; }
+
+        /* GRID DE MATÉRIAS (BLOG) */
+        .content-section { padding: 80px 6%; }
+        .section-header { margin-bottom: 40px; text-align: center; }
+        .section-header h2 { font-size: 2.2rem; font-weight: 900; }
+
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+            transition: 0.4s;
+            text-decoration: none;
+            color: inherit;
+            border: 1px solid transparent;
+        }
+        .card:hover { transform: translateY(-10px); border-color: var(--hot-orange); }
+        
+        .card-img { width: 100%; height: 220px; background: #eee; overflow: hidden; position: relative; }
+        .card-img img { width: 100%; height: 100%; object-fit: cover; }
+        .card-tag { position: absolute; top: 20px; left: 20px; background: var(--hot-orange); color: #fff; padding: 5px 15px; border-radius: 50px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; }
+
+        .card-body { padding: 30px; }
+        .card-body h3 { font-size: 1.4rem; margin: 0 0 15px; font-weight: 800; line-height: 1.2; }
+        .card-body p { color: #6b7280; font-size: 0.95rem; margin-bottom: 20px; }
+
+        /* FOOTER / COOKIES */
+        .cookie-bar {
+            position: fixed; bottom: 0; width: 100%; background: #fff;
+            padding: 15px 6%; display: flex; justify-content: space-between;
+            align-items: center; border-top: 4px solid #000; z-index: 2000;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
+        }
+        .btn-ok { background: #4f46e5; color: #fff; border: none; padding: 10px 30px; border-radius: 5px; font-weight: 700; cursor: pointer; }
+
+        @media (max-width: 900px) {
+            .hero { flex-direction: column; text-align: center; }
+            .hero-text h1 { font-size: 2.5rem; }
+            nav.top-menu { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">inovar<span>digital</span></div>
+        <nav class="top-menu">
+            <a href="#">Produtos</a>
+            <a href="#">Soluções</a>
+            <a href="https://cursosinovardigital.github.io/lowticketlucrativo/blog">Blog</a>
+            <a href="#">Ajuda</a>
+        </nav>
+        <div class="auth-buttons">
+            <a href="#" class="btn-login">Entrar</a>
+            <a href="#" class="btn-signup">Comece gratuitamente</a>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-text">
+            <h1>Cresça ao lado <span>dos melhores.</span></h1>
+            <p>Acesse o ecossistema completo para criar, gerenciar e vender seus produtos digitais em 2026.</p>
+            <a href="#" class="btn-signup" style="padding: 18px 40px; font-size: 1.1rem;">Quero começar agora</a>
+        </div>
+        <div class="hero-image">
+            <img src="https://hotmart.com/static/app-hotmart-next/images/monks-home/yoga.webp" alt="Inovar Digital Hero">
+        </div>
+    </section>
+
+    <section class="content-section">
+        <div class="section-header">
+            <h2>Explore nossas <span>Matérias</span></h2>
+            <p>Conteúdo de alto nível para quem quer dominar o mercado.</p>
+        </div>
+
+        <div class="articles-grid">
+            <a href="https://cursosinovardigital.github.io/lowticketlucrativo/blog" class="card">
+                <div class="card-img">
+                    <span class="card-tag">Estratégia</span>
+                    <img src="produto1.jpg" alt="Low Ticket">
+                </div>
+                <div class="card-body">
+                    <h3>Como vender infoprodutos todos os dias no automático</h3>
+                    <p>Descubra como estruturar seu funil de Low Ticket para faturar R$ 63 mil em tempo recorde...</p>
+                    <strong style="color: var(--hot-orange)">Ler agora →</strong>
+                </div>
+            </a>
+
+            <a href="#" class="card">
+                <div class="card-img">
+                    <span class="card-tag">Inovação</span>
+                    <img src="https://hotmart.com/static/app-hotmart-next/images/monks-home/boost-sales/1-desk.webp" alt="IA Business">
+                </div>
+                <div class="card-body">
+                    <h3>5 IAs que estão mudando o jogo dos infoprodutos</h3>
+                    <p>Do atendimento ao cliente à cópia de anúncios: veja quais ferramentas utilizar para escalar sua operação...</p>
+                    <strong style="color: var(--hot-orange)">Ler agora →</strong>
+                </div>
+            </a>
+
+            <a href="#" class="card">
+                <div class="card-img">
+                    <span class="card-tag">Arbitragem</span>
+                    <div style="background: #053d4e; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 4rem;">📉</div>
+                </div>
+                <div class="card-body">
+                    <h3>O oceano azul do Meio de Funil</h3>
+                    <p>Por que vender produtos com menor concorrência no Google Search é a estratégia mais lucrativa de 2026...</p>
+                    <strong style="color: var(--hot-orange)">Ler agora →</strong>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <div class="cookie-bar" id="cookieBar">
+        <p style="font-size: 0.85rem; color: #666; margin: 0;">Em nosso site, você encontra mais informações sobre o que são cookies e como os utilizamos para que o seu negócio aconteça.</p>
+        <button class="btn-ok" onclick="document.getElementById('cookieBar').style.display='none'">OK</button>
+    </div>
+
+    <footer style="padding: 60px; text-align: center; background: #000; color: #fff; font-size: 0.8rem;">
+        Inovar Digital © 2026 - Víctor Trivinho | Guarulhos, SP - Todos os direitos reservados.
+    </footer>
+
+</body>
+</html>
