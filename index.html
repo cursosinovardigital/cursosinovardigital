@@ -4,9 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inovar Digital | Onde o seu negócio digital acontece</title>
-    
-    <meta name="description" content="A maior plataforma de estratégias digitais. Aprenda a vender no automático e dominar o meio de funil.">
-    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -38,75 +35,69 @@
             border-bottom: 1px solid #e5e7eb;
         }
 
-        .logo { font-weight: 900; font-size: 1.6rem; color: var(--hot-orange); letter-spacing: -1px; }
-        .logo span { color: #000; }
+        .logo { font-weight: 900; font-size: 1.6rem; color: #000; letter-spacing: -1px; }
+        .logo span { color: var(--hot-orange); }
 
         nav.top-menu { display: flex; gap: 30px; align-items: center; }
-        nav.top-menu a { 
-            text-decoration: none; 
-            color: var(--text-dark); 
-            font-weight: 500; 
-            font-size: 0.95rem;
-        }
+        nav.top-menu a { text-decoration: none; color: var(--text-dark); font-weight: 500; font-size: 0.95rem; }
 
         .auth-buttons { display: flex; gap: 15px; }
-        .btn-login { 
-            color: var(--text-dark); 
-            text-decoration: none; 
-            font-weight: 600; 
-            padding: 10px 25px; 
-            border: 1px solid #d1d5db; 
-            border-radius: 8px;
-            font-size: 0.9rem;
-        }
-        .btn-signup { 
-            background: var(--hot-orange); 
-            color: var(--white); 
-            text-decoration: none; 
-            font-weight: 700; 
-            padding: 12px 28px; 
-            border-radius: 8px; 
-            font-size: 0.9rem;
-        }
+        .btn-login { color: var(--text-dark); text-decoration: none; font-weight: 600; padding: 10px 25px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 0.9rem; }
+        .btn-signup { background: var(--hot-orange); color: var(--white); text-decoration: none; font-weight: 700; padding: 12px 28px; border-radius: 8px; font-size: 0.9rem; }
 
-        /* HERO SECTION - AJUSTE DE ALINHAMENTO */
+        /* HERO - ALINHAMENTO MILIMÉTRICO AO TOPO */
         .hero {
-            padding: 100px 8%;
+            padding: 60px 8% 80px; /* Reduzi o padding superior para alinhar melhor */
             display: flex;
-            align-items: center;
+            align-items: flex-start; /* FORÇA O ALINHAMENTO AO TOPO */
             background: var(--white);
             gap: 60px;
-            min-height: 500px;
         }
-        .hero-text { flex: 1; text-align: left; }
+
+        .hero-text { 
+            flex: 1.2; 
+            text-align: left;
+            padding-top: 10px; /* Ajuste fino para alinhar com a curva da imagem */
+        }
+
         .hero-text h1 { 
             font-size: 4.2rem; 
             font-weight: 900; 
-            line-height: 1.05; 
+            line-height: 1.0; 
             margin: 0 0 25px 0; 
             color: #000; 
-            letter-spacing: -2px;
+            letter-spacing: -3px;
         }
+
         .hero-text h1 span { color: var(--hot-orange); }
+
         .hero-text p { 
             font-size: 1.3rem; 
             color: #4b5563; 
             margin-bottom: 40px; 
-            line-height: 1.5;
-            max-width: 550px;
+            line-height: 1.4;
+            max-width: 500px;
         }
 
-        .hero-image { flex: 1; display: flex; justify-content: flex-end; }
+        .hero-image { 
+            flex: 0.8; 
+            display: flex; 
+            justify-content: flex-end;
+        }
+
         .hero-image img { 
             width: 100%; 
-            max-width: 520px; 
-            border-radius: 32px; 
-            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+            max-width: 460px; /* Diminuída para enquadrar perfeitamente */
+            height: 460px; /* Fixei a altura para permitir o recorte fluido */
+            border-radius: 40px; 
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            object-fit: cover; /* Recorta a imagem para caber no quadrado sem distorcer */
+            object-position: center;
         }
 
-        /* GRID DE MATÉRIAS */
+        /* SEÇÃO DE MATÉRIAS */
         .content-section { padding: 80px 8%; }
-        .section-header { margin-bottom: 50px; text-align: left; }
+        .section-header { margin-bottom: 50px; }
         .section-header h2 { font-size: 2.5rem; font-weight: 900; letter-spacing: -1px; }
 
         .articles-grid {
@@ -124,7 +115,7 @@
             text-decoration: none;
             color: inherit;
         }
-        .card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
+        .card:hover { transform: translateY(-8px); border: 1px solid var(--hot-orange); }
         
         .card-img { width: 100%; height: 200px; background: #eee; position: relative; }
         .card-img img { width: 100%; height: 100%; object-fit: cover; }
@@ -137,24 +128,22 @@
 
         .card-body { padding: 30px; }
         .card-body h3 { font-size: 1.3rem; margin: 0 0 15px; font-weight: 800; line-height: 1.3; color: #000; }
-        .card-body p { color: #6b7280; font-size: 1rem; line-height: 1.5; margin-bottom: 20px; }
+        .card-body p { color: #6b7280; font-size: 1rem; line-height: 1.5; }
 
         /* COOKIE BAR */
         .cookie-bar {
-            position: fixed; bottom: 20px; left: 2%; right: 2%; 
+            position: fixed; bottom: 20px; left: 5%; right: 5%; 
             background: var(--white); padding: 20px 40px; 
             display: flex; justify-content: space-between; align-items: center; 
             border-radius: 15px; z-index: 2000;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
             border: 1px solid #e5e7eb;
         }
-        .btn-ok { background: #4f46e5; color: #fff; border: none; padding: 12px 40px; border-radius: 10px; font-weight: 700; cursor: pointer; }
 
         @media (max-width: 1024px) {
-            .hero { flex-direction: column; text-align: center; padding-top: 60px; }
-            .hero-text { text-align: center; }
+            .hero { flex-direction: column; text-align: center; align-items: center; }
             .hero-text h1 { font-size: 3rem; }
-            .hero-image { justify-content: center; }
+            .hero-image img { height: auto; max-width: 100%; }
             nav.top-menu { display: none; }
         }
     </style>
@@ -178,11 +167,11 @@
     <section class="hero">
         <div class="hero-text">
             <h1>Cresça ao lado <span>dos melhores.</span></h1>
-            <p>Acesse o ecossistema completo da <strong>Inovar Digital</strong> para criar, gerenciar e vender seus produtos digitais no automático.</p>
+            <p>Acesse o ecossistema completo para criar, gerenciar e vender seus produtos digitais no automático com a <strong>Inovar Digital</strong>.</p>
             <a href="#" class="btn-signup" style="padding: 18px 50px; font-size: 1.1rem; display: inline-block;">Quero começar agora</a>
         </div>
         <div class="hero-image">
-            <img src="https://hotmart.com/static/app-hotmart-next/images/monks-home/yoga.webp" alt="Estratégias Digitais Inovar">
+            <img src="https://hotmart.com/static/app-hotmart-next/images/monks-home/yoga.webp" alt="Alinhamento Inovar Digital">
         </div>
     </section>
 
@@ -195,49 +184,45 @@
             <a href="https://cursosinovardigital.github.io/lowticketlucrativo/blog" class="card">
                 <div class="card-img">
                     <span class="card-tag">Estratégia</span>
-                    <img src="produto1.jpg" alt="Vendas Low Ticket">
+                    <img src="produto1.jpg" alt="Vendas" onerror="this.style.display='none';">
                 </div>
                 <div class="card-body">
                     <h3>Como vender infoprodutos todos os dias no automático</h3>
-                    <p>Entenda a estrutura de funil que permite escalar vendas sem precisar de audiência ou grandes investimentos.</p>
-                    <strong style="color: var(--hot-orange)">Ler agora →</strong>
+                    <p>Entenda a estrutura de funil que permite escalar vendas sem precisar de audiência.</p>
                 </div>
             </a>
 
             <a href="#" class="card">
                 <div class="card-img">
-                    <span class="card-tag">Inteligência Artificial</span>
-                    <img src="https://hotmart.com/static/app-hotmart-next/images/monks-home/boost-sales/1-desk.webp" alt="IA nos Negócios">
+                    <span class="card-tag">IA</span>
+                    <img src="https://hotmart.com/static/app-hotmart-next/images/monks-home/boost-sales/1-desk.webp" alt="IA">
                 </div>
                 <div class="card-body">
-                    <h3>5 IAs que estão mudando o jogo dos negócios em 2026</h3>
-                    <p>Descubra as ferramentas que as grandes empresas estão usando para automatizar o atendimento e a criação de conteúdo.</p>
-                    <strong style="color: var(--hot-orange)">Ler agora →</strong>
+                    <h3>5 IAs que estão mudando o jogo em 2026</h3>
+                    <p>Ferramentas essenciais para automatizar seu atendimento e criação de conteúdo.</p>
                 </div>
             </a>
 
             <a href="#" class="card">
                 <div class="card-img">
-                    <span class="card-tag">Arbitragem</span>
-                    <div style="background: #053d4e; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 4rem;">📈</div>
+                    <span class="card-tag">Negócios</span>
+                    <div style="background: #053d4e; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 4rem;">📉</div>
                 </div>
                 <div class="card-body">
-                    <h3>O oceano azul do Meio de Funil no Google</h3>
-                    <p>Como encontrar produtos validados com baixa concorrência e lucrar alto através de anúncios de busca.</p>
-                    <strong style="color: var(--hot-orange)">Ler agora →</strong>
+                    <h3>O oceano azul do Meio de Funil</h3>
+                    <p>Como encontrar produtos validados com baixa concorrência e lucrar alto.</p>
                 </div>
             </a>
         </div>
     </section>
 
     <div class="cookie-bar" id="cookieBar">
-        <p style="font-size: 0.9rem; color: #4b5563; max-width: 800px;">Em nosso site, você encontra mais informações sobre o que são cookies e como os utilizamos para que o seu negócio aconteça.</p>
-        <button class="btn-ok" onclick="document.getElementById('cookieBar').style.display='none'">OK</button>
+        <p style="font-size: 0.9rem; color: #4b5563; margin: 0;">Utilizamos cookies para que o seu negócio aconteça.</p>
+        <button onclick="document.getElementById('cookieBar').style.display='none'" style="background: #4f46e5; color: #fff; border: none; padding: 10px 25px; border-radius: 8px; cursor: pointer; font-weight: 700;">OK</button>
     </div>
 
-    <footer style="padding: 80px 8%; text-align: center; background: #000; color: #fff; font-size: 0.85rem;">
-        <p>Inovar Digital © 2026 - Víctor Trivinho | Guarulhos, SP</p>
-        <p style="color: #666; margin-top: 10px;">Todos os direitos reservados.</p>
+    <footer style="padding: 60px; text-align: center; background: #000; color: #fff; font-size: 0.8rem;">
+        Inovar Digital © 2026 - Víctor Trivinho | Guarulhos, SP
     </footer>
 
 </body>
