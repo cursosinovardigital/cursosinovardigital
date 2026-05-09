@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Inovar Digital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --hot-orange: #ff4000;
+            --hot-bg: #f5f3ef;
+            --text-dark: #053d4e;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--hot-bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .login-card {
+            background: #fff;
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .logo { font-weight: 900; font-size: 1.8rem; margin-bottom: 30px; color: #000; }
+        .logo span { color: var(--hot-orange); }
+        
+        h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 10px; }
+        p { color: #6b7280; margin-bottom: 30px; font-size: 0.9rem; }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 15px;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+        .btn-login {
+            width: 100%;
+            background: var(--hot-orange);
+            color: #fff;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-login:hover { filter: brightness(1.1); transform: translateY(-2px); }
+        
+        .footer-links { margin-top: 25px; font-size: 0.85rem; color: #6b7280; }
+        .footer-links a { color: var(--hot-orange); text-decoration: none; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+<div class="login-card">
+    <div class="logo">inovar<span>digital</span></div>
+    <h2>Boas-vindas!</h2>
+    <p>Acesse sua conta para gerenciar seus negócios.</p>
+    
+    <form id="loginForm">
+        <input type="email" id="email" placeholder="E-mail" required>
+        <input type="password" id="password" placeholder="Senha" required>
+        <button type="submit" class="btn-login">Entrar</button>
+    </form>
+
+    <div class="footer-links">
+        Ainda não tem conta? <a href="#">Criar conta</a>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    // Aqui vamos colocar a configuração do Supabase no próximo passo
+</script>
+
+</body>
+</html>
