@@ -223,7 +223,12 @@
                 <div style="width: 250px;"><select class="search-input" style="padding-left: 15px;"><option>Todos os produtos</option></select></div>
                 <button class="btn-primary" style="background: #FFF; color: #4A5568; border: 1px solid var(--border);"><i class="fas fa-filter"></i> Filtros</button>
             </div>
-            <div class="table-container"><table><thead><tr><th>NOME DO AFILIADO</th><th>PRODUTO</th><th>DATA DE AFILIAÇÃO</th><th>COMISSÃO</th><th>VENDAS</th><th>AÇÕES</th></tr></thead><tbody><tr><td colspan="6" style="text-align: center; padding: 60px; color: #A0AEC0;"><i class="fas fa-users" style="font-size: 40px; margin-bottom: 15px; display: block;"></i>Nenhum afiliado encontrado</td></tr></tbody></table></div>
+            <div class="table-container">
+                <table>
+                    <thead><tr><th>NOME</th><th>PRODUTO</th><th>LINK ÚNICO</th><th>VENDAS</th><th>AÇÕES</th></tr></thead>
+                    <tbody id="lista-afiliados-body"></tbody>
+                </table>
+            </div>
         </section>
 
         <section id="aba-assin" class="aba-section">
@@ -412,7 +417,44 @@
         }
     }
 
-    // --- VENDAS & DASHBOARD ---
+    // --- AFILIADOS ---
+    async function carregarAfiliados() {
+        const { data, error } = await _supabase.from('afiliados').select('*, produtos(nome)');
+        if(error || !data) return;
+        const body = document.getElementById('lista-afiliados-body');
+        if (data.length === 0) {
+            body.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 60px; color: #A0AEC0;"><i class="fas fa-users" style="font-size: 40px; margin-bottom: 15px; display: block;"></i>Nenhum afiliado encontrado</td></tr>`;
+        } else {
+            body.innerHTML = data.map(a => `
+                <tr>
+                    <td style="font-weight:700">${a.nome}</td>
+                    <td>${a.produtos?.nome || 'Global'}</td>
+                    <td><input type="text" readonly class="search-input" style="padding:5px; font-size:11px; width:200px" value="${a.link_afiliado || 'Pendente'}"></td>
+                    <td>${a.vendas_realizadas}</td>
+                    <td><i class="fas fa-ellipsis-v" style="cursor:pointer"></i></td>
+                </tr>`).join('');
+        }
+    }
+
+    // --- FINANCEIRO & DASHBOARD ---
+    async function solicitarSaque() {
+        const saldoTxt = document.getElementById('fin-disponivel').innerText.replace('R$ ', '').replace(',', '.');
+        const saldoDisponivel = parseFloat(saldoTxt);
+        if (saldoDisponivel <= 0) { alert("Sem saldo disponível."); return; }
+        const valorSaque = prompt("Digite o valor para saque:");
+        if (!valorSaque || parseFloat(valorSaque) > saldoDisponivel) { alert("Valor inválido."); return; }
+        const chavePix = prompt("Digite sua chave PIX:");
+        if (chavePix) {
+            const { error } = await _supabase.from('saques').insert([{ valor: parseFloat(valorSaque), chave_pix: chavePix, status: 'Pendente' }]);
+            if (!error) { alert("Saque solicitado!"); carregarHistoricoSaques(); }
+        }
+    }
+
+    async function carregarHistoricoSaques() {
+        const { data } = await _supabase.from('saques').select('*').order('created_at', { ascending: false });
+        if (data) document.getElementById('lista-saques-body').innerHTML = data.map(s => `<tr><td>${new Date(s.created_at).toLocaleDateString()}</td><td>R$ ${s.valor.toFixed(2)}</td><td>${s.status}</td></tr>`).join('');
+    }
+
     async function simularVenda(prodId, preco) {
         const comissao = preco * 0.10;
         await _supabase.from('vendas').insert([{ produto_id: prodId, valor_total: preco, comissao_maestro: comissao, valor_liquido: preco - comissao, status: 'Paga' }]);
@@ -439,25 +481,6 @@
         }
     }
 
-    // --- SAQUES ---
-    async function solicitarSaque() {
-        const saldoTxt = document.getElementById('fin-disponivel').innerText.replace('R$ ', '').replace(',', '.');
-        const saldoDisponivel = parseFloat(saldoTxt);
-        if (saldoDisponivel <= 0) { alert("Sem saldo disponível."); return; }
-        const valorSaque = prompt("Digite o valor para saque:");
-        if (!valorSaque || parseFloat(valorSaque) > saldoDisponivel) { alert("Valor inválido."); return; }
-        const chavePix = prompt("Digite sua chave PIX:");
-        if (chavePix) {
-            const { error } = await _supabase.from('saques').insert([{ valor: parseFloat(valorSaque), chave_pix: chavePix, status: 'Pendente' }]);
-            if (!error) { alert("Saque solicitado!"); carregarHistoricoSaques(); }
-        }
-    }
-
-    async function carregarHistoricoSaques() {
-        const { data } = await _supabase.from('saques').select('*').order('created_at', { ascending: false });
-        if (data) document.getElementById('lista-saques-body').innerHTML = data.map(s => `<tr><td>${new Date(s.created_at).toLocaleDateString()}</td><td>R$ ${s.valor.toFixed(2)}</td><td>${s.status}</td></tr>`).join('');
-    }
-
     // --- NAVEGAÇÃO ---
     function nav(id, el) {
         document.querySelectorAll('.aba-section').forEach(s => s.classList.remove('active'));
@@ -466,6 +489,7 @@
         el.classList.add('active');
         document.getElementById('header-path').innerHTML = `<strong>Maestro Console</strong> / ${el.innerText.trim()}`;
         if(id === 'prod') carregarProdutos();
+        if(id === 'afiliados') carregarAfiliados();
         if(id === 'dash' || id === 'vendas' || id === 'finan') carregarDadosDashboard();
         if(id === 'finan') carregarHistoricoSaques();
     }
