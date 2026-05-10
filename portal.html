@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inovar Digital | Gestão de Cursos</title>
+    <title>Inovar Digital | Portal</title>
     <script src="https://sdk.mercadopago.com/js/v2"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -11,27 +11,25 @@
         :root { --primary: #FF6600; --bg: #ffffff; --sidebar: #f8f9fa; --text: #333; --border: #e9ecef; }
         body { font-family: 'Inter', sans-serif; background: #f4f7f6; color: var(--text); margin: 0; display: flex; height: 100vh; }
         
+        /* Menu Lateral */
         nav { width: 260px; background: var(--sidebar); display: flex; flex-direction: column; padding: 25px; border-right: 1px solid var(--border); }
         .logo { font-size: 24px; font-weight: 800; color: var(--primary); margin-bottom: 40px; }
         nav button { background: none; border: none; color: #666; padding: 12px 15px; text-align: left; font-size: 15px; cursor: pointer; border-radius: 10px; margin-bottom: 8px; font-weight: 500; transition: 0.2s; }
         nav button:hover, nav button.active { background: #fff; color: var(--primary); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
 
+        /* Principal */
         main { flex: 1; overflow-y: auto; padding: 40px; }
         .aba { display: none; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
         
-        /* Grid e Cards */
-        .grid-cursos { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
-        .card { background: #fff; border-radius: 16px; border: 1px solid var(--border); padding: 20px; transition: 0.3s; }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
-        
+        /* Cards */
+        .card { background: #fff; border-radius: 15px; border: 1px solid var(--border); padding: 20px; transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
         .btn-acao { background: var(--primary); color: #fff; border: none; padding: 12px; width: 100%; border-radius: 10px; font-weight: 700; cursor: pointer; margin-top: 10px; }
         .btn-outline { background: none; border: 1px solid var(--primary); color: var(--primary); padding: 10px; width: 100%; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 5px; }
 
-        /* Gestor de Aulas */
-        .gestor-aulas { background: #fff; padding: 30px; border-radius: 20px; border: 1px solid var(--border); }
-        .aula-item { display: flex; justify-content: space-between; padding: 15px; border-bottom: 1px solid #eee; }
-        
-        input, textarea { width: 100%; border: 1px solid var(--border); padding: 12px; border-radius: 8px; margin-top: 8px; margin-bottom: 15px; box-sizing: border-box; }
+        /* Player */
+        #player-modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:999; justify-content:center; align-items:center; flex-direction:column; color:white; }
     </style>
 </head>
 <body>
@@ -45,62 +43,66 @@
 
 <main>
     <section id="aba-vitrine" class="aba" style="display: block;">
-        <h2>Marketplace</h2>
-        <div id="lista-vitrine" class="grid-cursos"></div>
+        <h2>Explorar Cursos</h2>
+        <div id="lista-vitrine" class="grid">Carregando marketplace...</div>
     </section>
 
     <section id="aba-aluno" class="aba">
-        <h2>Meus Cursos</h2>
-        <div id="lista-aluno" class="grid-cursos"></div>
+        <h2>Meus Cursos Comprados</h2>
+        <div id="lista-aluno" class="grid">Nenhum curso adquirido ainda.</div>
     </section>
 
     <section id="aba-produtor" class="aba">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
             <h2>Seus Produtos</h2>
-            <button class="btn-acao" style="width: auto; padding: 10px 20px;" onclick="document.getElementById('modal-novo').style.display='block'">+ Novo Curso</button>
+            <button class="btn-acao" style="width:auto; padding:10px 20px;" onclick="abrirModalNovo()">+ Novo Curso</button>
         </div>
-        <div id="lista-produtos-gestao" class="grid-cursos" style="margin-top: 20px;"></div>
+        <div id="lista-produtor" class="grid" style="margin-top:20px;"></div>
     </section>
 
-    <section id="aba-gestor-conteudo" class="aba">
-        <button onclick="mudarAba('produtor', document.querySelector('nav button:nth-child(4)'))" style="border:none; background:none; cursor:pointer; color: var(--primary); font-weight:bold;"><i class="fas fa-arrow-left"></i> Voltar aos Produtos</button>
-        <h2 id="nome-curso-gestao">Gerenciando Aulas</h2>
-        
-        <div class="gestor-aulas">
+    <section id="aba-aulas" class="aba">
+        <button onclick="mudarAba('produtor')" style="border:none; background:none; color:var(--primary); cursor:pointer; font-weight:bold;"><i class="fas fa-arrow-left"></i> Voltar</button>
+        <h2 id="gestao-titulo-curso">Gerenciando Aulas</h2>
+        <div class="card">
             <h4>Adicionar Nova Aula</h4>
-            <input type="text" id="aula-titulo" placeholder="Título da Aula">
-            <input type="text" id="aula-url" placeholder="Link do Vídeo (YouTube/Vimeo)">
-            <button class="btn-acao" onclick="salvarAula()">Adicionar Aula ao Curso</button>
-            <hr>
-            <h4>Aulas Cadastradas</h4>
-            <div id="lista-aulas-gestao"></div>
+            <input type="text" id="aula-titulo" placeholder="Título da Aula" style="width:100%; padding:10px; margin-bottom:10px; border-radius:5px; border:1px solid #ddd;">
+            <input type="text" id="aula-url" placeholder="URL do Vídeo (YouTube)" style="width:100%; padding:10px; margin-bottom:10px; border-radius:5px; border:1px solid #ddd;">
+            <button class="btn-acao" onclick="salvarAula()">Salvar Aula no Curso</button>
         </div>
+        <div id="lista-aulas" style="margin-top:20px;"></div>
     </section>
 </main>
 
-<div id="modal-novo" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:100;">
-    <div style="background:#fff; width:400px; margin: 100px auto; padding:30px; border-radius:20px;">
-        <h3>Criar Novo Produto</h3>
-        <input type="text" id="new-nome" placeholder="Nome do Curso">
-        <input type="number" id="new-preco" placeholder="Preço R$">
-        <textarea id="new-desc" placeholder="Descrição"></textarea>
-        <button class="btn-acao" onclick="criarCurso()">Publicar Curso</button>
-        <button class="btn-outline" onclick="document.getElementById('modal-novo').style.display='none'">Cancelar</button>
+<div id="modal-novo" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000;">
+    <div style="background:white; width:400px; margin:100px auto; padding:30px; border-radius:20px;">
+        <h3>Cadastrar Produto</h3>
+        <input type="text" id="c-nome" placeholder="Nome do Curso" style="width:100%; margin-bottom:10px; padding:10px;">
+        <input type="number" id="c-preco" placeholder="Preço R$" style="width:100%; margin-bottom:10px; padding:10px;">
+        <textarea id="c-desc" placeholder="Descrição curta" style="width:100%; margin-bottom:10px; padding:10px;"></textarea>
+        <button class="btn-acao" onclick="criarCurso()">Criar Curso</button>
+        <button class="btn-outline" onclick="this.parentElement.parentElement.style.display='none'">Cancelar</button>
     </div>
 </div>
 
+<div id="player-modal" onclick="fecharPlayer()">
+    <div id="video-frame" style="width:80%; max-width:800px; background:black; border-radius:15px; overflow:hidden;"></div>
+    <p>Clique fora para fechar</p>
+</div>
+
 <script>
+    const mp = new MercadoPago('APP_USR-50665ab5-8c5c-4b1b-9f9b-2e708b8fbb50');
     let cursoAtivoId = null;
 
     function mudarAba(aba, btn) {
-        document.querySelectorAll('.aba').forEach(s => s.style.display = 'none');
+        document.querySelectorAll('.aba').forEach(a => a.style.display = 'none');
         document.getElementById('aba-' + aba).style.display = 'block';
         if(btn) {
             document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
         }
         if(aba === 'vitrine') carregarVitrine();
-        if(aba === 'produtor') carregarGestaoProdutos();
+        if(aba === 'produtor') carregarProdutor();
+        if(aba === 'aluno') carregarAluno();
     }
 
     async function carregarVitrine() {
@@ -115,50 +117,59 @@
         `).join('');
     }
 
-    async function carregarGestaoProdutos() {
+    async function carregarProdutor() {
         const { data } = await _supabase.from('cursos_disponiveis').select('*');
-        document.getElementById('lista-produtos-gestao').innerHTML = data.map(c => `
+        document.getElementById('lista-produtor').innerHTML = data.map(c => `
             <div class="card">
                 <h3>${c.nome}</h3>
-                <button class="btn-outline" onclick="abrirGestorConteudo('${c.id}', '${c.nome}')">Gerenciar Aulas</button>
-                <button class="btn-outline" style="border-color: #ddd; color: #666;">Editar Preço</button>
+                <button class="btn-outline" onclick="gerenciarAulas('${c.id}', '${c.nome}')">Gerenciar Aulas</button>
             </div>
         `).join('');
     }
 
-    function abrirGestorConteudo(id, nome) {
+    async function gerenciarAulas(id, nome) {
         cursoAtivoId = id;
-        document.getElementById('nome-curso-gestao').innerText = "Gerenciando: " + nome;
-        mudarAba('gestor-conteudo');
-        carregarAulasDoCurso();
+        document.getElementById('gestao-titulo-curso').innerText = "Aulas de: " + nome;
+        mudarAba('aulas');
+        carregarListaAulas();
     }
 
-    async function carregarAulasDoCurso() {
-        const { data } = await _supabase.from('aulas').select('*').eq('curso_id', cursoAtivoId).order('ordem');
-        document.getElementById('lista-aulas-gestao').innerHTML = data.map(a => `
-            <div class="aula-item">
-                <span><i class="fas fa-video"></i> ${a.titulo}</span>
-                <button onclick="deletarAula('${a.id}')" style="color:red; border:none; background:none; cursor:pointer;"><i class="fas fa-trash"></i></button>
+    async function carregarListaAulas() {
+        const { data } = await _supabase.from('aulas').select('*').eq('curso_id', cursoAtivoId);
+        document.getElementById('lista-aulas').innerHTML = data.map(a => `
+            <div class="card" style="margin-bottom:10px; display:flex; justify-content:space-between;">
+                <span>${a.titulo}</span>
+                <button onclick="verAula('${a.video_url}')" style="border:none; background:none; color:blue; cursor:pointer;">Testar Vídeo</button>
             </div>
         `).join('');
     }
 
     async function salvarAula() {
         const titulo = document.getElementById('aula-titulo').value;
-        const video_url = document.getElementById('aula-url').value;
-        await _supabase.from('aulas').insert([{ curso_id: cursoAtivoId, titulo, video_url }]);
-        alert("Aula adicionada!");
-        carregarAulasDoCurso();
+        const url = document.getElementById('aula-url').value;
+        await _supabase.from('aulas').insert([{ curso_id: cursoAtivoId, titulo, video_url: url }]);
+        alert("Aula salva!");
+        carregarListaAulas();
     }
 
     async function criarCurso() {
-        const nome = document.getElementById('new-nome').value;
-        const preco = document.getElementById('new-preco').value;
-        const descricao = document.getElementById('new-desc').value;
+        const nome = document.getElementById('c-nome').value;
+        const preco = document.getElementById('c-preco').value;
+        const descricao = document.getElementById('c-desc').value;
         await _supabase.from('cursos_disponiveis').insert([{ nome, preco, descricao }]);
-        document.getElementById('modal-novo').style.display = 'none';
-        carregarGestaoProdutos();
+        alert("Curso Criado!");
+        document.getElementById('modal-novo').style.display='none';
+        carregarProdutor();
     }
+
+    function verAula(url) {
+        const id = url.split('v=')[1] || url.split('/').pop();
+        document.getElementById('video-frame').innerHTML = `<iframe width="100%" height="450" src="https://www.youtube.com/embed/${id}" frameborder="0" allowfullscreen></iframe>`;
+        document.getElementById('player-modal').style.display = 'flex';
+    }
+
+    function fecharPlayer() { document.getElementById('player-modal').style.display = 'none'; }
+    function abrirModalNovo() { document.getElementById('modal-novo').style.display = 'block'; }
 
     carregarVitrine();
 </script>
