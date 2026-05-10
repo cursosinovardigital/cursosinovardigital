@@ -3,191 +3,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inovar Digital | Dashboard</title>
+    <title>Inovar Digital | Gestão de Cursos</title>
     <script src="https://sdk.mercadopago.com/js/v2"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root {
-            --primary: #FF6600; /* Laranja Inovar */
-            --bg: #ffffff;
-            --sidebar: #f8f9fa;
-            --text: #333;
-            --border: #e9ecef;
-        }
-
+        :root { --primary: #FF6600; --bg: #ffffff; --sidebar: #f8f9fa; --text: #333; --border: #e9ecef; }
         body { font-family: 'Inter', sans-serif; background: #f4f7f6; color: var(--text); margin: 0; display: flex; height: 100vh; }
         
-        /* Menu Lateral */
-        nav { width: 250px; background: var(--sidebar); display: flex; flex-direction: column; padding: 25px; border-right: 1px solid var(--border); }
-        .logo { font-size: 24px; font-weight: 800; color: var(--primary); margin-bottom: 50px; letter-spacing: -1px; }
-        nav button { 
-            background: none; border: none; color: #666; padding: 12px 15px; text-align: left; 
-            font-size: 15px; cursor: pointer; border-radius: 10px; transition: 0.2s; margin-bottom: 8px; font-weight: 500;
-        }
-        nav button i { margin-right: 12px; width: 20px; }
+        nav { width: 260px; background: var(--sidebar); display: flex; flex-direction: column; padding: 25px; border-right: 1px solid var(--border); }
+        .logo { font-size: 24px; font-weight: 800; color: var(--primary); margin-bottom: 40px; }
+        nav button { background: none; border: none; color: #666; padding: 12px 15px; text-align: left; font-size: 15px; cursor: pointer; border-radius: 10px; margin-bottom: 8px; font-weight: 500; transition: 0.2s; }
         nav button:hover, nav button.active { background: #fff; color: var(--primary); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
 
-        /* Conteúdo Principal */
         main { flex: 1; overflow-y: auto; padding: 40px; }
-        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
-        h2 { font-weight: 700; color: #111; }
+        .aba { display: none; }
         
-        /* Cards Estilo Kiwify */
-        .grid-cursos { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; }
-        .card { 
-            background: #fff; border-radius: 16px; overflow: hidden; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid var(--border); transition: 0.3s;
-        }
-        .card:hover { transform: translateY(-5px); border-color: var(--primary); }
-        .card-img { height: 180px; background: #eee; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-        .card-img i { font-size: 50px; color: #ccc; }
-        .card-body { padding: 25px; }
-        .card h3 { margin: 0 0 10px; font-size: 18px; color: #111; }
-        .card p { color: #777; font-size: 14px; line-height: 1.5; margin-bottom: 20px; }
+        /* Grid e Cards */
+        .grid-cursos { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
+        .card { background: #fff; border-radius: 16px; border: 1px solid var(--border); padding: 20px; transition: 0.3s; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
         
-        .btn-buy { 
-            background: var(--primary); color: #fff; border: none; padding: 14px; 
-            width: 100%; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.3s;
-        }
-        .btn-buy:hover { background: #e65c00; }
+        .btn-acao { background: var(--primary); color: #fff; border: none; padding: 12px; width: 100%; border-radius: 10px; font-weight: 700; cursor: pointer; margin-top: 10px; }
+        .btn-outline { background: none; border: 1px solid var(--primary); color: var(--primary); padding: 10px; width: 100%; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 5px; }
 
-        /* Player de Vídeo */
-        #player-modal { 
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.9); z-index: 1000; padding: 50px; box-sizing: border-box;
-        }
-        .video-content { max-width: 900px; margin: auto; background: #000; border-radius: 20px; overflow: hidden; }
+        /* Gestor de Aulas */
+        .gestor-aulas { background: #fff; padding: 30px; border-radius: 20px; border: 1px solid var(--border); }
+        .aula-item { display: flex; justify-content: space-between; padding: 15px; border-bottom: 1px solid #eee; }
         
-        /* Formulários */
-        .form-box { background: #fff; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        input, textarea, select { 
-            width: 100%; border: 1px solid var(--border); padding: 14px; border-radius: 10px; margin-bottom: 15px; font-size: 15px; 
-        }
+        input, textarea { width: 100%; border: 1px solid var(--border); padding: 12px; border-radius: 8px; margin-top: 8px; margin-bottom: 15px; box-sizing: border-box; }
     </style>
 </head>
 <body>
 
 <nav>
     <div class="logo">INOVAR.</div>
-    <button class="active" onclick="mudarAba('vitrine', this)"><i class="fas fa-th-large"></i> Marketplace</button>
-    <button onclick="mudarAba('meus-cursos', this)"><i class="fas fa-play-circle"></i> Meus Cursos</button>
-    <button onclick="mudarAba('produtor', this)"><i class="fas fa-plus-circle"></i> Novo Produto</button>
-    <button onclick="mudarAba('aulas', this)"><i class="fas fa-video"></i> Gerenciar Aulas</button>
+    <button class="active" onclick="mudarAba('vitrine', this)"><i class="fas fa-store"></i> Marketplace</button>
+    <button onclick="mudarAba('aluno', this)"><i class="fas fa-graduation-cap"></i> Meus Cursos</button>
+    <button onclick="mudarAba('produtor', this)"><i class="fas fa-tools"></i> Gestão de Produtos</button>
 </nav>
 
 <main>
-    <header>
-        <h2 id="titulo-pagina">Marketplace de Cursos</h2>
-        <div><i class="fas fa-user-circle"></i> @victortrivinho</div>
-    </header>
-
-    <section id="aba-vitrine" class="aba">
-        <div id="vitrine-lista" class="grid-cursos"></div>
+    <section id="aba-vitrine" class="aba" style="display: block;">
+        <h2>Marketplace</h2>
+        <div id="lista-vitrine" class="grid-cursos"></div>
     </section>
 
-    <section id="aba-meus-cursos" class="aba" style="display:none;">
-        <div id="aluno-lista" class="grid-cursos"></div>
+    <section id="aba-aluno" class="aba">
+        <h2>Meus Cursos</h2>
+        <div id="lista-aluno" class="grid-cursos"></div>
     </section>
 
-    <section id="aba-produtor" class="aba" style="display:none;">
-        <div class="form-box">
-            <h3>Criar Novo Produto</h3>
-            <input type="text" id="p-nome" placeholder="Nome do Curso">
-            <textarea id="p-desc" placeholder="Descrição"></textarea>
-            <input type="number" id="p-preco" placeholder="Preço R$">
-            <input type="text" id="p-link" placeholder="Link de Pagamento (Mercado Pago)">
-            <button class="btn-buy" onclick="api_criarCurso()">Publicar Curso</button>
+    <section id="aba-produtor" class="aba">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h2>Seus Produtos</h2>
+            <button class="btn-acao" style="width: auto; padding: 10px 20px;" onclick="document.getElementById('modal-novo').style.display='block'">+ Novo Curso</button>
         </div>
+        <div id="lista-produtos-gestao" class="grid-cursos" style="margin-top: 20px;"></div>
     </section>
 
-    <section id="aba-aulas" class="aba" style="display:none;">
-        <div class="form-box">
-            <h3>Cadastrar Aula no Curso</h3>
-            <select id="aula-curso-select"><option>Carregando cursos...</option></select>
+    <section id="aba-gestor-conteudo" class="aba">
+        <button onclick="mudarAba('produtor', document.querySelector('nav button:nth-child(4)'))" style="border:none; background:none; cursor:pointer; color: var(--primary); font-weight:bold;"><i class="fas fa-arrow-left"></i> Voltar aos Produtos</button>
+        <h2 id="nome-curso-gestao">Gerenciando Aulas</h2>
+        
+        <div class="gestor-aulas">
+            <h4>Adicionar Nova Aula</h4>
             <input type="text" id="aula-titulo" placeholder="Título da Aula">
             <input type="text" id="aula-url" placeholder="Link do Vídeo (YouTube/Vimeo)">
-            <button class="btn-buy" onclick="api_cadastrarAula()">Salvar Aula</button>
+            <button class="btn-acao" onclick="salvarAula()">Adicionar Aula ao Curso</button>
+            <hr>
+            <h4>Aulas Cadastradas</h4>
+            <div id="lista-aulas-gestao"></div>
         </div>
     </section>
 </main>
 
-<div id="player-modal" onclick="this.style.display='none'">
-    <div class="video-content" onclick="event.stopPropagation()">
-        <div id="player-frame"></div>
+<div id="modal-novo" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:100;">
+    <div style="background:#fff; width:400px; margin: 100px auto; padding:30px; border-radius:20px;">
+        <h3>Criar Novo Produto</h3>
+        <input type="text" id="new-nome" placeholder="Nome do Curso">
+        <input type="number" id="new-preco" placeholder="Preço R$">
+        <textarea id="new-desc" placeholder="Descrição"></textarea>
+        <button class="btn-acao" onclick="criarCurso()">Publicar Curso</button>
+        <button class="btn-outline" onclick="document.getElementById('modal-novo').style.display='none'">Cancelar</button>
     </div>
 </div>
 
 <script>
-    const mp = new MercadoPago('APP_USR-50665ab5-8c5c-4b1b-9f9b-2e708b8fbb50');
+    let cursoAtivoId = null;
 
     function mudarAba(aba, btn) {
-        document.querySelectorAll('.aba').forEach(el => el.style.display = 'none');
-        document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.aba').forEach(s => s.style.display = 'none');
         document.getElementById('aba-' + aba).style.display = 'block';
-        btn.classList.add('active');
+        if(btn) {
+            document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
         if(aba === 'vitrine') carregarVitrine();
-        if(aba === 'meus-cursos') carregarAreaAluno();
-        if(aba === 'aulas') carregarSelectCursos();
+        if(aba === 'produtor') carregarGestaoProdutos();
     }
 
     async function carregarVitrine() {
-        const { data: cursos } = await _supabase.from('cursos_disponiveis').select('*');
-        document.getElementById('vitrine-lista').innerHTML = cursos.map(c => `
+        const { data } = await _supabase.from('cursos_disponiveis').select('*');
+        document.getElementById('lista-vitrine').innerHTML = data.map(c => `
             <div class="card">
-                <div class="card-img"><i class="fas fa-graduation-cap"></i></div>
-                <div class="card-body">
-                    <h3>${c.nome}</h3>
-                    <p>${c.descricao}</p>
-                    <button class="btn-buy" onclick="comprar('${c.nome}', '${c.link_pagamento}')">Comprar por R$ ${c.preco}</button>
-                </div>
+                <h3>${c.nome}</h3>
+                <p>${c.descricao}</p>
+                <strong>R$ ${c.preco}</strong>
+                <button class="btn-acao">Comprar Agora</button>
             </div>
         `).join('');
     }
 
-    async function comprar(nome, link) {
-        const { data: { session } } = await _supabase.auth.getSession();
-        window.location.href = `${link}?external_reference=${session?.user.id}&reason=${encodeURIComponent(nome)}`;
-    }
-
-    async function carregarAreaAluno() {
-        const { data: { session } } = await _supabase.auth.getSession();
-        const { data: mats } = await _supabase.from('matriculas').select('*').eq('user_id', session.user.id);
-        document.getElementById('aluno-lista').innerHTML = mats.map(m => `
+    async function carregarGestaoProdutos() {
+        const { data } = await _supabase.from('cursos_disponiveis').select('*');
+        document.getElementById('lista-produtos-gestao').innerHTML = data.map(c => `
             <div class="card">
-                <div class="card-img" style="background:#fff3e0"><i class="fas fa-play" style="color:var(--primary)"></i></div>
-                <div class="card-body">
-                    <h3>${m.curso_id}</h3>
-                    <button class="btn-buy" onclick="abrirCurso('${m.curso_id}')">Acessar Aulas</button>
-                </div>
+                <h3>${c.nome}</h3>
+                <button class="btn-outline" onclick="abrirGestorConteudo('${c.id}', '${c.nome}')">Gerenciar Aulas</button>
+                <button class="btn-outline" style="border-color: #ddd; color: #666;">Editar Preço</button>
             </div>
         `).join('');
     }
 
-    async function abrirCurso(nome) {
-        const { data: aulas } = await _supabase.from('aulas').select('*').eq('curso_nome', nome).order('ordem');
-        if(!aulas.length) return alert("Este curso ainda não tem aulas cadastradas.");
-        
-        const videoId = aulas[0].video_url.split('v=')[1] || aulas[0].video_url.split('/').pop();
-        document.getElementById('player-frame').innerHTML = `<iframe width="100%" height="500" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
-        document.getElementById('player-modal').style.display = 'flex';
+    function abrirGestorConteudo(id, nome) {
+        cursoAtivoId = id;
+        document.getElementById('nome-curso-gestao').innerText = "Gerenciando: " + nome;
+        mudarAba('gestor-conteudo');
+        carregarAulasDoCurso();
     }
 
-    async function carregarSelectCursos() {
-        const { data: cursos } = await _supabase.from('cursos_disponiveis').select('nome');
-        document.getElementById('aula-curso-select').innerHTML = cursos.map(c => `<option value="${c.nome}">${c.nome}</option>`).join('');
+    async function carregarAulasDoCurso() {
+        const { data } = await _supabase.from('aulas').select('*').eq('curso_id', cursoAtivoId).order('ordem');
+        document.getElementById('lista-aulas-gestao').innerHTML = data.map(a => `
+            <div class="aula-item">
+                <span><i class="fas fa-video"></i> ${a.titulo}</span>
+                <button onclick="deletarAula('${a.id}')" style="color:red; border:none; background:none; cursor:pointer;"><i class="fas fa-trash"></i></button>
+            </div>
+        `).join('');
     }
 
-    async function api_criarCurso() {
-        const curso = { nome: document.getElementById('p-nome').value, descricao: document.getElementById('p-desc').value, preco: document.getElementById('p-preco').value, link_pagamento: document.getElementById('p-link').value };
-        await _supabase.from('cursos_disponiveis').insert([curso]);
-        alert("Curso Criado!");
+    async function salvarAula() {
+        const titulo = document.getElementById('aula-titulo').value;
+        const video_url = document.getElementById('aula-url').value;
+        await _supabase.from('aulas').insert([{ curso_id: cursoAtivoId, titulo, video_url }]);
+        alert("Aula adicionada!");
+        carregarAulasDoCurso();
     }
 
-    async function api_cadastrarAula() {
-        const aula = { curso_nome: document.getElementById('aula-curso-select').value, titulo: document.getElementById('aula-titulo').value, video_url: document.getElementById('aula-url').value, ordem: 1 };
-        await _supabase.from('aulas').insert([aula]);
-        alert("Aula Salva!");
+    async function criarCurso() {
+        const nome = document.getElementById('new-nome').value;
+        const preco = document.getElementById('new-preco').value;
+        const descricao = document.getElementById('new-desc').value;
+        await _supabase.from('cursos_disponiveis').insert([{ nome, preco, descricao }]);
+        document.getElementById('modal-novo').style.display = 'none';
+        carregarGestaoProdutos();
     }
 
     carregarVitrine();
