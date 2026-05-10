@@ -14,134 +14,44 @@
             --white: #ffffff;
         }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--hot-bg);
-            color: var(--text-dark);
-            margin: 0;
-            display: flex;
-        }
+        body { font-family: 'Inter', sans-serif; background-color: var(--hot-bg); color: var(--text-dark); margin: 0; display: flex; }
 
         /* SIDEBAR */
-        aside {
-            width: var(--sidebar-width);
-            background: var(--text-dark);
-            height: 100vh;
-            position: fixed;
-            color: white;
-            padding: 30px 20px;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            z-index: 100;
-        }
-
-        .sidebar-logo {
-            font-weight: 900;
-            font-size: 1.4rem;
-            margin-bottom: 50px;
-            letter-spacing: -1px;
-        }
+        aside { width: var(--sidebar-width); background: var(--text-dark); height: 100vh; position: fixed; color: white; padding: 30px 20px; box-sizing: border-box; display: flex; flex-direction: column; z-index: 100; }
+        .sidebar-logo { font-weight: 900; font-size: 1.4rem; margin-bottom: 50px; letter-spacing: -1px; }
         .sidebar-logo span { color: var(--hot-orange); }
 
         nav.menu-lateral { flex-grow: 1; }
-        nav.menu-lateral a {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: rgba(255,255,255,0.7);
-            text-decoration: none;
-            padding: 12px 15px;
-            border-radius: 10px;
-            margin-bottom: 8px;
-            transition: 0.3s;
-            font-weight: 500;
-        }
-        nav.menu-lateral a:hover, nav.menu-lateral a.active {
-            background: rgba(255, 64, 0, 0.15);
-            color: var(--hot-orange);
-        }
+        nav.menu-lateral a { display: flex; align-items: center; gap: 12px; color: rgba(255,255,255,0.7); text-decoration: none; padding: 12px 15px; border-radius: 10px; margin-bottom: 8px; transition: 0.3s; font-weight: 500; }
+        nav.menu-lateral a:hover, nav.menu-lateral a.active { background: rgba(255, 64, 0, 0.15); color: var(--hot-orange); }
 
         /* MAIN CONTENT */
-        main {
-            margin-left: var(--sidebar-width);
-            width: calc(100% - var(--sidebar-width));
-            padding: 40px 5%;
-            box-sizing: border-box;
-        }
-
-        header.portal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 40px;
-        }
-
+        main { margin-left: var(--sidebar-width); width: calc(100% - var(--sidebar-width)); padding: 40px 5%; box-sizing: border-box; }
+        header.portal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
         .welcome-text h1 { font-size: 1.8rem; font-weight: 800; margin: 0; }
-        .welcome-text p { color: #6b7280; margin: 5px 0 0; }
-
         .user-stats { display: flex; gap: 20px; }
-        .stat-card {
-            background: white;
-            padding: 15px 25px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            text-align: center;
-        }
+        .stat-card { background: white; padding: 15px 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center; }
         .stat-card span { display: block; font-size: 1.2rem; font-weight: 800; color: var(--hot-orange); }
-        .stat-card label { font-size: 0.75rem; color: #9ca3af; text-transform: uppercase; font-weight: 700; }
 
         /* GRID DE CURSOS */
         .section-title { font-size: 1.4rem; font-weight: 800; margin-bottom: 25px; display: flex; align-items: center; gap: 10px; }
-        .section-title::after { content: ''; height: 2px; flex-grow: 1; background: #e5e7eb; }
+        .courses-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
 
-        .courses-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 25px;
-        }
-
-        .course-card {
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
-            transition: 0.3s;
-            border: 1px solid transparent;
-        }
+        .course-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.04); transition: 0.3s; border: 1px solid transparent; }
         .course-card:hover { transform: translateY(-5px); border-color: var(--hot-orange); }
-
-        .course-thumb { width: 100%; height: 160px; background: #ddd; position: relative; }
+        .course-thumb { width: 100%; height: 160px; position: relative; }
         .course-thumb img { width: 100%; height: 100%; object-fit: cover; }
-        .badge-free { position: absolute; top: 15px; right: 15px; background: #10b981; color: white; padding: 4px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 800; }
-
         .course-content { padding: 20px; }
-        .course-content h3 { font-size: 1.1rem; margin: 0 0 10px; font-weight: 700; line-height: 1.4; height: 3rem; overflow: hidden; }
-        
-        .progress-bar { height: 6px; background: #eee; border-radius: 3px; margin: 15px 0 8px; overflow: hidden; }
-        .progress-fill { height: 100%; background: var(--hot-orange); width: 0%; transition: 0.5s; }
-        
-        .course-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; }
-        .course-info { font-size: 0.8rem; color: #9ca3af; }
-        .btn-play { 
-            background: var(--hot-orange); 
-            color: white; 
-            width: 35px; 
-            height: 35px; 
-            border-radius: 50%; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            text-decoration: none;
-            transition: 0.3s;
-        }
-        .btn-play:hover { transform: scale(1.1); }
+        .course-content h3 { font-size: 1.1rem; margin: 0; font-weight: 700; }
+        .btn-play { background: var(--hot-orange); color: white; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; margin-top: 15px; }
+
+        /* LOADING SPINNER */
+        #loading { text-align: center; padding: 50px; font-weight: 600; color: var(--hot-orange); }
 
         @media (max-width: 900px) {
             aside { width: 80px; padding: 20px 10px; }
             .sidebar-logo, nav.menu-lateral a span { display: none; }
             main { margin-left: 80px; width: calc(100% - 80px); }
-            .user-stats { display: none; }
         }
     </style>
 </head>
@@ -150,29 +60,11 @@
     <aside>
         <div class="sidebar-logo">inovar<span>digital</span></div>
         <nav class="menu-lateral">
-            <a href="#" class="active">
-                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-                <span>Dashboard</span>
-            </a>
-            <a href="#">
-                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                <span>Meus Cursos</span>
-            </a>
-            <a href="#">
-                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l4 4v10a2 2 0 01-2 2z"></path><path d="M14 2v6h6"></path><path d="M16 13H8"></path><path d="M16 17H8"></path><path d="M10 9H8"></path></svg>
-                <span>Notícias</span>
-            </a>
-            <a href="#">
-                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                <span>IA Tools</span>
-            </a>
+            <a href="#" class="active"><span>Dashboard</span></a>
+            <a href="index.html"><span>Voltar ao Site</span></a>
         </nav>
-        
         <nav class="menu-lateral" style="margin-top: auto;">
-            <a href="index.html">
-                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                <span>Sair</span>
-            </a>
+            <a href="#" onclick="logout()"><span>Sair</span></a>
         </nav>
     </aside>
 
@@ -180,83 +72,90 @@
         <header class="portal-header">
             <div class="welcome-text">
                 <h1>Olá, <span id="user-name">Aluno</span>! 👋</h1>
-                <p>Pronto para dominar o digital hoje?</p>
+                <p>Aqui estão seus cursos liberados.</p>
             </div>
             <div class="user-stats">
                 <div class="stat-card">
                     <span id="courses-count">0</span>
-                    <label>Cursos</label>
-                </div>
-                <div class="stat-card">
-                    <span>12</span>
-                    <label>Horas</label>
+                    <label style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: #9ca3af;">Meus Cursos</label>
                 </div>
             </div>
         </header>
 
-        <h2 class="section-title">Continue de onde parou</h2>
+        <h2 class="section-title">Seus Cursos</h2>
+        <div id="loading">Carregando seus cursos...</div>
         <div class="courses-grid" id="courses-container">
-            <div class="course-card">
-                <div class="course-thumb">
-                    <span class="badge-free">GRÁTIS</span>
-                    <img src="https://img.youtube.com/vi/M7lc1UVf-VE/maxresdefault.jpg" alt="Curso">
-                </div>
-                <div class="course-content">
-                    <h3>Marketing Digital para Iniciantes 2026</h3>
-                    <div class="progress-bar"><div class="progress-fill" style="width: 45%;"></div></div>
-                    <div class="course-footer">
-                        <span class="course-info">12 aulas • 45% concluído</span>
-                        <a href="#" class="btn-play">
-                            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>
-                        </a>
-                    </div>
-                </div>
             </div>
-
-            <div class="course-card">
-                <div class="course-thumb">
-                    <span class="badge-free" style="background: #6366f1;">PREMIUM</span>
-                    <img src="https://img.youtube.com/vi/u1GZ8K_J7_I/maxresdefault.jpg" alt="IA">
-                </div>
-                <div class="course-content">
-                    <h3>Automação de Vendas com Inteligência Artificial</h3>
-                    <div class="progress-bar"><div class="progress-fill" style="width: 10%;"></div></div>
-                    <div class="course-footer">
-                        <span class="course-info">08 aulas • 10% concluído</span>
-                        <a href="#" class="btn-play">
-                            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="course-card" style="border: 2px dashed #d1d5db; background: transparent; display: flex; align-items: center; justify-content: center; min-height: 300px;">
-                <div style="text-align: center; color: #9ca3af;">
-                    <svg width="50" height="50" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"></path></svg>
-                    <p style="font-weight: 600; margin-top: 10px;">Novos cursos em breve</p>
-                </div>
-            </div>
-        </div>
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
         const SUPABASE_URL = 'https://onsbuazkqfehkudhladt.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'; // Use sua chave aqui
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9uc2J1YXprcWZlaGt1ZGhsYWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzNTI5OTgsImV4cCI6MjA5MzkyODk5OH0.ZypL6LHbPC_z971EDCTh6pVoA7g4qM6hWSWfWVO9a-M';
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        async function checkAccess() {
+        // BANCO DE DADOS LOCAL DOS CURSOS (Você pode gerenciar por aqui por enquanto)
+        const CATALOGO_CURSOS = {
+            'marketing-digital': {
+                titulo: 'Marketing Digital para Iniciantes 2026',
+                img: 'https://img.youtube.com/vi/M7lc1UVf-VE/maxresdefault.jpg',
+                link: 'aula.html?curso=marketing-digital'
+            },
+            'automacao-ia': {
+                titulo: 'Automação de Vendas com IA',
+                img: 'https://img.youtube.com/vi/u1GZ8K_J7_I/maxresdefault.jpg',
+                link: 'aula.html?curso=automacao-ia'
+            }
+        };
+
+        async function carregarPortal() {
             const { data: { session } } = await _supabase.auth.getSession();
             
             if (!session) {
-                // Se não estiver logado, volta para o login
                 window.location.href = 'login.html';
+                return;
+            }
+
+            document.getElementById('user-name').innerText = session.user.email.split('@')[0];
+
+            // BUSCA AS MATRÍCULAS DO ALUNO NO BANCO
+            const { data: matriculas, error } = await _supabase
+                .from('matriculas')
+                .select('curso_id')
+                .eq('user_id', session.user.id);
+
+            const container = document.getElementById('courses-container');
+            const loading = document.getElementById('loading');
+            loading.style.display = 'none';
+
+            if (matriculas && matriculas.length > 0) {
+                document.getElementById('courses-count').innerText = matriculas.length;
+                
+                matriculas.forEach(item => {
+                    const dadosCurso = CATALOGO_CURSOS[item.curso_id];
+                    if (dadosCurso) {
+                        container.innerHTML += `
+                            <div class="course-card">
+                                <div class="course-thumb"><img src="${dadosCurso.img}" alt="Thumb"></div>
+                                <div class="course-content">
+                                    <h3>${dadosCurso.titulo}</h3>
+                                    <a href="${dadosCurso.link}" class="btn-play">▶</a>
+                                </div>
+                            </div>
+                        `;
+                    }
+                });
             } else {
-                // Personaliza o nome
-                document.getElementById('user-name').innerText = session.user.email.split('@')[0];
+                container.innerHTML = `<p>Você ainda não possui cursos liberados. Explore a nossa loja!</p>`;
             }
         }
-        checkAccess();
+
+        async function logout() {
+            await _supabase.auth.signOut();
+            window.location.href = 'index.html';
+        }
+
+        carregarPortal();
     </script>
 </body>
 </html>
