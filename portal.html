@@ -5,103 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portal Inovar | Aluno e Produtor</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
     <style>
-        :root {
-            --hot-orange: #ff4000;
-            --hot-bg: #f5f3ef;
-            --text-dark: #053d4e;
-            --sidebar-width: 260px;
-            --white: #ffffff;
-        }
-
+        :root { --hot-orange: #ff4000; --hot-bg: #f5f3ef; --text-dark: #053d4e; --sidebar-width: 260px; }
         body { font-family: 'Inter', sans-serif; background-color: var(--hot-bg); color: var(--text-dark); margin: 0; display: flex; min-height: 100vh; }
-
-        /* SIDEBAR */
-        aside { 
-            width: var(--sidebar-width); 
-            background: var(--text-dark); 
-            height: 100vh; 
-            position: fixed; 
-            color: white; 
-            padding: 30px 20px; 
-            box-sizing: border-box; 
-            display: flex; 
-            flex-direction: column; 
-            z-index: 100; 
-        }
-        .sidebar-logo { font-weight: 900; font-size: 1.4rem; margin-bottom: 40px; letter-spacing: -1px; }
+        
+        aside { width: var(--sidebar-width); background: var(--text-dark); height: 100vh; position: fixed; color: white; padding: 30px 20px; box-sizing: border-box; display: flex; flex-direction: column; z-index: 100; }
+        .sidebar-logo { font-weight: 900; font-size: 1.4rem; margin-bottom: 40px; }
         .sidebar-logo span { color: var(--hot-orange); }
 
-        nav.menu-lateral a { 
-            display: flex; 
-            align-items: center; 
-            gap: 12px; 
-            color: rgba(255,255,255,0.7); 
-            text-decoration: none; 
-            padding: 12px 15px; 
-            border-radius: 10px; 
-            margin-bottom: 8px; 
-            transition: 0.3s; 
-            font-weight: 500;
-            cursor: pointer;
-        }
-        nav.menu-lateral a:hover, nav.menu-lateral a.active { 
-            background: rgba(255, 64, 0, 0.15); 
-            color: var(--hot-orange); 
-        }
+        nav.menu-lateral a { display: flex; align-items: center; gap: 12px; color: rgba(255,255,255,0.7); text-decoration: none; padding: 12px 15px; border-radius: 10px; margin-bottom: 8px; cursor: pointer; }
+        nav.menu-lateral a:hover, nav.menu-lateral a.active { background: rgba(255, 64, 0, 0.15); color: var(--hot-orange); }
 
-        /* CONTEÚDO PRINCIPAL */
-        main { margin-left: var(--sidebar-width); width: calc(100% - var(--sidebar-width)); padding: 40px 5%; box-sizing: border-box; }
-        
+        main { margin-left: var(--sidebar-width); width: 100%; padding: 40px 5%; box-sizing: border-box; }
         .view-section { display: none; }
         .view-section.active { display: block; }
 
-        /* FORMULÁRIO DE CRIAÇÃO */
-        .form-box { 
-            background: white; 
-            padding: 30px; 
-            border-radius: 20px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
-            max-width: 600px; 
-            margin-bottom: 40px;
-        }
-        .form-box h3 { margin-top: 0; margin-bottom: 20px; }
-        input, textarea { 
-            width: 100%; 
-            padding: 12px; 
-            margin-bottom: 15px; 
-            border: 1px solid #e5e7eb; 
-            border-radius: 8px; 
-            box-sizing: border-box;
-            font-family: inherit;
-        }
-        .btn-acao { 
-            background: var(--hot-orange); 
-            color: white; 
-            border: none; 
-            padding: 15px; 
-            border-radius: 8px; 
-            font-weight: 700; 
-            cursor: pointer; 
-            width: 100%; 
-            transition: 0.3s;
-        }
-        .btn-acao:hover { background: #e63a00; }
+        .section-title { font-size: 1.4rem; font-weight: 800; margin: 40px 0 20px; display: flex; align-items: center; gap: 10px; }
+        .section-title span { color: var(--hot-orange); }
 
-        /* GRID DE CARDS */
         .courses-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
-        .card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border: 1px solid #eee; }
+        .card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
         .card img { width: 100%; height: 160px; object-fit: cover; }
         .card-body { padding: 20px; }
-        .card-body h3 { margin: 0 0 10px; font-size: 1.1rem; }
-        .card-body p { font-size: 0.85rem; color: #6b7280; margin-bottom: 15px; }
-        .price-tag { font-weight: 800; color: var(--hot-orange); font-size: 1.2rem; }
-
-        @media (max-width: 900px) {
-            aside { width: 80px; padding: 20px 10px; }
-            .sidebar-logo, nav.menu-lateral a span { display: none; }
-            main { margin-left: 80px; width: calc(100% - 80px); }
-        }
+        .btn-buy { background: #10b981; color: white; border: none; padding: 10px; border-radius: 8px; width: 100%; font-weight: 700; cursor: pointer; margin-top: 10px; }
+        .btn-play { background: var(--hot-orange); color: white; border: none; padding: 10px; border-radius: 8px; width: 100%; font-weight: 700; cursor: pointer; text-decoration: none; display: block; text-align: center; }
     </style>
 </head>
 <body>
@@ -109,142 +37,84 @@
     <aside>
         <div class="sidebar-logo">inovar<span>digital</span></div>
         <nav class="menu-lateral">
-            <a onclick="showView('aluno')" id="nav-aluno" class="active">📚 <span>Meus Cursos</span></a>
+            <a onclick="showView('aluno')" id="nav-aluno" class="active">📚 <span>Área do Aluno</span></a>
             <a onclick="showView('produtor')" id="nav-produtor">🚀 <span>Modo Produtor</span></a>
-        </nav>
-        <nav class="menu-lateral" style="margin-top: auto;">
-            <a onclick="logout()">🚪 <span>Sair</span></a>
+            <a href="index.html">🏠 <span>Voltar ao Site</span></a>
         </nav>
     </aside>
 
     <main>
         <section id="view-aluno" class="view-section active">
             <h1>Olá, <span id="user-name">Aluno</span>! 👋</h1>
-            <p>Continue aprendendo de onde parou.</p>
+            
+            <h2 class="section-title"><span>●</span> Meus Cursos</h2>
             <div class="courses-grid" id="meus-cursos-container">
                 </div>
-        </section>
 
-        <section id="view-produtor" class="view-section">
-            <h1>Área do Criador</h1>
-            <p>Gerencie seus conteúdos e publique novos cursos na plataforma.</p>
-            
-            <div class="form-box">
-                <h3>Criar Novo Curso</h3>
-                <input type="text" id="c-titulo" placeholder="Nome do Curso">
-                <textarea id="c-desc" placeholder="O que o aluno vai aprender?" rows="3"></textarea>
-                <input type="number" id="c-preco" placeholder="Preço de Venda (Ex: 97.00)">
-                <input type="text" id="c-video" placeholder="ID do vídeo do YouTube (Ex: dQw4w9WgXcQ)">
-                <button class="btn-acao" onclick="criarCurso()">Publicar Curso Agora</button>
-            </div>
-
-            <h2>Cursos Criados por Você</h2>
-            <div class="courses-grid" id="cursos-criados-container">
+            <h2 class="section-title"><span>●</span> Vitrine de Oportunidades</h2>
+            <div class="courses-grid" id="vitrine-container">
                 </div>
         </section>
-    </main>
+
+        </main>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // CHAVES DO SEU PROJETO JÁ INSERIDAS AQUI
-        const SUPABASE_URL = 'https://onsbuazkqfehkudhladt.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9uc2J1YXprcWZlaGt1ZGhsYWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzNTI5OTgsImV4cCI6MjA5MzkyODk5OH0.ZypL6LHbPC_z971EDCTh6pVoA7g4qM6hWSWfWVO9a-M'; 
-        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        const _supabase = supabase.createClient('https://onsbuazkqfehkudhladt.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9uc2J1YXprcWZlaGt1ZGhsYWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzNTI5OTgsImV4cCI6MjA5MzkyODk5OH0.ZypL6LHbPC_z971EDCTh6pVoA7g4qM6hWSWfWVO9a-M');
+        const mp = new MercadoPago('APP_USR-c966781c-16d3-4ebe-b401-c6d32b193297');
 
-        function showView(view) {
-            document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.menu-lateral a').forEach(a => a.classList.remove('active'));
-            document.getElementById('view-' + view).classList.add('active');
-            document.getElementById('nav-' + view).classList.add('active');
-            
-            if(view === 'aluno') carregarCursosComprados();
-            if(view === 'produtor') carregarCursosCriados();
-        }
-
-        async function criarCurso() {
+        async function carregarPortal() {
             const { data: { session } } = await _supabase.auth.getSession();
+            if (!session) { window.location.href = 'login.html'; return; }
             
-            if(!session) {
-                alert("Você precisa estar logado!");
-                return;
-            }
-
-            const curso = {
-                nome: document.getElementById('c-titulo').value,
-                descricao: document.getElementById('c-desc').value,
-                preco: parseFloat(document.getElementById('c-preco').value),
-                video_id: document.getElementById('c-video').value,
-                instrutor_id: session.user.id,
-                capa_url: `https://img.youtube.com/vi/${document.getElementById('c-video').value}/maxresdefault.jpg`
-            };
-
-            const { error } = await _supabase.from('cursos_disponiveis').insert([curso]);
-
-            if (error) {
-                alert("Erro ao publicar: " + error.message);
-            } else {
-                alert("Sucesso! Seu curso já está na base da Inovar Digital.");
-                document.getElementById('c-titulo').value = '';
-                document.getElementById('c-desc').value = '';
-                document.getElementById('c-preco').value = '';
-                document.getElementById('c-video').value = '';
-                carregarCursosCriados();
-            }
-        }
-
-        async function carregarCursosComprados() {
-            const { data: { session } } = await _supabase.auth.getSession();
-            if(!session) return;
-
             document.getElementById('user-name').innerText = session.user.email.split('@')[0];
-
-            const { data: matriculas } = await _supabase.from('matriculas').select('*').eq('user_id', session.user.id);
             
+            carregarCursosComprados(session.user.id);
+            carregarVitrine();
+        }
+
+        async function carregarCursosComprados(userId) {
+            const { data: matriculas } = await _supabase.from('matriculas').select('*').eq('user_id', userId);
             const container = document.getElementById('meus-cursos-container');
-            container.innerHTML = '';
-
-            if (matriculas && matriculas.length > 0) {
-                matriculas.forEach(m => {
-                    container.innerHTML += `<div class="card"><div class="card-body"><h3>📚 Curso: ${m.curso_id}</h3><button class="btn-acao" onclick="window.location.href='aula.html?curso=${m.curso_id}'">Assistir Agora</button></div></div>`;
-                });
-            } else {
-                container.innerHTML = '<p>Você ainda não tem cursos. Comece a aprender hoje!</p>';
-            }
-        }
-
-        async function carregarCursosCriados() {
-            const { data: { session } } = await _supabase.auth.getSession();
-            if(!session) return;
-
-            const { data: cursos } = await _supabase.from('cursos_disponiveis').select('*').eq('instrutor_id', session.user.id);
+            container.innerHTML = matriculas?.length ? '' : '<p>Você ainda não possui cursos.</p>';
             
-            const container = document.getElementById('cursos-criados-container');
+            matriculas?.forEach(m => {
+                container.innerHTML += `
+                    <div class="card">
+                        <div class="card-body">
+                            <h3>${m.curso_id}</h3>
+                            <a href="aula.html?curso=${m.curso_id}" class="btn-play">Acessar Conteúdo</a>
+                        </div>
+                    </div>`;
+            });
+        }
+
+        async function carregarVitrine() {
+            const { data: cursos } = await _supabase.from('cursos_disponiveis').select('*');
+            const container = document.getElementById('vitrine-container');
             container.innerHTML = '';
 
-            if (cursos && cursos.length > 0) {
-                cursos.forEach(c => {
-                    container.innerHTML += `
-                        <div class="card">
-                            <img src="${c.capa_url}">
-                            <div class="card-body">
-                                <h3>${c.nome}</h3>
-                                <p>${c.descricao}</p>
-                                <span class="price-tag">R$ ${c.preco}</span>
-                            </div>
-                        </div>`;
-                });
-            } else {
-                container.innerHTML = '<p>Você ainda não criou nenhum curso.</p>';
-            }
+            cursos?.forEach(c => {
+                container.innerHTML += `
+                    <div class="card">
+                        <img src="${c.capa_url || 'https://via.placeholder.com/300x160'}">
+                        <div class="card-body">
+                            <h3>${c.nome}</h3>
+                            <p style="font-size:0.8rem; color:#666">${c.descricao}</p>
+                            <div style="font-weight:800; font-size:1.1rem; margin: 10px 0;">R$ ${c.preco}</div>
+                            <button class="btn-buy" onclick="abrirCheckout('${c.nome}', ${c.preco})">Comprar Agora</button>
+                        </div>
+                    </div>`;
+            });
         }
 
-        async function logout() {
-            await _supabase.auth.signOut();
-            window.location.href = 'index.html';
+        function abrirCheckout(nome, preco) {
+            alert(`Você será redirecionado para o pagamento de ${nome} no valor de R$ ${preco}`);
+            // Aqui entra a integração final do link de checkout do Mercado Pago
+            window.open('https://link.mercadopago.com.br/INOVARDIGITAL_TESTE', '_blank');
         }
 
-        // Inicialização
-        carregarCursosComprados();
+        carregarPortal();
     </script>
 </body>
 </html>
