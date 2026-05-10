@@ -297,5 +297,23 @@
     function openColabModal() { document.getElementById('modalColab').classList.add('active'); }
     function closeColabModal() { document.getElementById('modalColab').classList.remove('active'); }
 </script>
+    const ctx = document.getElementById('salesChart')?.getContext('2d');
+    if(ctx) {
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['00h', '04h', '08h', '12h', '16h', '20h', '23h'],
+                datasets: [{
+                    data: [0, 0, 0, 0, 0, 0, 0],
+                    borderColor: '#5D5FEF',
+                    backgroundColor: 'rgba(93, 95, 239, 0.1)',
+                    fill: true, tension: 0.4, borderWidth: 3, pointRadius: 0
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true }, x: { grid: { display: false } } }
+            }
+        });
+    }
 </body>
 </html>
