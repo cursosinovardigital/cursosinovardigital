@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assistindo Aula | Inovar Digital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --hot-orange: #ff4000;
+            --hot-bg: #f5f3ef;
+            --text-dark: #053d4e;
+            --white: #ffffff;
+        }
+
+        body { font-family: 'Inter', sans-serif; background: #000; color: #fff; margin: 0; display: flex; height: 100vh; overflow: hidden; }
+
+        /* LISTA DE AULAS (LATERAL DIREITA) */
+        aside.playlist {
+            width: 350px;
+            background: #111;
+            border-left: 1px solid #222;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .playlist-header { padding: 25px; border-bottom: 1px solid #222; }
+        .playlist-header h2 { font-size: 1.1rem; margin: 0; color: var(--hot-orange); }
+
+        .playlist-content { flex-grow: 1; overflow-y: auto; padding: 10px; }
+        
+        .aula-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.2s;
+            text-decoration: none;
+            color: #aaa;
+            margin-bottom: 5px;
+        }
+        .aula-item:hover { background: #1a1a1a; color: #fff; }
+        .aula-item.active { background: rgba(255, 64, 0, 0.1); color: var(--hot-orange); border-left: 3px solid var(--hot-orange); }
+
+        .aula-number { font-size: 0.8rem; font-weight: 800; opacity: 0.5; }
+        .aula-title { font-size: 0.9rem; font-weight: 500; }
+
+        /* AREA DO VÍDEO */
+        main.video-player {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            background: #000;
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 */
+            height: 0;
+            background: #000;
+        }
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .video-info { padding: 30px 5%; background: var(--white); color: var(--text-dark); flex-grow: 1; overflow-y: auto; }
+        .video-info h1 { font-size: 1.8rem; font-weight: 800; margin: 0 0 10px 0; }
+        .video-info p { color: #6b7280; line-height: 1.6; }
+
+        /* BOTÃO VOLTAR */
+        .btn-back {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 10;
+            background: rgba(0,0,0,0.5);
+            color: #fff;
+            padding: 8px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            backdrop-filter: blur(5px);
+        }
+
+        @media (max-width: 1000px) {
+            body { flex-direction: column; overflow-y: auto; height: auto; }
+            aside.playlist { width: 100%; height: auto; border-left: none; border-top: 1px solid #222; }
+        }
+    </style>
+</head>
+<body>
+
+    <a href="portal.html" class="btn-back">← Voltar ao Portal</a>
+
+    <main class="video-player">
+        <div class="video-wrapper">
+            <iframe id="main-video" src="https://www.youtube.com/embed/M7lc1UVf-VE?rel=0" frameborder="0" allowfullscreen></iframe>
+        </div>
+        
+        <div class="video-info">
+            <h1 id="aula-atual-titulo">Introdução ao Marketing Digital 2026</h1>
+            <p>Nesta aula você vai entender a base da nossa metodologia e como configurar suas ferramentas para a primeira venda.</p>
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 30px 0;">
+            <h3>Materiais de Apoio</h3>
+            <a href="#" style="color: var(--hot-orange); text-decoration: none; font-weight: 600;">📥 Baixar PDF da Aula</a>
+        </div>
+    </main>
+
+    <aside class="playlist">
+        <div class="playlist-header">
+            <h2>Módulo 1: Fundamentos</h2>
+            <p style="font-size: 0.75rem; color: #666; margin: 5px 0 0;">6 aulas • 1h 20min</p>
+        </div>
+        
+        <div class="playlist-content">
+            <a href="#" class="aula-item active" onclick="changeVideo('M7lc1UVf-VE', 'Introdução ao Marketing Digital 2026')">
+                <span class="aula-number">01</span>
+                <span class="aula-title">Introdução ao Método</span>
+            </a>
+            <a href="#" class="aula-item" onclick="changeVideo('dQw4w9WgXcQ', 'Configurando sua Estrutura')">
+                <span class="aula-number">02</span>
+                <span class="aula-title">Configurando sua Estrutura</span>
+            </a>
+            <a href="#" class="aula-item">
+                <span class="aula-number">03</span>
+                <span class="aula-title">Mentalidade de Escala</span>
+            </a>
+            </div>
+    </aside>
+
+    <script>
+        function changeVideo(id, title) {
+            document.getElementById('main-video').src = `https://www.youtube.com/embed/${id}?rel=0&autoplay=1`;
+            document.getElementById('aula-atual-titulo').innerText = title;
+            
+            // Lógica simples para mudar a classe active
+            document.querySelectorAll('.aula-item').forEach(item => item.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+        }
+    </script>
+</body>
+</html>
