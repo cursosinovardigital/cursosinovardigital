@@ -8,6 +8,30 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        /* --- ESTILOS PARA O MODAL DE PRODUTOS --- */
+.modal-overlay.active { 
+    display: flex !important; /* Força o modal a aparecer */
+}
+
+.product-modal-tab { 
+    display: none; /* Esconde as abas por padrão */
+}
+
+.product-modal-tab.active { 
+    display: block; /* Mostra a aba ativa */
+}
+
+/* Estilo para as abas dentro do modal parecerem botões */
+.sub-nav-item {
+    padding: 10px 20px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+}
+
+.sub-nav-item.active {
+    color: var(--purple-kiwi);
+    border-bottom-color: var(--purple-kiwi);
+}
         :root { 
             --orange: #FF6600; --side-black: #111418; --white: #FFFFFF; 
             --bg: #F4F7FA; --text: #1A1D23; --border: #E2E8F0; --green: #22C55E;
