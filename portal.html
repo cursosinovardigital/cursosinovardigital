@@ -171,7 +171,7 @@
                 <table>
                     <thead><tr><th>NOME</th><th>PREÇO</th><th>STATUS</th><th style="text-align:right">AÇÕES</th></tr></thead>
                     <tbody id="product-list-body">
-                        </tbody>
+                    </tbody>
                 </table>
             </div>
         </section>
@@ -181,6 +181,28 @@
             <div class="sub-nav"><div class="sub-nav-item active">Áreas de membros</div><div class="sub-nav-item">Cursos</div><div class="sub-nav-item">Escolas</div></div>
             <div style="display: flex; justify-content: space-between; align-items: center; background: #FFF; padding: 20px; border: 1px solid var(--border); border-radius: 12px 12px 0 0; border-bottom: none;"><div style="position: relative; width: 400px;"><i class="fas fa-search" style="position: absolute; left: 15px; top: 15px; color: #A0AEC0;"></i><input type="text" placeholder="Buscar..." class="search-input"></div><button class="btn-primary">Criar área de membros</button></div>
             <div class="table-container" style="border-radius: 0 0 12px 12px;"><table><thead><tr><th>NOME</th><th>URL</th><th>ALUNOS</th><th>AÇÕES</th></tr></thead><tbody id="member-list-body"><tr><td>Área Premium Inovar</td><td>inovar.digital/m/premium</td><td>0</td><td><i class="fas fa-edit"></i></td></tr></tbody></table></div>
+        </section>
+
+        <section id="aba-vendas" class="aba-section">
+            <h2>Minhas Vendas</h2>
+            <div class="table-container" style="padding: 20px; margin-bottom: 25px;">
+                <div class="sales-filters">
+                    <div class="filter-group"><label>Período</label><input type="date" class="search-input" style="padding: 10px;"></div>
+                    <div class="filter-group"><label>Produto</label><select class="search-input" style="padding: 10px;"><option>Todos os produtos</option></select></div>
+                    <div class="filter-group"><label>Status</label><select class="search-input" style="padding: 10px;"><option>Pagas</option></select></div>
+                    <div class="filter-group"><label>Oferta</label><select class="search-input" style="padding: 10px;"><option>Todas as ofertas</option></select></div>
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                    <button class="btn-primary" style="background: #FFF; color: var(--text); border: 1px solid var(--border);"><i class="fas fa-download"></i> Exportar</button>
+                    <button class="btn-primary">Filtrar</button>
+                </div>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead><tr><th>ID VENDA</th><th>PRODUTO</th><th>VALOR</th><th>DATA</th><th>STATUS</th></tr></thead>
+                    <tbody id="sales-list-body"></tbody>
+                </table>
+            </div>
         </section>
 
         <section id="aba-market" class="aba-section">
@@ -202,12 +224,6 @@
                 <button class="btn-primary" style="background: #FFF; color: #4A5568; border: 1px solid var(--border);"><i class="fas fa-filter"></i> Filtros</button>
             </div>
             <div class="table-container"><table><thead><tr><th>NOME DO AFILIADO</th><th>PRODUTO</th><th>DATA DE AFILIAÇÃO</th><th>COMISSÃO</th><th>VENDAS</th><th>AÇÕES</th></tr></thead><tbody><tr><td colspan="6" style="text-align: center; padding: 60px; color: #A0AEC0;"><i class="fas fa-users" style="font-size: 40px; margin-bottom: 15px; display: block;"></i>Nenhum afiliado encontrado</td></tr></tbody></table></div>
-        </section>
-
-        <section id="aba-vendas" class="aba-section">
-            <h2>Minhas Vendas</h2>
-            <div class="table-container" style="padding: 20px; margin-bottom: 25px;"><div class="sales-filters"><div class="filter-group"><label>Período</label><input type="date" class="search-input" style="padding: 10px;"></div><div class="filter-group"><label>Produto</label><select class="search-input" style="padding: 10px;"><option>Todos os produtos</option></select></div><div class="filter-group"><label>Status</label><select class="search-input" style="padding: 10px;"><option>Pagas</option></select></div><div class="filter-group"><label>Oferta</label><select class="search-input" style="padding: 10px;"><option>Todas as ofertas</option></select></div></div><div style="display: flex; justify-content: flex-end; gap: 10px;"><button class="btn-primary" style="background: #FFF; color: var(--text); border: 1px solid var(--border);"><i class="fas fa-download"></i> Exportar</button><button class="btn-primary">Filtrar</button></div></div>
-            <div class="table-container"><table><thead><tr><th>PRODUTO</th><th>COMPRADOR</th><th>VALOR</th><th>DATA</th><th>STATUS</th><th>AÇÕES</th></tr></thead><tbody><tr><td>Curso de Violão do Zero</td><td>vittrivinho@example.com</td><td>R$ 297,00</td><td>10/05/2026</td><td><span class="badge badge-success">Paga</span></td><td><i class="fas fa-eye"></i></td></tr></tbody></table></div>
         </section>
 
         <section id="aba-assin" class="aba-section">
@@ -282,7 +298,6 @@
             <div class="sub-nav-item" onclick="switchProductTab('entrega', this)">Entrega</div>
         </div>
         <input type="hidden" id="edit-prod-id">
-
         <div id="p-info" class="prod-modal-tab active" style="padding-top:20px;">
             <label style="display:block; font-size:12px; font-weight:700; margin-bottom:5px;">NOME DO PRODUTO</label>
             <input type="text" id="ipt_nome" class="search-input" style="padding:10px;" placeholder="Ex: Curso de Violão">
@@ -318,39 +333,10 @@
 
     let salesChartInstance = null;
 
-    // SALVAR OU ATUALIZAR PRODUTO
-    async function salvarProduto() {
-        const id = document.getElementById('edit-prod-id').value;
-        const nome = document.getElementById('ipt_nome').value;
-        const preco = document.getElementById('ipt_preco').value;
-        const url = document.getElementById('ipt_url').value;
-
-        if(!nome || !preco) { alert("Preencha nome e preço!"); return; }
-
-        const payload = { nome: nome, preco: parseFloat(preco), url_entrega: url, status: 'Ativo' };
-
-        let result;
-        if(id) {
-            // Edição
-            result = await _supabase.from('produtos').update(payload).eq('id', id);
-        } else {
-            // Criação
-            result = await _supabase.from('produtos').insert([payload]);
-        }
-
-        if(result.error) { alert("Erro ao processar!"); }
-        else { 
-            alert(id ? "Produto atualizado!" : "Produto criado!"); 
-            closeProductModal(); 
-            carregarProdutos(); 
-        }
-    }
-
-    // CARREGAR PRODUTOS E ATUALIZAR DASHBOARD
+    // --- PRODUTOS ---
     async function carregarProdutos() {
         const { data, error } = await _supabase.from('produtos').select('*').order('created_at', { ascending: false });
         if(error) return;
-
         const body = document.getElementById('product-list-body');
         body.innerHTML = data.map(p => `
             <tr>
@@ -358,16 +344,25 @@
                 <td>R$ ${p.preco.toFixed(2).replace('.',',')}</td>
                 <td><span class="badge badge-success">${p.status}</span></td>
                 <td style="text-align:right">
+                    <button class="btn-primary" style="padding: 5px 10px; font-size: 11px; background: var(--green); margin-right:10px;" onclick="simularVenda('${p.id}', ${p.preco})">Simular Venda</button>
                     <i class="fas fa-edit" style="cursor:pointer; margin-right:10px" onclick="editProduct('${p.id}', '${p.nome}', ${p.preco}, '${p.url_entrega || ''}')"></i>
                     <i class="fas fa-trash" style="cursor:pointer; color:#E53E3E" onclick="deleteProduct('${p.id}')"></i>
                 </td>
             </tr>
         `).join('');
-
-        updateDashboard(data);
     }
 
-    // FUNÇÕES DE EDIÇÃO E EXCLUSÃO
+    async function salvarProduto() {
+        const id = document.getElementById('edit-prod-id').value;
+        const nome = document.getElementById('ipt_nome').value;
+        const preco = document.getElementById('ipt_preco').value;
+        const url = document.getElementById('ipt_url').value;
+        if(!nome || !preco) { alert("Preencha nome e preço!"); return; }
+        const payload = { nome: nome, preco: parseFloat(preco), url_entrega: url, status: 'Ativo' };
+        const result = id ? await _supabase.from('produtos').update(payload).eq('id', id) : await _supabase.from('produtos').insert([payload]);
+        if(!result.error) { closeProductModal(); carregarProdutos(); }
+    }
+
     function editProduct(id, nome, preco, url) {
         document.getElementById('edit-prod-id').value = id;
         document.getElementById('ipt_nome').value = nome;
@@ -385,51 +380,71 @@
         }
     }
 
-    // ATUALIZAR DASHBOARD COM DADOS REAIS (SIMULADOS PELOS PRODUTOS)
-    function updateDashboard(produtos) {
-        const total = produtos.reduce((sum, p) => sum + p.preco, 0);
-        document.getElementById('dash-total-vendas').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
-        document.getElementById('dash-valor-liquido').innerText = `R$ ${(total * 0.9).toFixed(2).replace('.', ',')}`; // 10% de taxa maestro
-        document.getElementById('dash-count-vendas').innerText = produtos.length;
-        
-        // Atualizar Gráfico com valores reais (exemplo de labels)
+    // --- VENDAS ---
+    async function simularVenda(prodId, preco) {
+        const comissao = preco * 0.10;
+        const { error } = await _supabase.from('vendas').insert([{
+            produto_id: prodId,
+            valor_total: preco,
+            comissao_maestro: comissao,
+            valor_liquido: preco - comissao,
+            email_comprador: 'teste@aluno.com',
+            status: 'Paga'
+        }]);
+        if(!error) { alert('Venda simulada com sucesso!'); carregarDadosDashboard(); }
+    }
+
+    async function carregarDadosDashboard() {
+        const { data: vendas, error } = await _supabase.from('vendas').select('*, produtos(nome)').order('created_at', { ascending: false });
+        if(error) return;
+        const totalBruto = vendas.reduce((sum, v) => sum + v.valor_total, 0);
+        const totalLiquido = vendas.reduce((sum, v) => sum + v.valor_liquido, 0);
+        if(document.getElementById('dash-total-vendas')) document.getElementById('dash-total-vendas').innerText = `R$ ${totalBruto.toFixed(2).replace('.', ',')}`;
+        if(document.getElementById('dash-valor-liquido')) document.getElementById('dash-valor-liquido').innerText = `R$ ${totalLiquido.toFixed(2).replace('.', ',')}`;
+        if(document.getElementById('dash-count-vendas')) document.getElementById('dash-count-vendas').innerText = vendas.length;
+        const bodySales = document.getElementById('sales-list-body');
+        if(bodySales) bodySales.innerHTML = vendas.map(v => `
+            <tr>
+                <td>#${v.id.slice(0,8)}</td>
+                <td style="font-weight:700">${v.produtos?.nome || 'Produto excluído'}</td>
+                <td>R$ ${v.valor_total.toFixed(2)}</td>
+                <td>${new Date(v.created_at).toLocaleDateString()}</td>
+                <td><span class="badge badge-success">${v.status}</span></td>
+            </tr>
+        `).join('');
         if(salesChartInstance) {
-            salesChartInstance.data.datasets[0].data = produtos.slice(0, 7).map(p => p.preco);
+            salesChartInstance.data.datasets[0].data = vendas.slice(0, 7).reverse().map(v => v.valor_total);
             salesChartInstance.update();
         }
     }
 
+    // --- NAVEGAÇÃO ---
     function nav(id, el) {
         if(id === 'ajuda') return;
         document.querySelectorAll('.aba-section').forEach(s => s.classList.remove('active'));
         document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-        document.getElementById('aba-' + id).classList.add('active');
+        const target = document.getElementById('aba-' + id);
+        if(target) target.classList.add('active');
         el.classList.add('active');
         document.getElementById('header-path').innerHTML = `<strong>Maestro Console</strong> / ${el.innerText.trim()}`;
         if(id === 'relat') closeRelat();
         if(id === 'prod') carregarProdutos();
+        if(id === 'dash' || id === 'vendas') carregarDadosDashboard();
     }
     
     function openRelat(t) { document.getElementById('relat-main-list').style.display='none'; document.getElementById('relat-detail').style.display='block'; document.getElementById('relat-title-display').innerText=t; }
     function closeRelat() { document.getElementById('relat-main-list').style.display='block'; document.getElementById('relat-detail').style.display='none'; }
     function openColabModal() { document.getElementById('modalColab').classList.add('active'); }
     function closeColabModal() { document.getElementById('modalColab').classList.remove('active'); }
-
     function openProductModal() { 
         if(!document.getElementById('edit-prod-id').value) {
             document.getElementById('modal-product-title').innerText = "Criar produto";
             document.getElementById('btn-save-product').innerText = "Criar produto";
-            // Limpa campos se for criação
-            document.getElementById('ipt_nome').value = '';
-            document.getElementById('ipt_preco').value = '';
-            document.getElementById('ipt_url').value = '';
+            document.getElementById('ipt_nome').value = ''; document.getElementById('ipt_preco').value = ''; document.getElementById('ipt_url').value = '';
         }
         document.getElementById('modalProduct').classList.add('active'); 
     }
-    function closeProductModal() { 
-        document.getElementById('modalProduct').classList.remove('active'); 
-        document.getElementById('edit-prod-id').value = ''; // Limpa ID ao fechar
-    }
+    function closeProductModal() { document.getElementById('modalProduct').classList.remove('active'); document.getElementById('edit-prod-id').value = ''; }
     function switchProductTab(tab, el) {
         document.querySelectorAll('.prod-modal-tab').forEach(c => c.style.display = 'none');
         document.querySelectorAll('#productModalNav .sub-nav-item').forEach(i => i.classList.remove('active'));
@@ -439,12 +454,13 @@
 
     window.onload = function() {
         carregarProdutos();
+        carregarDadosDashboard();
         const ctx = document.getElementById('salesChart')?.getContext('2d');
         if(ctx) {
             salesChartInstance = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: ['Produto 1', 'Produto 2', 'Produto 3', 'Produto 4', 'Produto 5', 'Produto 6', 'Produto 7'],
+                    labels: ['Venda 1', 'Venda 2', 'Venda 3', 'Venda 4', 'Venda 5', 'Venda 6', 'Venda 7'],
                     datasets: [{
                         data: [0, 0, 0, 0, 0, 0, 0],
                         borderColor: '#5D5FEF',
