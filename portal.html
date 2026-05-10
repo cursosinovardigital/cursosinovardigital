@@ -124,7 +124,7 @@
 
 <main>
     <header>
-        <div id="header-path"><strong>Maestro Console</strong> / Apps</div>
+        <div id="header-path"><strong>Maestro Console</strong> / Dashboard</div>
         <div style="display:flex; align-items:center; gap:20px;">
             <i class="fas fa-user-circle fa-2x" style="color: #CBD5E0;"></i>
         </div>
@@ -180,7 +180,7 @@
             <h2>Área de Membros</h2>
             <div class="sub-nav"><div class="sub-nav-item active">Áreas de membros</div><div class="sub-nav-item">Cursos</div><div class="sub-nav-item">Escolas</div></div>
             <div style="display: flex; justify-content: space-between; align-items: center; background: #FFF; padding: 20px; border: 1px solid var(--border); border-radius: 12px 12px 0 0; border-bottom: none;"><div style="position: relative; width: 400px;"><i class="fas fa-search" style="position: absolute; left: 15px; top: 15px; color: #A0AEC0;"></i><input type="text" placeholder="Buscar..." class="search-input"></div><button class="btn-primary">Criar área de membros</button></div>
-            <div class="table-container" style="border-radius: 0 0 12px 12px;"><table><thead><tr><th>NOME</th><th>URL</th><th>ALUNOS</th><th>AÇÕES</th></tr></thead><tbody id="member-list-body"><tr><td>Área Premium Inovar</td><td>inovar.digital/m/premium</td><td>0</td><td><i class="fas fa-edit"></i></td></tr></tbody></table></div>
+            <div class="table-container" style="border-radius: 0 0 12px 12px;"><table><thead><tr><th>NOME</th><th>URL</th><th>ALUNOS</th><th>AÇÕES</th></tr></thead><tbody id="member-list-body"><tr><td>Área Premium Inovar</td><td>inovar.digital/m/premium</td><td>0</td><td><i class="fas fa-edit" style="cursor:pointer"></i></td></tr></tbody></table></div>
         </section>
 
         <section id="aba-vendas" class="aba-section">
@@ -236,7 +236,7 @@
         <section id="aba-finan" class="aba-section">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;"><h2 style="margin:0">Financeiro</h2><select class="select-currency"><option>BRL</option></select></div>
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:25px; margin-bottom:30px;">
-                <div class="fin-card disponivel"><span class="fin-label">Saldo disponível</span><span class="fin-value">R$ 0,00</span></div>
+                <div class="fin-card disponivel"><span class="fin-label">Saldo disponível</span><span class="fin-value" id="fin-disponivel">R$ 0,00</span></div>
                 <div class="fin-card pendente"><span class="fin-label">Saldo pendente <i class="far fa-question-circle" style="font-size:14px; color:#CBD5E0"></i></span><span class="fin-value">R$ 0,00</span></div>
             </div>
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;">
@@ -326,14 +326,13 @@
 </div>
 
 <script>
-    // CONFIGURAÇÃO SUPABASE
     const SUPABASE_URL = 'https://onsbuazkqfehkudhladt.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9uc2J1YXprcWZlaGt1ZGhsYWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzNTI5OTgsImV4cCI6MjA5MzkyODk5OH0.ZypL6LHbPC_z971EDCTh6pVoA7g4qM6hWSWfWVO9a-M';
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     let salesChartInstance = null;
 
-    // --- PRODUTOS ---
+    // --- LÓGICA DE PRODUTOS ---
     async function carregarProdutos() {
         const { data, error } = await _supabase.from('produtos').select('*').order('created_at', { ascending: false });
         if(error) return;
@@ -342,7 +341,7 @@
             <tr>
                 <td style="font-weight:700; color:var(--purple-kiwi)">${p.nome}</td>
                 <td>R$ ${p.preco.toFixed(2).replace('.',',')}</td>
-                <td><span class="badge badge-success">${p.status}</span></td>
+                <td><span class="badge badge-success">Ativo</span></td>
                 <td style="text-align:right">
                     <button class="btn-primary" style="padding: 5px 10px; font-size: 11px; background: var(--green); margin-right:10px;" onclick="simularVenda('${p.id}', ${p.preco})">Simular Venda</button>
                     <i class="fas fa-edit" style="cursor:pointer; margin-right:10px" onclick="editProduct('${p.id}', '${p.nome}', ${p.preco}, '${p.url_entrega || ''}')"></i>
@@ -357,9 +356,13 @@
         const nome = document.getElementById('ipt_nome').value;
         const preco = document.getElementById('ipt_preco').value;
         const url = document.getElementById('ipt_url').value;
+
         if(!nome || !preco) { alert("Preencha nome e preço!"); return; }
-        const payload = { nome: nome, preco: parseFloat(preco), url_entrega: url, status: 'Ativo' };
+
+        const payload = { nome, preco: parseFloat(preco), url_entrega: url, status: 'Ativo' };
+
         const result = id ? await _supabase.from('produtos').update(payload).eq('id', id) : await _supabase.from('produtos').insert([payload]);
+
         if(!result.error) { closeProductModal(); carregarProdutos(); }
     }
 
@@ -369,18 +372,17 @@
         document.getElementById('ipt_preco').value = preco;
         document.getElementById('ipt_url').value = url;
         document.getElementById('modal-product-title').innerText = "Editar produto";
-        document.getElementById('btn-save-product').innerText = "Salvar alterações";
         openProductModal();
     }
 
     async function deleteProduct(id) {
-        if(confirm("Deseja realmente excluir este produto?")) {
+        if(confirm("Excluir este produto?")) {
             const { error } = await _supabase.from('produtos').delete().eq('id', id);
             if(!error) carregarProdutos();
         }
     }
 
-    // --- VENDAS ---
+    // --- LÓGICA DE VENDAS E DASHBOARD ---
     async function simularVenda(prodId, preco) {
         const comissao = preco * 0.10;
         const { error } = await _supabase.from('vendas').insert([{
@@ -388,46 +390,49 @@
             valor_total: preco,
             comissao_maestro: comissao,
             valor_liquido: preco - comissao,
-            email_comprador: 'teste@aluno.com',
             status: 'Paga'
         }]);
-        if(!error) { alert('Venda simulada com sucesso!'); carregarDadosDashboard(); }
+        if(!error) { alert('Venda registrada!'); carregarDadosDashboard(); }
     }
 
     async function carregarDadosDashboard() {
         const { data: vendas, error } = await _supabase.from('vendas').select('*, produtos(nome)').order('created_at', { ascending: false });
-        if(error) return;
+        if(error || !vendas) return;
+
         const totalBruto = vendas.reduce((sum, v) => sum + v.valor_total, 0);
         const totalLiquido = vendas.reduce((sum, v) => sum + v.valor_liquido, 0);
-        if(document.getElementById('dash-total-vendas')) document.getElementById('dash-total-vendas').innerText = `R$ ${totalBruto.toFixed(2).replace('.', ',')}`;
-        if(document.getElementById('dash-valor-liquido')) document.getElementById('dash-valor-liquido').innerText = `R$ ${totalLiquido.toFixed(2).replace('.', ',')}`;
-        if(document.getElementById('dash-count-vendas')) document.getElementById('dash-count-vendas').innerText = vendas.length;
-        const bodySales = document.getElementById('sales-list-body');
-        if(bodySales) bodySales.innerHTML = vendas.map(v => `
+
+        // Atualiza Cards
+        document.getElementById('dash-total-vendas').innerText = `R$ ${totalBruto.toFixed(2).replace('.', ',')}`;
+        document.getElementById('dash-valor-liquido').innerText = `R$ ${totalLiquido.toFixed(2).replace('.', ',')}`;
+        document.getElementById('dash-count-vendas').innerText = vendas.length;
+        if(document.getElementById('fin-disponivel')) document.getElementById('fin-disponivel').innerText = `R$ ${totalLiquido.toFixed(2).replace('.', ',')}`;
+
+        // Aba Vendas
+        document.getElementById('sales-list-body').innerHTML = vendas.map(v => `
             <tr>
                 <td>#${v.id.slice(0,8)}</td>
-                <td style="font-weight:700">${v.produtos?.nome || 'Produto excluído'}</td>
+                <td style="font-weight:700">${v.produtos?.nome || 'Produto'}</td>
                 <td>R$ ${v.valor_total.toFixed(2)}</td>
                 <td>${new Date(v.created_at).toLocaleDateString()}</td>
                 <td><span class="badge badge-success">${v.status}</span></td>
             </tr>
         `).join('');
+
+        // Gráfico
         if(salesChartInstance) {
             salesChartInstance.data.datasets[0].data = vendas.slice(0, 7).reverse().map(v => v.valor_total);
             salesChartInstance.update();
         }
     }
 
-    // --- NAVEGAÇÃO ---
+    // --- NAVEGAÇÃO E MODAIS ---
     function nav(id, el) {
-        if(id === 'ajuda') return;
         document.querySelectorAll('.aba-section').forEach(s => s.classList.remove('active'));
         document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-        const target = document.getElementById('aba-' + id);
-        if(target) target.classList.add('active');
+        document.getElementById('aba-' + id).classList.add('active');
         el.classList.add('active');
         document.getElementById('header-path').innerHTML = `<strong>Maestro Console</strong> / ${el.innerText.trim()}`;
-        if(id === 'relat') closeRelat();
         if(id === 'prod') carregarProdutos();
         if(id === 'dash' || id === 'vendas') carregarDadosDashboard();
     }
@@ -436,15 +441,11 @@
     function closeRelat() { document.getElementById('relat-main-list').style.display='block'; document.getElementById('relat-detail').style.display='none'; }
     function openColabModal() { document.getElementById('modalColab').classList.add('active'); }
     function closeColabModal() { document.getElementById('modalColab').classList.remove('active'); }
-    function openProductModal() { 
-        if(!document.getElementById('edit-prod-id').value) {
-            document.getElementById('modal-product-title').innerText = "Criar produto";
-            document.getElementById('btn-save-product').innerText = "Criar produto";
-            document.getElementById('ipt_nome').value = ''; document.getElementById('ipt_preco').value = ''; document.getElementById('ipt_url').value = '';
-        }
-        document.getElementById('modalProduct').classList.add('active'); 
+    function openProductModal() { document.getElementById('modalProduct').classList.add('active'); }
+    function closeProductModal() { 
+        document.getElementById('modalProduct').classList.remove('active'); 
+        document.getElementById('edit-prod-id').value = ''; 
     }
-    function closeProductModal() { document.getElementById('modalProduct').classList.remove('active'); document.getElementById('edit-prod-id').value = ''; }
     function switchProductTab(tab, el) {
         document.querySelectorAll('.prod-modal-tab').forEach(c => c.style.display = 'none');
         document.querySelectorAll('#productModalNav .sub-nav-item').forEach(i => i.classList.remove('active'));
@@ -453,14 +454,12 @@
     }
 
     window.onload = function() {
-        carregarProdutos();
-        carregarDadosDashboard();
         const ctx = document.getElementById('salesChart')?.getContext('2d');
         if(ctx) {
             salesChartInstance = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: ['Venda 1', 'Venda 2', 'Venda 3', 'Venda 4', 'Venda 5', 'Venda 6', 'Venda 7'],
+                    labels: ['V1', 'V2', 'V3', 'V4', 'V5', 'V6', 'V7'],
                     datasets: [{
                         data: [0, 0, 0, 0, 0, 0, 0],
                         borderColor: '#5D5FEF',
@@ -471,6 +470,8 @@
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
             });
         }
+        carregarProdutos();
+        carregarDadosDashboard();
     };
 </script>
 </body>
