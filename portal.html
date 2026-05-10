@@ -412,6 +412,64 @@
 </div>
 
 <script>
+
+    // 1. Abre o modal de produtos
+function openProductModal() {
+    const modal = document.getElementById('modalProduct');
+    if (modal) modal.classList.add('active');
+}
+
+// 2. Fecha o modal de produtos
+function closeProductModal() {
+    const modal = document.getElementById('modalProduct');
+    if (modal) modal.classList.remove('active');
+}
+
+// 3. Troca as abas (Informações, Preços, Entrega) dentro do modal
+function switchModalTab(tabId) {
+    // Esconde todas as abas do modal
+    document.querySelectorAll('.product-modal-tab').forEach(tab => {
+        tab.style.display = 'none';
+        tab.classList.remove('active');
+    });
+    
+    // Remove o destaque de todos os botões da sub-nav
+    document.querySelectorAll('#productModalNav .sub-nav-item').forEach(item => {
+        item.classList.remove('active');
+    });
+
+    // Mostra a aba clicada
+    const targetTab = document.getElementById('modal-tab-' + tabId);
+    if (targetTab) {
+        targetTab.style.display = 'block';
+        targetTab.classList.add('active');
+    }
+    
+    // Destaca o botão clicado (usando o evento atual)
+    event.currentTarget.classList.add('active');
+}
+
+// 4. Carrega a lista de produtos (Simulação inicial)
+async function loadProducts() {
+    const listBody = document.getElementById('product-list-body');
+    if (!listBody) return;
+
+    // Simula um delay de carregamento de 1 segundo
+    setTimeout(() => {
+        listBody.innerHTML = `
+            <tr>
+                <td style="font-weight:700; color:var(--purple-kiwi)">Curso de Violão do Zero</td>
+                <td><span style="background:#E0E7FF; color:#4338CA; padding:4px 8px; border-radius:4px; font-size:11px; font-weight:700;">CURSO ONLINE</span></td>
+                <td>R$ 297,00</td>
+                <td><span style="background:#DCFCE7; color:#166534; padding:4px 8px; border-radius:4px; font-size:11px; font-weight:700;">Ativo</span></td>
+                <td style="text-align:right">
+                    <i class="fas fa-link" style="margin-right:10px; cursor:pointer; color:#718096" title="Checkout"></i>
+                    <i class="fas fa-edit" style="cursor:pointer; color:#718096" title="Editar"></i>
+                </td>
+            </tr>
+        `;
+    }, 800);
+}
     function nav(id, el) {
         if(id === 'ajuda') return; // Não ativa seção para link externo
         document.querySelectorAll('.aba-section').forEach(s => s.classList.remove('active'));
