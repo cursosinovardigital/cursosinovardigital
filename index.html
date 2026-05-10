@@ -49,18 +49,18 @@
         .btn-signup { background: var(--hot-orange); color: var(--white); text-decoration: none; font-weight: 700; padding: 12px 28px; border-radius: 8px; font-size: 0.9rem; transition: all 0.3s ease; }
         .btn-signup:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(255, 64, 0, 0.3); }
 
-        /* HERO - AJUSTE FINO (MAIS FINO E ALINHADO) */
+        /* HERO - AJUSTE FINO */
         .hero {
-            padding: 40px 8% 60px; /* Padding reduzido para afinar a sessão */
+            padding: 40px 8% 60px; 
             display: flex;
-            align-items: center; /* Centraliza verticalmente o texto com a imagem */
+            align-items: center; 
             background: var(--white);
             gap: 60px;
         }
 
         .hero-text { flex: 1.2; text-align: left; }
         .hero-text h1 { 
-            font-size: 3.8rem; /* Ligeiramente menor para elegância */
+            font-size: 3.8rem; 
             font-weight: 900; line-height: 1.0; 
             margin: 0 0 20px 0; color: #000; letter-spacing: -3px;
         }
@@ -69,7 +69,7 @@
 
         .hero-image { flex: 0.8; display: flex; justify-content: flex-end; }
         .hero-image img { 
-            width: 100%; max-width: 420px; height: 420px; /* Imagem um pouco menor para alinhar */
+            width: 100%; max-width: 420px; height: 420px; 
             border-radius: 35px; box-shadow: 0 15px 50px rgba(0,0,0,0.08);
             object-fit: cover; object-position: center;
         }
@@ -93,7 +93,7 @@
         .stat-item h3 { font-size: 2.8rem; font-weight: 900; margin: 0; color: var(--hot-orange); }
         .stat-item p { font-size: 1.1rem; opacity: 0.8; margin-top: 5px; }
 
-        /* SEÇÃO DE MATÉRIAS */
+        /* SEÇÃO DE MATÉRIAS INTERCALADA */
         .content-section { 
             padding: 80px 8%; 
             background-color: var(--hot-bg); 
@@ -120,9 +120,9 @@
             display: flex;
             flex-direction: column;
         }
-        .card:hover { transform: translateY(-8px); border: 1px solid var(--hot-orange); }
+        .card:hover { transform: translateY(-8px); border: 1px solid var(--hot-orange); box-shadow: 0 10px 30px rgba(0,0,0,0.06); }
         
-        .card-img { width: 100%; height: 200px; background: #eee; position: relative; }
+        .card-img { width: 100%; height: 200px; background: #eee; position: relative; flex-shrink: 0; }
         .card-img img { width: 100%; height: 100%; object-fit: cover; }
         .card-tag { 
             position: absolute; top: 20px; left: 20px; 
@@ -143,7 +143,7 @@
             border-radius: 10px;
             font-weight: 700;
             font-size: 0.9rem;
-            transition: 0.2s ease;
+            transition: all 0.2s ease;
             margin-top: auto;
             display: block;
         }
@@ -168,22 +168,37 @@
         .format-icon { margin-bottom: 20px; display: inline-block; color: var(--hot-orange); }
         .format-card h4 { font-size: 1.2rem; font-weight: 800; margin: 0; color: var(--text-dark); }
 
-        /* COOKIE BAR */
+        /* COOKIE BAR ESTILO HOTMART */
         .cookie-bar {
-            position: fixed; bottom: 20px; left: 5%; right: 5%; 
-            background: var(--white); padding: 20px 40px; 
-            display: flex; justify-content: space-between; align-items: center; 
-            border-radius: 15px; z-index: 2000;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 1100px;
+            background: #ffffff;
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 12px;
+            z-index: 3000;
+            box-shadow: 0 4px 25px rgba(0,0,0,0.12);
             border: 1px solid #e5e7eb;
         }
-
-        footer { 
-            padding: 60px 8%; 
-            background: #000; 
-            color: #fff; 
-            text-align: center;
+        .cookie-text { font-size: 0.9rem; color: #6b7280; margin: 0; line-height: 1.5; padding-right: 20px; }
+        .cookie-text a { color: #5882e5; text-decoration: underline; }
+        .btn-cookie-ok {
+            background: #5882e5; color: #ffffff; border: none; padding: 12px 45px;
+            border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 0.9rem;
+            transition: 0.2s; text-transform: uppercase;
         }
+        .btn-cookie-ok:hover { background: #4669c1; }
+
+        /* FOOTER */
+        footer { padding: 60px 8%; background: #000; color: #fff; text-align: left; }
+        .footer-logo { font-size: 2rem; font-weight: 900; margin-bottom: 10px; color: var(--hot-orange); }
+        .footer-logo span { color: #fff; }
 
         @media (max-width: 1024px) {
             .hero { flex-direction: column; text-align: center; align-items: center; }
@@ -192,6 +207,9 @@
             .stats-section { flex-direction: column; text-align: center; }
             .stats-grid { grid-template-columns: 1fr; gap: 30px; }
             nav.top-menu { display: none; }
+            .cookie-bar { flex-direction: column; text-align: center; padding: 20px; width: 95%; }
+            .cookie-text { padding-right: 0; margin-bottom: 15px; }
+            .btn-cookie-ok { width: 100%; }
         }
     </style>
 </head>
@@ -246,37 +264,25 @@
         <div class="section-header">
             <h2>Explore nossas <span>Matérias & Oportunidades</span></h2>
         </div>
-
         <div class="articles-grid">
             <div class="card">
-                <div class="card-img">
-                    <span class="card-tag">Estratégia</span>
-                    <img src="produto1.jpg" alt="Vendas">
-                </div>
+                <div class="card-img"><span class="card-tag">Estratégia</span><img src="produto1.jpg" alt="Vendas"></div>
                 <div class="card-body">
                     <h3>Como vender infoprodutos todos os dias no automático</h3>
                     <p>Entenda a estrutura de funil que permite escalar vendas sem precisar de audiência.</p>
                     <a href="https://cursosinovardigital.github.io/lowticketlucrativo/blog" class="card-btn">Ler Matéria Completa</a>
                 </div>
             </div>
-
             <div class="card">
-                <div class="card-img">
-                    <span class="card-tag">IA</span>
-                    <img src="https://hotmart.com/static/app-hotmart-next/images/monks-home/boost-sales/1-desk.webp" alt="IA">
-                </div>
+                <div class="card-img"><span class="card-tag">IA</span><img src="https://hotmart.com/static/app-hotmart-next/images/monks-home/boost-sales/1-desk.webp" alt="IA"></div>
                 <div class="card-body">
                     <h3>5 IAs que estão mudando o jogo em 2026</h3>
                     <p>Ferramentas essenciais para automatizar seu atendimento e criação de conteúdo.</p>
                     <a href="#" class="card-btn">Conhecer as IAs</a>
                 </div>
             </div>
-
             <div class="card">
-                <div class="card-img">
-                    <span class="card-tag">Capacitação</span>
-                    <img src="fundacao.bradesco.jpg" alt="Fundação Bradesco">
-                </div>
+                <div class="card-img"><span class="card-tag">Capacitação</span><img src="fundacao.bradesco.jpg" alt="Fundação Bradesco"></div>
                 <div class="card-body">
                     <h3>Cursos Gratuitos Fundação Bradesco</h3>
                     <p>Acesse certificações gratuitas em tecnologia, negócios e design com o padrão de excelência da Escola Virtual.</p>
@@ -288,45 +294,36 @@
 
     <section class="formats-section">
         <h2 style="font-size: 2.2rem; font-weight: 900;">Tudo que você precisa <span>em um só lugar.</span></h2>
-        
         <div class="formats-grid">
             <div class="format-card">
-                <div class="format-icon">
-                    <svg width="40" height="40" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM3.89 9L12 5.11 20.11 9 12 12.89 3.89 9zM12 15l-9-4.91V14l9 5 9-5v-3.91L12 15z"/></svg>
-                </div>
+                <div class="format-icon"><svg width="40" height="40" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM3.89 9L12 5.11 20.11 9 12 12.89 3.89 9zM12 15l-9-4.91V14l9 5 9-5v-3.91L12 15z"/></svg></div>
                 <h4>Cursos Gratuitos</h4>
             </div>
             <div class="format-card">
-                <div class="format-icon">
-                    <svg width="40" height="40" fill="currentColor" viewBox="0 0 24 24"><path d="M19 8l-1.41 1.41L16.17 8H4v2h12.17l-1.58 1.59L16 13l4-4-1-1zm-2 9H7v-2h10v2zm0-14H7v2h10V3zM5 16H3V7h2v9z"/></svg>
-                </div>
+                <div class="format-icon"><svg width="40" height="40" fill="currentColor" viewBox="0 0 24 24"><path d="M19 8l-1.41 1.41L16.17 8H4v2h12.17l-1.58 1.59L16 13l4-4-1-1zm-2 9H7v-2h10v2zm0-14H7v2h10V3zM5 16H3V7h2v9z"/></svg></div>
                 <h4>IAs Integradas</h4>
             </div>
             <div class="format-card">
-                <div class="format-icon">
-                    <svg width="40" height="40" fill="currentColor" viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-8 0h-4V4h4v2z"/></svg>
-                </div>
+                <div class="format-icon"><svg width="40" height="40" fill="currentColor" viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-8 0h-4V4h4v2z"/></svg></div>
                 <h4>Serviços</h4>
             </div>
             <div class="format-card">
-                <div class="format-icon">
-                    <svg width="40" height="40" fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-1 14H5V6h14v12zM7 8h10v2H7V8zm0 4h10v2H7v-2z"/></svg>
-                </div>
+                <div class="format-icon"><svg width="40" height="40" fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-1 14H5V6h14v12zM7 8h10v2H7V8zm0 4h10v2H7v-2z"/></svg></div>
                 <h4>Notícias</h4>
             </div>
         </div>
     </section>
 
     <div class="cookie-bar" id="cookieBar">
-        <p style="font-size: 0.9rem; color: #4b5563; margin: 0;">Utilizamos cookies para que o seu negócio aconteça.</p>
-        <button onclick="document.getElementById('cookieBar').style.display='none'" style="background: var(--hot-orange); color: #fff; border: none; padding: 10px 25px; border-radius: 8px; cursor: pointer; font-weight: 700; transition: 0.2s;">OK</button>
+        <p class="cookie-text">Em nosso <a href="#">Aviso de Cookies</a>, você encontra mais informações sobre o que são cookies, quais utilizamos na Inovar Digital, para que servem e como gerenciá-los.</p>
+        <button onclick="document.getElementById('cookieBar').style.display='none'" class="btn-cookie-ok">OK</button>
     </div>
 
     <footer>
         <div style="max-width: 1100px; margin: 0 auto;">
-            <div class="logo" style="color: #fff; font-size: 2rem; margin-bottom: 20px;">inovar<span>digital</span></div>
-            <p style="color: #888; font-size: 1rem; margin-bottom: 40px;">Seu portal de notícias, serviços e capacitação digital.</p>
-            <div style="border-top: 1px solid #333; padding-top: 40px; color: #666; font-size: 0.8rem;">
+            <div class="footer-logo">inovar<span>digital</span></div>
+            <p style="color: #888; font-size: 1rem; margin-bottom: 40px; max-width: 500px;">Seu portal de notícias, serviços e capacitação digital avançada para o mercado de 2026.</p>
+            <div style="border-top: 1px solid #333; padding-top: 30px; color: #555; font-size: 0.85rem;">
                 Inovar Digital © 2026 - Víctor Trivinho | Guarulhos, SP
             </div>
         </div>
