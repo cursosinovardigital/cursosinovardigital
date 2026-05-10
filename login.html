@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | Inovar Digital</title>
+    <title>Acesso | Inovar Digital</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -30,7 +30,6 @@
             max-width: 400px;
             text-align: center;
         }
-        /* LOGO - Voltando ao tamanho original que você curtiu */
         .logo { 
             font-weight: 900; 
             font-size: 1.8rem; 
@@ -105,20 +104,20 @@
         .btn-google:hover { background: #f9fafb; border-color: #9ca3af; }
         
         .footer-links { margin-top: 25px; font-size: 0.85rem; color: #6b7280; }
-        .footer-links a { color: var(--hot-orange); text-decoration: none; font-weight: 600; }
+        .footer-links a { color: var(--hot-orange); text-decoration: none; font-weight: 600; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div class="login-card">
     <div class="logo">inovar<span>digital</span></div>
-    <h2>Boas-vindas!</h2>
-    <p>Acesse sua conta para gerenciar seus negócios.</p>
+    <h2 id="auth-title">Boas-vindas!</h2>
+    <p id="auth-desc">Acesse sua conta para gerenciar seus negócios.</p>
     
-    <form id="loginForm">
+    <form id="authForm">
         <input type="email" id="email" placeholder="E-mail" required>
         <input type="password" id="password" placeholder="Senha" required>
-        <button type="submit" class="btn-login">Entrar</button>
+        <button type="submit" id="btn-submit" class="btn-login">Entrar</button>
     </form>
 
     <div class="divider">ou</div>
@@ -129,7 +128,7 @@
     </button>
 
     <div class="footer-links">
-        Ainda não tem conta? <a href="#">Criar conta</a>
+        <span id="toggle-text">Ainda não tem conta?</span> <a onclick="toggleAuth()" id="toggle-link">Criar conta</a>
     </div>
 </div>
 
@@ -139,25 +138,56 @@
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9uc2J1YXprcWZlaGt1ZGhsYWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzNTI5OTgsImV4cCI6MjA5MzkyODk5OH0.ZypL6LHbPC_z971EDCTh6pVoA7g4qM6hWSWfWVO9a-M';
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+    let isLogin = true;
+
+    function toggleAuth() {
+        isLogin = !isLogin;
+        const title = document.getElementById('auth-title');
+        const desc = document.getElementById('auth-desc');
+        const btnSubmit = document.getElementById('btn-submit');
+        const toggleText = document.getElementById('toggle-text');
+        const toggleLink = document.getElementById('toggle-link');
+
+        if (isLogin) {
+            title.innerText = 'Boas-vindas!';
+            desc.innerText = 'Acesse sua conta para gerenciar seus negócios.';
+            btnSubmit.innerText = 'Entrar';
+            toggleText.innerText = 'Ainda não tem conta?';
+            toggleLink.innerText = 'Criar conta';
+        } else {
+            title.innerText = 'Crie sua conta';
+            desc.innerText = 'Cadastre-se gratuitamente para acessar o conteúdo.';
+            btnSubmit.innerText = 'Cadastrar';
+            toggleText.innerText = 'Já possui conta?';
+            toggleLink.innerText = 'Fazer login';
+        }
+    }
+
     async function loginComGoogle() {
         const { error } = await _supabase.auth.signInWithOAuth({
             provider: 'google',
-            options: { redirectTo: window.location.origin + '/index.html' }
+            options: { 
+                // AQUI RESOLVE O ERRO: Substitua pela URL do seu GitHub Pages
+                redirectTo: 'https://cursosinovardigital.github.io/cursosinovardigital/index.html' 
+            }
         });
         if (error) alert('Erro: ' + error.message);
     }
 
-    const loginForm = document.getElementById('loginForm');
-    loginForm.addEventListener('submit', async (e) => {
+    const authForm = document.getElementById('authForm');
+    authForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
-        const { error } = await _supabase.auth.signInWithPassword({ email, password });
 
-        if (error) {
-            alert('Erro: ' + error.message);
+        if (isLogin) {
+            const { error } = await _supabase.auth.signInWithPassword({ email, password });
+            if (error) alert('Erro no login: ' + error.message);
+            else window.location.href = 'index.html';
         } else {
-            window.location.href = 'index.html';
+            const { error } = await _supabase.auth.signUp({ email, password });
+            if (error) alert('Erro no cadastro: ' + error.message);
+            else alert('Sucesso! Verifique seu e-mail para confirmar a conta.');
         }
     });
 </script>
