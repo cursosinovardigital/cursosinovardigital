@@ -15,7 +15,7 @@
 
         body { 
             font-family: 'Inter', sans-serif; 
-            background-color: var(--hot-bg); 
+            background-color: var(--white); 
             color: var(--text-dark); 
             margin: 0; 
             overflow-x: hidden;
@@ -44,64 +44,62 @@
 
         .auth-buttons { display: flex; gap: 15px; align-items: center; }
         .btn-login { color: var(--text-dark); text-decoration: none; font-weight: 600; padding: 10px 25px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 0.9rem; transition: 0.2s; }
-        .btn-login:hover { background: #f9fafb; border-color: #9ca3af; }
+        .btn-login:hover { background: var(--hot-bg); }
         
         .btn-signup { background: var(--hot-orange); color: var(--white); text-decoration: none; font-weight: 700; padding: 12px 28px; border-radius: 8px; font-size: 0.9rem; transition: all 0.3s ease; }
         .btn-signup:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(255, 64, 0, 0.3); }
 
-        /* HERO - ALINHAMENTO MILIMÉTRICO AO TOPO */
+        /* HERO - AJUSTE FINO (MAIS FINO E ALINHADO) */
         .hero {
-            padding: 60px 8% 80px; 
+            padding: 40px 8% 60px; /* Padding reduzido para afinar a sessão */
             display: flex;
-            align-items: flex-start; 
+            align-items: center; /* Centraliza verticalmente o texto com a imagem */
             background: var(--white);
             gap: 60px;
         }
 
-        .hero-text { 
-            flex: 1.2; 
-            text-align: left;
-            padding-top: 10px; 
-        }
-
+        .hero-text { flex: 1.2; text-align: left; }
         .hero-text h1 { 
-            font-size: 4.2rem; 
-            font-weight: 900; 
-            line-height: 1.0; 
-            margin: 0 0 25px 0; 
-            color: #000; 
-            letter-spacing: -3px;
+            font-size: 3.8rem; /* Ligeiramente menor para elegância */
+            font-weight: 900; line-height: 1.0; 
+            margin: 0 0 20px 0; color: #000; letter-spacing: -3px;
         }
-
         .hero-text h1 span { color: var(--hot-orange); }
+        .hero-text p { font-size: 1.2rem; color: #4b5563; margin-bottom: 30px; line-height: 1.4; max-width: 480px; }
 
-        .hero-text p { 
-            font-size: 1.3rem; 
-            color: #4b5563; 
-            margin-bottom: 40px; 
-            line-height: 1.4;
-            max-width: 500px;
-        }
-
-        .hero-image { 
-            flex: 0.8; 
-            display: flex; 
-            justify-content: flex-end;
-        }
-
+        .hero-image { flex: 0.8; display: flex; justify-content: flex-end; }
         .hero-image img { 
-            width: 100%; 
-            max-width: 460px; 
-            height: 460px; 
-            border-radius: 40px; 
-            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
-            object-fit: cover; 
-            object-position: center;
+            width: 100%; max-width: 420px; height: 420px; /* Imagem um pouco menor para alinhar */
+            border-radius: 35px; box-shadow: 0 15px 50px rgba(0,0,0,0.08);
+            object-fit: cover; object-position: center;
         }
+
+        /* SEÇÃO DE NÚMEROS */
+        .stats-section {
+            background: var(--text-dark);
+            color: var(--white);
+            padding: 60px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 40px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 60px;
+            flex: 1;
+        }
+        .stat-item h3 { font-size: 2.8rem; font-weight: 900; margin: 0; color: var(--hot-orange); }
+        .stat-item p { font-size: 1.1rem; opacity: 0.8; margin-top: 5px; }
 
         /* SEÇÃO DE MATÉRIAS */
-        .content-section { padding: 80px 8%; }
-        .section-header { margin-bottom: 50px; }
+        .content-section { 
+            padding: 80px 8%; 
+            background-color: var(--hot-bg); 
+            border-top: 1px solid #eee;
+        }
+        .section-header { margin-bottom: 40px; }
         .section-header h2 { font-size: 2.5rem; font-weight: 900; letter-spacing: -1px; margin: 0; }
         .section-header h2 span { color: var(--hot-orange); }
 
@@ -120,11 +118,11 @@
             text-decoration: none;
             color: inherit;
             display: flex;
-            flex-direction: column; /* Essencial para alinhar o botão no final */
+            flex-direction: column;
         }
-        .card:hover { transform: translateY(-8px); border: 1px solid var(--hot-orange); box-shadow: 0 10px 30px rgba(0,0,0,0.06); }
+        .card:hover { transform: translateY(-8px); border: 1px solid var(--hot-orange); }
         
-        .card-img { width: 100%; height: 200px; background: #eee; position: relative; flex-shrink: 0; }
+        .card-img { width: 100%; height: 200px; background: #eee; position: relative; }
         .card-img img { width: 100%; height: 100%; object-fit: cover; }
         .card-tag { 
             position: absolute; top: 20px; left: 20px; 
@@ -137,7 +135,6 @@
         .card-body h3 { font-size: 1.3rem; margin: 0 0 15px; font-weight: 800; line-height: 1.3; color: #000; }
         .card-body p { color: #6b7280; font-size: 1rem; line-height: 1.5; margin-bottom: 25px; flex-grow: 1; }
 
-        /* Botão interativo dentro do card */
         .card-btn {
             background: var(--hot-orange);
             color: var(--white);
@@ -146,11 +143,30 @@
             border-radius: 10px;
             font-weight: 700;
             font-size: 0.9rem;
-            transition: all 0.2s ease;
-            margin-top: auto; /* Empurra o botão para o final do card */
+            transition: 0.2s ease;
+            margin-top: auto;
             display: block;
         }
         .card-btn:hover { background: #e03900; transform: scale(1.02); }
+
+        /* SEÇÃO DE FORMATOS ATUALIZADA */
+        .formats-section { padding: 80px 8%; text-align: center; background: var(--white); }
+        .formats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin-top: 50px;
+        }
+        .format-card {
+            padding: 40px 20px;
+            border-radius: 24px;
+            background: #fdfdfd;
+            border: 1.5px solid #f0f0f0;
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .format-card:hover { border-color: var(--hot-orange); box-shadow: 0 15px 30px rgba(255, 64, 0, 0.08); transform: translateY(-10px); }
+        .format-icon { margin-bottom: 20px; display: inline-block; color: var(--hot-orange); }
+        .format-card h4 { font-size: 1.2rem; font-weight: 800; margin: 0; color: var(--text-dark); }
 
         /* COOKIE BAR */
         .cookie-bar {
@@ -161,12 +177,20 @@
             box-shadow: 0 10px 40px rgba(0,0,0,0.1);
             border: 1px solid #e5e7eb;
         }
-        .cookie-bar button:hover { opacity: 0.9; transform: scale(1.03); }
+
+        footer { 
+            padding: 60px 8%; 
+            background: #000; 
+            color: #fff; 
+            text-align: center;
+        }
 
         @media (max-width: 1024px) {
             .hero { flex-direction: column; text-align: center; align-items: center; }
             .hero-text h1 { font-size: 3rem; }
             .hero-image img { height: auto; max-width: 100%; }
+            .stats-section { flex-direction: column; text-align: center; }
+            .stats-grid { grid-template-columns: 1fr; gap: 30px; }
             nav.top-menu { display: none; }
         }
     </style>
@@ -178,7 +202,9 @@
         <nav class="top-menu">
             <a href="#">Cursos</a>
             <a href="#">Notícias</a>
-            <a href="#">Serviços</a> <a href="#">Produtos</a> </nav>
+            <a href="#">Serviços</a>
+            <a href="#">Produtos</a>
+        </nav>
         <div class="auth-buttons">
             <a href="login.html" class="btn-login">Entrar</a>
             <a href="login.html" class="btn-signup">Comece gratuitamente</a>
@@ -189,10 +215,30 @@
         <div class="hero-text">
             <h1>Cresça ao lado <span>dos melhores.</span></h1>
             <p>Acesse o hub completo de notícias, cursos gratuitos e as melhores ferramentas de IA do mercado com a <strong>Inovar Digital</strong>.</p>
-            <a href="login.html" class="btn-signup" style="padding: 18px 50px; font-size: 1.1rem; display: inline-block; margin-top: 10px;">Quero começar agora</a>
+            <a href="login.html" class="btn-signup" style="padding: 16px 45px; font-size: 1.1rem; display: inline-block;">Quero começar agora</a>
         </div>
         <div class="hero-image">
             <img src="https://hotmart.com/static/app-hotmart-next/images/monks-home/yoga.webp" alt="Alinhamento Inovar Digital">
+        </div>
+    </section>
+
+    <section class="stats-section">
+        <div style="max-width: 400px;">
+            <h2 style="font-size: 2rem; line-height: 1.1;">Lidere o mercado com <span>estratégia.</span></h2>
+        </div>
+        <div class="stats-grid">
+            <div class="stat-item">
+                <h3>+100</h3>
+                <p>Matérias Semanais</p>
+            </div>
+            <div class="stat-item">
+                <h3>50h</h3>
+                <p>Cursos Gratuitos</p>
+            </div>
+            <div class="stat-item">
+                <h3>24/7</h3>
+                <p>Suporte Digital</p>
+            </div>
         </div>
     </section>
 
@@ -240,13 +286,50 @@
         </div>
     </section>
 
+    <section class="formats-section">
+        <h2 style="font-size: 2.2rem; font-weight: 900;">Tudo que você precisa <span>em um só lugar.</span></h2>
+        
+        <div class="formats-grid">
+            <div class="format-card">
+                <div class="format-icon">
+                    <svg width="40" height="40" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM3.89 9L12 5.11 20.11 9 12 12.89 3.89 9zM12 15l-9-4.91V14l9 5 9-5v-3.91L12 15z"/></svg>
+                </div>
+                <h4>Cursos Gratuitos</h4>
+            </div>
+            <div class="format-card">
+                <div class="format-icon">
+                    <svg width="40" height="40" fill="currentColor" viewBox="0 0 24 24"><path d="M19 8l-1.41 1.41L16.17 8H4v2h12.17l-1.58 1.59L16 13l4-4-1-1zm-2 9H7v-2h10v2zm0-14H7v2h10V3zM5 16H3V7h2v9z"/></svg>
+                </div>
+                <h4>IAs Integradas</h4>
+            </div>
+            <div class="format-card">
+                <div class="format-icon">
+                    <svg width="40" height="40" fill="currentColor" viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-8 0h-4V4h4v2z"/></svg>
+                </div>
+                <h4>Serviços</h4>
+            </div>
+            <div class="format-card">
+                <div class="format-icon">
+                    <svg width="40" height="40" fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-1 14H5V6h14v12zM7 8h10v2H7V8zm0 4h10v2H7v-2z"/></svg>
+                </div>
+                <h4>Notícias</h4>
+            </div>
+        </div>
+    </section>
+
     <div class="cookie-bar" id="cookieBar">
         <p style="font-size: 0.9rem; color: #4b5563; margin: 0;">Utilizamos cookies para que o seu negócio aconteça.</p>
-        <button onclick="document.getElementById('cookieBar').style.display='none'" style="background: #4f46e5; color: #fff; border: none; padding: 10px 25px; border-radius: 8px; cursor: pointer; font-weight: 700; transition: 0.2s;">OK</button>
+        <button onclick="document.getElementById('cookieBar').style.display='none'" style="background: var(--hot-orange); color: #fff; border: none; padding: 10px 25px; border-radius: 8px; cursor: pointer; font-weight: 700; transition: 0.2s;">OK</button>
     </div>
 
-    <footer style="padding: 60px; text-align: center; background: #000; color: #fff; font-size: 0.8rem;">
-        Inovar Digital © 2026 - Víctor Trivinho | Guarulhos, SP
+    <footer>
+        <div style="max-width: 1100px; margin: 0 auto;">
+            <div class="logo" style="color: #fff; font-size: 2rem; margin-bottom: 20px;">inovar<span>digital</span></div>
+            <p style="color: #888; font-size: 1rem; margin-bottom: 40px;">Seu portal de notícias, serviços e capacitação digital.</p>
+            <div style="border-top: 1px solid #333; padding-top: 40px; color: #666; font-size: 0.8rem;">
+                Inovar Digital © 2026 - Víctor Trivinho | Guarulhos, SP
+            </div>
+        </div>
     </footer>
 
 </body>
