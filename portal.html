@@ -61,7 +61,7 @@
         .badge { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
         .badge-success { background: #DCFCE7; color: #166534; }
 
-        /* FINANCEIRO ESPECIFICO (UNIDO) */
+        /* FINANCEIRO ESPECIFICO (RESTAURADO IGUAL AO PRINT) */
         .fin-card { background: #FFF; padding: 30px; border-radius: 12px; border: 1px solid var(--border); display: flex; flex-direction: column; gap: 10px; position: relative; }
         .fin-card.disponivel { border-left: 6px solid var(--green); }
         .fin-card.pendente { border-left: 6px solid #EAB308; }
@@ -88,6 +88,12 @@
         .modal-overlay.active { display: flex; }
         .modal-content { background: #FFF; padding: 30px; border-radius: 12px; width: 450px; position: relative; }
 
+        /* ESTILO APPS (ADICIONADO) */
+        .apps-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
+        .app-card { background: #FFF; border: 1px solid var(--border); border-radius: 15px; padding: 30px 20px; display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .app-icon { width: 60px; height: 60px; background: #F8F9FA; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; font-size: 26px; }
+        .btn-app-config { width: 100%; padding: 12px; border: 1px solid var(--border); background: none; border-radius: 10px; font-weight: 700; cursor: pointer; color: #4A5568; margin-top: 15px; }
+
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
@@ -105,15 +111,15 @@
         <div class="nav-item" onclick="nav('assin', this)"><i class="fas fa-sync"></i> Assinaturas</div>
         <div class="nav-item" onclick="nav('finan', this)"><i class="fas fa-wallet"></i> Financeiro</div>
         <div class="nav-item" onclick="nav('relat', this)"><i class="fas fa-chart-line"></i> Relatórios</div>
-        <div class="nav-item active" onclick="nav('colab', this)"><i class="fas fa-user-friends"></i> Colaboradores</div>
-        <div class="nav-item" onclick="nav('apps', this)"><i class="fas fa-th"></i> Apps</div>
+        <div class="nav-item" onclick="nav('colab', this)"><i class="fas fa-user-friends"></i> Colaboradores</div>
+        <div class="nav-item active" onclick="nav('apps', this)"><i class="fas fa-th"></i> Apps</div>
         <div class="nav-item" onclick="nav('ajuda', this)"><i class="fas fa-question-circle"></i> Ajuda</div>
     </div>
 </nav>
 
 <main>
     <header>
-        <div id="header-path"><strong>Maestro Console</strong> / Colaboradores</div>
+        <div id="header-path"><strong>Maestro Console</strong> / Apps</div>
         <div style="display:flex; align-items:center; gap:20px;">
             <i class="fas fa-user-circle fa-2x" style="color: #CBD5E0;"></i>
         </div>
@@ -129,13 +135,27 @@
 
         <section id="aba-market" class="aba-section">
             <h2>Marketplace</h2>
-            <div class="market-grid"><div class="market-card"><div class="market-thumb"><img src="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?auto=format&fit=crop&w=400&q=80"></div><div class="market-info"><div class="market-title">Curso de Violão do Zero com Víctor</div><div class="market-commission">Até R$ 147,00 de comissão</div></div></div></div>
+            <div class="market-grid">
+                <div class="market-card">
+                    <div class="market-thumb">
+                        <img src="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?auto=format&fit=crop&w=400&q=80" alt="Violão">
+                    </div>
+                    <div class="market-info">
+                        <div class="market-title">Curso de Violão do Zero com Víctor</div>
+                        <div class="market-commission">Até R$ 147,00 de comissão</div>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <section id="aba-afiliados" class="aba-section">
             <h2>Meus Afiliados</h2>
             <div class="sub-nav"><div class="sub-nav-item active">Meus afiliados</div><div class="sub-nav-item">Solicitações</div></div>
-            <div style="display: flex; gap: 15px; margin-bottom: 20px;"><div style="flex: 1; position: relative;"><i class="fas fa-search" style="position: absolute; left: 15px; top: 15px; color: #A0AEC0;"></i><input type="text" class="search-input" placeholder="Filtrar por nome ou e-mail..."></div><div style="width: 250px;"><select class="search-input" style="padding-left: 15px;"><option>Todos os produtos</option></select></div><button class="btn-primary" style="background: #FFF; color: #4A5568; border: 1px solid var(--border);"><i class="fas fa-filter"></i> Filtros</button></div>
+            <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+                <div style="flex: 1; position: relative;"><i class="fas fa-search" style="position: absolute; left: 15px; top: 15px; color: #A0AEC0;"></i><input type="text" class="search-input" placeholder="Filtrar por nome ou e-mail..."></div>
+                <div style="width: 250px;"><select class="search-input" style="padding-left: 15px;"><option>Todos os produtos</option></select></div>
+                <button class="btn-primary" style="background: #FFF; color: #4A5568; border: 1px solid var(--border);"><i class="fas fa-filter"></i> Filtros</button>
+            </div>
             <div class="table-container"><table><thead><tr><th>NOME DO AFILIADO</th><th>PRODUTO</th><th>DATA DE AFILIAÇÃO</th><th>COMISSÃO</th><th>VENDAS</th><th>AÇÕES</th></tr></thead><tbody><tr><td colspan="6" style="text-align: center; padding: 60px; color: #A0AEC0;"><i class="fas fa-users" style="font-size: 40px; margin-bottom: 15px; display: block;"></i>Nenhum afiliado encontrado</td></tr></tbody></table></div>
         </section>
 
@@ -153,11 +173,40 @@
         </section>
 
         <section id="aba-finan" class="aba-section">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;"><h2>Financeiro</h2><select class="select-currency"><option>BRL</option></select></div>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:25px; margin-bottom:30px;"><div class="fin-card disponivel"><span class="fin-label">Saldo disponível</span><span class="fin-value">R$ 0,00</span></div><div class="fin-card pendente"><span class="fin-label">Saldo pendente <i class="far fa-question-circle" style="font-size:14px; color:#CBD5E0"></i></span><span class="fin-value">R$ 0,00</span></div></div>
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;"><a href="#" style="color:var(--purple-kiwi); font-weight:600; text-decoration:none; font-size:14px;">Alterar minha conta para CNPJ</a><button class="btn-primary">Efetuar saque</button></div>
-            <div class="sub-nav"><div class="sub-nav-item active">Saques</div><div class="sub-nav-item">Dados bancários</div><div class="sub-nav-item">Taxas e Prazos</div><div class="sub-nav-item">Identidade</div></div>
-            <div class="table-container"><table><thead><tr><th>DATA</th><th>VALOR</th><th>STATUS</th></tr></thead><tbody><tr><td colspan="3" style="text-align:center; padding:50px; color:#A0AEC0;">Exibindo 0 de 0 páginas</td></tr></tbody></table></div>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
+                <h2 style="margin:0">Financeiro</h2>
+                <select class="select-currency"><option>BRL</option></select>
+            </div>
+            
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:25px; margin-bottom:30px;">
+                <div class="fin-card disponivel">
+                    <span class="fin-label">Saldo disponível</span>
+                    <span class="fin-value">R$ 0,00</span>
+                </div>
+                <div class="fin-card pendente">
+                    <span class="fin-label">Saldo pendente <i class="far fa-question-circle" style="font-size:14px; color:#CBD5E0"></i></span>
+                    <span class="fin-value">R$ 0,00</span>
+                </div>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;">
+                <a href="#" style="color:var(--purple-kiwi); font-weight:600; text-decoration:none; font-size:14px;">Alterar minha conta para CNPJ</a>
+                <button class="btn-primary" onclick="alert('Iniciando processo de saque Maestro...')">Efetuar saque</button>
+            </div>
+
+            <div class="sub-nav">
+                <div class="sub-nav-item active">Saques</div>
+                <div class="sub-nav-item">Dados bancários</div>
+                <div class="sub-nav-item">Taxas e Prazos</div>
+                <div class="sub-nav-item">Identidade</div>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead><tr><th>DATA</th><th>VALOR</th><th>STATUS</th></tr></thead>
+                    <tbody><tr><td colspan="3" style="text-align:center; padding:50px; color:#A0AEC0;">Exibindo 0 de 0 páginas</td></tr></tbody>
+                </table>
+            </div>
         </section>
 
         <section id="aba-relat" class="aba-section">
@@ -165,26 +214,31 @@
             <div id="relat-detail" class="report-detail-view"><div class="back-link" onclick="closeRelat()"><i class="fas fa-arrow-left"></i> <span id="relat-title-display"></span></div><div class="card-stat" style="min-height:300px; display:flex; align-items:center; justify-content:center; color:#A0AEC0;"><p>Buscando informações em tempo real...</p></div></div>
         </section>
 
-        <section id="aba-colab" class="aba-section active">
+        <section id="aba-colab" class="aba-section">
             <h2>Colaboradores</h2>
             <div style="display: flex; justify-content: space-between; align-items: center; background: #FFF; padding: 20px; border: 1px solid var(--border); border-radius: 12px 12px 0 0; border-bottom: none; margin-top:20px;">
-                <div style="position: relative; width: 400px;">
-                    <i class="fas fa-search" style="position: absolute; left: 15px; top: 15px; color: var(--purple-kiwi);"></i>
-                    <input type="text" placeholder="Buscar...." class="search-input" style="padding-left:45px">
-                </div>
+                <div style="position: relative; width: 400px;"><i class="fas fa-search" style="position: absolute; left: 15px; top: 15px; color: var(--purple-kiwi);"></i><input type="text" placeholder="Buscar...." class="search-input" style="padding-left:45px"></div>
                 <button class="btn-primary" onclick="openColabModal()">Adicionar colaborador</button>
             </div>
-            <div class="table-container" style="border-radius: 0 0 12px 12px;">
-                <table>
-                    <thead><tr><th>EMAIL</th><th>STATUS</th><th>DATA DO CONVITE</th></tr></thead>
-                    <tbody><tr><td colspan="3" style="text-align: center; padding: 40px; color: #A0AEC0;">Exibindo 1 de 0 páginas</td></tr></tbody>
-                </table>
-            </div>
+            <div class="table-container" style="border-radius: 0 0 12px 12px;"><table><thead><tr><th>EMAIL</th><th>STATUS</th><th>DATA DO CONVITE</th></tr></thead><tbody><tr><td colspan="3" style="text-align: center; padding: 40px; color: #A0AEC0;">Exibindo 1 de 0 páginas</td></tr></tbody></table></div>
             <p style="text-align:center; margin-top:20px; color:#718096; font-size:14px;"><i class="fas fa-info-circle" style="color:var(--purple-kiwi)"></i> Aprenda mais sobre os <a href="#" style="color:var(--purple-kiwi); text-decoration:none;">colaboradores</a></p>
         </section>
 
+        <section id="aba-apps" class="aba-section active">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <h2 style="margin:0">Apps e Integrações</h2>
+                <button class="btn-primary" style="background:none; color:var(--purple-kiwi); border:1px solid var(--purple-kiwi); padding:8px 20px;">Minhas Chaves API</button>
+            </div>
+            <p style="color:#718096; font-size:15px; margin-bottom:35px;">Conecte suas ferramentas favoritas para automatizar seu negócio.</p>
+            <div class="apps-grid">
+                <div class="app-card"><div class="app-icon" style="color:#22C55E;"><i class="fas fa-link"></i></div><div style="font-weight:800; font-size:18px;">Webhooks</div><div style="font-size:13px; color:#718096; margin-top:10px;">Dados de vendas em tempo real.</div><button class="btn-app-config">Configurar</button></div>
+                <div class="app-card"><div class="app-icon" style="color:#FF6600;"><i class="fas fa-bolt"></i></div><div style="font-weight:800; font-size:18px;">Zapier</div><div style="font-size:13px; color:#718096; margin-top:10px;">Conecte com 5.000+ apps.</div><button class="btn-app-config">Conectar</button></div>
+                <div class="app-card"><div class="app-icon" style="color:#356ae6;"><i class="fas fa-envelope-open-text"></i></div><div style="font-weight:800; font-size:18px;">ActiveCampaign</div><div style="font-size:13px; color:#718096; margin-top:10px;">Sincronize listas de e-mail.</div><button class="btn-app-config">Configurar</button></div>
+                <div class="app-card"><div class="app-icon" style="color:#25D366;"><i class="fab fa-whatsapp"></i></div><div style="font-weight:800; font-size:18px;">Hotzapp</div><div style="font-size:13px; color:#718096; margin-top:10px;">Notificações por WhatsApp.</div><button class="btn-app-config">Configurar</button></div>
+            </div>
+        </section>
+
         <section id="aba-dash" class="aba-section"><h2>Dashboard</h2></section>
-        <section id="aba-apps" class="aba-section"><h2>Apps</h2></section>
         <section id="aba-ajuda" class="aba-section"><h2>Ajuda</h2></section>
         <section id="aba-prod" class="aba-section"><h2>Produtos</h2></section>
     </div>
@@ -192,18 +246,9 @@
 
 <div class="modal-overlay" id="modalColab">
     <div class="modal-content">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-            <h3 style="margin:0">Adicionar colaborador</h3>
-            <i class="fas fa-times" onclick="closeColabModal()" style="cursor:pointer; color:#A0AEC0"></i>
-        </div>
-        <div style="margin-bottom:15px">
-            <label style="display:block; font-size:14px; font-weight:600; color:#4A5568; margin-bottom:8px">E-mail</label>
-            <input type="email" placeholder="E-mail do colaborador" style="width:100%; padding:12px; border:1px solid var(--border); border-radius:8px; outline:none">
-        </div>
-        <div style="display:flex; align-items:center; gap:10px; margin-bottom:25px">
-            <input type="checkbox" id="acessoTotal" checked style="width:18px; height:18px; cursor:pointer">
-            <label for="acessoTotal" style="font-size:14px; font-weight:600; color:#4A5568; cursor:pointer">Acesso total</label>
-        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;"><h3 style="margin:0">Adicionar colaborador</h3><i class="fas fa-times" onclick="closeColabModal()" style="cursor:pointer; color:#A0AEC0"></i></div>
+        <div style="margin-bottom:15px"><label style="display:block; font-size:14px; font-weight:600; color:#4A5568; margin-bottom:8px">E-mail</label><input type="email" placeholder="E-mail do colaborador" style="width:100%; padding:12px; border:1px solid var(--border); border-radius:8px; outline:none"></div>
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:25px"><input type="checkbox" id="acessoTotal" checked style="width:18px; height:18px; cursor:pointer"><label for="acessoTotal" style="font-size:14px; font-weight:600; color:#4A5568; cursor:pointer">Acesso total</label></div>
         <button class="btn-primary" style="width:100%; padding:14px">Adicionar colaborador</button>
     </div>
 </div>
