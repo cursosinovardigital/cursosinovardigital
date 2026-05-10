@@ -5,33 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inovar Digital | Console Maestro</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* --- ESTILOS PARA O MODAL DE PRODUTOS --- */
-.modal-overlay.active { 
-    display: flex !important; /* Força o modal a aparecer */
-}
-
-.product-modal-tab { 
-    display: none; /* Esconde as abas por padrão */
-}
-
-.product-modal-tab.active { 
-    display: block; /* Mostra a aba ativa */
-}
-
-/* Estilo para as abas dentro do modal parecerem botões */
-.sub-nav-item {
-    padding: 10px 20px;
-    cursor: pointer;
-    border-bottom: 2px solid transparent;
-}
-
-.sub-nav-item.active {
-    color: var(--purple-kiwi);
-    border-bottom-color: var(--purple-kiwi);
-}
         :root { 
             --orange: #FF6600; --side-black: #111418; --white: #FFFFFF; 
             --bg: #F4F7FA; --text: #1A1D23; --border: #E2E8F0; --green: #22C55E;
@@ -151,50 +126,7 @@
     </header>
 
     <div class="content-area">
-            <section id="aba-dash" class="aba-section active">
-    <div style="display:flex; gap:15px; margin-bottom:20px;">
-        <select class="search-input" style="width:150px; padding:10px 15px;"><option>Hoje</option></select>
-        <select class="search-input" style="width:260px; padding:10px 15px;"><option>Todos os produtos</option></select>
-        <select class="search-input" style="width:160px; padding:10px 15px;"><option>BRL</option></select>
-    </div>
-
-    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
-        <div style="background: #FFF; border: 1px solid var(--border); border-radius: 12px; padding: 25px; height: 420px; position: relative;">
-            <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
-                <span style="font-weight:700; color:#718096">Vendas nas últimas 24h</span>
-                <span style="font-size:24px; font-weight:800">R$ 0,00</span>
-            </div>
-            <div style="height: 320px; width: 100%;">
-                <canvas id="salesChart"></canvas>
-            </div>
-        </div>
-
-        <div style="display:flex; flex-direction:column; gap:15px;">
-            <div style="background:#FFF; border:1px solid var(--border); border-radius:12px; padding:20px; display:flex; align-items:center; gap:15px;">
-                <i class="fas fa-dollar-sign" style="color:#718096; background:#F8F9FA; padding:12px; border-radius:50%; width:45px; height:45px; display:flex; align-items:center; justify-content:center;"></i>
-                <div>
-                    <div style="font-size:12px; color:#718096; font-weight:600">Valor líquido</div>
-                    <div style="font-size:20px; font-weight:800">R$ 0,00</div>
-                </div>
-            </div>
-            <div style="background:#FFF; border:1px solid var(--border); border-radius:12px; padding:20px; display:flex; align-items:center; gap:15px;">
-                <i class="fas fa-shopping-cart" style="color:#718096; background:#F8F9FA; padding:12px; border-radius:50%; width:45px; height:45px; display:flex; align-items:center; justify-content:center;"></i>
-                <div>
-                    <div style="font-size:12px; color:#718096; font-weight:600">Vendas</div>
-                    <div style="font-size:20px; font-weight:800">0</div>
-                </div>
-            </div>
-            <div style="background:#FFF; border:1px solid var(--border); border-radius:12px; padding:20px; display:flex; align-items:center; gap:15px;">
-                <i class="fas fa-barcode" style="color:#718096; background:#F8F9FA; padding:12px; border-radius:50%; width:45px; height:45px; display:flex; align-items:center; justify-content:center;"></i>
-                <div>
-                    <div style="font-size:12px; color:#718096; font-weight:600">Boletos gerados</div>
-                    <div style="font-size:20px; font-weight:800">0</div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-                <section id="aba-membro" class="aba-section">
+        <section id="aba-membro" class="aba-section">
             <h2>Área de Membros</h2>
             <div class="sub-nav"><div class="sub-nav-item active">Áreas de membros</div><div class="sub-nav-item">Cursos</div><div class="sub-nav-item">Escolas</div></div>
             <div style="display: flex; justify-content: space-between; align-items: center; background: #FFF; padding: 20px; border: 1px solid var(--border); border-radius: 12px 12px 0 0; border-bottom: none;"><div style="position: relative; width: 400px;"><i class="fas fa-search" style="position: absolute; left: 15px; top: 15px; color: #A0AEC0;"></i><input type="text" placeholder="Buscar..." class="search-input"></div><button class="btn-primary">Criar área de membros</button></div>
@@ -301,104 +233,10 @@
                 <div class="app-card"><div class="app-icon" style="color:#25D366;"><i class="fab fa-whatsapp"></i></div><div style="font-weight:800; font-size:18px;">Hotzapp</div><div style="font-size:13px; color:#718096; margin-top:10px;">Notificações por WhatsApp.</div><button class="btn-app-config">Configurar</button></div>
             </div>
         </section>
-<section id="aba-prod" class="aba-section">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;">
-        <h2 style="margin:0">Meus Produtos</h2>
-        <button class="btn-primary" onclick="openProductModal()"><i class="fas fa-plus"></i> Criar produto</button>
-    </div>
 
-    <div style="display: flex; gap: 15px; margin-bottom: 20px;">
-        <div style="flex: 1; position: relative;">
-            <i class="fas fa-search" style="position: absolute; left: 15px; top: 15px; color: #A0AEC0;"></i>
-            <input type="text" id="searchProduct" class="search-input" placeholder="Filtrar por nome do produto..." onkeyup="filterProducts()">
-        </div>
-        <select class="search-input" style="width: 200px; padding-left: 15px;">
-            <option value="">Todos os status</option>
-            <option value="ativo">Ativo</option>
-            <option value="rascunho">Rascunho</option>
-        </select>
-    </div>
-
-    <div class="table-container">
-        <table id="productsTable">
-            <thead>
-                <tr>
-                    <th>PRODUTO</th>
-                    <th>TIPO</th>
-                    <th>PREÇO BASE</th>
-                    <th>STATUS</th>
-                    <th style="text-align:right">AÇÕES</th>
-                </tr>
-            </thead>
-            <tbody id="product-list-body">
-                <tr>
-                    <td colspan="5" style="text-align:center; padding:50px; color:#A0AEC0;">
-                        <i class="fas fa-spinner fa-spin"></i> Carregando produtos...
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</section>
-
-<div class="modal-overlay" id="modalProduct" style="align-items: flex-start; padding-top: 50px;">
-    <div class="modal-content" style="width: 800px; max-width: 95%;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-            <h3 style="margin:0">Novo Produto</h3>
-            <i class="fas fa-times" onclick="closeProductModal()" style="cursor:pointer; color:#A0AEC0"></i>
-        </div>
-
-        <div class="sub-nav" id="productModalNav">
-            <div class="sub-nav-item active" onclick="switchModalTab('info')">Informações</div>
-            <div class="sub-nav-item" onclick="switchModalTab('preco')">Preços e Ofertas</div>
-            <div class="sub-nav-item" onclick="switchModalTab('entrega')">Entrega</div>
-        </div>
-
-        <form id="productForm">
-            <div id="modal-tab-info" class="product-modal-tab active">
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-top:20px;">
-                    <div>
-                        <label style="display:block; font-size:12px; font-weight:700; margin-bottom:5px;">NOME DO PRODUTO</label>
-                        <input type="text" id="prod_nome" class="search-input" style="padding:10px;" required placeholder="Ex: Curso de Violão do Zero">
-                    </div>
-                    <div>
-                        <label style="display:block; font-size:12px; font-weight:700; margin-bottom:5px;">CATEGORIA</label>
-                        <select id="prod_cat" class="search-input" style="padding:10px;">
-                            <option>Música</option>
-                            <option>Educação</option>
-                            <option>Negócios</option>
-                        </select>
-                    </div>
-                </div>
-                <div style="margin-top:15px;">
-                    <label style="display:block; font-size:12px; font-weight:700; margin-bottom:5px;">DESCRIÇÃO</label>
-                    <textarea id="prod_desc" class="search-input" style="height:80px; padding:10px; resize:none;"></textarea>
-                </div>
-            </div>
-
-            <div id="modal-tab-preco" class="product-modal-tab" style="display:none">
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-top:20px;">
-                    <div>
-                        <label style="display:block; font-size:12px; font-weight:700; margin-bottom:5px;">VALOR (R$)</label>
-                        <input type="number" id="prod_preco" class="search-input" style="padding:10px;" placeholder="297,00">
-                    </div>
-                    <div>
-                        <label style="display:block; font-size:12px; font-weight:700; margin-bottom:5px;">TIPO DE COBRANÇA</label>
-                        <select class="search-input" style="padding:10px;">
-                            <option>Pagamento Único</option>
-                            <option>Assinatura (Recorrente)</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <div style="margin-top:30px; display:flex; justify-content:flex-end; gap:10px;">
-                <button type="button" class="btn-primary" style="background:#E2E8F0; color:#4A5568" onclick="closeProductModal()">Cancelar</button>
-                <button type="submit" class="btn-primary">Salvar Produto</button>
-            </div>
-        </form>
-    </div>
-</div>
+        <section id="aba-dash" class="aba-section"><h2>Dashboard</h2></section>
+        <section id="aba-ajuda" class="aba-section"><h2>Ajuda</h2></section>
+        <section id="aba-prod" class="aba-section"><h2>Produtos</h2></section>
     </div>
 </main>
 
@@ -412,113 +250,19 @@
 </div>
 
 <script>
-<script>
-// 1. Abre o modal de produtos
-function openProductModal() {
-    const modal = document.getElementById('modalProduct');
-    if (modal) modal.classList.add('active');
-}
-
-// 2. Fecha o modal de produtos
-function closeProductModal() {
-    const modal = document.getElementById('modalProduct');
-    if (modal) modal.classList.remove('active');
-}
-
-// 3. Troca as abas dentro do modal
-function switchModalTab(tabId) {
-    document.querySelectorAll('.product-modal-tab').forEach(tab => {
-        tab.style.display = 'none';
-        tab.classList.remove('active');
-    });
-    
-    document.querySelectorAll('#productModalNav .sub-nav-item').forEach(item => {
-        item.classList.remove('active');
-    });
-
-    const targetTab = document.getElementById('modal-tab-' + tabId);
-    if (targetTab) {
-        targetTab.style.display = 'block';
-        targetTab.classList.add('active');
+    function nav(id, el) {
+        if(id === 'ajuda') return; // Não ativa seção para link externo
+        document.querySelectorAll('.aba-section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        document.getElementById('aba-' + id).classList.add('active');
+        el.classList.add('active');
+        document.getElementById('header-path').innerHTML = `<strong>Maestro Console</strong> / ${el.innerText.trim()}`;
+        if(id === 'relat') closeRelat();
     }
-    event.currentTarget.classList.add('active');
-}
-
-// 4. Carrega a lista de produtos (Corrigido!)
-async function loadProducts() {
-    const listBody = document.getElementById('product-list-body');
-    if (!listBody) return;
-
-    setTimeout(() => {
-        listBody.innerHTML = `
-            <tr>
-                <td style="font-weight:700; color:var(--purple-kiwi)">Curso de Violão do Zero</td>
-                <td><span style="background:#E0E7FF; color:#4338CA; padding:4px 8px; border-radius:4px; font-size:11px; font-weight:700;">CURSO ONLINE</span></td>
-                <td>R$ 297,00</td>
-                <td><span style="background:#DCFCE7; color:#166534; padding:4px 8px; border-radius:4px; font-size:11px; font-weight:700;">Ativo</span></td>
-                <td style="text-align:right">
-                    <i class="fas fa-link" style="margin-right:10px; cursor:pointer; color:#718096" title="Checkout"></i>
-                    <i class="fas fa-edit" style="cursor:pointer; color:#718096" title="Editar"></i>
-                </td>
-            </tr>`;
-    }, 500);
-}
-
-// 5. Navegação Principal
-function nav(id, el) {
-    if(id === 'ajuda') return; 
-    
-    document.querySelectorAll('.aba-section').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-    
-    const target = document.getElementById('aba-' + id);
-    if(target) target.classList.add('active');
-    
-    el.classList.add('active');
-    document.getElementById('header-path').innerHTML = `<strong>Maestro Console</strong> / ${el.innerText.trim()}`;
-    
-    if(id === 'relat') closeRelat();
-    if(id === 'prod') loadProducts();
-}
-
-function openRelat(t) { 
-    document.getElementById('relat-main-list').style.display='none'; 
-    document.getElementById('relat-detail').style.display='block'; 
-    document.getElementById('relat-title-display').innerText=t; 
-}
-
-function closeRelat() { 
-    document.getElementById('relat-main-list').style.display='block'; 
-    document.getElementById('relat-detail').style.display='none'; 
-}
-
-function openColabModal() { document.getElementById('modalColab').classList.add('active'); }
-function closeColabModal() { document.getElementById('modalColab').classList.remove('active'); }
-
-// 6. Gráfico Dashboard
-window.onload = function() {
-    const ctx = document.getElementById('salesChart')?.getContext('2d');
-    if(ctx) {
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['00h', '04h', '08h', '12h', '16h', '20h', '23h'],
-                datasets: [{
-                    data: [0, 0, 0, 0, 0, 0, 0],
-                    borderColor: '#5D5FEF',
-                    backgroundColor: 'rgba(93, 95, 239, 0.1)',
-                    fill: true, tension: 0.4, borderWidth: 3, pointRadius: 0
-                }]
-            },
-            options: { 
-                responsive: true, 
-                maintainAspectRatio: false, 
-                plugins: { legend: { display: false } },
-                scales: { y: { beginAtZero: true }, x: { grid: { display: false } } }
-            }
-        });
-    }
-};
+    function openRelat(t) { document.getElementById('relat-main-list').style.display='none'; document.getElementById('relat-detail').style.display='block'; document.getElementById('relat-title-display').innerText=t; }
+    function closeRelat() { document.getElementById('relat-main-list').style.display='block'; document.getElementById('relat-detail').style.display='none'; }
+    function openColabModal() { document.getElementById('modalColab').classList.add('active'); }
+    function closeColabModal() { document.getElementById('modalColab').classList.remove('active'); }
 </script>
 </body>
 </html>
