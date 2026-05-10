@@ -171,13 +171,7 @@
                 <table>
                     <thead><tr><th>NOME</th><th>PREÇO</th><th>STATUS</th><th style="text-align:right">AÇÕES</th></tr></thead>
                     <tbody id="product-list-body">
-                        <tr>
-                            <td style="font-weight:700; color:var(--purple-kiwi)">Curso de Violão do Zero</td>
-                            <td>R$ 297,00</td>
-                            <td><span class="badge badge-success">Ativo</span></td>
-                            <td style="text-align:right"><i class="fas fa-edit" style="cursor:pointer"></i></td>
-                        </tr>
-                    </tbody>
+                        </tbody>
                 </table>
             </div>
         </section>
@@ -289,19 +283,19 @@
         </div>
         <div id="p-info" class="prod-modal-tab active" style="padding-top:20px;">
             <label style="display:block; font-size:12px; font-weight:700; margin-bottom:5px;">NOME DO PRODUTO</label>
-            <input type="text" class="search-input" style="padding:10px;" placeholder="Ex: Curso de Violão">
+            <input type="text" id="ipt_nome" class="search-input" style="padding:10px;" placeholder="Ex: Curso de Violão">
         </div>
-        <div id="p-preco" class="prod-modal-tab" style="padding-top:20px; display:none;">
+        <div id="p-preco" class="prod-modal-tab" style="padding-top:20px;">
             <label style="display:block; font-size:12px; font-weight:700; margin-bottom:5px;">VALOR (R$)</label>
-            <input type="number" class="search-input" style="padding:10px;" placeholder="297.00">
+            <input type="number" id="ipt_preco" class="search-input" style="padding:10px;" placeholder="297.00">
         </div>
-        <div id="p-entrega" class="prod-modal-tab" style="padding-top:20px; display:none;">
+        <div id="p-entrega" class="prod-modal-tab" style="padding-top:20px;">
             <label style="display:block; font-size:12px; font-weight:700; margin-bottom:5px;">URL DE ENTREGA</label>
-            <input type="text" class="search-input" style="padding:10px;" placeholder="https://...">
+            <input type="text" id="ipt_url" class="search-input" style="padding:10px;" placeholder="https://...">
         </div>
         <div style="margin-top:25px; display:flex; justify-content:flex-end; gap:10px;">
             <button class="btn-primary" style="background:#E2E8F0; color:#4A5568" onclick="closeProductModal()">Cancelar</button>
-            <button class="btn-primary">Criar produto</button>
+            <button class="btn-primary" onclick="salvarProduto()">Criar produto</button>
         </div>
     </div>
 </div>
@@ -315,6 +309,42 @@
 </div>
 
 <script>
+    // CONFIGURAÇÃO SUPABASE
+    const SUPABASE_URL = 'https://onsbuazkqfehkudhladt.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9uc2J1YXprcWZlaGt1ZGhsYWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzNTI5OTgsImV4cCI6MjA5MzkyODk5OH0.ZypL6LHbPC_z971EDCTh6pVoA7g4qM6hWSWfWVO9a-M';
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // SALVAR PRODUTO
+    async function salvarProduto() {
+        const nome = document.getElementById('ipt_nome').value;
+        const preco = document.getElementById('ipt_preco').value;
+        const url = document.getElementById('ipt_url').value;
+
+        if(!nome || !preco) { alert("Preencha nome e preço!"); return; }
+
+        const { error } = await _supabase
+            .from('produtos')
+            .insert([{ nome: nome, preco: parseFloat(preco), url_entrega: url, status: 'Ativo' }]);
+
+        if(error) { console.error(error); alert("Erro ao salvar!"); }
+        else { alert("Produto criado!"); closeProductModal(); carregarProdutos(); }
+    }
+
+    // CARREGAR PRODUTOS
+    async function carregarProdutos() {
+        const { data, error } = await _supabase.from('produtos').select('*').order('created_at', { ascending: false });
+        if(error) return;
+        const body = document.getElementById('product-list-body');
+        body.innerHTML = data.map(p => `
+            <tr>
+                <td style="font-weight:700; color:var(--purple-kiwi)">${p.nome}</td>
+                <td>R$ ${p.preco.toFixed(2).replace('.',',')}</td>
+                <td><span class="badge badge-success">${p.status}</span></td>
+                <td style="text-align:right"><i class="fas fa-edit" style="cursor:pointer"></i></td>
+            </tr>
+        `).join('');
+    }
+
     function nav(id, el) {
         if(id === 'ajuda') return;
         document.querySelectorAll('.aba-section').forEach(s => s.classList.remove('active'));
@@ -323,6 +353,7 @@
         el.classList.add('active');
         document.getElementById('header-path').innerHTML = `<strong>Maestro Console</strong> / ${el.innerText.trim()}`;
         if(id === 'relat') closeRelat();
+        if(id === 'prod') carregarProdutos();
     }
     
     function openRelat(t) { document.getElementById('relat-main-list').style.display='none'; document.getElementById('relat-detail').style.display='block'; document.getElementById('relat-title-display').innerText=t; }
@@ -330,7 +361,6 @@
     function openColabModal() { document.getElementById('modalColab').classList.add('active'); }
     function closeColabModal() { document.getElementById('modalColab').classList.remove('active'); }
 
-    // FUNÇÕES PRODUTO
     function openProductModal() { document.getElementById('modalProduct').classList.add('active'); }
     function closeProductModal() { document.getElementById('modalProduct').classList.remove('active'); }
     function switchProductTab(tab, el) {
@@ -341,6 +371,7 @@
     }
 
     window.onload = function() {
+        carregarProdutos();
         const ctx = document.getElementById('salesChart')?.getContext('2d');
         if(ctx) {
             new Chart(ctx, {
