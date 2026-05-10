@@ -1,673 +1,367 @@
 <!DOCTYPE html>
-
 <html lang="pt-br">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Inovar Digital | Console Maestro</title>
-
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
     <style>
-
         :root { 
-
             --orange: #FF6600; --side-black: #111418; --white: #FFFFFF; 
-
             --bg: #F4F7FA; --text: #1A1D23; --border: #E2E8F0; --green: #22C55E;
-
             --purple-kiwi: #5D5FEF;
-
         }
-
-
 
         * { box-sizing: border-box; font-family: 'Inter', sans-serif; transition: 0.2s; }
-
         body { margin: 0; display: flex; height: 100vh; background: var(--bg); overflow: hidden; }
 
-
-
         /* SIDEBAR DEFINITIVA (12 ABAS FIXAS - TRAVADO) */
-
         nav { width: 260px; background: var(--side-black); display: flex; flex-direction: column; flex-shrink: 0; }
-
         .logo-area { padding: 30px 25px; border-bottom: 1px solid #2D3436; font-size: 20px; font-weight: 900; color: #FFF; }
-
         .logo-area span { color: var(--orange); }
-
         .nav-scroll { flex: 1; overflow-y: auto; padding: 10px 0; }
-
         .nav-item { padding: 12px 25px; color: #A0AEC0; cursor: pointer; display: flex; align-items: center; font-size: 14px; border-left: 4px solid transparent; text-decoration: none; }
-
         .nav-item i { margin-right: 15px; width: 18px; text-align: center; }
-
         .nav-item:hover, .nav-item.active { background: #1E2228; color: #FFF; border-left-color: var(--orange); }
 
-
-
         /* MAIN STRUCTURE */
-
         main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
-
         header { height: 70px; background: var(--white); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; padding: 0 40px; }
-
         
-
         .content-area { padding: 35px; overflow-y: auto; flex: 1; }
-
         .aba-section { display: none; }
-
         .aba-section.active { display: block; animation: fadeIn 0.3s ease; }
 
-
-
         /* COMPONENTES REUTILIZÁVEIS (TRAVADO) */
-
         .btn-primary { background: var(--purple-kiwi); color: white; border: none; padding: 12px 25px; border-radius: 8px; font-weight: 700; cursor: pointer; }
-
         .table-container { background:#FFF; border:1px solid var(--border); border-radius:12px; overflow:hidden; }
-
         table { width: 100%; border-collapse: collapse; }
-
         th { text-align: left; padding: 15px; background: #F8F9FA; color: #718096; font-size: 11px; text-transform: uppercase; border-bottom: 1px solid var(--border); }
-
         td { padding: 15px; border-bottom: 1px solid var(--border); font-size: 14px; color: #4A5568; }
-
         .search-input { width: 100%; padding: 12px 40px; border: 1px solid var(--border); border-radius: 8px; outline: none; }
-
         
-
         .sub-nav { display: flex; gap: 25px; margin-bottom: 25px; border-bottom: 1px solid var(--border); }
-
         .sub-nav-item { padding: 10px 5px; cursor: pointer; color: #718096; font-weight: 600; border-bottom: 3px solid transparent; }
-
         .sub-nav-item.active { color: var(--purple-kiwi); border-bottom-color: var(--purple-kiwi); }
 
-
-
         /* MARKETPLACE (TRAVADO) */
-
         .market-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 25px; }
-
         .market-card { background: #FFF; border-radius: 15px; border: 1px solid var(--border); overflow: hidden; }
-
         .market-thumb { width: 100%; height: 140px; background: #333; position: relative; }
-
         .market-thumb img { width: 100%; height: 100%; object-fit: cover; }
-
         .market-info { padding: 15px; }
-
         .market-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
-
         .market-commission { color: var(--green); font-size: 13px; font-weight: 700; }
 
-
-
         /* VENDAS (TRAVADO) */
-
         .sales-filters { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 20px; }
-
         .filter-group { display: flex; flex-direction: column; gap: 5px; }
-
         .filter-group label { font-size: 12px; font-weight: 600; color: #718096; }
-
         .badge { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
-
         .badge-success { background: #DCFCE7; color: #166534; }
 
-
-
-        /* FINANCEIRO ESPECIFICO (RESTAURADO IGUAL AO PRINT) */
-
+        /* FINANCEIRO ESPECIFICO */
         .fin-card { background: #FFF; padding: 30px; border-radius: 12px; border: 1px solid var(--border); display: flex; flex-direction: column; gap: 10px; position: relative; }
-
         .fin-card.disponivel { border-left: 6px solid var(--green); }
-
         .fin-card.pendente { border-left: 6px solid #EAB308; }
-
         .fin-label { color: #718096; font-size: 13px; font-weight: 600; }
-
         .fin-value { font-size: 32px; font-weight: 800; color: var(--text); }
-
         .select-currency { border: 1px solid var(--border); padding: 8px 15px; border-radius: 8px; font-weight: 600; color: #4A5568; outline: none; cursor: pointer; }
 
-
-
         /* ASSINATURAS E CARDS */
-
         .card-stat { background: #FFF; padding: 25px; border-radius: 12px; border: 1px solid var(--border); }
 
-
-
         /* ESTILO RELATÓRIOS */
-
         .report-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
-
         .report-card { background: #FFF; padding: 25px; border-radius: 12px; border: 1px solid var(--border); display: flex; align-items: center; gap: 20px; cursor: pointer; }
-
         .report-card:hover { border-color: var(--purple-kiwi); background: #F8F9FF; }
-
         .report-card i { font-size: 24px; color: var(--text); width: 30px; text-align: center; }
-
         .report-card span { font-weight: 700; font-size: 15px; }
 
-
-
         .report-detail-view { display: none; }
-
         .report-detail-view.active { display: block; }
-
         .back-link { cursor: pointer; color: var(--text); font-weight: 700; font-size: 18px; margin-bottom: 20px; display: inline-flex; align-items: center; gap: 10px; }
 
-
-
-        /* MODAL COLABORADORES (NOVO) */
-
+        /* MODAIS */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
-
-        .modal-overlay.active { display: flex; }
-
+        .modal-overlay.active { display: flex !important; }
         .modal-content { background: #FFF; padding: 30px; border-radius: 12px; width: 450px; position: relative; }
 
-
-
-        /* ESTILO APPS (ADICIONADO) */
-
+        /* ESTILO APPS */
         .apps-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
-
         .app-card { background: #FFF; border: 1px solid var(--border); border-radius: 15px; padding: 30px 20px; display: flex; flex-direction: column; align-items: center; text-align: center; }
-
         .app-icon { width: 60px; height: 60px; background: #F8F9FA; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; font-size: 26px; }
-
         .btn-app-config { width: 100%; padding: 12px; border: 1px solid var(--border); background: none; border-radius: 10px; font-weight: 700; cursor: pointer; color: #4A5568; margin-top: 15px; }
 
-
+        /* ESTILO INTERNO MODAL PRODUTOS */
+        .prod-modal-tab { display: none; }
+        .prod-modal-tab.active { display: block; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
     </style>
-
 </head>
-
 <body>
 
-
-
 <nav>
-
     <div class="logo-area">Inovar<span>Digital</span></div>
-
     <div class="nav-scroll">
-
         <div class="nav-item" onclick="nav('dash', this)"><i class="fas fa-home"></i> Dashboard</div>
-
         <div class="nav-item" onclick="nav('prod', this)"><i class="fas fa-tag"></i> Produtos</div>
-
         <div class="nav-item" onclick="nav('membro', this)"><i class="fas fa-play-circle"></i> Área de Membros</div>
-
         <div class="nav-item" onclick="nav('market', this)"><i class="fas fa-shopping-cart"></i> Marketplace</div>
-
         <div class="nav-item" onclick="nav('afiliados', this)"><i class="fas fa-users-cog"></i> Meus Afiliados</div>
-
         <div class="nav-item" onclick="nav('vendas', this)"><i class="fas fa-dollar-sign"></i> Vendas</div>
-
         <div class="nav-item" onclick="nav('assin', this)"><i class="fas fa-sync"></i> Assinaturas</div>
-
         <div class="nav-item" onclick="nav('finan', this)"><i class="fas fa-wallet"></i> Financeiro</div>
-
         <div class="nav-item" onclick="nav('relat', this)"><i class="fas fa-chart-line"></i> Relatórios</div>
-
         <div class="nav-item" onclick="nav('colab', this)"><i class="fas fa-user-friends"></i> Colaboradores</div>
-
         <div class="nav-item active" onclick="nav('apps', this)"><i class="fas fa-th"></i> Apps</div>
-
         <a href="ajuda.html" target="_blank" class="nav-item"><i class="fas fa-question-circle"></i> Ajuda</a>
-
     </div>
-
 </nav>
 
-
-
 <main>
-
     <header>
-
         <div id="header-path"><strong>Maestro Console</strong> / Apps</div>
-
         <div style="display:flex; align-items:center; gap:20px;">
-
             <i class="fas fa-user-circle fa-2x" style="color: #CBD5E0;"></i>
-
         </div>
-
     </header>
 
-
-
     <div class="content-area">
-
-            <section id="aba-dash" class="aba-section active">
-
-    <div style="display:flex; gap:15px; margin-bottom:20px;">
-
-        <select class="search-input" style="width:150px; padding:10px 15px;"><option>Hoje</option></select>
-
-        <select class="search-input" style="width:260px; padding:10px 15px;"><option>Todos os produtos</option></select>
-
-        <select class="search-input" style="width:160px; padding:10px 15px;"><option>BRL</option></select>
-
-    </div>
-
-
-
-    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
-
-        <div style="background: #FFF; border: 1px solid var(--border); border-radius: 12px; padding: 25px; height: 420px; position: relative;">
-
-            <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
-
-                <span style="font-weight:700; color:#718096">Vendas nas últimas 24h</span>
-
-                <span style="font-size:24px; font-weight:800">R$ 0,00</span>
-
+        <section id="aba-dash" class="aba-section active">
+            <div style="display:flex; gap:15px; margin-bottom:20px;">
+                <select class="search-input" style="width:150px; padding:10px 15px;"><option>Hoje</option></select>
+                <select class="search-input" style="width:260px; padding:10px 15px;"><option>Todos os produtos</option></select>
+                <select class="search-input" style="width:160px; padding:10px 15px;"><option>BRL</option></select>
             </div>
-
-            <div style="height: 320px; width: 100%;">
-
-                <canvas id="salesChart"></canvas>
-
-            </div>
-
-        </div>
-
-
-
-        <div style="display:flex; flex-direction:column; gap:15px;">
-
-            <div style="background:#FFF; border:1px solid var(--border); border-radius:12px; padding:20px; display:flex; align-items:center; gap:15px;">
-
-                <i class="fas fa-dollar-sign" style="color:#718096; background:#F8F9FA; padding:12px; border-radius:50%; width:45px; height:45px; display:flex; align-items:center; justify-content:center;"></i>
-
-                <div>
-
-                    <div style="font-size:12px; color:#718096; font-weight:600">Valor líquido</div>
-
-                    <div style="font-size:20px; font-weight:800">R$ 0,00</div>
-
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
+                <div style="background: #FFF; border: 1px solid var(--border); border-radius: 12px; padding: 25px; height: 420px; position: relative;">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
+                        <span style="font-weight:700; color:#718096">Vendas nas últimas 24h</span>
+                        <span style="font-size:24px; font-weight:800">R$ 0,00</span>
+                    </div>
+                    <div style="height: 320px; width: 100%;"><canvas id="salesChart"></canvas></div>
                 </div>
-
-            </div>
-
-            <div style="background:#FFF; border:1px solid var(--border); border-radius:12px; padding:20px; display:flex; align-items:center; gap:15px;">
-
-                <i class="fas fa-shopping-cart" style="color:#718096; background:#F8F9FA; padding:12px; border-radius:50%; width:45px; height:45px; display:flex; align-items:center; justify-content:center;"></i>
-
-                <div>
-
-                    <div style="font-size:12px; color:#718096; font-weight:600">Vendas</div>
-
-                    <div style="font-size:20px; font-weight:800">0</div>
-
+                <div style="display:flex; flex-direction:column; gap:15px;">
+                    <div style="background:#FFF; border:1px solid var(--border); border-radius:12px; padding:20px; display:flex; align-items:center; gap:15px;">
+                        <i class="fas fa-dollar-sign" style="color:#718096; background:#F8F9FA; padding:12px; border-radius:50%; width:45px; height:45px; display:flex; align-items:center; justify-content:center;"></i>
+                        <div><div style="font-size:12px; color:#718096; font-weight:600">Valor líquido</div><div style="font-size:20px; font-weight:800">R$ 0,00</div></div>
+                    </div>
+                    <div style="background:#FFF; border:1px solid var(--border); border-radius:12px; padding:20px; display:flex; align-items:center; gap:15px;">
+                        <i class="fas fa-shopping-cart" style="color:#718096; background:#F8F9FA; padding:12px; border-radius:50%; width:45px; height:45px; display:flex; align-items:center; justify-content:center;"></i>
+                        <div><div style="font-size:12px; color:#718096; font-weight:600">Vendas</div><div style="font-size:20px; font-weight:800">0</div></div>
+                    </div>
+                    <div style="background:#FFF; border:1px solid var(--border); border-radius:12px; padding:20px; display:flex; align-items:center; gap:15px;">
+                        <i class="fas fa-barcode" style="color:#718096; background:#F8F9FA; padding:12px; border-radius:50%; width:45px; height:45px; display:flex; align-items:center; justify-content:center;"></i>
+                        <div><div style="font-size:12px; color:#718096; font-weight:600">Boletos gerados</div><div style="font-size:20px; font-weight:800">0</div></div>
+                    </div>
                 </div>
-
             </div>
-
-            <div style="background:#FFF; border:1px solid var(--border); border-radius:12px; padding:20px; display:flex; align-items:center; gap:15px;">
-
-                <i class="fas fa-barcode" style="color:#718096; background:#F8F9FA; padding:12px; border-radius:50%; width:45px; height:45px; display:flex; align-items:center; justify-content:center;"></i>
-
-                <div>
-
-                    <div style="font-size:12px; color:#718096; font-weight:600">Boletos gerados</div>
-
-                    <div style="font-size:20px; font-weight:800">0</div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-                <section id="aba-membro" class="aba-section">
-
-            <h2>Área de Membros</h2>
-
-            <div class="sub-nav"><div class="sub-nav-item active">Áreas de membros</div><div class="sub-nav-item">Cursos</div><div class="sub-nav-item">Escolas</div></div>
-
-            <div style="display: flex; justify-content: space-between; align-items: center; background: #FFF; padding: 20px; border: 1px solid var(--border); border-radius: 12px 12px 0 0; border-bottom: none;"><div style="position: relative; width: 400px;"><i class="fas fa-search" style="position: absolute; left: 15px; top: 15px; color: #A0AEC0;"></i><input type="text" placeholder="Buscar..." class="search-input"></div><button class="btn-primary">Criar área de membros</button></div>
-
-            <div class="table-container" style="border-radius: 0 0 12px 12px;"><table><thead><tr><th>NOME</th><th>URL</th><th>ALUNOS</th><th>AÇÕES</th></tr></thead><tbody><tr><td>Área Premium Inovar</td><td>inovar.digital/m/premium</td><td>0</td><td><i class="fas fa-edit"></i></td></tr></tbody></table></div>
-
         </section>
 
+        <section id="aba-prod" class="aba-section">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;">
+                <h2 style="margin:0; font-weight: 800;">Produtos</h2>
+                <button class="btn-primary" onclick="openProductModal()"><i class="fas fa-plus"></i> Criar produto</button>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead><tr><th>NOME</th><th>PREÇO</th><th>STATUS</th><th style="text-align:right">AÇÕES</th></tr></thead>
+                    <tbody id="product-list-body">
+                        <tr>
+                            <td style="font-weight:700; color:var(--purple-kiwi)">Curso de Violão do Zero</td>
+                            <td>R$ 297,00</td>
+                            <td><span class="badge badge-success">Ativo</span></td>
+                            <td style="text-align:right"><i class="fas fa-edit" style="cursor:pointer"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
 
+        <section id="aba-membro" class="aba-section">
+            <h2>Área de Membros</h2>
+            <div class="sub-nav"><div class="sub-nav-item active">Áreas de membros</div><div class="sub-nav-item">Cursos</div><div class="sub-nav-item">Escolas</div></div>
+            <div style="display: flex; justify-content: space-between; align-items: center; background: #FFF; padding: 20px; border: 1px solid var(--border); border-radius: 12px 12px 0 0; border-bottom: none;"><div style="position: relative; width: 400px;"><i class="fas fa-search" style="position: absolute; left: 15px; top: 15px; color: #A0AEC0;"></i><input type="text" placeholder="Buscar..." class="search-input"></div><button class="btn-primary">Criar área de membros</button></div>
+            <div class="table-container" style="border-radius: 0 0 12px 12px;"><table><thead><tr><th>NOME</th><th>URL</th><th>ALUNOS</th><th>AÇÕES</th></tr></thead><tbody><tr><td>Área Premium Inovar</td><td>inovar.digital/m/premium</td><td>0</td><td><i class="fas fa-edit"></i></td></tr></tbody></table></div>
+        </section>
 
         <section id="aba-market" class="aba-section">
-
             <h2>Marketplace</h2>
-
             <div class="market-grid">
-
                 <div class="market-card">
-
-                    <div class="market-thumb">
-
-                        <img src="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?auto=format&fit=crop&w=400&q=80" alt="Violão">
-
-                    </div>
-
-                    <div class="market-info">
-
-                        <div class="market-title">Curso de Violão do Zero com Víctor</div>
-
-                        <div class="market-commission">Até R$ 147,00 de comissão</div>
-
-                    </div>
-
+                    <div class="market-thumb"><img src="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?auto=format&fit=crop&w=400&q=80" alt="Violão"></div>
+                    <div class="market-info"><div class="market-title">Curso de Violão do Zero com Víctor</div><div class="market-commission">Até R$ 147,00 de comissão</div></div>
                 </div>
-
             </div>
-
         </section>
-
-
 
         <section id="aba-afiliados" class="aba-section">
-
             <h2>Meus Afiliados</h2>
-
             <div class="sub-nav"><div class="sub-nav-item active">Meus afiliados</div><div class="sub-nav-item">Solicitações</div></div>
-
             <div style="display: flex; gap: 15px; margin-bottom: 20px;">
-
                 <div style="flex: 1; position: relative;"><i class="fas fa-search" style="position: absolute; left: 15px; top: 15px; color: #A0AEC0;"></i><input type="text" class="search-input" placeholder="Filtrar por nome ou e-mail..."></div>
-
                 <div style="width: 250px;"><select class="search-input" style="padding-left: 15px;"><option>Todos os produtos</option></select></div>
-
                 <button class="btn-primary" style="background: #FFF; color: #4A5568; border: 1px solid var(--border);"><i class="fas fa-filter"></i> Filtros</button>
-
             </div>
-
             <div class="table-container"><table><thead><tr><th>NOME DO AFILIADO</th><th>PRODUTO</th><th>DATA DE AFILIAÇÃO</th><th>COMISSÃO</th><th>VENDAS</th><th>AÇÕES</th></tr></thead><tbody><tr><td colspan="6" style="text-align: center; padding: 60px; color: #A0AEC0;"><i class="fas fa-users" style="font-size: 40px; margin-bottom: 15px; display: block;"></i>Nenhum afiliado encontrado</td></tr></tbody></table></div>
-
         </section>
-
-
 
         <section id="aba-vendas" class="aba-section">
-
             <h2>Minhas Vendas</h2>
-
             <div class="table-container" style="padding: 20px; margin-bottom: 25px;"><div class="sales-filters"><div class="filter-group"><label>Período</label><input type="date" class="search-input" style="padding: 10px;"></div><div class="filter-group"><label>Produto</label><select class="search-input" style="padding: 10px;"><option>Todos os produtos</option></select></div><div class="filter-group"><label>Status</label><select class="search-input" style="padding: 10px;"><option>Pagas</option></select></div><div class="filter-group"><label>Oferta</label><select class="search-input" style="padding: 10px;"><option>Todas as ofertas</option></select></div></div><div style="display: flex; justify-content: flex-end; gap: 10px;"><button class="btn-primary" style="background: #FFF; color: var(--text); border: 1px solid var(--border);"><i class="fas fa-download"></i> Exportar</button><button class="btn-primary">Filtrar</button></div></div>
-
             <div class="table-container"><table><thead><tr><th>PRODUTO</th><th>COMPRADOR</th><th>VALOR</th><th>DATA</th><th>STATUS</th><th>AÇÕES</th></tr></thead><tbody><tr><td>Curso de Violão do Zero</td><td>vittrivinho@example.com</td><td>R$ 297,00</td><td>10/05/2026</td><td><span class="badge badge-success">Paga</span></td><td><i class="fas fa-eye"></i></td></tr></tbody></table></div>
-
         </section>
-
-
 
         <section id="aba-assin" class="aba-section">
-
             <h2>Assinaturas</h2>
-
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px; margin-bottom:30px;"><div class="card-stat"><div style="color:#718096; font-size:12px; font-weight:700;">ASSINATURAS ATIVAS</div><div style="font-size:32px; font-weight:800; margin-top:10px;">0</div></div><div class="card-stat"><div style="color:#718096; font-size:12px; font-weight:700;">FATURAMENTO RECORRENTE MENSAL</div><div style="font-size:32px; font-weight:800; margin-top:10px;">R$ 0,00</div></div></div>
-
             <div class="sub-nav"><div class="sub-nav-item active">Ativas</div><div class="sub-nav-item">Canceladas</div><div class="sub-nav-item">Todas</div></div>
-
             <div class="table-container"><table style="text-align:center;"><tbody><tr><td style="padding:40px; color:#A0AEC0;">Exibindo 1 de 0 páginas</td></tr></tbody></table></div>
-
         </section>
-
-
 
         <section id="aba-finan" class="aba-section">
-
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
-
-                <h2 style="margin:0">Financeiro</h2>
-
-                <select class="select-currency"><option>BRL</option></select>
-
-            </div>
-
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;"><h2 style="margin:0">Financeiro</h2><select class="select-currency"><option>BRL</option></select></div>
             <div style="display:grid; grid-template-columns: 1fr 1fr; gap:25px; margin-bottom:30px;">
-
-                <div class="fin-card disponivel">
-
-                    <span class="fin-label">Saldo disponível</span>
-
-                    <span class="fin-value">R$ 0,00</span>
-
-                </div>
-
-                <div class="fin-card pendente">
-
-                    <span class="fin-label">Saldo pendente <i class="far fa-question-circle" style="font-size:14px; color:#CBD5E0"></i></span>
-
-                    <span class="fin-value">R$ 0,00</span>
-
-                </div>
-
+                <div class="fin-card disponivel"><span class="fin-label">Saldo disponível</span><span class="fin-value">R$ 0,00</span></div>
+                <div class="fin-card pendente"><span class="fin-label">Saldo pendente <i class="far fa-question-circle" style="font-size:14px; color:#CBD5E0"></i></span><span class="fin-value">R$ 0,00</span></div>
             </div>
-
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;">
-
                 <a href="#" style="color:var(--purple-kiwi); font-weight:600; text-decoration:none; font-size:14px;">Alterar minha conta para CNPJ</a>
-
-                <button class="btn-primary" onclick="alert('Iniciando processo de saque Maestro...')">Efetuar saque</button>
-
+                <button class="btn-primary" onclick="alert('Saque solicitado!')">Efetuar saque</button>
             </div>
-
-            <div class="sub-nav">
-
-                <div class="sub-nav-item active">Saques</div>
-
-                <div class="sub-nav-item">Dados bancários</div>
-
-                <div class="sub-nav-item">Taxas e Prazos</div>
-
-                <div class="sub-nav-item">Identidade</div>
-
-            </div>
-
-            <div class="table-container">
-
-                <table>
-
-                    <thead><tr><th>DATA</th><th>VALOR</th><th>STATUS</th></tr></thead>
-
-                    <tbody><tr><td colspan="3" style="text-align:center; padding:50px; color:#A0AEC0;">Exibindo 0 de 0 páginas</td></tr></tbody>
-
-                </table>
-
-            </div>
-
+            <div class="sub-nav"><div class="sub-nav-item active">Saques</div><div class="sub-nav-item">Dados bancários</div><div class="sub-nav-item">Taxas e Prazos</div><div class="sub-nav-item">Identidade</div></div>
+            <div class="table-container"><table><thead><tr><th>DATA</th><th>VALOR</th><th>STATUS</th></tr></thead><tbody><tr><td colspan="3" style="text-align:center; padding:50px; color:#A0AEC0;">Exibindo 0 de 0 páginas</td></tr></tbody></table></div>
         </section>
-
-
 
         <section id="aba-relat" class="aba-section">
-
-            <div id="relat-main-list"><h2>Relatórios</h2><div class="report-grid"><div class="report-card" onclick="openRelat('Receita de co-produção')"><i class="fas fa-users"></i><span>Receita de co-produção</span></div><div class="report-card" onclick="openRelat('Receita por produto')"><i class="fas fa-chart-line"></i><span>Receita por produto</span></div><div class="report-card" onclick="openRelat('Vendas abandonadas')"><i class="fas fa-shopping-cart"></i><span>Vendas abandonadas</span></div><div class="report-card" onclick="openRelat('Engajamento dos alunos')"><i class="far fa-smile"></i><span>Engajamento dos alunos</span></div><div class="report-card" onclick="openRelat('Receita por afiliado')"><i class="fas fa-user-friends"></i><span>Receita por afiliado</span></div><div class="report-card" onclick="openRelat('Saldo a receber')"><i class="fas fa-wallet"></i><span>Saldo a receber</span></div><div class="report-card" onclick="openRelat('Assinaturas canceladas')"><i class="far fa-times-circle"></i><span>Assinaturas canceladas</span></div></div></div>
-
+            <div id="relat-main-list">
+                <h2>Relatórios</h2>
+                <div class="report-grid">
+                    <div class="report-card" onclick="openRelat('Receita de co-produção')"><i class="fas fa-users"></i><span>Receita de co-produção</span></div>
+                    <div class="report-card" onclick="openRelat('Receita por produto')"><i class="fas fa-chart-line"></i><span>Receita por produto</span></div>
+                    <div class="report-card" onclick="openRelat('Vendas abandonadas')"><i class="fas fa-shopping-cart"></i><span>Vendas abandonadas</span></div>
+                    <div class="report-card" onclick="openRelat('Engajamento dos alunos')"><i class="far fa-smile"></i><span>Engajamento dos alunos</span></div>
+                    <div class="report-card" onclick="openRelat('Receita por afiliado')"><i class="fas fa-user-friends"></i><span>Receita por afiliado</span></div>
+                    <div class="report-card" onclick="openRelat('Saldo a receber')"><i class="fas fa-wallet"></i><span>Saldo a receber</span></div>
+                    <div class="report-card" onclick="openRelat('Assinaturas canceladas')"><i class="far fa-times-circle"></i><span>Assinaturas canceladas</span></div>
+                </div>
+            </div>
             <div id="relat-detail" class="report-detail-view"><div class="back-link" onclick="closeRelat()"><i class="fas fa-arrow-left"></i> <span id="relat-title-display"></span></div><div class="card-stat" style="min-height:300px; display:flex; align-items:center; justify-content:center; color:#A0AEC0;"><p>Buscando informações em tempo real...</p></div></div>
-
         </section>
-
-
 
         <section id="aba-colab" class="aba-section">
-
             <h2>Colaboradores</h2>
-
             <div style="display: flex; justify-content: space-between; align-items: center; background: #FFF; padding: 20px; border: 1px solid var(--border); border-radius: 12px 12px 0 0; border-bottom: none; margin-top:20px;">
-
                 <div style="position: relative; width: 400px;"><i class="fas fa-search" style="position: absolute; left: 15px; top: 15px; color: var(--purple-kiwi);"></i><input type="text" placeholder="Buscar...." class="search-input" style="padding-left:45px"></div>
-
                 <button class="btn-primary" onclick="openColabModal()">Adicionar colaborador</button>
-
             </div>
-
             <div class="table-container" style="border-radius: 0 0 12px 12px;"><table><thead><tr><th>EMAIL</th><th>STATUS</th><th>DATA DO CONVITE</th></tr></thead><tbody><tr><td colspan="3" style="text-align: center; padding: 40px; color: #A0AEC0;">Exibindo 1 de 0 páginas</td></tr></tbody></table></div>
-
-            <p style="text-align:center; margin-top:20px; color:#718096; font-size:14px;"><i class="fas fa-info-circle" style="color:var(--purple-kiwi)"></i> Aprenda mais sobre os <a href="#" style="color:var(--purple-kiwi); text-decoration:none;">colaboradores</a></p>
-
         </section>
-
-
 
         <section id="aba-apps" class="aba-section active">
-
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-
-                <h2 style="margin:0">Apps e Integrações</h2>
-
-                <button class="btn-primary" style="background:none; color:var(--purple-kiwi); border:1px solid var(--purple-kiwi); padding:8px 20px;">Minhas Chaves API</button>
-
+            <h2 style="margin:0">Apps e Integrações</h2>
+            <div class="apps-grid" style="margin-top:35px;">
+                <div class="app-card"><div class="app-icon" style="color:#22C55E;"><i class="fas fa-link"></i></div><div style="font-weight:800; font-size:18px;">Webhooks</div><button class="btn-app-config">Configurar</button></div>
+                <div class="app-card"><div class="app-icon" style="color:#FF6600;"><i class="fas fa-bolt"></i></div><div style="font-weight:800; font-size:18px;">Zapier</div><button class="btn-app-config">Conectar</button></div>
+                <div class="app-card"><div class="app-icon" style="color:#356ae6;"><i class="fas fa-envelope-open-text"></i></div><div style="font-weight:800; font-size:18px;">ActiveCampaign</div><button class="btn-app-config">Configurar</button></div>
+                <div class="app-card"><div class="app-icon" style="color:#25D366;"><i class="fab fa-whatsapp"></i></div><div style="font-weight:800; font-size:18px;">Hotzapp</div><button class="btn-app-config">Configurar</button></div>
             </div>
-
-            <p style="color:#718096; font-size:15px; margin-bottom:35px;">Conecte suas ferramentas favoritas para automatizar seu negócio.</p>
-
-            <div class="apps-grid">
-
-                <div class="app-card"><div class="app-icon" style="color:#22C55E;"><i class="fas fa-link"></i></div><div style="font-weight:800; font-size:18px;">Webhooks</div><div style="font-size:13px; color:#718096; margin-top:10px;">Dados de vendas em tempo real.</div><button class="btn-app-config">Configurar</button></div>
-
-                <div class="app-card"><div class="app-icon" style="color:#FF6600;"><i class="fas fa-bolt"></i></div><div style="font-weight:800; font-size:18px;">Zapier</div><div style="font-size:13px; color:#718096; margin-top:10px;">Conecte com 5.000+ apps.</div><button class="btn-app-config">Conectar</button></div>
-
-                <div class="app-card"><div class="app-icon" style="color:#356ae6;"><i class="fas fa-envelope-open-text"></i></div><div style="font-weight:800; font-size:18px;">ActiveCampaign</div><div style="font-size:13px; color:#718096; margin-top:10px;">Sincronize listas de e-mail.</div><button class="btn-app-config">Configurar</button></div>
-
-                <div class="app-card"><div class="app-icon" style="color:#25D366;"><i class="fab fa-whatsapp"></i></div><div style="font-weight:800; font-size:18px;">Hotzapp</div><div style="font-size:13px; color:#718096; margin-top:10px;">Notificações por WhatsApp.</div><button class="btn-app-config">Configurar</button></div>
-
-            </div>
-
         </section>
 
-
-
-        <section id="aba-dash" class="aba-section"><h2>Dashboard</h2></section>
-
         <section id="aba-ajuda" class="aba-section"><h2>Ajuda</h2></section>
-
-        <section id="aba-prod" class="aba-section"><h2>Produtos</h2></section>
-
     </div>
-
 </main>
 
-
-
-<div class="modal-overlay" id="modalColab">
-
-    <div class="modal-content">
-
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;"><h3 style="margin:0">Adicionar colaborador</h3><i class="fas fa-times" onclick="closeColabModal()" style="cursor:pointer; color:#A0AEC0"></i></div>
-
-        <div style="margin-bottom:15px"><label style="display:block; font-size:14px; font-weight:600; color:#4A5568; margin-bottom:8px">E-mail</label><input type="email" placeholder="E-mail do colaborador" style="width:100%; padding:12px; border:1px solid var(--border); border-radius:8px; outline:none"></div>
-
-        <div style="display:flex; align-items:center; gap:10px; margin-bottom:25px"><input type="checkbox" id="acessoTotal" checked style="width:18px; height:18px; cursor:pointer"><label for="acessoTotal" style="font-size:14px; font-weight:600; color:#4A5568; cursor:pointer">Acesso total</label></div>
-
-        <button class="btn-primary" style="width:100%; padding:14px">Adicionar colaborador</button>
-
+<div class="modal-overlay" id="modalProduct">
+    <div class="modal-content" style="width: 700px; max-width: 90%;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+            <h3 style="margin:0">Criar produto</h3>
+            <i class="fas fa-times" onclick="closeProductModal()" style="cursor:pointer; color:#A0AEC0"></i>
+        </div>
+        <div class="sub-nav" id="productModalNav">
+            <div class="sub-nav-item active" onclick="switchProductTab('info', this)">Informações</div>
+            <div class="sub-nav-item" onclick="switchProductTab('preco', this)">Preço</div>
+            <div class="sub-nav-item" onclick="switchProductTab('entrega', this)">Entrega</div>
+        </div>
+        <div id="p-info" class="prod-modal-tab active" style="padding-top:20px;">
+            <label style="display:block; font-size:12px; font-weight:700; margin-bottom:5px;">NOME DO PRODUTO</label>
+            <input type="text" class="search-input" style="padding:10px;" placeholder="Ex: Curso de Violão">
+        </div>
+        <div id="p-preco" class="prod-modal-tab" style="padding-top:20px; display:none;">
+            <label style="display:block; font-size:12px; font-weight:700; margin-bottom:5px;">VALOR (R$)</label>
+            <input type="number" class="search-input" style="padding:10px;" placeholder="297.00">
+        </div>
+        <div id="p-entrega" class="prod-modal-tab" style="padding-top:20px; display:none;">
+            <label style="display:block; font-size:12px; font-weight:700; margin-bottom:5px;">URL DE ENTREGA</label>
+            <input type="text" class="search-input" style="padding:10px;" placeholder="https://...">
+        </div>
+        <div style="margin-top:25px; display:flex; justify-content:flex-end; gap:10px;">
+            <button class="btn-primary" style="background:#E2E8F0; color:#4A5568" onclick="closeProductModal()">Cancelar</button>
+            <button class="btn-primary">Criar produto</button>
+        </div>
     </div>
-
 </div>
 
-
+<div class="modal-overlay" id="modalColab">
+    <div class="modal-content">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;"><h3 style="margin:0">Adicionar colaborador</h3><i class="fas fa-times" onclick="closeColabModal()" style="cursor:pointer; color:#A0AEC0"></i></div>
+        <div style="margin-bottom:15px"><label style="display:block; font-size:14px; font-weight:600; color:#4A5568; margin-bottom:8px">E-mail</label><input type="email" placeholder="E-mail do colaborador" style="width:100%; padding:12px; border:1px solid var(--border); border-radius:8px; outline:none"></div>
+        <button class="btn-primary" style="width:100%; padding:14px">Adicionar colaborador</button>
+    </div>
+</div>
 
 <script>
-
     function nav(id, el) {
-
-        if(id === 'ajuda') return; // Não ativa seção para link externo
-
+        if(id === 'ajuda') return;
         document.querySelectorAll('.aba-section').forEach(s => s.classList.remove('active'));
-
         document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-
         document.getElementById('aba-' + id).classList.add('active');
-
         el.classList.add('active');
-
         document.getElementById('header-path').innerHTML = `<strong>Maestro Console</strong> / ${el.innerText.trim()}`;
-
         if(id === 'relat') closeRelat();
-
     }
-
+    
     function openRelat(t) { document.getElementById('relat-main-list').style.display='none'; document.getElementById('relat-detail').style.display='block'; document.getElementById('relat-title-display').innerText=t; }
-
     function closeRelat() { document.getElementById('relat-main-list').style.display='block'; document.getElementById('relat-detail').style.display='none'; }
-
     function openColabModal() { document.getElementById('modalColab').classList.add('active'); }
-
     function closeColabModal() { document.getElementById('modalColab').classList.remove('active'); }
 
-
-
-    // O GRÁFICO PRECISA FICAR DENTRO DA TAG SCRIPT E ESPERAR A PÁGINA CARREGAR
+    // FUNÇÕES PRODUTO
+    function openProductModal() { document.getElementById('modalProduct').classList.add('active'); }
+    function closeProductModal() { document.getElementById('modalProduct').classList.remove('active'); }
+    function switchProductTab(tab, el) {
+        document.querySelectorAll('.prod-modal-tab').forEach(c => c.style.display = 'none');
+        document.querySelectorAll('#productModalNav .sub-nav-item').forEach(i => i.classList.remove('active'));
+        document.getElementById('p-' + tab).style.display = 'block';
+        el.classList.add('active');
+    }
 
     window.onload = function() {
-
         const ctx = document.getElementById('salesChart')?.getContext('2d');
-
         if(ctx) {
-
             new Chart(ctx, {
-
                 type: 'line',
-
                 data: {
-
                     labels: ['00h', '04h', '08h', '12h', '16h', '20h', '23h'],
-
                     datasets: [{
-
                         data: [0, 0, 0, 0, 0, 0, 0],
-
                         borderColor: '#5D5FEF',
-
                         backgroundColor: 'rgba(93, 95, 239, 0.1)',
-
                         fill: true, tension: 0.4, borderWidth: 3, pointRadius: 0
-
                     }]
-
                 },
-
                 options: { 
-
-                    responsive: true, 
-
-                    maintainAspectRatio: false, 
-
+                    responsive: true, maintainAspectRatio: false, 
                     plugins: { legend: { display: false } },
-
                     scales: { y: { beginAtZero: true }, x: { grid: { display: false } } }
-
                 }
-
             });
-
         }
-
     };
-
 </script>
-
 </body>
-
 </html>
