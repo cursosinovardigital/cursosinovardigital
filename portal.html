@@ -231,14 +231,36 @@
                 <div class="app-card"><div class="app-icon" style="color:#FF6600;"><i class="fas fa-bolt"></i></div><div style="font-weight:800; font-size:18px;">Zapier</div><div style="font-size:13px; color:#718096; margin-top:10px;">Conecte com 5.000+ apps.</div><button class="btn-app-config">Conectar</button></div>
                 <div class="app-card"><div class="app-icon" style="color:#356ae6;"><i class="fas fa-envelope-open-text"></i></div><div style="font-weight:800; font-size:18px;">ActiveCampaign</div><div style="font-size:13px; color:#718096; margin-top:10px;">Sincronize listas de e-mail.</div><button class="btn-app-config">Configurar</button></div>
                 <div class="app-card"><div class="app-icon" style="color:#25D366;"><i class="fab fa-whatsapp"></i></div><div style="font-weight:800; font-size:18px;">Hotzapp</div><div style="font-size:13px; color:#718096; margin-top:10px;">Notificações por WhatsApp.</div><button class="btn-app-config">Configurar</button></div>
-            </div>
-        </section>
-
-        <section id="aba-dash" class="aba-section"><h2>Dashboard</h2></section>
-        <section id="aba-ajuda" class="aba-section"><h2>Ajuda</h2></section>
-        <section id="aba-prod" class="aba-section"><h2>Produtos</h2></section>
+<div style="display:flex; gap:15px; margin-bottom:20px;">
+        <select class="search-input" style="width:150px; padding:10px 15px;"><option>Hoje</option></select>
+        <select class="search-input" style="width:260px; padding:10px 15px;"><option>Todos os produtos</option></select>
+        <select class="search-input" style="width:160px; padding:10px 15px;"><option>BRL</option></select>
     </div>
-</main>
+
+    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
+        <div style="background: #FFF; border: 1px solid var(--border); border-radius: 12px; padding: 25px; height: 420px; position: relative;">
+            <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
+                <span style="font-weight:700; color:#718096">Vendas nas últimas 24h</span>
+                <span style="font-size:24px; font-weight:800">R$ 0,00</span>
+            </div>
+            <div style="height: 320px; width: 100%;"><canvas id="salesChart"></canvas></div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:15px;">
+            <div style="background:#FFF; border:1px solid var(--border); border-radius:12px; padding:20px; display:flex; align-items:center; gap:15px;">
+                <i class="fas fa-dollar-sign" style="color:#718096; background:#F8F9FA; padding:12px; border-radius:50%; width:45px; height:45px; display:flex; align-items:center; justify-content:center;"></i>
+                <div><div style="font-size:12px; color:#718096; font-weight:600">Valor líquido</div><div style="font-size:20px; font-weight:800">R$ 0,00</div></div>
+            </div>
+            <div style="background:#FFF; border:1px solid var(--border); border-radius:12px; padding:20px; display:flex; align-items:center; gap:15px;">
+                <i class="fas fa-shopping-cart" style="color:#718096; background:#F8F9FA; padding:12px; border-radius:50%; width:45px; height:45px; display:flex; align-items:center; justify-content:center;"></i>
+                <div><div style="font-size:12px; color:#718096; font-weight:600">Vendas</div><div style="font-size:20px; font-weight:800">0</div></div>
+            </div>
+            <div style="background:#FFF; border:1px solid var(--border); border-radius:12px; padding:20px; display:flex; align-items:center; gap:15px;">
+                <i class="fas fa-barcode" style="color:#718096; background:#F8F9FA; padding:12px; border-radius:50%; width:45px; height:45px; display:flex; align-items:center; justify-content:center;"></i>
+                <div><div style="font-size:12px; color:#718096; font-weight:600">Boletos gerados</div><div style="font-size:20px; font-weight:800">0</div></div>
+            </div>
+        </div>
+    </div></main>
 
 <div class="modal-overlay" id="modalColab">
     <div class="modal-content">
