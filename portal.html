@@ -11,52 +11,47 @@
     <style>
         :root { 
             --orange: #FF6600; --side-black: #111418; --white: #FFFFFF; 
-            --bg: #F4F7FA; --text: #1A1D23; --border: #E2E8F0; 
+            --bg: #F4F7FA; --text: #1A1D23; --border: #E2E8F0; --green: #22C55E;
         }
 
         * { box-sizing: border-box; font-family: 'Inter', sans-serif; }
         body { margin: 0; display: flex; height: 100vh; background: var(--bg); overflow: hidden; }
 
-        /* SIDEBAR E LOGO */
+        /* SIDEBAR */
         nav { width: 260px; background: var(--side-black); display: flex; flex-direction: column; flex-shrink: 0; }
         .logo-area { padding: 30px 25px; border-bottom: 1px solid #2D3436; font-size: 20px; font-weight: 900; color: #FFF; }
         .logo-area span { color: var(--orange); }
-        
         .nav-scroll { flex: 1; overflow-y: auto; padding: 10px 0; }
-        .nav-item { 
-            padding: 12px 25px; color: #A0AEC0; cursor: pointer; display: flex; 
-            align-items: center; font-size: 14px; border-left: 4px solid transparent; transition: 0.2s;
-        }
+        .nav-item { padding: 12px 25px; color: #A0AEC0; cursor: pointer; display: flex; align-items: center; font-size: 14px; border-left: 4px solid transparent; transition: 0.2s; }
         .nav-item i { margin-right: 15px; width: 18px; text-align: center; }
         .nav-item:hover, .nav-item.active { background: #1E2228; color: #FFF; border-left-color: var(--orange); }
 
-        /* MAIN CONTENT */
+        /* MAIN */
         main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
-        header { 
-            height: 70px; background: var(--white); border-bottom: 1px solid var(--border);
-            display: flex; justify-content: space-between; align-items: center; padding: 0 40px;
-        }
+        header { height: 70px; background: var(--white); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; padding: 0 40px; }
         .user-header { display: flex; align-items: center; gap: 15px; font-weight: 700; }
 
         .content-area { padding: 35px; overflow-y: auto; flex: 1; }
         .aba-section { display: none; }
         .aba-section.active { display: block; animation: fadeIn 0.3s ease; }
 
-        /* COMPONENTES DE UI */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
-        .card { background: #FFF; border-radius: 12px; border: 1px solid var(--border); padding: 25px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
-        .val { font-size: 28px; font-weight: 800; color: var(--text); margin-top: 10px; }
-        .btn-inovar { 
-            background: var(--orange); color: #FFF; border: none; padding: 12px 20px; 
-            border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px;
-        }
+        /* COMPONENTES KIWIFY STYLE */
+        .card-stat { background: #FFF; padding: 25px; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .stat-label { color: #718096; font-size: 12px; font-weight: 700; text-transform: uppercase; }
+        .stat-value { font-size: 28px; font-weight: 800; color: var(--text); margin-top: 8px; }
+        
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        .table-container { background: #FFF; border-radius: 12px; border: 1px solid var(--border); overflow: hidden; margin-top: 20px; }
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; padding: 15px; background: #F8F9FA; color: #718096; font-size: 12px; border-bottom: 1px solid var(--border); }
+        td { padding: 15px; border-bottom: 1px solid var(--border); font-size: 14px; color: #4A5568; }
 
-        /* EDITOR DE PRODUTO */
-        .editor-box { background: #FFF; border-radius: 15px; border: 1px solid var(--border); overflow: hidden; margin-top: 20px; }
-        .editor-tabs { display: flex; background: #F8F9FA; border-bottom: 1px solid var(--border); }
+        .btn-inovar { background: var(--orange); color: #FFF; border: none; padding: 12px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+
+        /* EDITOR E PLAYER */
+        .editor-box { background: #FFF; border-radius: 15px; border: 1px solid var(--border); overflow: hidden; }
         .tab-btn { padding: 15px 25px; cursor: pointer; font-weight: 600; color: #718096; border-bottom: 3px solid transparent; }
         .tab-btn.active { color: var(--orange); border-bottom-color: var(--orange); }
-        input, textarea, select { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; margin-top: 8px; margin-bottom: 15px; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -92,59 +87,71 @@
 
     <div class="content-area">
         <section id="aba-dash" class="aba-section active">
-            <h2>Resumo das últimas 24 horas</h2>
+            <h2>Dashboard</h2>
             <div class="grid">
-                <div class="card" style="border-left: 5px solid #22C55E;">
-                    <span style="color:#718096; font-size:12px; font-weight:700;">VENDAS APROVADAS</span>
-                    <div class="val" id="dash-faturamento">R$ 0,00</div>
+                <div class="card-stat">
+                    <div class="stat-label">Valor Líquido</div>
+                    <div class="stat-value" id="dash-liquido">R$ 0,00</div>
                 </div>
-                <div class="card" style="border-left: 5px solid var(--orange);">
-                    <span style="color:#718096; font-size:12px; font-weight:700;">PAGAMENTOS PENDENTES</span>
-                    <div class="val" id="dash-pendentes">0</div>
+                <div class="card-stat">
+                    <div class="stat-label">Vendas</div>
+                    <div class="stat-value" id="dash-vendas-count">0</div>
                 </div>
+                <div class="card-stat">
+                    <div class="stat-label">Boleto Gerados</div>
+                    <div class="stat-value" id="dash-boletos">0</div>
+                </div>
+            </div>
+            <div class="card-stat" style="margin-top: 25px; height: 300px; display: flex; align-items: center; justify-content: center;">
+                <canvas id="mainChart"></canvas>
             </div>
         </section>
 
         <section id="aba-prod" class="aba-section">
             <div id="lista-prod-container">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
-                    <h2>Meus Produtos</h2>
-                    <button class="btn-inovar" onclick="abrirEditor(null)">+ Criar Produto</button>
+                <div style="display:flex; justify-content:space-between; margin-bottom:30px;">
+                    <h2>Produtos</h2>
+                    <button class="btn-inovar" onclick="abrirEditor(null)">Criar produto</button>
                 </div>
-                <div id="grid-meus-produtos" class="grid"></div>
+                <div class="table-container">
+                    <table id="tabela-meus-produtos">
+                        <thead><tr><th>NOME</th><th>PREÇO</th><th>STATUS</th><th>AÇÕES</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
             </div>
 
             <div id="editor-prod-container" style="display:none;">
                 <button onclick="fecharEditor()" style="background:none; border:none; color:var(--orange); font-weight:bold; cursor:pointer; margin-bottom:20px;"><i class="fas fa-arrow-left"></i> Voltar</button>
                 <div class="editor-box">
-                    <div class="editor-tabs">
-                        <div class="tab-btn active" onclick="toggleEditorTab('info', this)">Configurações</div>
-                        <div class="tab-btn" onclick="toggleEditorTab('aulas', this)">Conteúdo e Vídeos</div>
+                    <div style="display:flex; border-bottom:1px solid var(--border);">
+                        <div class="tab-btn active" onclick="toggleEditorTab('info', this)">Geral</div>
+                        <div class="tab-btn" onclick="toggleEditorTab('aulas', this)">Área de Membros</div>
                     </div>
                     <div id="edit-info" class="editor-pane" style="padding:30px;">
-                        <label>Nome do Produto</label><input type="text" id="p-nome-edit">
-                        <label>Preço (R$)</label><input type="number" id="p-preco-edit">
-                        <label>Descrição</label><textarea id="p-desc-edit" rows="4"></textarea>
+                        <label>Nome do Produto</label><input type="text" id="p-nome-edit" style="width:100%; padding:12px; margin-bottom:15px; border:1px solid var(--border); border-radius:8px;">
+                        <label>Preço (R$)</label><input type="number" id="p-preco-edit" style="width:100%; padding:12px; margin-bottom:15px; border:1px solid var(--border); border-radius:8px;">
                         <button class="btn-inovar" onclick="salvarProduto()">Salvar Produto</button>
-                    </div>
-                    <div id="edit-aulas" class="editor-pane" style="padding:30px; display:none;">
-                        <div style="background:#F8F9FA; padding:20px; border-radius:10px; margin-bottom:20px;">
-                            <h4>Nova Aula</h4>
-                            <input type="text" id="aula-tit" placeholder="Título da Aula">
-                            <input type="text" id="aula-url" placeholder="Link YouTube/Vimeo">
-                            <button class="btn-inovar" onclick="addAula()">Adicionar Aula</button>
-                        </div>
-                        <div id="lista-aulas-editor"></div>
                     </div>
                 </div>
             </div>
         </section>
 
         <section id="aba-vendas" class="aba-section">
-            <h2>Histórico de Vendas</h2>
-            <div class="card" style="padding:0; overflow:hidden;">
-                <table id="tabela-vendas" style="width:100%; border-collapse:collapse;">
-                    <thead><tr style="background:#F8F9FA; text-align:left;"><th style="padding:15px;">Data</th><th style="padding:15px;">Produto</th><th style="padding:15px;">Valor</th><th style="padding:15px;">Status</th></tr></thead>
+            <h2>Vendas</h2>
+            <div class="grid" style="margin-bottom: 20px;">
+                <div class="card-stat">
+                    <div class="stat-label">Vendas Encontradas</div>
+                    <div class="stat-value" id="vendas-total-count">0</div>
+                </div>
+                <div class="card-stat">
+                    <div class="stat-label">Valor Líquido</div>
+                    <div class="stat-value" id="vendas-valor-total">R$ 0,00</div>
+                </div>
+            </div>
+            <div class="table-container">
+                <table id="tabela-vendas">
+                    <thead><tr><th>DATA</th><th>PRODUTO</th><th>CLIENTE</th><th>STATUS</th><th>VALOR LÍQUIDO</th></tr></thead>
                     <tbody></tbody>
                 </table>
             </div>
@@ -152,21 +159,31 @@
 
         <section id="aba-finan" class="aba-section">
             <h2>Financeiro</h2>
-            <div class="card" style="max-width:400px; border-top: 4px solid var(--orange);">
-                <span style="color:#718096;">SALDO DISPONÍVEL</span>
-                <div class="val" style="color:#22C55E; font-size:36px;">R$ 0,00</div>
-                <button class="btn-inovar" style="width:100%; margin-top:20px; background:#2D3436; justify-content:center;">Sacar Agora</button>
+            <div class="grid">
+                <div class="card-stat" style="border-left: 5px solid var(--green);">
+                    <div class="stat-label">Saldo Disponível</div>
+                    <div class="stat-value" style="color: var(--green);">R$ 0,00</div>
+                </div>
+                <div class="card-stat" style="border-left: 5px solid var(--orange);">
+                    <div class="stat-label">Saldo Pendente</div>
+                    <div class="stat-value">R$ 0,00</div>
+                </div>
             </div>
+            <button class="btn-inovar" style="margin-top: 20px;">Efetuar saque</button>
         </section>
 
-        <section id="aba-membro" class="aba-section"><h2>Área de Membros</h2><div id="grid-membros" class="grid"></div></section>
-        <section id="aba-market" class="aba-section"><h2>Marketplace</h2><div id="grid-market" class="grid"></div></section>
-        <section id="aba-afiliados" class="aba-section"><h2>Meus Afiliados</h2><p>Gestão de parceiros.</p></section>
-        <section id="aba-assin" class="aba-section"><h2>Assinaturas</h2><p>Recorrência.</p></section>
-        <section id="aba-relat" class="aba-section"><h2>Relatórios</h2><p>Gráficos de performance.</p></section>
-        <section id="aba-colab" class="aba-section"><h2>Colaboradores</h2><p>Permissões de equipe.</p></section>
-        <section id="aba-apps" class="aba-section"><h2>Apps</h2><p>Integrações externas.</p></section>
-        <section id="aba-ajuda" class="aba-section"><h2>Ajuda</h2><p>Suporte Inovar Digital.</p></section>
+        <section id="aba-market" class="aba-section">
+            <h2>Mais vendidos do Marketplace</h2>
+            <div class="grid" id="grid-marketplace"></div>
+        </section>
+
+        <section id="aba-afiliados" class="aba-section"><h2>Meus Afiliados</h2><p>Área de parceiros.</p></section>
+        <section id="aba-assin" class="aba-section"><h2>Assinaturas</h2><p>Gestão de recorrência.</p></section>
+        <section id="aba-membro" class="aba-section"><h2>Área de Membros</h2><p>Escolas e cursos.</p></section>
+        <section id="aba-relat" class="aba-section"><h2>Relatórios</h2><p>Análise de dados.</p></section>
+        <section id="aba-colab" class="aba-section"><h2>Colaboradores</h2><p>Equipe.</p></section>
+        <section id="aba-apps" class="aba-section"><h2>Apps</h2><p>Integrações.</p></section>
+        <section id="aba-ajuda" class="aba-section"><h2>Ajuda</h2><p>Suporte.</p></section>
     </div>
 </main>
 
@@ -178,77 +195,54 @@
         document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
         document.getElementById('aba-' + id).classList.add('active');
         el.classList.add('active');
-        if(id === 'prod' || id === 'dash') sync();
+        sync();
+    }
+
+    async function sync() {
+        const { data: vendas } = await _supabase.from('vendas').select('*').order('created_at', {ascending: false});
+        if(vendas) {
+            const aprovadas = vendas.filter(v => v.status === 'approved');
+            const totalLiquido = aprovadas.reduce((acc, v) => acc + v.valor, 0);
+            
+            document.getElementById('dash-liquido').innerText = `R$ ${totalLiquido.toFixed(2)}`;
+            document.getElementById('vendas-valor-total').innerText = `R$ ${totalLiquido.toFixed(2)}`;
+            document.getElementById('dash-vendas-count').innerText = aprovadas.length;
+            document.getElementById('vendas-total-count').innerText = vendas.length;
+
+            document.querySelector('#tabela-vendas tbody').innerHTML = vendas.map(v => `
+                <tr>
+                    <td>${new Date(v.created_at).toLocaleDateString()}</td>
+                    <td>${v.produto_nome}</td>
+                    <td>${v.email_comprador || 'Cliente'}</td>
+                    <td><span style="color:${v.status === 'approved' ? 'green' : 'orange'}">${v.status.toUpperCase()}</span></td>
+                    <td>R$ ${v.valor.toFixed(2)}</td>
+                </tr>
+            `).join('');
+        }
+
+        const { data: cursos } = await _supabase.from('cursos_disponiveis').select('*');
+        if(cursos) {
+            document.querySelector('#tabela-meus-produtos tbody').innerHTML = cursos.map(c => `
+                <tr>
+                    <td>${c.nome}</td>
+                    <td>R$ ${c.preco}</td>
+                    <td><span style="color:green">Ativo</span></td>
+                    <td><button onclick="abrirEditor(${c.id})" style="border:none; background:none; color:var(--orange); cursor:pointer; font-weight:bold;">Editar</button></td>
+                </tr>
+            `).join('');
+        }
     }
 
     function abrirEditor(id) {
         produtoAtivoId = id;
         document.getElementById('lista-prod-container').style.display = 'none';
         document.getElementById('editor-prod-container').style.display = 'block';
-        if(id) carregarDadosProduto(id);
     }
 
     function fecharEditor() {
         document.getElementById('lista-prod-container').style.display = 'block';
         document.getElementById('editor-prod-container').style.display = 'none';
         sync();
-    }
-
-    function toggleEditorTab(tab, el) {
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.querySelectorAll('.editor-pane').forEach(p => p.style.display = 'none');
-        el.classList.add('active');
-        document.getElementById('edit-' + tab).style.display = 'block';
-        if(tab === 'aulas') carregarAulasEditor();
-    }
-
-    async function sync() {
-        // Dash e Vendas
-        const { data: vendas } = await _supabase.from('vendas').select('*').order('created_at', {ascending: false});
-        if(vendas) {
-            const total = vendas.filter(v => v.status === 'approved').reduce((acc, v) => acc + v.valor, 0);
-            document.getElementById('dash-faturamento').innerText = `R$ ${total.toFixed(2)}`;
-            document.getElementById('dash-pendentes').innerText = vendas.filter(v => v.status === 'pending').length;
-            document.querySelector('#tabela-vendas tbody').innerHTML = vendas.map(v => `<tr><td style="padding:15px;">${new Date(v.created_at).toLocaleDateString()}</td><td style="padding:15px;">${v.produto_nome}</td><td style="padding:15px;">R$ ${v.valor}</td><td style="padding:15px; color:${v.status === 'approved' ? 'green' : 'orange'}">${v.status.toUpperCase()}</td></tr>`).join('');
-        }
-
-        // Cursos
-        const { data: cursos } = await _supabase.from('cursos_disponiveis').select('*');
-        if(cursos) {
-            const html = cursos.map(c => `<div class="card"><h3>${c.nome}</h3><div style="color:var(--orange); font-weight:800; margin:10px 0;">R$ ${c.preco}</div><button class="btn-inovar" style="width:100%; justify-content:center;" onclick="abrirEditor(${c.id})">Gerenciar</button></div>`).join('');
-            document.getElementById('grid-meus-produtos').innerHTML = html;
-            document.getElementById('grid-market').innerHTML = html;
-            document.getElementById('grid-membros').innerHTML = html;
-        }
-    }
-
-    async function carregarDadosProduto(id) {
-        const { data } = await _supabase.from('cursos_disponiveis').select('*').eq('id', id).single();
-        document.getElementById('p-nome-edit').value = data.nome;
-        document.getElementById('p-preco-edit').value = data.preco;
-        document.getElementById('p-desc-edit').value = data.descricao;
-    }
-
-    async function carregarAulasEditor() {
-        const { data } = await _supabase.from('aulas').select('*').eq('curso_id', produtoAtivoId);
-        document.getElementById('lista-aulas-editor').innerHTML = data.map(a => `<div style="padding:15px; border-bottom:1px solid #EEE; display:flex; justify-content:space-between;"><span><i class="fas fa-video"></i> ${a.titulo}</span></div>`).join('');
-    }
-
-    async function salvarProduto() {
-        const p = { nome: document.getElementById('p-nome-edit').value, preco: document.getElementById('p-preco-edit').value, descricao: document.getElementById('p-desc-edit').value };
-        if(produtoAtivoId) {
-            await _supabase.from('cursos_disponiveis').update(p).eq('id', produtoAtivoId);
-        } else {
-            const { data } = await _supabase.from('cursos_disponiveis').insert([p]).select();
-            produtoAtivoId = data[0].id;
-        }
-        alert("Produto salvo!");
-    }
-
-    async function addAula() {
-        const a = { curso_id: produtoAtivoId, titulo: document.getElementById('aula-tit').value, video_url: document.getElementById('aula-url').value };
-        await _supabase.from('aulas').insert([a]);
-        carregarAulasEditor();
     }
 
     sync();
