@@ -170,8 +170,7 @@
             <div class="table-container">
                 <table>
                     <thead><tr><th>NOME</th><th>PREÇO</th><th>STATUS</th><th style="text-align:right">AÇÕES</th></tr></thead>
-                    <tbody id="product-list-body">
-                    </tbody>
+                    <tbody id="product-list-body"></tbody>
                 </table>
             </div>
         </section>
@@ -197,12 +196,7 @@
                     <button class="btn-primary">Filtrar</button>
                 </div>
             </div>
-            <div class="table-container">
-                <table>
-                    <thead><tr><th>ID VENDA</th><th>PRODUTO</th><th>VALOR</th><th>DATA</th><th>STATUS</th></tr></thead>
-                    <tbody id="sales-list-body"></tbody>
-                </table>
-            </div>
+            <div class="table-container"><table><thead><tr><th>ID VENDA</th><th>PRODUTO</th><th>VALOR</th><th>DATA</th><th>STATUS</th></tr></thead><tbody id="sales-list-body"></tbody></table></div>
         </section>
 
         <section id="aba-market" class="aba-section">
@@ -221,12 +215,13 @@
             <div style="display: flex; gap: 15px; margin-bottom: 20px;">
                 <div style="flex: 1; position: relative;"><i class="fas fa-search" style="position: absolute; left: 15px; top: 15px; color: #A0AEC0;"></i><input type="text" class="search-input" placeholder="Filtrar por nome ou e-mail..."></div>
                 <div style="width: 250px;"><select class="search-input" style="padding-left: 15px;"><option>Todos os produtos</option></select></div>
-                <button class="btn-primary" style="background: #FFF; color: #4A5568; border: 1px solid var(--border);"><i class="fas fa-filter"></i> Filtros</button>
+                <button class="btn-primary" onclick="convidarAfiliado()">Convidar Afiliado</button>
             </div>
             <div class="table-container">
                 <table>
                     <thead><tr><th>NOME</th><th>PRODUTO</th><th>LINK ÚNICO</th><th>VENDAS</th><th>AÇÕES</th></tr></thead>
-                    <tbody id="lista-afiliados-body"></tbody>
+                    <tbody id="lista-afiliados-body">
+                        </tbody>
                 </table>
             </div>
         </section>
@@ -248,7 +243,7 @@
                 <a href="#" style="color:var(--purple-kiwi); font-weight:600; text-decoration:none; font-size:14px;">Alterar minha conta para CNPJ</a>
                 <button class="btn-primary" onclick="solicitarSaque()">Efetuar saque</button>
             </div>
-            <div class="sub-nav"><div class="sub-nav-item active">Saques</div><div class="sub-nav-item">Dados bancários</div><div class="sub-nav-item">Taxas e Prazos</div><div class="sub-nav-item">Identidade</div></div>
+            <div class="sub-nav"><div class="sub-nav-item active">Saques</div><div class="sub-nav-item">Dados bancários</div></div>
             <div class="table-container"><table><thead><tr><th>DATA</th><th>VALOR</th><th>STATUS</th></tr></thead><tbody id="lista-saques-body"><tr><td colspan="3" style="text-align:center; padding:50px; color:#A0AEC0;">Exibindo 0 de 0 páginas</td></tr></tbody></table></div>
         </section>
 
@@ -297,31 +292,21 @@
             <h3 id="modal-product-title" style="margin:0; font-weight: 800;">Editar produto</h3>
             <i class="fas fa-times" onclick="closeProductModal()" style="cursor:pointer; color:#A0AEC0"></i>
         </div>
-        
-        <div style="padding: 20px 30px 0 30px;">
-            <div class="sub-nav" id="productModalNav">
-                <div class="sub-nav-item active" onclick="switchProductTab('info', this)">Geral</div>
-                <div class="sub-nav-item" onclick="switchProductTab('links', this)">Links</div>
-                <div class="sub-nav-item" onclick="alert('Configurações em breve')">Configurações</div>
-                <div class="sub-nav-item" onclick="alert('Checkout em breve')">Checkout</div>
-                <div class="sub-nav-item" onclick="alert('Afiliados em breve')">Afiliados</div>
-            </div>
-        </div>
-
+        <div style="padding: 20px 30px 0 30px;"><div class="sub-nav" id="productModalNav">
+            <div class="sub-nav-item active" onclick="switchProductTab('info', this)">Geral</div>
+            <div class="sub-nav-item" onclick="switchProductTab('links', this)">Links</div>
+            <div class="sub-nav-item" onclick="alert('Configurações em breve')">Configurações</div>
+            <div class="sub-nav-item" onclick="alert('Checkout em breve')">Checkout</div>
+            <div class="sub-nav-item" onclick="alert('Afiliados em breve')">Afiliados</div>
+        </div></div>
         <div class="modal-body" style="padding: 30px; flex: 1; overflow-y: auto;">
             <input type="hidden" id="edit-prod-id">
-            
             <div id="p-info" class="prod-modal-tab active">
-                <div style="margin-bottom:20px">
-                    <label style="display:block; font-size:12px; font-weight:700; margin-bottom:8px; color: #718096;">NOME DO PRODUTO</label>
-                    <input type="text" id="ipt_nome" class="search-input" style="width:100%; padding-left: 15px;" placeholder="Ex: Curso de Violão">
-                </div>
-                <div>
-                    <label style="display:block; font-size:12px; font-weight:700; margin-bottom:8px; color: #718096;">VALOR (R$)</label>
-                    <input type="number" id="ipt_preco" class="search-input" style="width:100%; padding-left: 15px;" placeholder="297.00">
-                </div>
+                <label style="display:block; font-size:12px; font-weight:700; margin-bottom:8px; color: #718096;">NOME DO PRODUTO</label>
+                <input type="text" id="ipt_nome" class="search-input" style="width:100%; margin-bottom:20px; padding-left:15px">
+                <label style="display:block; font-size:12px; font-weight:700; margin-bottom:8px; color: #718096;">VALOR (R$)</label>
+                <input type="number" id="ipt_preco" class="search-input" style="width:100%; padding-left:15px">
             </div>
-
             <div id="p-links" class="prod-modal-tab" style="display:none">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px">
                     <div style="position: relative; width: 350px;">
@@ -330,20 +315,10 @@
                     </div>
                     <button class="btn-primary" style="background: var(--purple-kiwi);"><i class="fas fa-plus"></i> Adicionar link</button>
                 </div>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr><th>NOME DO LINK</th><th>URL</th><th>TIPO</th><th>PREÇO</th><th>STATUS</th><th></th></tr>
-                        </thead>
-                        <tbody id="prod-links-table"></tbody>
-                    </table>
-                </div>
-                <p style="margin-top:20px; color: var(--purple-kiwi); font-weight:600; cursor:pointer; display: flex; align-items: center; gap: 8px;" onclick="nav('ajuda', document.querySelector('[onclick*=\'ajuda\']'))">
-                    <i class="fas fa-info-circle"></i> Aprenda mais sobre os <span style="text-decoration: underline;">links</span>
-                </p>
+                <div class="table-container"><table><thead><tr><th>NOME DO LINK</th><th>URL</th><th>TIPO</th><th>PREÇO</th><th>STATUS</th><th></th></tr></thead><tbody id="prod-links-table"></tbody></table></div>
+                <p style="margin-top:20px; color: var(--purple-kiwi); font-weight:600; cursor:pointer; display: flex; align-items: center; gap: 8px;" onclick="nav('ajuda', document.querySelector('.nav-item:last-child'))"><i class="fas fa-info-circle"></i> Aprenda mais sobre os <span style="text-decoration: underline;">links</span></p>
             </div>
         </div>
-
         <div class="modal-footer" style="padding: 20px 30px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; background: white;">
             <button class="btn-danger" id="btn-del-prod" onclick="deleteProductFromModal()" style="border-radius: 8px; background: #EF4444; color: white; border: none; padding: 10px 20px; cursor: pointer; font-weight: 700;">Excluir produto</button>
             <button class="btn-primary" onclick="salvarProduto()" id="btn-save-product" style="border-radius: 8px; background: var(--purple-kiwi);">Salvar produto</button>
@@ -354,7 +329,7 @@
 <div class="modal-overlay" id="modalColab">
     <div class="modal-content" style="width: 450px;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;"><h3 style="margin:0">Adicionar colaborador</h3><i class="fas fa-times" onclick="closeColabModal()" style="cursor:pointer; color:#A0AEC0"></i></div>
-        <div style="margin-bottom:15px"><label style="display:block; font-size:14px; font-weight:600; color:#4A5568; margin-bottom:8px">E-mail</label><input type="email" placeholder="E-mail do colaborador" style="width:100%; padding:12px; border:1px solid var(--border); border-radius:8px; outline:none"></div>
+        <div class="modal-body"><div style="margin-bottom:15px"><label style="display:block; font-size:14px; font-weight:600; color:#4A5568; margin-bottom:8px">E-mail</label><input type="email" placeholder="E-mail do colaborador" class="search-input" style="width:100%; padding-left:15px"></div></div>
         <button class="btn-primary" style="width:100%; padding:14px">Adicionar colaborador</button>
     </div>
 </div>
@@ -363,10 +338,12 @@
     const SUPABASE_URL = 'https://onsbuazkqfehkudhladt.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9uc2J1YXprcWZlaGt1ZGhsYWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzNTI5OTgsImV4cCI6MjA5MzkyODk5OH0.ZypL6LHbPC_z971EDCTh6pVoA7g4qM6hWSWfWVO9a-M';
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
     let salesChartInstance = null;
 
-    // --- PRODUTOS ---
+    // TAXA COMPETITIVA: 7.9% + R$ 1,00
+    const TAXA_PERCENTUAL = 0.079; 
+    const TAXA_FIXA = 1.00;
+
     async function carregarProdutos() {
         const { data, error } = await _supabase.from('produtos').select('*').order('created_at', { ascending: false });
         if(error) return;
@@ -376,7 +353,7 @@
                 <td>R$ ${p.preco.toFixed(2).replace('.',',')}</td>
                 <td><span class="badge badge-success" style="background:#DCFCE7; color:#166534; padding:4px 8px; border-radius:4px; font-size:11px; font-weight:700;">Ativo</span></td>
                 <td style="text-align:right">
-                    <button class="btn-primary" style="padding: 5px 10px; font-size: 11px; background: var(--green); margin-right:10px;" onclick="simularVenda('${p.id}', ${p.preco})">Simular Venda</button>
+                    <button class="btn-primary" style="padding: 5px 10px; font-size: 11px; background: var(--green); margin-right:10px;" onclick="simularVenda('${p.id}', ${p.preco})">Venda</button>
                     <i class="fas fa-edit" style="cursor:pointer" onclick="editProduct('${p.id}', '${p.nome}', ${p.preco})"></i>
                 </td>
             </tr>`).join('');
@@ -384,10 +361,7 @@
 
     async function salvarProduto() {
         const id = document.getElementById('edit-prod-id').value;
-        const nome = document.getElementById('ipt_nome').value;
-        const preco = document.getElementById('ipt_preco').value;
-        if(!nome || !preco) { alert("Preencha nome e preço!"); return; }
-        const payload = { nome, preco: parseFloat(preco), status: 'Ativo' };
+        const payload = { nome: document.getElementById('ipt_nome').value, preco: parseFloat(document.getElementById('ipt_preco').value), status: 'Ativo' };
         const res = id ? await _supabase.from('produtos').update(payload).eq('id', id) : await _supabase.from('produtos').insert([payload]);
         if(!res.error) { closeProductModal(); carregarProdutos(); }
     }
@@ -417,7 +391,6 @@
         }
     }
 
-    // --- AFILIADOS ---
     async function carregarAfiliados() {
         const { data, error } = await _supabase.from('afiliados').select('*, produtos(nome)');
         if(error || !data) return;
@@ -425,29 +398,20 @@
         if (data.length === 0) {
             body.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 60px; color: #A0AEC0;"><i class="fas fa-users" style="font-size: 40px; margin-bottom: 15px; display: block;"></i>Nenhum afiliado encontrado</td></tr>`;
         } else {
-            body.innerHTML = data.map(a => `
-                <tr>
-                    <td style="font-weight:700">${a.nome}</td>
-                    <td>${a.produtos?.nome || 'Global'}</td>
-                    <td><input type="text" readonly class="search-input" style="padding:5px; font-size:11px; width:200px" value="${a.link_afiliado || 'Pendente'}"></td>
-                    <td>${a.vendas_realizadas}</td>
-                    <td><i class="fas fa-ellipsis-v" style="cursor:pointer"></i></td>
-                </tr>`).join('');
+            body.innerHTML = data.map(a => `<tr><td style="font-weight:700">${a.nome}</td><td>${a.produtos?.nome || 'Global'}</td><td><input type="text" readonly class="search-input" style="padding:5px; font-size:11px; width:200px" value="${a.link_afiliado || 'Pendente'}"></td><td>${a.vendas_realizadas}</td><td><i class="fas fa-ellipsis-v" style="cursor:pointer"></i></td></tr>`).join('');
         }
     }
 
-    // --- FINANCEIRO & DASHBOARD ---
+    async function convidarAfiliado() {
+        const nome = prompt("Nome:"); const email = prompt("E-mail:");
+        if(nome && email) { await _supabase.from('afiliados').insert([{ nome, email, link_afiliado: `https://inovar.digital/ref/${Math.random().toString(36).substring(7)}` }]); carregarAfiliados(); }
+    }
+
     async function solicitarSaque() {
-        const saldoTxt = document.getElementById('fin-disponivel').innerText.replace('R$ ', '').replace(',', '.');
-        const saldoDisponivel = parseFloat(saldoTxt);
-        if (saldoDisponivel <= 0) { alert("Sem saldo disponível."); return; }
-        const valorSaque = prompt("Digite o valor para saque:");
-        if (!valorSaque || parseFloat(valorSaque) > saldoDisponivel) { alert("Valor inválido."); return; }
-        const chavePix = prompt("Digite sua chave PIX:");
-        if (chavePix) {
-            const { error } = await _supabase.from('saques').insert([{ valor: parseFloat(valorSaque), chave_pix: chavePix, status: 'Pendente' }]);
-            if (!error) { alert("Saque solicitado!"); carregarHistoricoSaques(); }
-        }
+        const saldo = parseFloat(document.getElementById('fin-disponivel').innerText.replace('R$ ', '').replace(',', '.'));
+        if (saldo <= 0) { alert("Sem saldo!"); return; }
+        const valor = prompt("Valor para saque:"); const pix = prompt("Chave PIX:");
+        if (valor && pix) { await _supabase.from('saques').insert([{ valor: parseFloat(valor), chave_pix: pix, status: 'Pendente' }]); alert("Solicitado!"); carregarHistoricoSaques(); }
     }
 
     async function carregarHistoricoSaques() {
@@ -456,32 +420,25 @@
     }
 
     async function simularVenda(prodId, preco) {
-        const comissao = preco * 0.10;
-        await _supabase.from('vendas').insert([{ produto_id: prodId, valor_total: preco, comissao_maestro: comissao, valor_liquido: preco - comissao, status: 'Paga' }]);
+        const comissaoPlataforma = (preco * TAXA_PERCENTUAL) + TAXA_FIXA;
+        const valorLiquido = preco - comissaoPlataforma;
+        await _supabase.from('vendas').insert([{ produto_id: prodId, valor_total: preco, comissao_maestro: comissaoPlataforma, valor_liquido: valorLiquido, status: 'Paga' }]);
         carregarDadosDashboard();
     }
 
     async function carregarDadosDashboard() {
         const { data: vendas, error } = await _supabase.from('vendas').select('*, produtos(nome)').order('created_at', { ascending: false });
         if(error || !vendas) return;
-        const totalBruto = vendas.reduce((sum, v) => sum + v.valor_total, 0);
-        const totalLiquido = vendas.reduce((sum, v) => sum + v.valor_liquido, 0);
-        
-        document.getElementById('dash-total-vendas').innerText = `R$ ${totalBruto.toFixed(2).replace('.', ',')}`;
-        document.getElementById('dash-valor-liquido').innerText = `R$ ${totalLiquido.toFixed(2).replace('.', ',')}`;
+        const totalB = vendas.reduce((sum, v) => sum + v.valor_total, 0);
+        const totalL = vendas.reduce((sum, v) => sum + v.valor_liquido, 0);
+        document.getElementById('dash-total-vendas').innerText = `R$ ${totalB.toFixed(2).replace('.', ',')}`;
+        document.getElementById('dash-valor-liquido').innerText = `R$ ${totalL.toFixed(2).replace('.', ',')}`;
         document.getElementById('dash-count-vendas').innerText = vendas.length;
-        document.getElementById('fin-disponivel').innerText = `R$ ${totalLiquido.toFixed(2).replace('.', ',')}`;
-        
-        document.getElementById('sales-list-body').innerHTML = vendas.map(v => `
-            <tr><td>#${v.id.slice(0,8)}</td><td>${v.produtos?.nome || 'Produto'}</td><td>R$ ${v.valor_total.toFixed(2)}</td><td>${new Date(v.created_at).toLocaleDateString()}</td><td><span class="badge badge-success">Paga</span></td></tr>`).join('');
-        
-        if(salesChartInstance) {
-            salesChartInstance.data.datasets[0].data = vendas.slice(0, 7).reverse().map(v => v.valor_total);
-            salesChartInstance.update();
-        }
+        document.getElementById('fin-disponivel').innerText = `R$ ${totalL.toFixed(2).replace('.', ',')}`;
+        document.getElementById('sales-list-body').innerHTML = vendas.map(v => `<tr><td>#${v.id.slice(0,8)}</td><td>${v.produtos?.nome || 'Produto'}</td><td>R$ ${v.valor_total.toFixed(2)}</td><td>${new Date(v.created_at).toLocaleDateString()}</td><td><span class="badge badge-success">Paga</span></td></tr>`).join('');
+        if(salesChartInstance) { salesChartInstance.data.datasets[0].data = vendas.slice(0, 7).reverse().map(v => v.valor_total); salesChartInstance.update(); }
     }
 
-    // --- NAVEGAÇÃO ---
     function nav(id, el) {
         document.querySelectorAll('.aba-section').forEach(s => s.classList.remove('active'));
         document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
