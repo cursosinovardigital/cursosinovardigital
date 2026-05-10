@@ -51,21 +51,27 @@
         nav.top-menu a { text-decoration: none; color: var(--text-dark); font-weight: 500; font-size: 0.95rem; transition: 0.2s; }
         nav.top-menu a:hover { color: var(--hot-orange); }
 
-        .auth-buttons { display: flex; gap: 15px; align-items: center; }
+        /* AJUSTE AQUI: Espaçamento entre os botões de Auth */
+        .auth-buttons { display: flex; gap: 20px; align-items: center; } 
+        
+        #logged-out-group { display: flex; gap: 15px; align-items: center; }
+
         .btn-login-nav { color: var(--text-dark); text-decoration: none; font-weight: 600; padding: 10px 25px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 0.9rem; transition: 0.2s; }
         .btn-login-nav:hover { background: var(--hot-bg); }
         
         .btn-signup { background: var(--hot-orange); color: var(--white); text-decoration: none; font-weight: 700; padding: 12px 28px; border-radius: 8px; font-size: 0.9rem; transition: all 0.3s ease; }
         .btn-signup:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(255, 64, 0, 0.3); }
 
+        /* PERFIL DROPDOWN */
+        .profile-container { position: relative; display: none; align-items: center; gap: 10px; cursor: pointer; }
+        .avatar { width: 40px; height: 40px; background: var(--hot-orange); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; border: 2px solid white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .dropdown-menu { display: none; position: absolute; top: 50px; right: 0; width: 200px; background: white; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 1px solid #eee; padding: 10px 0; z-index: 5000; }
+        .dropdown-menu a { display: block; padding: 10px 20px; text-decoration: none; color: #444; font-size: 0.9rem; transition: 0.2s; }
+        .dropdown-menu a:hover { background: var(--hot-bg); color: var(--hot-orange); }
+        .dropdown-menu hr { border: 0; border-top: 1px solid #eee; margin: 10px 0; }
+
         /* HERO */
-        .hero {
-            padding: 40px 8% 60px; 
-            display: flex;
-            align-items: center; 
-            background: var(--white);
-            gap: 60px;
-        }
+        .hero { padding: 40px 8% 60px; display: flex; align-items: center; background: var(--white); gap: 60px; }
         .hero-text { flex: 1.2; text-align: left; }
         .hero-text h1 { font-size: 3.8rem; font-weight: 900; line-height: 1.0; margin: 0 0 20px 0; color: #000; letter-spacing: -3px; }
         .hero-text h1 span { color: var(--hot-orange); }
@@ -86,7 +92,7 @@
         .section-header h2 span { color: var(--hot-orange); }
         .articles-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 35px; }
         .card { background: var(--white); border-radius: 24px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.04); transition: 0.3s ease; text-decoration: none; color: inherit; display: flex; flex-direction: column; }
-        .card:hover { transform: translateY(-8px); border: 1px solid var(--hot-orange); }
+        .card:hover { transform: translateY(-8px); border: 1px solid var(--hot-orange); box-shadow: 0 10px 30px rgba(0,0,0,0.06); }
         .card-img { width: 100%; height: 200px; background: #eee; position: relative; }
         .card-img img { width: 100%; height: 100%; object-fit: cover; }
         .card-tag { position: absolute; top: 20px; left: 20px; background: #ffcc00; color: #000; padding: 6px 14px; border-radius: 8px; font-size: 0.75rem; font-weight: 900; }
@@ -108,7 +114,7 @@
         .cookie-text a { color: #5882e5; text-decoration: underline; }
         .btn-cookie-ok { background: #5882e5; color: #ffffff; border: none; padding: 12px 45px; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 0.9rem; transition: 0.2s; text-transform: uppercase; }
 
-        /* FOOTER - AZUL ESCURO */
+        /* FOOTER */
         footer { padding: 60px 8%; background: var(--text-dark); color: #fff; text-align: left; }
         .footer-logo { font-size: 2rem; font-weight: 900; margin-bottom: 10px; color: var(--hot-orange); }
 
@@ -119,6 +125,8 @@
             .stats-grid { grid-template-columns: 1fr; gap: 30px; }
             nav.top-menu { display: none; }
             .cookie-bar { flex-direction: column; text-align: center; width: 95%; }
+            #logged-out-group { flex-direction: column; width: 100%; gap: 10px; }
+            .btn-login-nav, .btn-signup { width: 100%; text-align: center; }
         }
     </style>
 </head>
@@ -132,15 +140,21 @@
             <a href="#">Serviços</a>
             <a href="#">Produtos</a>
         </nav>
-        <div id="auth-buttons" class="auth-buttons">
-            <a href="login.html" id="btn-entrar" class="btn-login-nav">Entrar</a>
-            <a href="login.html" id="btn-login" class="btn-signup">Comece gratuitamente</a>
-            <a href="perfil.html" id="btn-perfil" style="display: none; text-decoration: none; font-weight: 600; color: var(--text-dark); align-items: center; gap: 8px;">
-                <span>Minha Conta</span>
-                <div style="width: 35px; height: 35px; background: var(--hot-orange); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        <div class="auth-buttons">
+            <div id="logged-out-group">
+                <a href="login.html" id="btn-entrar" class="btn-login-nav">Entrar</a>
+                <a href="login.html" id="btn-login" class="btn-signup">Comece gratuitamente</a>
+            </div>
+            
+            <div id="btn-perfil" class="profile-container" onclick="toggleDropdown()">
+                <div class="avatar" id="user-avatar">U</div>
+                <div id="profile-dropdown" class="dropdown-menu">
+                    <a href="portal.html">Meus Cursos</a>
+                    <a href="perfil.html">Configurações</a>
+                    <hr>
+                    <a href="#" onclick="logout()">Sair</a>
                 </div>
-            </a>
+            </div>
         </div>
     </header>
 
@@ -250,19 +264,34 @@
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9uc2J1YXprcWZlaGt1ZGhsYWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzNTI5OTgsImV4cCI6MjA5MzkyODk5OH0.ZypL6LHbPC_z971EDCTh6pVoA7g4qM6hWSWfWVO9a-M';
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+        function toggleDropdown() {
+            const dropdown = document.getElementById('profile-dropdown');
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        }
+
+        window.onclick = function(event) {
+            if (!event.target.closest('.profile-container')) {
+                document.getElementById('profile-dropdown').style.display = 'none';
+            }
+        }
+
+        async function logout() {
+            await _supabase.auth.signOut();
+            window.location.reload();
+        }
+
         async function checkUser() {
             const { data: { session } } = await _supabase.auth.getSession();
-            const btnEntrar = document.getElementById('btn-entrar');
-            const btnSignup = document.getElementById('btn-login');
+            const loggedOutGroup = document.getElementById('logged-out-group');
             const btnPerfil = document.getElementById('btn-perfil');
+            const avatar = document.getElementById('user-avatar');
 
             if (session) {
-                btnEntrar.style.display = 'none';
-                btnSignup.style.display = 'none';
+                loggedOutGroup.style.display = 'none';
                 btnPerfil.style.display = 'flex';
+                avatar.innerText = session.user.email.charAt(0).toUpperCase();
             } else {
-                btnEntrar.style.display = 'block';
-                btnSignup.style.display = 'block';
+                loggedOutGroup.style.display = 'flex';
                 btnPerfil.style.display = 'none';
             }
         }
