@@ -39,11 +39,15 @@
         .logo span { color: var(--hot-orange); }
 
         nav.top-menu { display: flex; gap: 30px; align-items: center; }
-        nav.top-menu a { text-decoration: none; color: var(--text-dark); font-weight: 500; font-size: 0.95rem; }
+        nav.top-menu a { text-decoration: none; color: var(--text-dark); font-weight: 500; font-size: 0.95rem; transition: 0.2s; }
+        nav.top-menu a:hover { color: var(--hot-orange); }
 
-        .auth-buttons { display: flex; gap: 15px; }
-        .btn-login { color: var(--text-dark); text-decoration: none; font-weight: 600; padding: 10px 25px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 0.9rem; }
-        .btn-signup { background: var(--hot-orange); color: var(--white); text-decoration: none; font-weight: 700; padding: 12px 28px; border-radius: 8px; font-size: 0.9rem; }
+        .auth-buttons { display: flex; gap: 15px; align-items: center; }
+        .btn-login { color: var(--text-dark); text-decoration: none; font-weight: 600; padding: 10px 25px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 0.9rem; transition: 0.2s; }
+        .btn-login:hover { background: #f9fafb; border-color: #9ca3af; }
+        
+        .btn-signup { background: var(--hot-orange); color: var(--white); text-decoration: none; font-weight: 700; padding: 12px 28px; border-radius: 8px; font-size: 0.9rem; transition: all 0.3s ease; }
+        .btn-signup:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(255, 64, 0, 0.3); }
 
         /* HERO - ALINHAMENTO MILIMÉTRICO AO TOPO */
         .hero {
@@ -98,7 +102,8 @@
         /* SEÇÃO DE MATÉRIAS */
         .content-section { padding: 80px 8%; }
         .section-header { margin-bottom: 50px; }
-        .section-header h2 { font-size: 2.5rem; font-weight: 900; letter-spacing: -1px; }
+        .section-header h2 { font-size: 2.5rem; font-weight: 900; letter-spacing: -1px; margin: 0; }
+        .section-header h2 span { color: var(--hot-orange); }
 
         .articles-grid {
             display: grid;
@@ -114,10 +119,12 @@
             transition: 0.3s ease;
             text-decoration: none;
             color: inherit;
+            display: flex;
+            flex-direction: column; /* Essencial para alinhar o botão no final */
         }
-        .card:hover { transform: translateY(-8px); border: 1px solid var(--hot-orange); }
+        .card:hover { transform: translateY(-8px); border: 1px solid var(--hot-orange); box-shadow: 0 10px 30px rgba(0,0,0,0.06); }
         
-        .card-img { width: 100%; height: 200px; background: #eee; position: relative; }
+        .card-img { width: 100%; height: 200px; background: #eee; position: relative; flex-shrink: 0; }
         .card-img img { width: 100%; height: 100%; object-fit: cover; }
         .card-tag { 
             position: absolute; top: 20px; left: 20px; 
@@ -126,9 +133,24 @@
             font-size: 0.75rem; font-weight: 900; 
         }
 
-        .card-body { padding: 30px; }
+        .card-body { padding: 30px; flex-grow: 1; display: flex; flex-direction: column; }
         .card-body h3 { font-size: 1.3rem; margin: 0 0 15px; font-weight: 800; line-height: 1.3; color: #000; }
-        .card-body p { color: #6b7280; font-size: 1rem; line-height: 1.5; }
+        .card-body p { color: #6b7280; font-size: 1rem; line-height: 1.5; margin-bottom: 25px; flex-grow: 1; }
+
+        /* Botão interativo dentro do card */
+        .card-btn {
+            background: var(--hot-orange);
+            color: var(--white);
+            text-align: center;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            margin-top: auto; /* Empurra o botão para o final do card */
+            display: block;
+        }
+        .card-btn:hover { background: #e03900; transform: scale(1.02); }
 
         /* COOKIE BAR */
         .cookie-bar {
@@ -139,6 +161,7 @@
             box-shadow: 0 10px 40px rgba(0,0,0,0.1);
             border: 1px solid #e5e7eb;
         }
+        .cookie-bar button:hover { opacity: 0.9; transform: scale(1.03); }
 
         @media (max-width: 1024px) {
             .hero { flex-direction: column; text-align: center; align-items: center; }
@@ -153,11 +176,9 @@
     <header>
         <div class="logo">inovar<span>digital</span></div>
         <nav class="top-menu">
-            <a href="#">Produtos</a>
-            <a href="#">Soluções</a>
-            <a href="https://cursosinovardigital.github.io/lowticketlucrativo/blog">Blog</a>
-            <a href="#">Ajuda</a>
-        </nav>
+            <a href="#">Cursos</a>
+            <a href="#">Notícias</a>
+            <a href="#">Serviços</a> <a href="#">Produtos</a> </nav>
         <div class="auth-buttons">
             <a href="login.html" class="btn-login">Entrar</a>
             <a href="login.html" class="btn-signup">Comece gratuitamente</a>
@@ -167,8 +188,8 @@
     <section class="hero">
         <div class="hero-text">
             <h1>Cresça ao lado <span>dos melhores.</span></h1>
-            <p>Acesse o ecossistema completo para criar, gerenciar e vender seus produtos digitais no automático com a <strong>Inovar Digital</strong>.</p>
-            <a href="login.html" class="btn-signup" style="padding: 18px 50px; font-size: 1.1rem; display: inline-block;">Quero começar agora</a>
+            <p>Acesse o hub completo de notícias, cursos gratuitos e as melhores ferramentas de IA do mercado com a <strong>Inovar Digital</strong>.</p>
+            <a href="login.html" class="btn-signup" style="padding: 18px 50px; font-size: 1.1rem; display: inline-block; margin-top: 10px;">Quero começar agora</a>
         </div>
         <div class="hero-image">
             <img src="https://hotmart.com/static/app-hotmart-next/images/monks-home/yoga.webp" alt="Alinhamento Inovar Digital">
@@ -177,11 +198,11 @@
 
     <section class="content-section">
         <div class="section-header">
-            <h2>Explore nossas <span>Matérias</span></h2>
+            <h2>Explore nossas <span>Matérias & Oportunidades</span></h2>
         </div>
 
         <div class="articles-grid">
-            <a href="https://cursosinovardigital.github.io/lowticketlucrativo/blog" class="card">
+            <div class="card">
                 <div class="card-img">
                     <span class="card-tag">Estratégia</span>
                     <img src="produto1.jpg" alt="Vendas">
@@ -189,10 +210,11 @@
                 <div class="card-body">
                     <h3>Como vender infoprodutos todos os dias no automático</h3>
                     <p>Entenda a estrutura de funil que permite escalar vendas sem precisar de audiência.</p>
+                    <a href="https://cursosinovardigital.github.io/lowticketlucrativo/blog" class="card-btn">Ler Matéria Completa</a>
                 </div>
-            </a>
+            </div>
 
-            <a href="#" class="card">
+            <div class="card">
                 <div class="card-img">
                     <span class="card-tag">IA</span>
                     <img src="https://hotmart.com/static/app-hotmart-next/images/monks-home/boost-sales/1-desk.webp" alt="IA">
@@ -200,25 +222,27 @@
                 <div class="card-body">
                     <h3>5 IAs que estão mudando o jogo em 2026</h3>
                     <p>Ferramentas essenciais para automatizar seu atendimento e criação de conteúdo.</p>
+                    <a href="#" class="card-btn">Conhecer as IAs</a>
                 </div>
-            </a>
+            </div>
 
-            <a href="https://www.ev.org.br/areas-de-interesse" target="_blank" class="card">
+            <div class="card">
                 <div class="card-img">
                     <span class="card-tag">Capacitação</span>
-                    <img src="https://www.ev.org.br/Assets/images/logo-fundacao-bradesco.png" alt="Fundação Bradesco" style="object-fit: contain; padding: 20px; background: #fff;">
+                    <img src="fundacao.bradesco.jpg" alt="Fundação Bradesco">
                 </div>
                 <div class="card-body">
                     <h3>Cursos Gratuitos Fundação Bradesco</h3>
                     <p>Acesse certificações gratuitas em tecnologia, negócios e design com o padrão de excelência da Escola Virtual.</p>
+                    <a href="https://www.ev.org.br/areas-de-interesse" target="_blank" class="card-btn">Ver Cursos Grátis</a>
                 </div>
-            </a>
+            </div>
         </div>
     </section>
 
     <div class="cookie-bar" id="cookieBar">
         <p style="font-size: 0.9rem; color: #4b5563; margin: 0;">Utilizamos cookies para que o seu negócio aconteça.</p>
-        <button onclick="document.getElementById('cookieBar').style.display='none'" style="background: #4f46e5; color: #fff; border: none; padding: 10px 25px; border-radius: 8px; cursor: pointer; font-weight: 700;">OK</button>
+        <button onclick="document.getElementById('cookieBar').style.display='none'" style="background: #4f46e5; color: #fff; border: none; padding: 10px 25px; border-radius: 8px; cursor: pointer; font-weight: 700; transition: 0.2s;">OK</button>
     </div>
 
     <footer style="padding: 60px; text-align: center; background: #000; color: #fff; font-size: 0.8rem;">
