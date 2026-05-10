@@ -3,219 +3,192 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inovar Digital | Dashboard Pro</title>
+    <title>Inovar Digital | Console Profissional</title>
     <script src="https://sdk.mercadopago.com/js/v2"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --kiwi-green: #00E676; --sidebar-bg: #1A1D23; --main-bg: #F4F7FA; --text-dark: #2D3436; --orange: #FF6600; }
-        * { box-sizing: border-box; transition: all 0.2s ease; }
-        body { font-family: 'Inter', sans-serif; margin: 0; display: flex; height: 100vh; background: var(--main-bg); overflow: hidden; }
+        :root {
+            --primary: #FF6600; /* Laranja Inovar */
+            --dark-side: #111418; /* Preto Sidebar */
+            --top-white: #FFFFFF;
+            --bg-gray: #F0F2F5;
+            --text-title: #1A1D23;
+            --text-muted: #718096;
+            --border-color: #E2E8F0;
+        }
 
-        /* SIDEBAR ESTILO KIWIFY */
-        nav { width: 240px; background: var(--sidebar-bg); color: white; display: flex; flex-direction: column; padding: 20px 0; z-index: 10; }
-        .logo-area { padding: 0 25px 30px; border-bottom: 1px solid #2D3436; margin-bottom: 20px; }
-        .nav-item { padding: 12px 25px; color: #A0AEC0; cursor: pointer; display: flex; align-items: center; text-decoration: none; font-size: 14px; border-left: 4px solid transparent; }
-        .nav-item i { margin-right: 15px; width: 20px; text-align: center; }
-        .nav-item:hover { background: #2D3436; color: white; }
-        .nav-item.active { background: #2D3436; color: white; border-left-color: var(--kiwi-green); }
+        * { box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { margin: 0; display: flex; height: 100vh; background: var(--bg-gray); overflow: hidden; }
 
-        /* CONTEÚDO PRINCIPAL */
-        main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-        header { background: white; padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #E2E8F0; }
-        .top-stats { display: flex; gap: 30px; align-items: center; }
-        .progress-bar { width: 150px; height: 8px; background: #EDF2F7; border-radius: 10px; overflow: hidden; }
-        .progress-fill { width: 45%; height: 100%; background: var(--kiwi-green); }
-
-        .content-area { padding: 40px; overflow-y: auto; flex: 1; }
-        .aba { display: none; }
-        .aba.active { display: block; animation: fadeIn 0.4s ease; }
-
-        /* CARDS E GRIDS */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
-        .card { background: white; border-radius: 12px; border: 1px solid #E2E8F0; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 12px 20px rgba(0,0,0,0.08); }
-        .card-img { height: 160px; background: #CBD5E0; position: relative; }
-        .card-body { padding: 20px; }
-        .btn-primary { background: var(--orange); color: white; border: none; padding: 12px; border-radius: 8px; width: 100%; cursor: pointer; font-weight: 600; }
+        /* --- SIDEBAR --- */
+        nav { width: 250px; background: var(--dark-side); display: flex; flex-direction: column; flex-shrink: 0; height: 100%; }
+        .logo-box { padding: 25px; border-bottom: 1px solid #2D3436; text-align: center; }
+        .logo-box h1 { color: var(--primary); font-size: 22px; margin: 0; font-weight: 900; letter-spacing: -1px; }
         
-        /* MODAL E GESTÃO */
-        .form-group { margin-bottom: 15px; }
-        input, textarea, select { width: 100%; padding: 12px; border: 1px solid #E2E8F0; border-radius: 8px; font-size: 14px; }
+        .nav-scroll { flex: 1; overflow-y: auto; padding: 15px 0; }
+        .nav-item { 
+            padding: 12px 25px; color: #A0AEC0; cursor: pointer; display: flex; 
+            align-items: center; font-size: 14px; transition: 0.2s; border-left: 4px solid transparent;
+        }
+        .nav-item i { margin-right: 15px; width: 18px; text-align: center; }
+        .nav-item:hover { background: #1E2228; color: #FFF; }
+        .nav-item.active { background: #1E2228; color: #FFF; border-left-color: var(--primary); font-weight: 600; }
+
+        /* --- LAYOUT PRINCIPAL --- */
+        main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+        header { 
+            height: 65px; background: var(--top-white); border-bottom: 1px solid var(--border-color);
+            display: flex; justify-content: space-between; align-items: center; padding: 0 40px;
+        }
+        .user-profile { display: flex; align-items: center; gap: 15px; }
+        .progress-box { display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--text-muted); }
+        .bar-outer { width: 120px; height: 6px; background: #EDF2F7; border-radius: 10px; }
+        .bar-inner { width: 45%; height: 100%; background: #22C55E; border-radius: 10px; }
+
+        /* --- ÁREAS DE CONTEÚDO --- */
+        .content-wrapper { padding: 40px; overflow-y: auto; flex: 1; }
+        .aba-content { display: none; }
+        .aba-content.active { display: block; animation: fadeIn 0.3s ease; }
+
+        /* --- COMPONENTES --- */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
+        .card-dash { background: #FFF; padding: 25px; border-radius: 12px; border: 1px solid var(--border-color); box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .card-dash h4 { margin: 0; color: var(--text-muted); font-size: 13px; text-transform: uppercase; }
+        .card-dash .val { font-size: 28px; font-weight: 800; margin-top: 10px; color: var(--text-title); }
+
+        .btn-main { 
+            background: var(--primary); color: #FFF; border: none; padding: 12px 24px; 
+            border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 10px;
+        }
+        .btn-main:hover { filter: brightness(1.1); transform: translateY(-1px); }
+
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- FORMULÁRIOS --- */
+        .form-container { background: #FFF; padding: 30px; border-radius: 15px; border: 1px solid var(--border-color); max-width: 700px; }
+        input, textarea, select { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; margin-bottom: 15px; }
     </style>
 </head>
 <body>
 
 <nav>
-    <div class="logo-area">
-        <div style="font-size: 20px; font-weight: 800; color: var(--kiwi-green);">INOVAR.</div>
+    <div class="logo-box"><h1>INOVAR.</h1></div>
+    <div class="nav-scroll">
+        <div class="nav-item active" onclick="switchTab('dashboard', this)"><i class="fas fa-home"></i> Dashboard</div>
+        <div class="nav-item" onclick="switchTab('produtos', this)"><i class="fas fa-shopping-bag"></i> Produtos</div>
+        <div class="nav-item" onclick="switchTab('membros', this)"><i class="fas fa-play-circle"></i> Área de Membros</div>
+        <div class="nav-item" onclick="switchTab('marketplace', this)"><i class="fas fa-store"></i> Marketplace</div>
+        <div class="nav-item" onclick="switchTab('afiliados', this)"><i class="fas fa-users-cog"></i> Meus Afiliados</div>
+        <div class="nav-item" onclick="switchTab('vendas', this)"><i class="fas fa-dollar-sign"></i> Vendas</div>
+        <div class="nav-item" onclick="switchTab('assinaturas', this)"><i class="fas fa-sync-alt"></i> Assinaturas</div>
+        <div class="nav-item" onclick="switchTab('financeiro', this)"><i class="fas fa-wallet"></i> Financeiro</div>
+        <div class="nav-item" onclick="switchTab('relatorios', this)"><i class="fas fa-chart-line"></i> Relatórios</div>
+        <div class="nav-item" onclick="switchTab('colaboradores', this)"><i class="fas fa-user-friends"></i> Colaboradores</div>
+        <div class="nav-item" onclick="switchTab('apps', this)"><i class="fas fa-th-large"></i> Apps</div>
+        <div class="nav-item" onclick="switchTab('ajuda', this)"><i class="fas fa-question-circle"></i> Ajuda</div>
     </div>
-    <div class="nav-item active" onclick="showAba('dashboard', this)"><i class="fas fa-home"></i> Dashboard</div>
-    <div class="nav-item" onclick="showAba('produtos', this)"><i class="fas fa-tag"></i> Produtos</div>
-    <div class="nav-item" onclick="showAba('membros', this)"><i class="fas fa-users"></i> Área de Membros</div>
-    <div class="nav-item" onclick="showAba('marketplace', this)"><i class="fas fa-shopping-cart"></i> Marketplace</div>
-    <div class="nav-item" onclick="showAba('vendas', this)"><i class="fas fa-dollar-sign"></i> Vendas</div>
-    <div class="nav-item" onclick="showAba('financeiro', this)"><i class="fas fa-wallet"></i> Financeiro</div>
 </nav>
 
 <main>
     <header>
-        <div style="font-weight: 600; color: #4A5568;">Olá, Víctor Soati Ávila Trivinho</div>
-        <div class="top-stats">
-            <div style="font-size: 13px; color: #718096;">R$ 0K / R$ 10K</div>
-            <div class="progress-bar"><div class="progress-fill"></div></div>
+        <div style="font-weight: 700; color: var(--text-title);">Víctor Soati Ávila Trivinho</div>
+        <div class="user-profile">
+            <div class="progress-box">
+                <span>R$ 0K / R$ 10K</span>
+                <div class="bar-outer"><div class="bar-inner"></div></div>
+            </div>
             <i class="fas fa-user-circle fa-2x" style="color: #CBD5E0;"></i>
         </div>
     </header>
 
-    <div class="content-area">
-        <section id="aba-dashboard" class="aba active">
-            <h2>Resumo das últimas 24 horas</h2>
+    <div class="content-wrapper">
+        
+        <section id="aba-dashboard" class="aba-content active">
+            <h2 style="margin-bottom: 25px;">Resumo das últimas 24 horas</h2>
             <div class="grid">
-                <div class="card" style="padding: 20px; border-left: 5px solid var(--kiwi-green);">
-                    <div style="color: #718096;">Vendas aprovadas</div>
-                    <div style="font-size: 24px; font-weight: bold; margin-top: 10px;">R$ 0,00</div>
+                <div class="card-dash" style="border-left: 5px solid #22C55E;">
+                    <h4>Vendas Aprovadas</h4>
+                    <div class="val">R$ 0,00</div>
                 </div>
-                <div class="card" style="padding: 20px; border-left: 5px solid var(--orange);">
-                    <div style="color: #718096;">Pagamentos pendentes</div>
-                    <div style="font-size: 24px; font-weight: bold; margin-top: 10px;">0</div>
+                <div class="card-dash" style="border-left: 5px solid var(--primary);">
+                    <h4>Pagamentos Pendentes</h4>
+                    <div class="val">0</div>
                 </div>
             </div>
         </section>
 
-        <section id="aba-produtos" class="aba">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+        <section id="aba-produtos" class="aba-content">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
                 <h2>Meus Produtos</h2>
-                <button class="btn-primary" style="width: auto; padding: 10px 25px;" onclick="document.getElementById('modal-produto').style.display='flex'">Criar Produto</button>
+                <button class="btn-main" onclick="abrirModalProduto()">Criar Produto</button>
             </div>
-            <div id="lista-meus-produtos" class="grid"></div>
+            <div id="lista-produtos" class="grid"></div>
         </section>
 
-        <section id="aba-marketplace" class="aba">
+        <section id="aba-membros" class="aba-content">
+            <h2>Gerenciar Área de Membros</h2>
+            <div id="lista-membros" class="grid"></div>
+        </section>
+
+        <section id="aba-financeiro" class="aba-content">
+            <h2>Financeiro</h2>
+            <div class="card-dash" style="max-width: 450px; border-top: 4px solid var(--primary);">
+                <h4>Saldo disponível para saque</h4>
+                <div class="val" style="color: #22C55E;">R$ 0,00</div>
+                <button class="btn-main" style="width:100%; justify-content:center; margin-top:20px; background:#2D3436;">Solicitar Saque</button>
+            </div>
+        </section>
+
+        <section id="aba-marketplace" class="aba-content">
             <h2>Mais vendidos do Marketplace</h2>
             <div id="lista-marketplace" class="grid"></div>
         </section>
 
-        <section id="aba-membros" class="aba">
-            <h2>Gerenciar Área de Membros</h2>
-            <p>Selecione um curso para editar módulos e aulas:</p>
-            <div id="lista-membros-gestao" class="grid"></div>
-        </section>
+        <section id="aba-afiliados" class="aba-content"><h2>Meus Afiliados</h2><p>Área de gestão de parceiros.</p></section>
+        <section id="aba-vendas" class="aba-content"><h2>Lista de Vendas</h2><p>Relatório de transações em tempo real.</p></section>
+        <section id="aba-assinaturas" class="aba-content"><h2>Assinaturas</h2><p>Gestão de pagamentos recorrentes.</p></section>
+        <section id="aba-relatorios" class="aba-content"><h2>Relatórios</h2><p>Análise de métricas de conversão.</p></section>
+        <section id="aba-colaboradores" class="aba-content"><h2>Colaboradores</h2><p>Dê permissões para sua equipe.</p></section>
+        <section id="aba-apps" class="aba-content"><h2>Apps</h2><p>Integrações e Webhooks.</p></section>
+        <section id="aba-ajuda" class="aba-content"><h2>Ajuda</h2><p>Central de suporte Inovar Digital.</p></section>
 
-        <section id="aba-gestor-aulas" class="aba">
-            <button onclick="showAba('membros')" style="border:none; background:none; color:var(--orange); cursor:pointer; font-weight:bold; margin-bottom: 20px;"><i class="fas fa-arrow-left"></i> Voltar aos cursos</button>
-            <h2 id="titulo-curso-gerencia">Curso: ---</h2>
-            <div class="card" style="padding: 30px; margin-bottom: 20px;">
-                <h4>Nova Aula</h4>
-                <input type="text" id="aula-tit" placeholder="Título da Aula" style="margin-bottom: 10px;">
-                <input type="text" id="aula-link" placeholder="ID do Vídeo YouTube (Ex: dQw4w9WgXcQ)">
-                <button class="btn-primary" style="margin-top: 15px;" onclick="salvarAula()">Adicionar Aula</button>
-            </div>
-            <div id="lista-aulas-atual" class="grid"></div>
-        </section>
-
-        <section id="aba-financeiro" class="aba">
-            <h2>Finanças</h2>
-            <div class="card" style="padding: 40px; text-align: center;">
-                <div style="color: #718096; margin-bottom: 10px;">Saldo disponível para saque</div>
-                <div style="font-size: 32px; font-weight: 800; color: var(--kiwi-green);">R$ 0,00</div>
-                <button class="btn-primary" style="width: 200px; margin-top: 20px; background: #CBD5E0; cursor: not-allowed;">Sacar agora</button>
-            </div>
-        </section>
     </div>
 </main>
 
-<div id="modal-produto" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:100; justify-content:center; align-items:center;">
-    <div style="background:white; width:450px; padding:35px; border-radius:15px; box-shadow: 0 20px 40px rgba(0,0,0,0.2);">
-        <h3 style="margin-top:0;">Novo Produto</h3>
-        <input type="text" id="p-nome" placeholder="Nome do curso" style="margin-bottom:15px;">
-        <input type="number" id="p-preco" placeholder="Preço R$" style="margin-bottom:15px;">
-        <textarea id="p-desc" placeholder="Descrição do produto" style="height:100px; margin-bottom:15px;"></textarea>
-        <button class="btn-primary" onclick="criarProdutoReal()">Criar Produto Agora</button>
-        <button onclick="document.getElementById('modal-produto').style.display='none'" style="width:100%; background:none; border:none; margin-top:10px; color:#718096; cursor:pointer;">Cancelar</button>
-    </div>
-</div>
-
 <script>
-    let cursoEditando = null;
+    // INTEGRAÇÃO COM SUPABASE
+    const mp = new MercadoPago('APP_USR-50665ab5-8c5c-4b1b-9f9b-2e708b8fbb50');
 
-    function showAba(abaId, btn) {
-        document.querySelectorAll('.aba').forEach(a => a.classList.remove('active'));
-        document.getElementById('aba-' + abaId).classList.add('active');
-        if(btn) {
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            btn.classList.add('active');
-        }
-        if(abaId === 'produtos' || abaId === 'marketplace' || abaId === 'membros') carregarTodosCursos();
-    }
-
-    async function carregarTodosCursos() {
-        const { data } = await _supabase.from('cursos_disponiveis').select('*');
-        const mkp = document.getElementById('lista-marketplace');
-        const mps = document.getElementById('lista-meus-produtos');
-        const mms = document.getElementById('lista-membros-gestao');
+    function switchTab(tabId, el) {
+        document.querySelectorAll('.aba-content').forEach(a => a.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        document.getElementById('aba-' + tabId).classList.add('active');
+        el.classList.add('active');
         
-        const html = data.map(c => `
-            <div class="card">
-                <div class="card-img" style="background:#CBD5E0; display:flex; align-items:center; justify-content:center; font-size:40px; color:white;"><i class="fas fa-image"></i></div>
-                <div class="card-body">
-                    <h3 style="margin:0; font-size:16px;">${c.nome}</h3>
-                    <div style="color:var(--kiwi-green); font-weight:bold; margin:10px 0;">R$ ${c.preco}</div>
-                    <button class="btn-primary" onclick="comprarProd('${c.nome}', '${c.link_pagamento}')">Ver detalhes</button>
+        if(['produtos', 'membros', 'marketplace'].includes(tabId)) loadContent();
+    }
+
+    async function loadContent() {
+        const { data: cursos } = await _supabase.from('cursos_disponiveis').select('*');
+        const renderCard = (c) => `
+            <div class="card-dash">
+                <div style="height:120px; background:#F8F9FA; border-radius:8px; display:flex; align-items:center; justify-content:center; margin-bottom:15px;">
+                    <i class="fas fa-image fa-3x" style="color:#CBD5E0;"></i>
                 </div>
+                <h3 style="margin:0; font-size:16px;">${c.nome}</h3>
+                <div style="color:var(--primary); font-weight:800; margin-top:10px;">R$ ${c.preco}</div>
+                <button class="btn-main" style="width:100%; margin-top:15px; font-size:12px; justify-content:center;">Gerenciar</button>
             </div>
-        `).join('');
+        `;
 
-        const htmlGestao = data.map(c => `
-            <div class="card">
-                <div class="card-body">
-                    <h3>${c.nome}</h3>
-                    <button class="btn-primary" style="background:var(--sidebar-bg);" onclick="abrirGestorAulas('${c.id}', '${c.nome}')">Configurar Aulas</button>
-                </div>
-            </div>
-        `).join('');
-
-        mkp.innerHTML = html;
-        mps.innerHTML = html;
-        mms.innerHTML = htmlGestao;
+        document.getElementById('lista-produtos').innerHTML = cursos.map(renderCard).join('');
+        document.getElementById('lista-marketplace').innerHTML = cursos.map(renderCard).join('');
+        document.getElementById('lista-membros').innerHTML = cursos.map(renderCard).join('');
     }
 
-    async function abrirGestorAulas(id, nome) {
-        cursoEditando = id;
-        document.getElementById('titulo-curso-gerencia').innerText = "Gerenciando: " + nome;
-        showAba('gestor-aulas');
-        carregarAulasDoCurso();
-    }
-
-    async function carregarAulasDoCurso() {
-        const { data } = await _supabase.from('aulas').select('*').eq('curso_id', cursoEditando);
-        document.getElementById('lista-aulas-atual').innerHTML = data.map(a => `
-            <div class="card" style="padding:15px; display:flex; justify-content:space-between; align-items:center;">
-                <span><i class="fas fa-video"></i> ${a.titulo}</span>
-                <i class="fas fa-trash" style="color:#E53E3E; cursor:pointer;" onclick="deletarAula('${a.id}')"></i>
-            </div>
-        `).join('');
-    }
-
-    async function salvarAula() {
-        const t = document.getElementById('aula-tit').value;
-        const l = document.getElementById('aula-link').value;
-        await _supabase.from('aulas').insert([{ curso_id: cursoEditando, titulo: t, video_url: l }]);
-        alert("Aula salva com sucesso!");
-        carregarAulasDoCurso();
-    }
-
-    async function criarProdutoReal() {
-        const n = document.getElementById('p-nome').value;
-        const p = document.getElementById('p-preco').value;
-        const d = document.getElementById('p-desc').value;
-        await _supabase.from('cursos_disponiveis').insert([{ nome: n, preco: p, descricao: d }]);
-        document.getElementById('modal-produto').style.display='none';
-        carregarTodosCursos();
-    }
-
-    carregarTodosCursos();
+    // Inicialização automática
+    loadContent();
 </script>
 
 </body>
