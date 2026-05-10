@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Central de Ajuda | Inovar Digital</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --purple-kiwi: #5D5FEF;
+            --text-dark: #1A1D23;
+            --text-muted: #718096;
+            --bg-light: #F4F7FA;
+            --white: #FFFFFF;
+            --border: #E2E8F0;
+        }
+
+        * { box-sizing: border-box; font-family: 'Inter', sans-serif; margin: 0; padding: 0; }
+        body { background-color: var(--white); color: var(--text-dark); line-height: 1.6; }
+
+        /* Header da Página de Ajuda */
+        header {
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+        }
+        .logo { font-size: 20px; font-weight: 800; }
+        .logo span { color: #FF6600; }
+        .btn-back { 
+            text-decoration: none; 
+            color: var(--purple-kiwi); 
+            font-weight: 600; 
+            font-size: 14px;
+        }
+
+        /* Hero Section com Busca */
+        .hero {
+            background-color: var(--bg-light);
+            padding: 80px 20px;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 30px;
+            color: var(--text-dark);
+        }
+        .search-container {
+            max-width: 700px;
+            margin: 0 auto;
+            position: relative;
+        }
+        .search-container i {
+            position: absolute;
+            left: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 20px;
+        }
+        .search-input {
+            width: 100%;
+            padding: 20px 20px 20px 65px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-size: 18px;
+            outline: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: 0.3s;
+        }
+        .search-input:focus { border-color: var(--purple-kiwi); box-shadow: 0 4px 20px rgba(93, 95, 239, 0.15); }
+
+        /* Grid de Categorias */
+        .container {
+            max-width: 1100px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+        .help-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        .category-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 40px 30px;
+            text-align: center;
+            text-decoration: none;
+            color: inherit;
+            transition: 0.3s;
+        }
+        .category-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--purple-kiwi);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+        .category-card i {
+            font-size: 40px;
+            color: var(--purple-kiwi);
+            margin-bottom: 20px;
+            display: block;
+        }
+        .category-card h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+        .category-card p {
+            color: var(--text-muted);
+            font-size: 15px;
+        }
+
+        /* Footer simples */
+        footer {
+            text-align: center;
+            padding: 60px 20px;
+            border-top: 1px solid var(--border);
+            margin-top: 40px;
+        }
+        .contact-support {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 30px;
+            background-color: var(--purple-kiwi);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo">Inovar<span>Digital</span></div>
+    <a href="index.html" class="btn-back"><i class="fas fa-arrow-left"></i> Voltar para o Console</a>
+</header>
+
+<section class="hero">
+    <h1>Como podemos ajudar?</h1>
+    <div class="search-container">
+        <i class="fas fa-search"></i>
+        <input type="text" class="search-input" placeholder="Busque por termos como 'saque', 'reembolso', 'afiliação'...">
+    </div>
+</section>
+
+<div class="container">
+    <div class="help-grid">
+        <a href="#" class="category-card">
+            <i class="fas fa-rocket"></i>
+            <h3>Quero Vender</h3>
+            <p>Configuração de produtos, ofertas, checkout e estratégias de vendas.</p>
+        </a>
+
+        <a href="#" class="category-card">
+            <i class="fas fa-shopping-bag"></i>
+            <h3>Quero Comprar</h3>
+            <p>Dúvidas sobre acesso a cursos, notas fiscais e pedidos de reembolso.</p>
+        </a>
+
+        <a href="#" class="category-card">
+            <i class="fas fa-money-bill-wave"></i>
+            <h3>Financeiro</h3>
+            <p>Tudo sobre saques, taxas, antecipações e prazos de recebimento.</p>
+        </a>
+
+        <a href="#" class="category-card">
+            <i class="fas fa-user-plus"></i>
+            <h3>Afiliados</h3>
+            <p>Como se afiliar a produtos e entender o sistema de comissionamento.</p>
+        </a>
+
+        <a href="#" class="category-card">
+            <i class="fas fa-play-circle"></i>
+            <h3>Área de Membros</h3>
+            <p>Personalização da área de alunos e gerenciamento de conteúdo.</p>
+        </a>
+
+        <a href="#" class="category-card">
+            <i class="fas fa-shield-alt"></i>
+            <h3>Conta e Segurança</h3>
+            <p>Como proteger sua conta, alterar dados e gerenciar permissões.</p>
+        </a>
+    </div>
+</div>
+
+<footer>
+    <p>Ainda precisa de suporte?</p>
+    <a href="https://wa.me/5511919912900" target="_blank" class="contact-support">Falar com um Especialista</a>
+</footer>
+
+</body>
+</html>
