@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://cursosinovardigital.github.io/cursosinovardigital/sitemap.xml
