@@ -470,14 +470,27 @@ async function loadProducts() {
         `;
     }, 800);
 }
-    function nav(id, el) {
-        if(id === 'ajuda') return; // Não ativa seção para link externo
+function nav(id, el) {
+        if(id === 'ajuda') return; 
+        
+        // Esconde todas as seções e remove o active do menu
         document.querySelectorAll('.aba-section').forEach(s => s.classList.remove('active'));
         document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-        document.getElementById('aba-' + id).classList.add('active');
+        
+        // Ativa a seção clicada
+        const target = document.getElementById('aba-' + id);
+        if(target) target.classList.add('active');
+        
+        // Ativa o item no menu lateral
         el.classList.add('active');
+        
+        // Atualiza o caminho no header
         document.getElementById('header-path').innerHTML = `<strong>Maestro Console</strong> / ${el.innerText.trim()}`;
+        
+        // Lógicas específicas de cada aba
         if(id === 'relat') closeRelat();
+        if(id === 'prod') loadProducts(); // <--- ESSA LINHA É A CHAVE!
+    }
     }
     function openRelat(t) { document.getElementById('relat-main-list').style.display='none'; document.getElementById('relat-detail').style.display='block'; document.getElementById('relat-title-display').innerText=t; }
     function closeRelat() { document.getElementById('relat-main-list').style.display='block'; document.getElementById('relat-detail').style.display='none'; }
