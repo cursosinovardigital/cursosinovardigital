@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inovar Digital | Console Maestro</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { 
+            --orange: #FF6600; --side-black: #111418; --white: #FFFFFF; 
+            --bg: #F4F7FA; --text: #1A1D23; --border: #E2E8F0; --green: #22C55E;
+            --purple-kiwi: #5D5FEF; --red: #EF4444;
+        }
+
+        * { box-sizing: border-box; font-family: 'Inter', sans-serif; transition: 0.2s; }
+        body { margin: 0; display: flex; height: 100vh; background: var(--bg); overflow: hidden; }
+
+        /* SIDEBAR DEFINITIVA (12 ABAS FIXAS - TRAVADO) */
+        nav { width: 260px; background: var(--side-black); display: flex; flex-direction: column; flex-shrink: 0; }
+        .logo-area { padding: 30px 25px; border-bottom: 1px solid #2D3436; font-size: 20px; font-weight: 900; color: #FFF; }
+        .logo-area span { color: var(--orange); }
+        .nav-scroll { flex: 1; overflow-y: auto; padding: 10px 0; }
+        .nav-item { padding: 12px 25px; color: #A0AEC0; cursor: pointer; display: flex; align-items: center; font-size: 14px; border-left: 4px solid transparent; text-decoration: none; }
+        .nav-item i { margin-right: 15px; width: 18px; text-align: center; }
+        .nav-item:hover, .nav-item.active { background: #1E2228; color: #FFF; border-left-color: var(--orange); }
+
+        /* MAIN STRUCTURE */
+        main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+        header { height: 70px; background: var(--white); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; padding: 0 40px; }
+        
+        .content-area { padding: 35px; overflow-y: auto; flex: 1; }
+        .aba-section { display: none; }
+        .aba-section.active { display: block; animation: fadeIn 0.3s ease; }
+
+        /* COMPONENTES REUTILIZÁVEIS (TRAVADO) */
+        .btn-primary { background: var(--purple-kiwi); color: white; border: none; padding: 12px 25px; border-radius: 8px; font-weight: 700; cursor: pointer; }
+        .btn-danger { background: var(--red); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; }
+        .table-container { background:#FFF; border:1px solid var(--border); border-radius:12px; overflow:hidden; }
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; padding: 15px; background: #F8F9FA; color: #718096; font-size: 11px; text-transform: uppercase; border-bottom: 1px solid var(--border); }
+        td { padding: 15px; border-bottom: 1px solid var(--border); font-size: 14px; color: #4A5568; }
+        .search-input { width: 100%; padding: 12px 15px; border: 1px solid var(--border); border-radius: 8px; outline: none; }
+        
+        .sub-nav { display: flex; gap: 25px; margin-bottom: 25px; border-bottom: 1px solid var(--border); }
+        .sub-nav-item { padding: 10px 5px; cursor: pointer; color: #718096; font-weight: 600; border-bottom: 3px solid transparent; }
+        .sub-nav-item.active { color: var(--purple-kiwi); border-bottom-color: var(--purple-kiwi); }
+
+        /* FINANCEIRO ESPECIFICO */
+        .fin-card { background: #FFF; padding: 30px; border-radius: 12px; border: 1px solid var(--border); display: flex; flex-direction: column; gap: 10px; position: relative; }
+        .fin-card.disponivel { border-left: 6px solid var(--green); }
+        .fin-card.pendente { border-left: 6px solid #EAB308; }
+        .fin-value { font-size: 32px; font-weight: 800; color: var(--text); }
+
+        /* ESTILO RELATÓRIOS */
+        .report-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
+        .report-card { background: #FFF; padding: 25px; border-radius: 12px; border: 1px solid var(--border); display: flex; align-items: center; gap: 20px; cursor: pointer; }
+        .report-card:hover { border-color: var(--purple-kiwi); background: #F8F9FF; }
+
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
+        .modal-overlay.active { display: flex !important; }
+        .modal-content { background: #FFF; border-radius: 12px; width: 900px; max-width: 95%; max-height: 90vh; display: flex; flex-direction: column; overflow: hidden; }
+
+        .prod-modal-tab { display: none; }
+        .prod-modal-tab.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="logo-area">Inovar<span>Digital</span></div>
+    <div class="nav-scroll">
+        <div class="nav-item" onclick="nav('dash', this)"><i class="fas fa-home"></i> Dashboard</div>
+        <div class="nav-item" onclick="nav('prod', this)"><i class="fas fa-tag"></i> Produtos</div>
+        <div class="nav-item" onclick="nav('membro', this)"><i class="fas fa-play-circle"></i> Área de Membros</div>
+        <div class="nav-item" onclick="nav('market', this)"><i class="fas fa-shopping-cart"></i> Marketplace</div>
+        <div class="nav-item" onclick="nav('afiliados', this)"><i class="fas fa-users-cog"></i> Meus Afiliados</div>
+        <div class="nav-item" onclick="nav('vendas', this)"><i class="fas fa-dollar-sign"></i> Vendas</div>
+        <div class="nav-item" onclick="nav('assin', this)"><i class="fas fa-sync"></i> Assinaturas</div>
+        <div class="nav-item" onclick="nav('finan', this)"><i class="fas fa-wallet"></i> Financeiro</div>
+        <div class="nav-item" onclick="nav('relat', this)"><i class="fas fa-chart-line"></i> Relatórios</div>
+        <div class="nav-item" onclick="nav('colab', this)"><i class="fas fa-user-friends"></i> Colaboradores</div>
+        <div class="nav-item active" onclick="nav('apps', this)"><i class="fas fa-th"></i> Apps</div>
+        <a href="ajuda.html" target="_blank" class="nav-item"><i class="fas fa-question-circle"></i> Ajuda</a>
+    </div>
+</nav>
+
+<main>
+    <header>
+        <div id="header-path"><strong>Maestro Console</strong> / Dashboard</div>
+        <i class="fas fa-user-circle fa-2x" style="color: #CBD5E0;"></i>
+    </header>
+
+    <div class="content-area">
+        <section id="aba-dash" class="aba-section active">
+            <div style="display:flex; gap:15px; margin-bottom:20px;">
+                <select class="search-input" style="width:150px;"><option>Hoje</option></select>
+                <select class="search-input" style="width:260px;"><option>Todos os produtos</option></select>
+            </div>
+            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
+                <div style="background: #FFF; border: 1px solid var(--border); border-radius: 12px; padding: 25px; height: 420px; position: relative;">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
+                        <span style="font-weight:700; color:#718096">Vendas nas últimas 24h</span>
+                        <span style="font-size:24px; font-weight:800" id="dash-total-vendas">R$ 0,00</span>
+                    </div>
+                    <div style="height: 320px; width: 100%;"><canvas id="salesChart"></canvas></div>
+                </div>
+                <div style="display:flex; flex-direction:column; gap:15px;">
+                    <div class="fin-card">
+                        <div>Valor líquido</div><div class="fin-value" id="dash-valor-liquido">R$ 0,00</div>
+                    </div>
+                    <div class="fin-card">
+                        <div>Vendas</div><div class="fin-value" id="dash-count-vendas">0</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="aba-prod" class="aba-section">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;">
+                <h2 style="margin:0; font-weight: 800;">Produtos</h2>
+                <button class="btn-primary" onclick="openProductModal()"><i class="fas fa-plus"></i> Criar produto</button>
+            </div>
+            <div class="table-container"><table><thead><tr><th>NOME</th><th>PREÇO</th><th>STATUS</th><th style="text-align:right">AÇÕES</th></tr></thead><tbody id="product-list-body"></tbody></table></div>
+        </section>
+
+        <section id="aba-membro" class="aba-section">
+            <h2>Área de Membros</h2>
+            <div class="sub-nav"><div class="sub-nav-item active">Áreas de membros</div><div class="sub-nav-item">Cursos</div><div class="sub-nav-item">Escolas</div></div>
+            <div style="display: flex; justify-content: space-between; align-items: center; background: #FFF; padding: 20px; border: 1px solid var(--border); border-radius: 12px 12px 0 0; border-bottom: none;"><div style="position: relative; width: 400px;"><i class="fas fa-search" style="position: absolute; left: 15px; top: 15px; color: #A0AEC0;"></i><input type="text" placeholder="Buscar..." class="search-input"></div><button class="btn-primary">Criar área de membros</button></div>
+            <div class="table-container" style="border-radius: 0 0 12px 12px;"><table><thead><tr><th>NOME</th><th>URL</th><th>ALUNOS</th><th>AÇÕES</th></tr></thead><tbody id="member-list-body"><tr><td>Área Premium Inovar</td><td>inovar.digital/m/premium</td><td>0</td><td><i class="fas fa-edit"></i></td></tr></tbody></table></div>
+        </section>
+
+        <section id="aba-vendas" class="aba-section">
+            <h2>Minhas Vendas</h2>
+            <div class="table-container" style="padding: 20px; margin-bottom: 25px;">
+                <div class="sales-filters">
+                    <div class="filter-group"><label>Período</label><input type="date" class="search-input"></div>
+                    <div class="filter-group"><label>Produto</label><select class="search-input"><option>Todos os produtos</option></select></div>
+                    <div class="filter-group"><label>Status</label><select class="search-input"><option>Pagas</option></select></div>
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                    <button class="btn-primary" style="background: #FFF; color: var(--text); border: 1px solid var(--border);">Exportar</button>
+                    <button class="btn-primary">Filtrar</button>
+                </div>
+            </div>
+            <div class="table-container"><table><thead><tr><th>ID VENDA</th><th>PRODUTO</th><th>VALOR</th><th>DATA</th><th>STATUS</th></tr></thead><tbody id="sales-list-body"></tbody></table></div>
+        </section>
+
+        <section id="aba-assin" class="aba-section">
+            <h2>Assinaturas</h2>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px; margin-bottom:30px;"><div class="card-stat">ASSINATURAS ATIVAS<div style="font-size:32px; font-weight:800">0</div></div><div class="card-stat">MRR<div style="font-size:32px; font-weight:800">R$ 0,00</div></div></div>
+            <div class="sub-nav"><div class="sub-nav-item active">Ativas</div><div class="sub-nav-item">Canceladas</div></div>
+            <div class="table-container"><table><thead><tr><th>ASSINANTE</th><th>PLANO</th><th>DATA</th></tr></thead><tbody><tr><td colspan="3" style="text-align:center; padding:40px; color:#A0AEC0;">Nenhuma assinatura</td></tr></tbody></table></div>
+        </section>
+
+        <section id="aba-finan" class="aba-section">
+            <h2>Financeiro</h2>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:25px; margin-bottom:30px;">
+                <div class="fin-card disponivel"><span>Saldo disponível</span><span class="fin-value" id="fin-disponivel">R$ 0,00</span></div>
+                <div class="fin-card pendente"><span>Saldo pendente</span><span class="fin-value">R$ 0,00</span></div>
+            </div>
+            <button class="btn-primary" onclick="solicitarSaque()">Efetuar saque</button>
+            <div class="table-container" style="margin-top:30px;"><table><thead><tr><th>DATA</th><th>VALOR</th><th>STATUS</th></tr></thead><tbody id="lista-saques-body"></tbody></table></div>
+        </section>
+
+        <section id="aba-relat" class="aba-section">
+            <div id="relat-main-list">
+                <h2>Relatórios</h2>
+                <div class="report-grid">
+                    <div class="report-card" onclick="openRelat('Receita de co-produção')"><span>Receita de co-produção</span></div>
+                    <div class="report-card" onclick="openRelat('Receita por produto')"><span>Receita por produto</span></div>
+                    <div class="report-card" onclick="openRelat('Engajamento dos alunos')"><span>Engajamento dos alunos</span></div>
+                </div>
+            </div>
+            <div id="relat-detail" style="display:none;"><div class="btn-primary" onclick="closeRelat()">Voltar</div><h3 id="relat-title-display"></h3></div>
+        </section>
+
+        <section id="aba-market" class="aba-section"><h2>Marketplace</h2></section>
+        <section id="aba-afiliados" class="aba-section"><h2>Meus Afiliados</h2></section>
+        <section id="aba-colab" class="aba-section"><h2>Colaboradores</h2></section>
+        <section id="aba-apps" class="aba-section"><h2>Apps</h2></section>
+        <section id="aba-ajuda" class="aba-section"><h2>Ajuda</h2></section>
+    </div>
+</main>
+<div class="modal-overlay" id="modalProduct">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="modal-product-title" style="margin:0">Editar produto</h3>
+            <i class="fas fa-times" onclick="closeProductModal()" style="cursor:pointer; color:#A0AEC0"></i>
+        </div>
+        <div style="padding: 10px 30px;"><div class="sub-nav" id="productModalNav">
+            <div class="sub-nav-item active" onclick="switchProductTab('info', this)">Geral</div>
+            <div class="sub-nav-item" onclick="switchProductTab('links', this)">Links</div>
+            <div class="sub-nav-item" onclick="alert('Configurações em breve')">Configurações</div>
+            <div class="sub-nav-item" onclick="alert('Checkout em breve')">Checkout</div>
+        </div></div>
+        <div class="modal-body">
+            <input type="hidden" id="edit-prod-id">
+            <div id="p-info" class="prod-modal-tab active">
+                <label style="display:block; font-size:12px; font-weight:700; margin-bottom:5px;">NOME DO PRODUTO</label>
+                <input type="text" id="ipt_nome" class="search-input" style="margin-bottom:15px; width: 100%;">
+                <label style="display:block; font-size:12px; font-weight:700; margin-bottom:5px;">PREÇO (R$)</label>
+                <input type="number" id="ipt_preco" class="search-input" style="width: 100%;">
+            </div>
+            <div id="p-links" class="prod-modal-tab">
+                <div class="table-container"><table><thead><tr><th>NOME DO LINK</th><th>URL</th></tr></thead><tbody id="prod-links-table"></tbody></table></div>
+                <p style="margin-top:15px; color: var(--purple-kiwi); font-weight:600; cursor:pointer">
+                    <i class="fas fa-info-circle"></i> Aprenda mais sobre <span style="text-decoration: underline">links</span>
+                </p>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-danger" id="btn-del-prod" onclick="deleteProductFromModal()">Excluir produto</button>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn-primary" style="background:#E2E8F0; color:#4A5568" onclick="closeProductModal()">Cancelar</button>
+                <button class="btn-primary" onclick="salvarProduto()">Salvar produto</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="modalColab">
+    <div class="modal-content" style="width: 450px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;"><h3 style="margin:0">Adicionar colaborador</h3><i class="fas fa-times" onclick="closeColabModal()" style="cursor:pointer; color:#A0AEC0"></i></div>
+        <div style="margin-bottom:15px"><label style="display:block; font-size:14px; font-weight:600; color:#4A5568; margin-bottom:8px">E-mail</label><input type="email" placeholder="E-mail do colaborador" style="width:100%; padding:12px; border:1px solid var(--border); border-radius:8px; outline:none"></div>
+        <button class="btn-primary" style="width:100%; padding:14px">Adicionar colaborador</button>
+    </div>
+</div>
+
+<script>
+    const SUPABASE_URL = 'https://onsbuazkqfehkudhladt.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9uc2J1YXprcWZlaGt1ZGhsYWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzNTI5OTgsImV4cCI6MjA5MzkyODk5OH0.ZypL6LHbPC_z971EDCTh6pVoA7g4qM6hWSWfWVO9a-M';
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    let salesChartInstance = null;
+
+    async function carregarProdutos() {
+        const { data, error } = await _supabase.from('produtos').select('*').order('created_at', { ascending: false });
+        if(error) return;
+        document.getElementById('product-list-body').innerHTML = data.map(p => `
+            <tr>
+                <td style="font-weight:700; color:var(--purple-kiwi)">${p.nome}</td>
+                <td>R$ ${p.preco.toFixed(2).replace('.',',')}</td>
+                <td><span class="badge-success">Ativo</span></td>
+                <td style="text-align:right">
+                    <button class="btn-primary" style="padding:5px 10px; font-size:11px; background:var(--green); margin-right:10px" onclick="simularVenda('${p.id}', ${p.preco})">Simular Venda</button>
+                    <i class="fas fa-edit" style="cursor:pointer" onclick="editProduct('${p.id}', '${p.nome}', ${p.preco})"></i>
+                </td>
+            </tr>`).join('');
+    }
+
+    async function salvarProduto() {
+        const id = document.getElementById('edit-prod-id').value;
+        const payload = { nome: document.getElementById('ipt_nome').value, preco: parseFloat(document.getElementById('ipt_preco').value), status: 'Ativo' };
+        const res = id ? await _supabase.from('produtos').update(payload).eq('id', id) : await _supabase.from('produtos').insert([payload]);
+        if(!res.error) { closeProductModal(); carregarProdutos(); }
+    }
+
+    function editProduct(id, nome, preco) {
+        document.getElementById('edit-prod-id').value = id;
+        document.getElementById('ipt_nome').value = nome;
+        document.getElementById('ipt_preco').value = preco;
+        document.getElementById('modal-product-title').innerText = "Editar produto";
+        document.getElementById('prod-links-table').innerHTML = `<tr><td style="font-weight:700">Checkout Principal</td><td><input type="text" readonly class="search-input" style="padding:5px; font-size:11px" value="https://inovar.digital/pay/${id}"></td></tr>`;
+        openProductModal();
+    }
+
+    async function deleteProductFromModal() {
+        const id = document.getElementById('edit-prod-id').value;
+        if(id && confirm("Deseja realmente excluir este produto?")) {
+            await _supabase.from('produtos').delete().eq('id', id);
+            closeProductModal(); carregarProdutos();
+        }
+    }
+
+    async function simularVenda(prodId, preco) {
+        await _supabase.from('vendas').insert([{ produto_id: prodId, valor_total: preco, comissao_maestro: preco*0.1, valor_liquido: preco*0.9, status: 'Paga' }]);
+        carregarDadosDashboard();
+    }
+
+    async function carregarDadosDashboard() {
+        const { data: vendas } = await _supabase.from('vendas').select('*, produtos(nome)');
+        if(!vendas) return;
+        const totalBruto = vendas.reduce((sum, v) => sum + v.valor_total, 0);
+        const totalLiquido = vendas.reduce((sum, v) => sum + v.valor_liquido, 0);
+        document.getElementById('dash-total-vendas').innerText = `R$ ${totalBruto.toFixed(2).replace('.', ',')}`;
+        document.getElementById('dash-valor-liquido').innerText = `R$ ${totalLiquido.toFixed(2).replace('.', ',')}`;
+        document.getElementById('dash-count-vendas').innerText = vendas.length;
+        document.getElementById('fin-disponivel').innerText = `R$ ${totalLiquido.toFixed(2).replace('.', ',')}`;
+        document.getElementById('sales-list-body').innerHTML = vendas.map(v => `
+            <tr><td>#${v.id.slice(0,8)}</td><td>${v.produtos?.nome || 'Produto'}</td><td>R$ ${v.valor_total.toFixed(2)}</td><td>${new Date(v.created_at).toLocaleDateString()}</td><td><span class="badge-success">Paga</span></td></tr>`).join('');
+        if(salesChartInstance) {
+            salesChartInstance.data.datasets[0].data = vendas.slice(0, 7).reverse().map(v => v.valor_total);
+            salesChartInstance.update();
+        }
+    }
+
+    async function solicitarSaque() {
+        const saldoTxt = document.getElementById('fin-disponivel').innerText.replace('R$ ', '').replace('.', '').replace(',', '.');
+        const saldo = parseFloat(saldoTxt);
+        if(saldo <= 0) return alert("Sem saldo disponível.");
+        const valor = prompt("Valor do saque:");
+        const pix = prompt("Chave PIX:");
+        if(valor && pix) {
+            await _supabase.from('saques').insert([{ valor: parseFloat(valor), chave_pix: pix, status: 'Pendente' }]);
+            alert("Solicitado!"); carregarHistoricoSaques();
+        }
+    }
+
+    async function carregarHistoricoSaques() {
+        const { data } = await _supabase.from('saques').select('*').order('created_at', { ascending: false });
+        if(data) document.getElementById('lista-saques-body').innerHTML = data.map(s => `<tr><td>${new Date(s.created_at).toLocaleDateString()}</td><td>R$ ${s.valor.toFixed(2)}</td><td>${s.status}</td></tr>`).join('');
+    }
+
+    function nav(id, el) {
+        document.querySelectorAll('.aba-section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        document.getElementById('aba-' + id).classList.add('active');
+        el.classList.add('active');
+        document.getElementById('header-path').innerHTML = `<strong>Maestro Console</strong> / ${el.innerText.trim()}`;
+        if(id === 'prod') carregarProdutos();
+        if(id === 'dash' || id === 'vendas' || id === 'finan') carregarDadosDashboard();
+        if(id === 'finan') carregarHistoricoSaques();
+    }
+
+    function openRelat(t) { document.getElementById('relat-main-list').style.display='none'; document.getElementById('relat-detail').style.display='block'; document.getElementById('relat-title-display').innerText=t; }
+    function closeRelat() { document.getElementById('relat-main-list').style.display='block'; document.getElementById('relat-detail').style.display='none'; }
+    function openColabModal() { document.getElementById('modalColab').classList.add('active'); }
+    function closeColabModal() { document.getElementById('modalColab').classList.remove('active'); }
+    function openProductModal() { document.getElementById('modalProduct').classList.add('active'); }
+    function closeProductModal() { document.getElementById('modalProduct').classList.remove('active'); document.getElementById('edit-prod-id').value = ''; }
+    function switchProductTab(tab, el) {
+        document.querySelectorAll('.prod-modal-tab').forEach(c => c.style.display = 'none');
+        document.querySelectorAll('#productModalNav .sub-nav-item').forEach(i => i.classList.remove('active'));
+        document.getElementById('p-' + tab).style.display = 'block';
+        el.classList.add('active');
+    }
+
+    window.onload = function() {
+        carregarProdutos(); carregarDadosDashboard();
+        const ctx = document.getElementById('salesChart')?.getContext('2d');
+        if(ctx) salesChartInstance = new Chart(ctx, { type: 'line', data: { labels: ['V1','V2','V3','V4','V5','V6','V7'], datasets: [{ data: [0,0,0,0,0,0,0], borderColor: '#5D5FEF', backgroundColor: 'rgba(93, 95, 239, 0.1)', fill: true, tension: 0.4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }});
+    };
+</script>
+</body>
+</html>
