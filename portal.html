@@ -241,10 +241,10 @@
             </div>
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;">
                 <a href="#" style="color:var(--purple-kiwi); font-weight:600; text-decoration:none; font-size:14px;">Alterar minha conta para CNPJ</a>
-                <button class="btn-primary" onclick="alert('Saque solicitado!')">Efetuar saque</button>
+                <button class="btn-primary" onclick="solicitarSaque()">Efetuar saque</button>
             </div>
             <div class="sub-nav"><div class="sub-nav-item active">Saques</div><div class="sub-nav-item">Dados bancários</div><div class="sub-nav-item">Taxas e Prazos</div><div class="sub-nav-item">Identidade</div></div>
-            <div class="table-container"><table><thead><tr><th>DATA</th><th>VALOR</th><th>STATUS</th></tr></thead><tbody><tr><td colspan="3" style="text-align:center; padding:50px; color:#A0AEC0;">Exibindo 0 de 0 páginas</td></tr></tbody></table></div>
+            <div class="table-container"><table><thead><tr><th>DATA</th><th>VALOR</th><th>STATUS</th></tr></thead><tbody id="lista-saques-body"><tr><td colspan="3" style="text-align:center; padding:50px; color:#A0AEC0;">Exibindo 0 de 0 páginas</td></tr></tbody></table></div>
         </section>
 
         <section id="aba-relat" class="aba-section">
@@ -287,38 +287,67 @@
 </main>
 
 <div class="modal-overlay" id="modalProduct">
-    <div class="modal-content" style="width: 700px; max-width: 90%;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-            <h3 id="modal-product-title">Criar produto</h3>
+    <div class="modal-content" style="width: 1000px; max-width: 95%; height: 85vh; display: flex; flex-direction: column;">
+        <div class="modal-header" style="padding: 20px 30px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+            <h3 id="modal-product-title" style="margin:0; font-weight: 800;">Editar produto</h3>
             <i class="fas fa-times" onclick="closeProductModal()" style="cursor:pointer; color:#A0AEC0"></i>
         </div>
-        <div class="sub-nav" id="productModalNav">
-            <div class="sub-nav-item active" onclick="switchProductTab('info', this)">Informações</div>
-            <div class="sub-nav-item" onclick="switchProductTab('preco', this)">Preço</div>
-            <div class="sub-nav-item" onclick="switchProductTab('entrega', this)">Entrega</div>
+        
+        <div style="padding: 20px 30px 0 30px;">
+            <div class="sub-nav" id="productModalNav">
+                <div class="sub-nav-item active" onclick="switchProductTab('info', this)">Geral</div>
+                <div class="sub-nav-item" onclick="switchProductTab('links', this)">Links</div>
+                <div class="sub-nav-item" onclick="alert('Configurações em breve')">Configurações</div>
+                <div class="sub-nav-item" onclick="alert('Checkout em breve')">Checkout</div>
+                <div class="sub-nav-item" onclick="alert('Afiliados em breve')">Afiliados</div>
+            </div>
         </div>
-        <input type="hidden" id="edit-prod-id">
-        <div id="p-info" class="prod-modal-tab active" style="padding-top:20px;">
-            <label style="display:block; font-size:12px; font-weight:700; margin-bottom:5px;">NOME DO PRODUTO</label>
-            <input type="text" id="ipt_nome" class="search-input" style="padding:10px;" placeholder="Ex: Curso de Violão">
+
+        <div class="modal-body" style="padding: 30px; flex: 1; overflow-y: auto;">
+            <input type="hidden" id="edit-prod-id">
+            
+            <div id="p-info" class="prod-modal-tab active">
+                <div style="margin-bottom:20px">
+                    <label style="display:block; font-size:12px; font-weight:700; margin-bottom:8px; color: #718096;">NOME DO PRODUTO</label>
+                    <input type="text" id="ipt_nome" class="search-input" style="width:100%; padding-left: 15px;" placeholder="Ex: Curso de Violão">
+                </div>
+                <div>
+                    <label style="display:block; font-size:12px; font-weight:700; margin-bottom:8px; color: #718096;">VALOR (R$)</label>
+                    <input type="number" id="ipt_preco" class="search-input" style="width:100%; padding-left: 15px;" placeholder="297.00">
+                </div>
+            </div>
+
+            <div id="p-links" class="prod-modal-tab" style="display:none">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px">
+                    <div style="position: relative; width: 350px;">
+                        <i class="fas fa-search" style="position: absolute; left: 15px; top: 12px; color: #A0AEC0;"></i>
+                        <input type="text" class="search-input" style="padding-left: 45px; width: 100%;" placeholder="Buscar link...">
+                    </div>
+                    <button class="btn-primary" style="background: var(--purple-kiwi);"><i class="fas fa-plus"></i> Adicionar link</button>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr><th>NOME DO LINK</th><th>URL</th><th>TIPO</th><th>PREÇO</th><th>STATUS</th><th></th></tr>
+                        </thead>
+                        <tbody id="prod-links-table"></tbody>
+                    </table>
+                </div>
+                <p style="margin-top:20px; color: var(--purple-kiwi); font-weight:600; cursor:pointer; display: flex; align-items: center; gap: 8px;" onclick="nav('ajuda', document.querySelector('[onclick*=\'ajuda\']'))">
+                    <i class="fas fa-info-circle"></i> Aprenda mais sobre os <span style="text-decoration: underline;">links</span>
+                </p>
+            </div>
         </div>
-        <div id="p-preco" class="prod-modal-tab" style="padding-top:20px; display:none;">
-            <label style="display:block; font-size:12px; font-weight:700; margin-bottom:5px;">VALOR (R$)</label>
-            <input type="number" id="ipt_preco" class="search-input" style="padding:10px;" placeholder="297.00">
-        </div>
-        <div id="p-entrega" class="prod-modal-tab" style="padding-top:20px; display:none;">
-            <label style="display:block; font-size:12px; font-weight:700; margin-bottom:5px;">URL DE ENTREGA</label>
-            <input type="text" id="ipt_url" class="search-input" style="padding:10px;" placeholder="https://...">
-        </div>
-        <div style="margin-top:25px; display:flex; justify-content:flex-end; gap:10px;">
-            <button class="btn-primary" style="background:#E2E8F0; color:#4A5568" onclick="closeProductModal()">Cancelar</button>
-            <button class="btn-primary" onclick="salvarProduto()" id="btn-save-product">Criar produto</button>
+
+        <div class="modal-footer" style="padding: 20px 30px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; background: white;">
+            <button class="btn-danger" id="btn-del-prod" onclick="deleteProductFromModal()" style="border-radius: 8px; background: #EF4444; color: white; border: none; padding: 10px 20px; cursor: pointer; font-weight: 700;">Excluir produto</button>
+            <button class="btn-primary" onclick="salvarProduto()" id="btn-save-product" style="border-radius: 8px; background: var(--purple-kiwi);">Salvar produto</button>
         </div>
     </div>
 </div>
 
 <div class="modal-overlay" id="modalColab">
-    <div class="modal-content">
+    <div class="modal-content" style="width: 450px;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;"><h3 style="margin:0">Adicionar colaborador</h3><i class="fas fa-times" onclick="closeColabModal()" style="cursor:pointer; color:#A0AEC0"></i></div>
         <div style="margin-bottom:15px"><label style="display:block; font-size:14px; font-weight:600; color:#4A5568; margin-bottom:8px">E-mail</label><input type="email" placeholder="E-mail do colaborador" style="width:100%; padding:12px; border:1px solid var(--border); border-radius:8px; outline:none"></div>
         <button class="btn-primary" style="width:100%; padding:14px">Adicionar colaborador</button>
@@ -332,101 +361,104 @@
 
     let salesChartInstance = null;
 
-    // --- LÓGICA DE PRODUTOS ---
+    // --- PRODUTOS ---
     async function carregarProdutos() {
         const { data, error } = await _supabase.from('produtos').select('*').order('created_at', { ascending: false });
         if(error) return;
-        const body = document.getElementById('product-list-body');
-        body.innerHTML = data.map(p => `
+        document.getElementById('product-list-body').innerHTML = data.map(p => `
             <tr>
                 <td style="font-weight:700; color:var(--purple-kiwi)">${p.nome}</td>
                 <td>R$ ${p.preco.toFixed(2).replace('.',',')}</td>
-                <td><span class="badge badge-success">Ativo</span></td>
+                <td><span class="badge badge-success" style="background:#DCFCE7; color:#166534; padding:4px 8px; border-radius:4px; font-size:11px; font-weight:700;">Ativo</span></td>
                 <td style="text-align:right">
                     <button class="btn-primary" style="padding: 5px 10px; font-size: 11px; background: var(--green); margin-right:10px;" onclick="simularVenda('${p.id}', ${p.preco})">Simular Venda</button>
-                    <i class="fas fa-edit" style="cursor:pointer; margin-right:10px" onclick="editProduct('${p.id}', '${p.nome}', ${p.preco}, '${p.url_entrega || ''}')"></i>
-                    <i class="fas fa-trash" style="cursor:pointer; color:#E53E3E" onclick="deleteProduct('${p.id}')"></i>
+                    <i class="fas fa-edit" style="cursor:pointer" onclick="editProduct('${p.id}', '${p.nome}', ${p.preco})"></i>
                 </td>
-            </tr>
-        `).join('');
+            </tr>`).join('');
     }
 
     async function salvarProduto() {
         const id = document.getElementById('edit-prod-id').value;
         const nome = document.getElementById('ipt_nome').value;
         const preco = document.getElementById('ipt_preco').value;
-        const url = document.getElementById('ipt_url').value;
-
         if(!nome || !preco) { alert("Preencha nome e preço!"); return; }
-
-        const payload = { nome, preco: parseFloat(preco), url_entrega: url, status: 'Ativo' };
-
-        const result = id ? await _supabase.from('produtos').update(payload).eq('id', id) : await _supabase.from('produtos').insert([payload]);
-
-        if(!result.error) { closeProductModal(); carregarProdutos(); }
+        const payload = { nome, preco: parseFloat(preco), status: 'Ativo' };
+        const res = id ? await _supabase.from('produtos').update(payload).eq('id', id) : await _supabase.from('produtos').insert([payload]);
+        if(!res.error) { closeProductModal(); carregarProdutos(); }
     }
 
-    function editProduct(id, nome, preco, url) {
+    function editProduct(id, nome, preco) {
         document.getElementById('edit-prod-id').value = id;
         document.getElementById('ipt_nome').value = nome;
         document.getElementById('ipt_preco').value = preco;
-        document.getElementById('ipt_url').value = url;
         document.getElementById('modal-product-title').innerText = "Editar produto";
+        document.getElementById('prod-links-table').innerHTML = `
+            <tr>
+                <td style="font-weight:600">${nome}</td>
+                <td><input type="text" readonly class="search-input" style="padding:8px; font-size:12px; width: 250px; background: #F8F9FA;" value="https://inovar.digital/pay/${id}"></td>
+                <td><span class="badge" style="background:#EBF4FF; color:#5D5FEF; padding: 4px 12px;">Checkout</span></td>
+                <td>R$ ${preco}</td>
+                <td><span style="color: #22C55E; font-weight: 700;">Ativo</span></td>
+                <td><i class="fas fa-ellipsis-v"></i></td>
+            </tr>`;
         openProductModal();
     }
 
-    async function deleteProduct(id) {
-        if(confirm("Excluir este produto?")) {
-            const { error } = await _supabase.from('produtos').delete().eq('id', id);
-            if(!error) carregarProdutos();
+    async function deleteProductFromModal() {
+        const id = document.getElementById('edit-prod-id').value;
+        if(id && confirm("Deseja realmente excluir?")) {
+            await _supabase.from('produtos').delete().eq('id', id);
+            closeProductModal(); carregarProdutos();
         }
     }
 
-    // --- LÓGICA DE VENDAS E DASHBOARD ---
+    // --- VENDAS & DASHBOARD ---
     async function simularVenda(prodId, preco) {
         const comissao = preco * 0.10;
-        const { error } = await _supabase.from('vendas').insert([{
-            produto_id: prodId,
-            valor_total: preco,
-            comissao_maestro: comissao,
-            valor_liquido: preco - comissao,
-            status: 'Paga'
-        }]);
-        if(!error) { alert('Venda registrada!'); carregarDadosDashboard(); }
+        await _supabase.from('vendas').insert([{ produto_id: prodId, valor_total: preco, comissao_maestro: comissao, valor_liquido: preco - comissao, status: 'Paga' }]);
+        carregarDadosDashboard();
     }
 
     async function carregarDadosDashboard() {
         const { data: vendas, error } = await _supabase.from('vendas').select('*, produtos(nome)').order('created_at', { ascending: false });
         if(error || !vendas) return;
-
         const totalBruto = vendas.reduce((sum, v) => sum + v.valor_total, 0);
         const totalLiquido = vendas.reduce((sum, v) => sum + v.valor_liquido, 0);
-
-        // Atualiza Cards
+        
         document.getElementById('dash-total-vendas').innerText = `R$ ${totalBruto.toFixed(2).replace('.', ',')}`;
         document.getElementById('dash-valor-liquido').innerText = `R$ ${totalLiquido.toFixed(2).replace('.', ',')}`;
         document.getElementById('dash-count-vendas').innerText = vendas.length;
-        if(document.getElementById('fin-disponivel')) document.getElementById('fin-disponivel').innerText = `R$ ${totalLiquido.toFixed(2).replace('.', ',')}`;
-
-        // Aba Vendas
+        document.getElementById('fin-disponivel').innerText = `R$ ${totalLiquido.toFixed(2).replace('.', ',')}`;
+        
         document.getElementById('sales-list-body').innerHTML = vendas.map(v => `
-            <tr>
-                <td>#${v.id.slice(0,8)}</td>
-                <td style="font-weight:700">${v.produtos?.nome || 'Produto'}</td>
-                <td>R$ ${v.valor_total.toFixed(2)}</td>
-                <td>${new Date(v.created_at).toLocaleDateString()}</td>
-                <td><span class="badge badge-success">${v.status}</span></td>
-            </tr>
-        `).join('');
-
-        // Gráfico
+            <tr><td>#${v.id.slice(0,8)}</td><td>${v.produtos?.nome || 'Produto'}</td><td>R$ ${v.valor_total.toFixed(2)}</td><td>${new Date(v.created_at).toLocaleDateString()}</td><td><span class="badge badge-success">Paga</span></td></tr>`).join('');
+        
         if(salesChartInstance) {
             salesChartInstance.data.datasets[0].data = vendas.slice(0, 7).reverse().map(v => v.valor_total);
             salesChartInstance.update();
         }
     }
 
-    // --- NAVEGAÇÃO E MODAIS ---
+    // --- SAQUES ---
+    async function solicitarSaque() {
+        const saldoTxt = document.getElementById('fin-disponivel').innerText.replace('R$ ', '').replace(',', '.');
+        const saldoDisponivel = parseFloat(saldoTxt);
+        if (saldoDisponivel <= 0) { alert("Sem saldo disponível."); return; }
+        const valorSaque = prompt("Digite o valor para saque:");
+        if (!valorSaque || parseFloat(valorSaque) > saldoDisponivel) { alert("Valor inválido."); return; }
+        const chavePix = prompt("Digite sua chave PIX:");
+        if (chavePix) {
+            const { error } = await _supabase.from('saques').insert([{ valor: parseFloat(valorSaque), chave_pix: chavePix, status: 'Pendente' }]);
+            if (!error) { alert("Saque solicitado!"); carregarHistoricoSaques(); }
+        }
+    }
+
+    async function carregarHistoricoSaques() {
+        const { data } = await _supabase.from('saques').select('*').order('created_at', { ascending: false });
+        if (data) document.getElementById('lista-saques-body').innerHTML = data.map(s => `<tr><td>${new Date(s.created_at).toLocaleDateString()}</td><td>R$ ${s.valor.toFixed(2)}</td><td>${s.status}</td></tr>`).join('');
+    }
+
+    // --- NAVEGAÇÃO ---
     function nav(id, el) {
         document.querySelectorAll('.aba-section').forEach(s => s.classList.remove('active'));
         document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
@@ -434,18 +466,16 @@
         el.classList.add('active');
         document.getElementById('header-path').innerHTML = `<strong>Maestro Console</strong> / ${el.innerText.trim()}`;
         if(id === 'prod') carregarProdutos();
-        if(id === 'dash' || id === 'vendas') carregarDadosDashboard();
+        if(id === 'dash' || id === 'vendas' || id === 'finan') carregarDadosDashboard();
+        if(id === 'finan') carregarHistoricoSaques();
     }
-    
+
     function openRelat(t) { document.getElementById('relat-main-list').style.display='none'; document.getElementById('relat-detail').style.display='block'; document.getElementById('relat-title-display').innerText=t; }
     function closeRelat() { document.getElementById('relat-main-list').style.display='block'; document.getElementById('relat-detail').style.display='none'; }
     function openColabModal() { document.getElementById('modalColab').classList.add('active'); }
     function closeColabModal() { document.getElementById('modalColab').classList.remove('active'); }
     function openProductModal() { document.getElementById('modalProduct').classList.add('active'); }
-    function closeProductModal() { 
-        document.getElementById('modalProduct').classList.remove('active'); 
-        document.getElementById('edit-prod-id').value = ''; 
-    }
+    function closeProductModal() { document.getElementById('modalProduct').classList.remove('active'); document.getElementById('edit-prod-id').value = ''; }
     function switchProductTab(tab, el) {
         document.querySelectorAll('.prod-modal-tab').forEach(c => c.style.display = 'none');
         document.querySelectorAll('#productModalNav .sub-nav-item').forEach(i => i.classList.remove('active'));
@@ -454,24 +484,9 @@
     }
 
     window.onload = function() {
+        carregarProdutos(); carregarDadosDashboard();
         const ctx = document.getElementById('salesChart')?.getContext('2d');
-        if(ctx) {
-            salesChartInstance = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['V1', 'V2', 'V3', 'V4', 'V5', 'V6', 'V7'],
-                    datasets: [{
-                        data: [0, 0, 0, 0, 0, 0, 0],
-                        borderColor: '#5D5FEF',
-                        backgroundColor: 'rgba(93, 95, 239, 0.1)',
-                        fill: true, tension: 0.4, borderWidth: 3, pointRadius: 5
-                    }]
-                },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
-            });
-        }
-        carregarProdutos();
-        carregarDadosDashboard();
+        if(ctx) salesChartInstance = new Chart(ctx, { type: 'line', data: { labels: ['V1','V2','V3','V4','V5','V6','V7'], datasets: [{ data: [0,0,0,0,0,0,0], borderColor: '#5D5FEF', backgroundColor: 'rgba(93, 95, 239, 0.1)', fill: true, tension: 0.4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }});
     };
 </script>
 </body>
