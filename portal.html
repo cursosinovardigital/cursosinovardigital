@@ -277,10 +277,104 @@
                 <div class="app-card"><div class="app-icon" style="color:#25D366;"><i class="fab fa-whatsapp"></i></div><div style="font-weight:800; font-size:18px;">Hotzapp</div><div style="font-size:13px; color:#718096; margin-top:10px;">Notificações por WhatsApp.</div><button class="btn-app-config">Configurar</button></div>
             </div>
         </section>
+<section id="aba-prod" class="aba-section">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;">
+        <h2 style="margin:0">Meus Produtos</h2>
+        <button class="btn-primary" onclick="openProductModal()"><i class="fas fa-plus"></i> Criar produto</button>
+    </div>
 
-        <section id="aba-dash" class="aba-section"><h2>Dashboard</h2></section>
-        <section id="aba-ajuda" class="aba-section"><h2>Ajuda</h2></section>
-        <section id="aba-prod" class="aba-section"><h2>Produtos</h2></section>
+    <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+        <div style="flex: 1; position: relative;">
+            <i class="fas fa-search" style="position: absolute; left: 15px; top: 15px; color: #A0AEC0;"></i>
+            <input type="text" id="searchProduct" class="search-input" placeholder="Filtrar por nome do produto..." onkeyup="filterProducts()">
+        </div>
+        <select class="search-input" style="width: 200px; padding-left: 15px;">
+            <option value="">Todos os status</option>
+            <option value="ativo">Ativo</option>
+            <option value="rascunho">Rascunho</option>
+        </select>
+    </div>
+
+    <div class="table-container">
+        <table id="productsTable">
+            <thead>
+                <tr>
+                    <th>PRODUTO</th>
+                    <th>TIPO</th>
+                    <th>PREÇO BASE</th>
+                    <th>STATUS</th>
+                    <th style="text-align:right">AÇÕES</th>
+                </tr>
+            </thead>
+            <tbody id="product-list-body">
+                <tr>
+                    <td colspan="5" style="text-align:center; padding:50px; color:#A0AEC0;">
+                        <i class="fas fa-spinner fa-spin"></i> Carregando produtos...
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<div class="modal-overlay" id="modalProduct" style="align-items: flex-start; padding-top: 50px;">
+    <div class="modal-content" style="width: 800px; max-width: 95%;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+            <h3 style="margin:0">Novo Produto</h3>
+            <i class="fas fa-times" onclick="closeProductModal()" style="cursor:pointer; color:#A0AEC0"></i>
+        </div>
+
+        <div class="sub-nav" id="productModalNav">
+            <div class="sub-nav-item active" onclick="switchModalTab('info')">Informações</div>
+            <div class="sub-nav-item" onclick="switchModalTab('preco')">Preços e Ofertas</div>
+            <div class="sub-nav-item" onclick="switchModalTab('entrega')">Entrega</div>
+        </div>
+
+        <form id="productForm">
+            <div id="modal-tab-info" class="product-modal-tab active">
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-top:20px;">
+                    <div>
+                        <label style="display:block; font-size:12px; font-weight:700; margin-bottom:5px;">NOME DO PRODUTO</label>
+                        <input type="text" id="prod_nome" class="search-input" style="padding:10px;" required placeholder="Ex: Curso de Violão do Zero">
+                    </div>
+                    <div>
+                        <label style="display:block; font-size:12px; font-weight:700; margin-bottom:5px;">CATEGORIA</label>
+                        <select id="prod_cat" class="search-input" style="padding:10px;">
+                            <option>Música</option>
+                            <option>Educação</option>
+                            <option>Negócios</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="margin-top:15px;">
+                    <label style="display:block; font-size:12px; font-weight:700; margin-bottom:5px;">DESCRIÇÃO</label>
+                    <textarea id="prod_desc" class="search-input" style="height:80px; padding:10px; resize:none;"></textarea>
+                </div>
+            </div>
+
+            <div id="modal-tab-preco" class="product-modal-tab" style="display:none">
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-top:20px;">
+                    <div>
+                        <label style="display:block; font-size:12px; font-weight:700; margin-bottom:5px;">VALOR (R$)</label>
+                        <input type="number" id="prod_preco" class="search-input" style="padding:10px;" placeholder="297,00">
+                    </div>
+                    <div>
+                        <label style="display:block; font-size:12px; font-weight:700; margin-bottom:5px;">TIPO DE COBRANÇA</label>
+                        <select class="search-input" style="padding:10px;">
+                            <option>Pagamento Único</option>
+                            <option>Assinatura (Recorrente)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top:30px; display:flex; justify-content:flex-end; gap:10px;">
+                <button type="button" class="btn-primary" style="background:#E2E8F0; color:#4A5568" onclick="closeProductModal()">Cancelar</button>
+                <button type="submit" class="btn-primary">Salvar Produto</button>
+            </div>
+        </form>
+    </div>
+</div>
     </div>
 </main>
 
