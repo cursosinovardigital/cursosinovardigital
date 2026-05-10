@@ -101,7 +101,7 @@
             cursor: pointer;
             transition: 0.2s;
         }
-        .btn-google:hover { background: #f9fafb; border-color: #9ca3af; }
+        .btn-google:hover { background: #f9fafb; }
         
         .footer-links { margin-top: 25px; font-size: 0.85rem; color: #6b7280; }
         .footer-links a { color: var(--hot-orange); text-decoration: none; font-weight: 600; cursor: pointer; }
@@ -167,7 +167,7 @@
         const { error } = await _supabase.auth.signInWithOAuth({
             provider: 'google',
             options: { 
-                // AQUI RESOLVE O ERRO: Substitua pela URL do seu GitHub Pages
+                // LINK CORRIGIDO PARA O SEU REPOSITÓRIO
                 redirectTo: 'https://cursosinovardigital.github.io/cursosinovardigital/index.html' 
             }
         });
