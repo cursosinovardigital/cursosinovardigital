@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análise Profunda: 5 IAs para Produtividade | Inovar Digital</title>
+    
+    <meta name="description" content="Guia completo e exaustivo sobre ferramentas de IA pouco conhecidas que estão dobrando a produtividade de empreendedores digitais em 2026.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --hot-orange: #ff4000;
+            --hot-bg: #f5f3ef;
+            --text-dark: #053d4e;
+            --white: #ffffff;
+            --max-width: 1100px;
+        }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--white); 
+            color: var(--text-dark); 
+            margin: 0; 
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .container { width: 100%; max-width: var(--max-width); margin: 0 auto; padding: 0 5%; box-sizing: border-box; }
+
+        header { background: var(--white); padding: 15px 0; border-bottom: 1px solid #e5e7eb; }
+        .header-content { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-weight: 900; font-size: 1.5rem; color: #000; letter-spacing: -1px; text-decoration: none; }
+        .logo span { color: var(--hot-orange); }
+
+        .auth-buttons { display: flex; gap: 12px; align-items: center; }
+        .btn-login-nav { color: var(--text-dark); text-decoration: none; font-weight: 600; padding: 8px 18px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.85rem; }
+        .btn-signup { background: var(--hot-orange); color: var(--white); text-decoration: none; font-weight: 700; padding: 10px 22px; border-radius: 6px; font-size: 0.85rem; }
+
+        .main-content { flex-grow: 1; padding: 40px 0; }
+        .article-wrapper { max-width: 750px; margin: 0 auto; }
+
+        .category-tag { background: #ffcc00; color: #000; padding: 4px 10px; border-radius: 4px; font-size: 0.7rem; font-weight: 900; text-transform: uppercase; display: inline-block; margin-bottom: 15px; }
+
+        h1 { font-size: 2.5rem; font-weight: 900; line-height: 1.2; margin: 0 0 15px 0; letter-spacing: -1.5px; color: #000; }
+        .subtitle { font-size: 1.15rem; color: #6b7280; margin-bottom: 25px; font-weight: 500; line-height: 1.4; }
+
+        .author-meta { display: flex; align-items: center; gap: 10px; color: #9ca3af; font-size: 0.8rem; margin-bottom: 30px; padding-bottom: 15px; border-bottom: 1px solid #eee; }
+
+        .featured-image { width: 100%; height: 400px; border-radius: 20px; margin-bottom: 35px; box-shadow: 0 15px 35px rgba(0,0,0,0.08); object-fit: cover; }
+
+        .content { font-size: 1.05rem; color: #374151; }
+        .content h2 { font-size: 1.7rem; font-weight: 800; color: #000; margin: 40px 0 15px; letter-spacing: -0.5px; border-left: 4px solid var(--hot-orange); padding-left: 15px; }
+        .content h3 { font-size: 1.3rem; font-weight: 700; color: var(--hot-orange); margin: 30px 0 10px; }
+        .content p { margin-bottom: 20px; }
+        .content ul { margin-bottom: 25px; padding-left: 20px; }
+        .content li { margin-bottom: 10px; }
+
+        .ia-tool-section { background: #f9fafb; padding: 30px; border-radius: 16px; border: 1px solid #eee; margin: 35px 0; }
+        .use-case { background: #fff; padding: 20px; border-radius: 8px; border-left: 3px solid #6366f1; margin-top: 15px; font-size: 0.95rem; }
+        .use-case b { display: block; margin-bottom: 5px; color: #6366f1; text-transform: uppercase; font-size: 0.7rem; }
+
+        .article-cta { background: var(--text-dark); color: #fff; padding: 45px; border-radius: 20px; margin: 50px 0; text-align: center; }
+        .article-cta h3 { font-size: 1.8rem; font-weight: 800; margin-bottom: 15px; color: #fff; }
+
+        .profile-container { position: relative; display: none; align-items: center; gap: 8px; cursor: pointer; }
+        .avatar { width: 35px; height: 35px; background: var(--hot-orange); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; border: 2px solid white; font-size: 0.9rem; }
+
+        footer { padding: 40px 0; background: var(--text-dark); color: #fff; }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .featured-image { height: 250px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container header-content">
+            <a href="index.html" class="logo">inovar<span>digital</span></a>
+            <div id="auth-buttons" class="auth-buttons">
+                <div id="logged-out-group" style="display: flex; gap: 10px;">
+                    <a href="login.html" class="btn-login-nav">Entrar</a>
+                    <a href="login.html" class="btn-signup">Comece gratuitamente</a>
+                </div>
+                <div id="btn-perfil" class="profile-container">
+                    <div class="avatar" id="user-avatar">U</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <article class="article-wrapper">
+                <header>
+                    <span class="category-tag">Especial Produtividade</span>
+                    <h1>Testamos 5 IAs pouco conhecidas para produtividade — veja o resultado</h1>
+                    <p class="subtitle">Enquanto o mercado se distrai com o óbvio, ferramentas de nicho estão redefinindo o que significa ser eficiente no digital em 2026.</p>
+                    <div class="author-meta">
+                        <span>Por <strong>Víctor Trivinho</strong></span>
+                        <span>•</span>
+                        <span>9 de Maio de 2026</span>
+                    </div>
+                </header>
+
+                <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=1170&auto=format&fit=crop" class="featured-image" alt="Produtividade IA">
+
+                <div class="content">
+                    <p>O ano de 2026 consolidou uma verdade absoluta no mercado digital: a Inteligência Artificial não é mais um diferencial, mas um requisito básico de sobrevivência. No entanto, a maioria dos empreendedores e profissionais de marketing ainda opera com as ferramentas "da superfície".</p>
+                    
+                    <p>Ao longo dos últimos meses, nossa equipe na <strong>Inovar Digital</strong> mergulhou no ecossistema global de tecnologia para encontrar as ferramentas que estão operando em camadas mais profundas de automação. Ferramentas que prometem — e cumprem — a entrega de horas extras no seu dia.</p>
+
+                    <h2>1. Motion: O Calendário com Inteligência de Priorização</h2>
+                    <p>O Motion resolve o maior problema da gestão de tempo moderna: o plano estático. Em sistemas tradicionais, se uma tarefa atrasa, você precisa mover manualmente todo o restante do dia. O Motion utiliza IA para <strong>reconstruir sua agenda em milissegundos</strong> sempre que um imprevisto ocorre.</p>
+                    
+                    <ul>
+                        <li><strong>Algoritmo de Prioridade:</strong> Ele entende quais tarefas são inadiáveis e quais podem ser movidas para amanhã.</li>
+                        <li><strong>Foco Profundo:</strong> A IA bloqueia automaticamente espaços no seu calendário para trabalho focado, baseando-se no seu nível de energia histórico.</li>
+                        <li><strong>Integração de Equipe:</strong> Ele alinha as agendas de times inteiros sem a necessidade de calls infinitas de alinhamento.</li>
+                    </ul>
+
+                    <div class="ia-tool-section">
+                        <h3>O Diferencial Estratégico</h3>
+                        <p>O Motion remove a "fadiga de decisão". Você não precisa pensar no que fazer em seguida; você simplesmente olha para o calendário e executa o que a IA determinou como mais produtivo para aquele momento.</p>
+                    </div>
+
+                    <h2>2. Otter.ai: Da Transcrição à Execução Direta</h2>
+                    <p>O Otter.ai deixou de ser apenas um gravador. Em sua versão 2026, ele atua como um <strong>Project Manager de Reuniões</strong>. Ele captura o áudio de calls de mentoria ou reuniões de vendas e transforma a conversa em itens acionáveis dentro do seu CRM ou ferramenta de gestão.</p>
+                    
+                    <div class="use-case">
+                        <b>Exemplo de Uso:</b>
+                        "Durante uma mentoria de 1 hora, a IA identifica que você prometeu enviar um PDF para o aluno. Ao final da call, o Otter já criou a tarefa no seu Notion com o link da gravação anexado."
+                    </div>
+
+                    <div class="article-cta">
+                        <h3>🤖 Domine essas ferramentas no Portal</h3>
+                        <p>Temos um módulo exclusivo ensinando a configurar a integração Otter + Notion para automatizar seu pós-venda.</p>
+                        <a href="portal.html" class="btn-signup">Acessar Treinamento Grátis</a>
+                    </div>
+
+                    <h2>3. Perplexity: O Fim da Pesquisa Irrelevante</h2>
+                    <p>A Perplexity redefiniu como coletamos dados. Enquanto o Google te dá links e anúncios, a Perplexity te dá <strong>conhecimento estruturado</strong>. Ela vasculha a internet em tempo real e entrega uma resposta direta, citando as fontes e eliminando a necessidade de abrir 20 abas de navegador.</p>
+                    
+                    <p>Para o criador de conteúdo, isso significa reduzir o tempo de roteirização de 3 horas para 15 minutos. A precisão dos dados coletados por IA em 2026 permite que você crie materiais com autoridade técnica sem o custo de um pesquisador humano.</p>
+
+                    <h2>4. Lindy.ai: Sua Primeira Agente Autônoma</h2>
+                    <p>Se as outras ferramentas são aplicativos, a Lindy é uma colaboradora. Ela é capaz de realizar tarefas complexas através de múltiplos apps. Você pode delegar para ela a triagem dos seus e-mails, a verificação de leads no LinkedIn e até o agendamento de reuniões com potenciais clientes.</p>
+                    
+                    <h3>Por que a Lindy é essencial:</h3>
+                    <p>Empreendedores digitais costumam se afogar no operacional. A Lindy atua na camada de execução fria, permitindo que você foque apenas onde o seu toque humano é indispensável: na estratégia e no fechamento de grandes negócios.</p>
+
+                    <h2>5. Gamma: O Design que Escala com Você</h2>
+                    <p>O Gamma utiliza IA generativa para criar apresentações, sites e documentos de apoio em segundos. Para quem vende cursos, o tempo gasto em design de slides costuma ser um gargalo massivo. Com o Gamma, você fornece o tópico e a IA gera uma estrutura visual profissional, coerente e pronta para ser apresentada.</p>
+
+                    <div class="ia-tool-section">
+                        <h3>Análise Final da Equipe</h3>
+                        <p>Nenhuma dessas ferramentas é mágica, mas todas são exponenciais. Se você integrar apenas duas delas no seu fluxo de trabalho hoje, você já estará à frente de 95% do mercado que ainda opera manualmente.</p>
+                    </div>
+
+                    <h2>Conclusão: A Máquina de Vendas 2026</h2>
+                    <p>A produtividade não é sobre fazer mais coisas em menos tempo, mas sobre <strong>eliminar o que não precisa ser feito por você</strong>. Na Inovar Digital, nossa filosofia é clara: automatize o robótico para humanizar o estratégico.</p>
+                    
+                    <p>Este teste provou que ferramentas menos populares costumam ser mais focadas e eficazes do que os grandes nomes generalistas. Fique atento às atualizações do nosso blog para continuar dominando as ferramentas que realmente trazem lucro.</p>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div style="font-size: 1.5rem; font-weight: 900; margin-bottom: 10px;">inovar<span style="color:var(--hot-orange);">digital</span></div>
+            <p style="opacity: 0.6; font-size: 0.85rem;">Inovar Digital © 2026 - Víctor Trivinho | Guarulhos, SP</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SUPABASE_URL = 'https://onsbuazkqfehkudhladt.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'; 
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        async function checkUser() {
+            const { data: { session } } = await _supabase.auth.getSession();
+            if (session) {
+                document.getElementById('logged-out-group').style.display = 'none';
+                document.getElementById('btn-perfil').style.display = 'flex';
+                document.getElementById('user-avatar').innerText = session.user.email.charAt(0).toUpperCase();
+            }
+        }
+        checkUser();
+    </script>
+</body>
+</html>
