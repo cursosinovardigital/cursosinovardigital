@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sucesso! Sua compra foi aprovada | Inovar Digital</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --orange-inovar: #FF6600;
+            --orange-hover: #e65c00;
+            --orange-dim: #FFF5F0;
+            --success: #22C55E;
+            --text-main: #1A1D23;
+            --text-dim: #718096;
+            --bg: #F8FAFC;
+            --white: #FFFFFF;
+            --border: #E2E8F0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* --- HEADER (Mantendo o padrão do checkout) --- */
+        .secure-header {
+            width: 100%;
+            background: var(--white);
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: center;
+        }
+        
+        .header-content {
+            width: 90%;
+            max-width: 1100px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 18px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--text-main);
+        }
+        .logo i { color: var(--orange-inovar); }
+
+        /* --- CONTEÚDO DE SUCESSO --- */
+        .success-container {
+            width: 90%;
+            max-width: 600px;
+            margin-top: 60px;
+            text-align: center;
+            background: var(--white);
+            padding: 50px 40px;
+            border-radius: 24px;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05);
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: #DCFCE7;
+            color: var(--success);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            margin: 0 auto 30px;
+            animation: scaleUp 0.5s ease-out;
+        }
+
+        h1 { font-size: 28px; font-weight: 800; margin-bottom: 15px; }
+        p.subtitle { color: var(--text-dim); font-size: 16px; line-height: 1.6; margin-bottom: 35px; }
+
+        /* --- BOX DE INSTRUÇÕES --- */
+        .instruction-card {
+            background: var(--bg);
+            border-radius: 16px;
+            padding: 25px;
+            text-align: left;
+            margin-bottom: 35px;
+        }
+
+        .instruction-item {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .instruction-item:last-child { margin-bottom: 0; }
+        
+        .step-num {
+            background: var(--orange-inovar);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .step-text { font-size: 14px; font-weight: 500; color: var(--text-main); }
+        .step-text span { display: block; color: var(--text-dim); font-weight: 400; font-size: 13px; margin-top: 4px; }
+
+        /* --- BOTÃO DE AÇÃO --- */
+        .btn-access {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            background: var(--orange-inovar);
+            color: white;
+            padding: 20px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 16px;
+            transition: all 0.2s;
+            box-shadow: 0 8px 20px rgba(255, 102, 0, 0.2);
+        }
+        .btn-access:hover { background: var(--orange-hover); transform: translateY(-2px); }
+
+        .support-link {
+            margin-top: 30px;
+            font-size: 13px;
+            color: var(--text-dim);
+        }
+        .support-link a { color: var(--orange-inovar); text-decoration: none; font-weight: 600; }
+
+        @keyframes scaleUp {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @media (max-width: 480px) {
+            .success-container { padding: 40px 20px; margin-top: 30px; }
+            h1 { font-size: 24px; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="secure-header">
+    <div class="header-content">
+        <a href="#" class="logo">
+            <i class="fas fa-rocket"></i> Inovar Digital
+        </a>
+        <div style="font-size: 12px; font-weight: 600; color: var(--text-dim);">
+            <i class="fas fa-check-circle" style="color:var(--success)"></i> PAGAMENTO CONFIRMADO
+        </div>
+    </div>
+</header>
+
+<main class="success-container">
+    <div class="success-icon">
+        <i class="fas fa-check"></i>
+    </div>
+
+    <h1>Sua compra foi aprovada!</h1>
+    <p class="subtitle">Parabéns por dar esse passo! Agora você já faz parte do nosso grupo seleto de alunos da Inovar Digital.</p>
+
+    <div class="instruction-card">
+        <div class="instruction-item">
+            <div class="step-num">1</div>
+            <div class="step-text">
+                Verifique seu e-mail
+                <span>Enviamos os dados de acesso para o endereço cadastrado na compra.</span>
+            </div>
+        </div>
+        <div class="instruction-item">
+            <div class="step-num">2</div>
+            <div class="step-text">
+                Cheque a caixa de Spam
+                <span>Caso não encontre na caixa de entrada em 5 minutos, olhe o lixo eletrônico.</span>
+            </div>
+        </div>
+        <div class="instruction-item">
+            <div class="step-num">3</div>
+            <div class="step-text">
+                Comece a estudar
+                <span>Clique no botão abaixo para ir direto para a sua área de aluno.</span>
+            </div>
+        </div>
+    </div>
+
+    <a href="aluno.html" class="btn-access">
+        COMEÇAR AGORA <i class="fas fa-arrow-right"></i>
+    </a>
+
+    <div class="support-link">
+        Ficou com alguma dúvida? <a href="#">Falar com suporte</a>
+    </div>
+</main>
+
+<footer style="margin: 40px 0; color: var(--text-dim); font-size: 12px;">
+    &copy; 2024 Inovar Digital - Maestro Console. Todos os direitos reservados.
+</footer>
+
+</body>
+</html>
