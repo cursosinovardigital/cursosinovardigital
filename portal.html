@@ -512,6 +512,39 @@ async function filtrarVendas() {
                     <td><span class="badge badge-success">${v.status}</span></td>
                 </tr>`).join('');
         }
+    };
+    
+    async function solicitarSaque() {
+        const saldoDisponivelStr = document.getElementById('fin-disponivel').innerText;
+        const saldoAtual = parseFloat(saldoDisponivelStr.replace('R$ ', '').replace(',', '.'));
+
+        if (saldoAtual <= 0) {
+            return alert("Você não possui saldo disponível para saque!");
+        }
+
+        const valorSaque = prompt(`Saldo disponível: R$ ${saldoAtual.toFixed(2)}\nDigite o valor que deseja sacar:`, saldoAtual.toFixed(2));
+        
+        if (!valorSaque || parseFloat(valorSaque) <= 0) return;
+        
+        const valorNumerico = parseFloat(valorSaque);
+
+        if (valorNumerico > saldoAtual) {
+            return alert("Valor solicitado é maior que o saldo disponível!");
+        }
+
+        // Simula o registro do saque no banco de dados
+        const { error } = await _supabase.from('saques').insert([{
+            valor: valorNumerico,
+            status: 'Pendente',
+            chave_pix: 'inovardigital91@gmail.com' // Exemplo usando seu e-mail
+        }]);
+
+        if (!error) {
+            alert("Solicitação de saque enviada com sucesso! O valor será processado em até 24h.");
+            carregarDadosDashboard(); // Atualiza o saldo na tela
+        } else {
+            alert("Erro ao processar saque. Verifique a tabela 'saques' no seu banco.");
+        }
     }
     
     function editProduct(id, nome, preco) {
