@@ -528,44 +528,34 @@
     }
 
 async function salvarProduto() {
-        // Puxando os elementos corretos do seu HTML
-        const inputNome = document.getElementById('ipt_nome');
-        const inputPreco = document.getElementById('ipt_preco');
-        const inputId = document.getElementById('edit-prod-id');
+    const inputNome = document.getElementById('ipt_nome');
+    const inputPreco = document.getElementById('ipt_preco');
+    const inputId = document.getElementById('edit-prod-id');
 
-        // Validação básica para o botão não falhar silenciosamente
-        if (!inputNome.value || !inputPreco.value) {
-            alert("Por favor, preencha o nome e o preço do produto.");
-            return;
-        }
-
-        const payload = { 
-            nome: inputNome.value, 
-            preco: parseFloat(inputPreco.value), 
-            status: 'Ativo' 
-        };
-
-        const id = inputId.value;
-
-        // Comando para o Supabase
-        const res = id ? 
-            await _supabase.from('produtos').update(payload).eq('id', id) : 
-            await _supabase.from('produtos').insert([payload]);
-
-        if (!res.error) { 
-            alert("Produto salvo com sucesso!"); 
-            closeProductModal(); 
-            // Limpa os campos para a próxima
-            inputNome.value = "";
-            inputPreco.value = "";
-            inputId.value = "";
-            // Recarrega a lista na tela
-            await carregarProdutos(); 
-        } else {
-            console.error("Erro Supabase:", res.error);
-            alert("Erro ao salvar: " + res.error.message);
-        }
+    if (!inputNome.value || !inputPreco.value) {
+        alert("Por favor, preencha o nome e o preço.");
+        return;
     }
+
+    const payload = { 
+        nome: inputNome.value, 
+        preco: parseFloat(inputPreco.value), 
+        status: 'Ativo' 
+    };
+
+    const id = inputId.value;
+    const res = id ? 
+        await _supabase.from('produtos').update(payload).eq('id', id) : 
+        await _supabase.from('produtos').insert([payload]);
+
+    if (!res.error) { 
+        alert("Produto salvo com sucesso!"); 
+        closeProductModal(); 
+        carregarProdutos(); // Para atualizar a lista na tela
+    } else {
+        alert("Erro ao salvar no banco. Verifique as permissões RLS.");
+    }
+}
 
     async function carregarDadosDashboard() {
         const { data: vendas, error } = await _supabase.from('vendas').select('*, produtos(nome)').order('created_at', { ascending: false });
