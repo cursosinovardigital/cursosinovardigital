@@ -134,36 +134,47 @@
     async function checarSeguranca() {
         const { data: { user } } = await _supabase.auth.getUser();
 
-        // 1. Bloqueio por falta de Login
         if (!user) {
             window.location.href = 'index.html';
             return;
         }
 
-        // 2. Reconhecimento de Usuário
         document.getElementById('user-display-name').innerText = user.user_metadata.full_name || user.email.split('@')[0];
-
-        // 3. Bloqueio por falta de Compra (Descomente abaixo quando as matrículas estiverem prontas)
-        /*
-        const { data: matricula } = await _supabase.from('matriculas').select('*').eq('user_id', user.id).eq('status', 'ativo');
-        if (!matricula || matricula.length === 0) {
-             document.getElementById('main-content').innerHTML = `
-                <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:50px;">
-                    <i class="fas fa-lock fa-5x" style="color:var(--orange); margin-bottom:30px; filter: drop-shadow(0 0 20px rgba(255,102,0,0.4))"></i>
-                    <h1 style="font-size:38px; font-weight:900;">Acesso Bloqueado</h1>
-                    <p style="color:var(--text-dim); max-width:500px; line-height:1.6; margin-top:10px;">Você ainda não possui uma licença ativa para este curso. Adquira no marketplace para liberar seu aprendizado.</p>
-                    <button onclick="window.location.href='portal.html'" style="background:var(--orange); color:white; border:none; padding:18px 40px; border-radius:15px; font-weight:900; cursor:pointer; margin-top:30px; letter-spacing:1px;">IR PARA O MARKETPLACE</button>
-                </div>
-             `;
-             return;
-        }
-        */
-
-        // Se estiver tudo OK, inicia o conteúdo
-        init();
+        
+        // Inicia o carregamento do conteúdo após passar na segurança
+        carregarConteudoCurso();
     }
 
-    async function init() {
+    async function carregarConteudoCurso() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const cursoId = urlParams.get('id');
+
+        // Se não tiver ID na URL, ele carrega a lista geral de aulas
+        if (!cursoId) {
+            initGeral();
+            return;
+        }
+
+        const { data: curso, error } = await _supabase
+            .from('aulas')
+            .select('*')
+            .eq('id', cursoId)
+            .single();
+
+        if (error || !curso) {
+            console.error("Curso não encontrado");
+            initGeral(); // Fallback para carregar a lista
+            return;
+        }
+
+        // Atualiza o player e as informações com o curso vindo do link
+        assistir(curso.video_url, curso.titulo, curso.descricao, curso.categoria, curso.id);
+        
+        // Carrega a barra lateral também
+        initGeral();
+    }
+
+    async function initGeral() {
         const { data: aulas, error } = await _supabase
             .from('aulas')
             .select('*')
@@ -178,8 +189,6 @@
             }, {});
 
             renderizarModulos(grupos);
-            const primeiraAula = aulas[0];
-            assistir(primeiraAula.video_url, primeiraAula.titulo, primeiraAula.descricao, primeiraAula.categoria, primeiraAula.id);
         } else {
             document.getElementById('module-container').innerHTML = `<p style="padding:20px; color:var(--text-dim); font-size:12px;">Nenhuma aula cadastrada ainda.</p>`;
         }
@@ -196,9 +205,9 @@
                         <span>${modNome}</span>
                         <i class="fas fa-chevron-down"></i>
                     </div>
-                    <div class="module-lessons" id="mod-${index}">
+                    <div class="module-lessons" id="mod-${index}" style="display: block;">
                         ${aulas.map(a => `
-                            <div class="lesson-item" id="item-${a.id}" onclick="assistir('${a.video_url}', '${a.titulo}', '${a.descricao}', '${a.categoria}', ${a.id})">
+                            <div class="lesson-item" id="item-${a.id}" onclick="assistir('${a.video_url}', '${a.titulo}', '${a.descricao}', '${a.categoria}', '${a.id}')">
                                 <div class="lesson-icon"><i class="fas fa-play-circle"></i></div>
                                 <div class="lesson-txt">
                                     <div class="lesson-name">${a.titulo}</div>
@@ -220,69 +229,28 @@
 
     function assistir(url, titulo, desc, cat, id) {
         const player = document.getElementById('main-player');
-        player.src = url;
-        player.play();
+        
+        // Se for link do YouTube, converte para embed
+        if (url.includes('youtube.com/watch')) {
+            url = url.replace('watch?v=', 'embed/');
+        }
+
+        // Verifica se é um iframe (YouTube/Vimeo) ou vídeo direto (.mp4)
+        if (url.includes('youtube') || url.includes('vimeo')) {
+            player.parentElement.innerHTML = `<iframe id="main-player" width="100%" height="100%" src="${url}" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+        } else {
+            player.src = url;
+            player.play();
+        }
+
         document.getElementById('view-title').innerText = titulo;
         document.getElementById('view-desc').innerText = desc || 'Sem descrição.';
         document.getElementById('view-cat').innerText = cat || 'Geral';
+        
         document.querySelectorAll('.lesson-item').forEach(i => i.classList.remove('active'));
         const activeItem = document.getElementById('item-' + id);
         if(activeItem) activeItem.classList.add('active');
     }
 
-    // Inicia pela checagem de segurança
-
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-<script>
-    const SUPABASE_URL = 'https://onsbuazkqfehkudhladt.supabase.co';
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9uc2J1YXprcWZlaGt1ZGhsYWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzNTI5OTgsImV4cCI6MjA5MzkyODk5OH0.ZypL6LHbPC_z971EDCTh6pVoA7g4qM6hWSWfWVO9a-M';
-    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-    async function carregarConteudoCurso() {
-        // 1. Pega o ID do curso que veio lá da vitrine (pela URL)
-        const urlParams = new URLSearchParams(window.location.search);
-        const cursoId = urlParams.get('id');
-
-        if (!cursoId) {
-            console.error("ID do curso não encontrado na URL");
-            return;
-        }
-
-        // 2. Busca os detalhes desse curso no banco (tabela aulas)
-        const { data: curso, error } = await _supabase
-            .from('aulas')
-            .select('*')
-            .eq('id', cursoId)
-            .single();
-
-        if (error || !curso) {
-            alert("Curso não encontrado!");
-            return;
-        }
-
-        // 3. Atualiza o título e o vídeo na tela do aluno
-        // (Estou usando os IDs padrões que costumamos usar no visual)
-        const tituloElemento = document.getElementById('aula-titulo-principal');
-        const videoContainer = document.getElementById('video-placeholder');
-
-        if (tituloElemento) tituloElemento.innerText = curso.titulo;
-        
-        // Se você tiver uma coluna 'video_url' na tabela 'aulas', aqui ele troca o vídeo:
-        if (videoContainer && curso.video_url) {
-            videoContainer.innerHTML = `<iframe width="100%" height="100%" src="${curso.video_url}" frameborder="0" allowfullscreen></iframe>`;
-        }
-    }
-
-    // Carrega tudo assim que a página abrir
-    window.onload = async function() {
-        // 1. Primeiro garante que a segurança rode
-        if (typeof checarSeguranca === "function") {
-            await checarSeguranca(); 
-        }
-        // 2. Depois carrega o conteúdo do curso dinâmico
-        carregarConteudoCurso(); 
-    };
+    window.onload = checarSeguranca;
 </script>
-
-</body>
-</html>
