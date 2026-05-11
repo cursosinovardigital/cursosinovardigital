@@ -328,9 +328,67 @@
                     <a href="#" style="color:var(--purple-kiwi); font-weight:600; text-decoration:none; font-size:14px;">Alterar minha conta para CNPJ</a>
                     <button class="btn-primary" onclick="solicitarSaque()">Efetuar saque</button>
                 </div>
-                <div class="sub-nav"><div class="sub-nav-item active">Saques</div><div class="sub-nav-item">Dados bancários</div></div>
-                <div class="table-container"><table><thead><tr><th>DATA</th><th>VALOR</th><th>STATUS</th></tr></thead><tbody id="lista-saques-body"><tr><td colspan="3" style="text-align:center; padding:50px; color:#A0AEC0;">Exibindo 0 de 0 páginas</td></tr></tbody></table></div>
-            </section>
+<div class="sub-nav" id="financeiroNav">
+    <div class="sub-nav-item active" onclick="switchFinTab('saques', this)">Saques</div>
+    <div class="sub-nav-item" onclick="switchFinTab('banco', this)">Dados bancários</div>
+</div>
+
+<div id="fin-saques" class="fin-tab-content">
+    <div class="table-container">
+        <table>
+            <thead><tr><th>DATA</th><th>VALOR</th><th>STATUS</th></tr></thead>
+            <tbody id="lista-saques-body">
+                <tr><td colspan="3" style="text-align:center; padding:50px; color:#A0AEC0;">Exibindo 0 de 0 páginas</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="fin-banco" class="fin-tab-content" style="display:none;">
+    <div style="background:#FFF; border:1px solid var(--border); border-radius:12px; padding:30px;">
+        <h4 style="margin-top:0">Configurações de Recebimento</h4>
+        <div style="margin-bottom:20px;">
+            <label style="display:block; font-size:12px; font-weight:700; color:#718096; margin-bottom:10px;">TIPO DE RECEBIMENTO</label>
+            <select id="tipo_recebimento" class="search-input" style="padding:10px; width: 100%;" onchange="toggleCamposBanco()">
+                <option value="pix">Chave Pix</option>
+                <option value="conta">Conta Bancária (TED/DOC)</option>
+            </select>
+        </div>
+
+        <div id="campos-pix">
+            <label style="display:block; font-size:12px; font-weight:700; color:#718096; margin-bottom:5px;">CHAVE PIX</label>
+            <input type="text" id="chave_pix_input" class="search-input" style="padding:10px; margin-bottom:15px;" placeholder="CPF, E-mail ou Celular">
+        </div>
+
+        <div id="campos-conta" style="display:none;">
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-bottom:15px;">
+                <div>
+                    <label style="display:block; font-size:12px; font-weight:700; color:#718096;">BANCO</label>
+                    <input type="text" id="banco_nome" class="search-input" style="padding:10px;" placeholder="Ex: Itaú">
+                </div>
+                <div>
+                    <label style="display:block; font-size:12px; font-weight:700; color:#718096;">TIPO DE CONTA</label>
+                    <select id="tipo_conta" class="search-input" style="padding:10px;">
+                        <option value="corrente">Conta Corrente</option>
+                        <option value="poupanca">Conta Poupança</option>
+                    </select>
+                </div>
+            </div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-bottom:15px;">
+                <div>
+                    <label style="display:block; font-size:12px; font-weight:700; color:#718096;">AGÊNCIA</label>
+                    <input type="text" id="agencia_num" class="search-input" style="padding:10px;">
+                </div>
+                <div>
+                    <label style="display:block; font-size:12px; font-weight:700; color:#718096;">CONTA (COM DÍGITO)</label>
+                    <input type="text" id="conta_num" class="search-input" style="padding:10px;">
+                </div>
+            </div>
+        </div>
+
+        <button class="btn-primary" style="width: 100%; margin-top: 10px;" onclick="salvarDadosBancarios()">Salvar Dados Bancários</button>
+    </div>
+</div>
 
             <section id="aba-relat" class="aba-section">
                 <div id="relat-main-list">
