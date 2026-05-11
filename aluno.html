@@ -145,53 +145,41 @@
         carregarConteudoCurso();
     }
 
-    async function carregarConteudoCurso() {
+async function carregarConteudoCurso() {
         const urlParams = new URLSearchParams(window.location.search);
         const cursoId = urlParams.get('id');
 
-        // Se não tiver ID na URL, ele carrega a lista geral de aulas
-        if (!cursoId) {
-            initGeral();
-            return;
-        }
-
-        const { data: curso, error } = await _supabase
-            .from('aulas')
-            .select('*')
-            .eq('id', cursoId)
-            .single();
-
-        if (error || !curso) {
-            console.error("Curso não encontrado");
-            initGeral(); // Fallback para carregar a lista
-            return;
-        }
-
-        // Atualiza o player e as informações com o curso vindo do link
-        assistir(curso.video_url, curso.titulo, curso.descricao, curso.categoria, curso.id);
-        
-        // Carrega a barra lateral também
-        initGeral();
-    }
-
-    async function initGeral() {
-        const { data: aulas, error } = await _supabase
+        // 1. Busca todas as aulas para montar a barra lateral primeiro
+        const { data: aulas, error: errAulas } = await _supabase
             .from('aulas')
             .select('*')
             .order('created_at', { ascending: true });
 
-        if (aulas && aulas.length > 0) {
-            const grupos = aulas.reduce((acc, aula) => {
-                const modNome = aula.modulo || 'Módulo Geral';
-                if (!acc[modNome]) acc[modNome] = [];
-                acc[modNome].push(aula);
-                return acc;
-            }, {});
-
-            renderizarModulos(grupos);
-        } else {
-            document.getElementById('module-container').innerHTML = `<p style="padding:20px; color:var(--text-dim); font-size:12px;">Nenhuma aula cadastrada ainda.</p>`;
+        if (errAulas || !aulas || aulas.length === 0) {
+            document.getElementById('module-container').innerHTML = `<p style="padding:20px; color:var(--text-dim); font-size:12px;">Nenhuma aula liberada ainda.</p>`;
+            return;
         }
+
+        // 2. Organiza os módulos na lateral
+        const grupos = aulas.reduce((acc, aula) => {
+            const modNome = aula.modulo || 'Módulo Geral';
+            if (!acc[modNome]) acc[modNome] = [];
+            acc[modNome].push(aula);
+            return acc;
+        }, {});
+        renderizarModulos(grupos);
+
+        // 3. Decide qual aula dar o "Play" inicial
+        let aulaParaIniciar = aulas[0]; // Padrão: primeira aula da lista
+
+        if (cursoId) {
+            // Se veio um ID específico (do checkout), tenta achar essa aula
+            const aulaEspecifica = aulas.find(a => a.id == cursoId);
+            if (aulaEspecifica) aulaParaIniciar = aulaEspecifica;
+        }
+
+        // 4. Dá o play na aula selecionada
+        assistir(aulaParaIniciar.video_url, aulaParaIniciar.titulo, aulaParaIniciar.descricao, aulaParaIniciar.categoria, aulaParaIniciar.id);
     }
 
     function renderizarModulos(grupos) {
