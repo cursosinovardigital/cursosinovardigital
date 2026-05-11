@@ -705,44 +705,48 @@ async function filtrarVendas() {
         });
     }
     
-    async function carregarMarketplaceReal() {
-        const { data: aulas, error } = await _supabase
-            .from('aulas')
-            .select('*')
-            .order('created_at', { ascending: false });
+async function carregarMarketplaceReal() {
+    const { data: aulas } = await _supabase.from('aulas').select('*').order('created_at', { ascending: false });
+    const { data: prods } = await _supabase.from('produtos').select('*').order('created_at', { ascending: false });
 
-        const grid = document.getElementById('market-full-grid');
-        if (!grid) return;
+    const grid = document.getElementById('market-full-grid');
+    if (!grid) return;
 
-        // Card de exemplo fixo (opcional, para não ficar vazio se não tiver nada no banco)
-        const exemplo = `
-            <div class="market-card">
-                <div class="market-thumb"><img src="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?auto=format&fit=crop&w=400&q=80"></div>
-                <div class="market-info">
-                    <div class="market-title">Curso de Violão do Zero com Víctor</div>
-                    <div class="market-commission">Até R$ 147,00 de comissão</div>
-                </div>
-            </div>`;
-
-        if (error || !aulas || aulas.length === 0) {
-            grid.innerHTML = exemplo;
-            return;
-        }
-
-        // Renderiza as aulas reais do Supabase
-        grid.innerHTML = exemplo + aulas.map(a => `
-            <div class="market-card" onclick="window.location.href='aluno.html?id=${a.id}'" style="cursor:pointer">
-                <div class="market-thumb">
-                    <img src="${a.capa_url || 'https://via.placeholder.com/400x225?text=Sem+Capa'}" onerror="this.src='https://via.placeholder.com/400x225?text=Erro+na+Capa'">
-                </div>
-                <div class="market-info">
-                    <div style="font-size:10px; color:var(--orange); font-weight:900; text-transform: uppercase; margin-bottom: 5px;">${a.categoria || 'Curso'}</div>
-                    <div class="market-title">${a.titulo}</div>
-                    <div class="market-commission">Acesso Liberado no Maestro</div>
-                </div>
+    const exemplo = `
+        <div class="market-card">
+            <div class="market-thumb"><img src="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?auto=format&fit=crop&w=400&q=80"></div>
+            <div class="market-info">
+                <div class="market-title">Curso de Violão do Zero com Víctor</div>
+                <div class="market-commission">Até R$ 147,00 de comissão</div>
             </div>
-        `).join('');
-    }
+        </div>`;
+
+    let htmlAulas = (aulas || []).map(a => `
+        <div class="market-card" onclick="window.location.href='aluno.html?id=${a.id}'" style="cursor:pointer">
+            <div class="market-thumb">
+                <img src="${a.capa_url || 'https://via.placeholder.com/400x225?text=Sem+Capa'}" onerror="this.src='https://via.placeholder.com/400x225?text=Erro+na+Capa'">
+            </div>
+            <div class="market-info">
+                <div style="font-size:10px; color:var(--orange); font-weight:900; text-transform: uppercase; margin-bottom: 5px;">${a.categoria || 'Curso'}</div>
+                <div class="market-title">${a.titulo}</div>
+                <div class="market-commission">Acesso Liberado no Maestro</div>
+            </div>
+        </div>`).join('');
+
+    let htmlProdutos = (prods || []).map(p => `
+        <div class="market-card" onclick="window.location.href='pay.html?id=${p.id}'" style="cursor:pointer">
+            <div class="market-thumb">
+                <img src="https://via.placeholder.com/400x225?text=${p.nome.replace(/ /g, '+')}" onerror="this.src='https://via.placeholder.com/400x225?text=Produto'">
+            </div>
+            <div class="market-info">
+                <div style="font-size:10px; color:#5D5FEF; font-weight:900; text-transform: uppercase; margin-bottom: 5px;">PRODUTO DIGITAL</div>
+                <div class="market-title">${p.nome}</div>
+                <div class="market-commission">Venda por R$ ${p.preco.toFixed(2).replace('.', ',')}</div>
+            </div>
+        </div>`).join('');
+
+    grid.innerHTML = exemplo + htmlAulas + htmlProdutos;
+}
     
 async function carregarAreasMembros() {
     const { data: aulas, error } = await _supabase
