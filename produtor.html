@@ -26,9 +26,7 @@
 
         .container { max-width: 1500px; margin: 0 auto; padding: 25px 40px; display: grid; grid-template-columns: 1fr 380px; gap: 30px; }
 
-        /* COLUNA DA ESQUERDA: STUDIO */
         .main-content { display: flex; flex-direction: column; gap: 25px; }
-        
         .studio-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 25px; }
         
         .drop-zone { 
@@ -39,7 +37,8 @@
         .drop-zone:hover { border-color: var(--orange); }
         .drop-zone video { width: 100%; height: 100%; object-fit: cover; }
 
-        .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+        /* AJUSTE PARA 3 INPUTS NA LINHA */
+        .input-row { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 15px; margin-bottom: 15px; }
         
         .form-input { 
             width: 100%; background: #161B22; border: 1px solid var(--border); 
@@ -47,13 +46,10 @@
         }
         .form-input:focus { border-color: var(--orange); }
 
-        /* COLUNA DA DIREITA: CONFIGS & VENDAS */
         .sidebar { display: flex; flex-direction: column; gap: 20px; }
-        
         .side-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 20px; }
         .side-title { font-size: 11px; font-weight: 900; text-transform: uppercase; color: var(--orange); margin-bottom: 15px; display: block; letter-spacing: 1px; }
 
-        /* FERRAMENTAS COMPACTAS */
         .tool-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 13px; }
         .switch { position: relative; width: 40px; height: 20px; }
         .switch input { opacity: 0; width: 0; height: 0; }
@@ -62,7 +58,6 @@
         input:checked + .slider { background: var(--orange); }
         input:checked + .slider:before { transform: translateX(20px); }
 
-        /* CAPA UPLOAD */
         .capa-box { 
             border: 1px dashed var(--border); border-radius: 12px; height: 140px; 
             display: flex; flex-direction: column; align-items: center; justify-content: center; 
@@ -70,7 +65,6 @@
         }
         .capa-box img { position: absolute; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
 
-        /* GRADE 3x3 REFINADA */
         .grid-section { grid-column: 1 / -1; margin-top: 20px; }
         .content-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
         .content-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px; overflow: hidden; position: relative; }
@@ -86,6 +80,7 @@
 
         .card-info { padding: 15px; }
         .card-title { font-size: 15px; font-weight: 800; margin-bottom: 5px; }
+        .card-mod { font-size: 9px; font-weight: 900; color: var(--orange); text-transform: uppercase; margin-bottom: 5px; display: block; }
         .card-desc { font-size: 12px; color: var(--text-dim); height: 36px; overflow: hidden; }
 
         .btn-pub { 
@@ -121,6 +116,7 @@
 
             <div class="input-row">
                 <input type="text" id="ipt-titulo" class="form-input" placeholder="Título da aula">
+                <input type="text" id="ipt-modulo" class="form-input" placeholder="Nome do Módulo">
                 <select id="ipt-cat" class="form-input">
                     <option value="Música">Música</option>
                     <option value="Marketing">Marketing</option>
@@ -147,18 +143,9 @@
 
         <div class="side-card">
             <span class="side-title">Estratégias de Venda</span>
-            <div class="tool-item">
-                <span>Order Bump</span>
-                <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
-            </div>
-            <div class="tool-item">
-                <span>Recuperação Ativa</span>
-                <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
-            </div>
-            <div class="tool-item">
-                <span>Upsell 1-Click</span>
-                <label class="switch"><input type="checkbox"><span class="slider"></span></label>
-            </div>
+            <div class="tool-item"><span>Order Bump</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+            <div class="tool-item"><span>Recuperação Ativa</span><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+            <div class="tool-item"><span>Upsell 1-Click</span><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
         </div>
     </div>
 
@@ -166,17 +153,13 @@
         <span class="side-title" style="margin-bottom: 20px;">Grade de Conteúdo Atual</span>
         <div class="content-grid" id="main-grid">
             <div class="content-card" id="demo-card">
-                <button class="btn-del" onclick="document.getElementById('demo-card').remove()">
-                    <i class="fas fa-trash"></i>
-                </button>
+                <button class="btn-del" onclick="document.getElementById('demo-card').remove()"><i class="fas fa-trash"></i></button>
                 <div class="card-thumb">
-                    <img src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=1000&auto=format&fit=crop" alt="Demo">
-                    <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%)">
-                        <i class="fas fa-play-circle fa-2x" style="color:var(--orange)"></i>
-                    </div>
+                    <img src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=1000&auto=format&fit=crop">
+                    <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%)"><i class="fas fa-play-circle fa-2x" style="color:var(--orange)"></i></div>
                 </div>
                 <div class="card-info">
-                    <span style="font-size:9px; color:var(--orange); font-weight:900;">DEMO</span>
+                    <span class="card-mod">Módulo Exemplo</span>
                     <div class="card-title">Aula Inaugural: Boas-vindas</div>
                     <div class="card-desc">Este é um exemplo de como suas aulas aparecerão. Você pode excluir este card.</div>
                 </div>
@@ -212,11 +195,12 @@
         const vFile = document.getElementById('video-file').files[0];
         const cFile = document.getElementById('capa-file').files[0];
         const titulo = document.getElementById('ipt-titulo').value;
+        const modulo = document.getElementById('ipt-modulo').value;
         const desc = document.getElementById('ipt-desc').value;
         const cat = document.getElementById('ipt-cat').value;
         const btn = document.getElementById('btn-master-pub');
 
-        if(!vFile || !titulo || !cFile) return alert("Por favor, preencha Vídeo, Capa e Título.");
+        if(!vFile || !titulo || !cFile || !modulo) return alert("Por favor, preencha Vídeo, Capa, Título e Módulo.");
 
         btn.disabled = true;
         btn.innerText = "Publicando...";
@@ -231,7 +215,7 @@
             const { data: cUrl } = _supabase.storage.from('cursos').getPublicUrl(cName);
 
             const { error } = await _supabase.from('aulas').insert([{
-                titulo: titulo, descricao: desc, video_url: vUrl.publicUrl, capa_url: cUrl.publicUrl, categoria: cat
+                titulo: titulo, modulo: modulo, descricao: desc, video_url: vUrl.publicUrl, capa_url: cUrl.publicUrl, categoria: cat
             }]);
 
             if(error) throw error;
@@ -252,7 +236,7 @@
                         <button class="btn-del" onclick="deletar(${a.id})"><i class="fas fa-trash"></i></button>
                         <div class="card-thumb"><img src="${a.capa_url}"></div>
                         <div class="card-info">
-                            <span style="font-size:9px; color:var(--orange); font-weight:900;">${a.categoria}</span>
+                            <span class="card-mod">${a.modulo}</span>
                             <div class="card-title">${a.titulo}</div>
                             <div class="card-desc">${a.descricao}</div>
                         </div>
