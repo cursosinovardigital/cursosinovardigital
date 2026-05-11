@@ -527,11 +527,44 @@
         document.getElementById('product-list-body').innerHTML = data.map(p => `<tr><td style="font-weight:700; color:var(--purple-kiwi)">${p.nome}</td><td>R$ ${p.preco.toFixed(2).replace('.',',')}</td><td><span class="badge badge-success">Ativo</span></td><td style="text-align:right"><button class="btn-primary" style="padding: 5px 10px; font-size: 11px; background: var(--green); margin-right:10px;" onclick="simularVenda('${p.id}', ${p.preco})">Venda</button><i class="fas fa-edit" style="cursor:pointer" onclick="editProduct('${p.id}', '${p.nome}', ${p.preco})"></i></td></tr>`).join('');
     }
 
-    async function salvarProduto() {
-        const id = document.getElementById('edit-prod-id').value;
-        const payload = { nome: document.getElementById('ipt_nome').value, preco: parseFloat(document.getElementById('ipt_preco').value), status: 'Ativo' };
-        const res = id ? await _supabase.from('produtos').update(payload).eq('id', id) : await _supabase.from('produtos').insert([payload]);
-        if(!res.error) { alert("Produto salvo com sucesso!"); closeProductModal(); carregarProdutos(); }
+async function salvarProduto() {
+        // Puxando os elementos corretos do seu HTML
+        const inputNome = document.getElementById('ipt_nome');
+        const inputPreco = document.getElementById('ipt_preco');
+        const inputId = document.getElementById('edit-prod-id');
+
+        // Validação básica para o botão não falhar silenciosamente
+        if (!inputNome.value || !inputPreco.value) {
+            alert("Por favor, preencha o nome e o preço do produto.");
+            return;
+        }
+
+        const payload = { 
+            nome: inputNome.value, 
+            preco: parseFloat(inputPreco.value), 
+            status: 'Ativo' 
+        };
+
+        const id = inputId.value;
+
+        // Comando para o Supabase
+        const res = id ? 
+            await _supabase.from('produtos').update(payload).eq('id', id) : 
+            await _supabase.from('produtos').insert([payload]);
+
+        if (!res.error) { 
+            alert("Produto salvo com sucesso!"); 
+            closeProductModal(); 
+            // Limpa os campos para a próxima
+            inputNome.value = "";
+            inputPreco.value = "";
+            inputId.value = "";
+            // Recarrega a lista na tela
+            await carregarProdutos(); 
+        } else {
+            console.error("Erro Supabase:", res.error);
+            alert("Erro ao salvar: " + res.error.message);
+        }
     }
 
     async function carregarDadosDashboard() {
