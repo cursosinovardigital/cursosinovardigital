@@ -444,12 +444,41 @@
         document.getElementById('product-list-body').innerHTML = data.map(p => `<tr><td style="font-weight:700; color:var(--purple-kiwi)">${p.nome}</td><td>R$ ${p.preco.toFixed(2).replace('.',',')}</td><td><span class="badge badge-success">Ativo</span></td><td style="text-align:right"><button class="btn-primary" style="padding: 5px 10px; font-size: 11px; background: var(--green); margin-right:10px;" onclick="simularVenda('${p.id}', ${p.preco})">Venda</button><i class="fas fa-edit" style="cursor:pointer" onclick="editProduct('${p.id}', '${p.nome}', ${p.preco})"></i></td></tr>`).join('');
     }
 
-    async function salvarProduto() {
-        const id = document.getElementById('edit-prod-id').value;
-        const payload = { nome: document.getElementById('ipt_nome').value, preco: parseFloat(document.getElementById('ipt_preco').value), status: 'Ativo' };
-        const res = id ? await _supabase.from('produtos').update(payload).eq('id', id) : await _supabase.from('produtos').insert([payload]);
-        if(!res.error) { closeProductModal(); carregarProdutos(); }
+async function salvarProduto() {
+    // Pegando os valores dos inputs do seu Modal (Print 2)
+    const id = document.getElementById('edit-prod-id').value;
+    const nome = document.getElementById('ipt_nome').value;
+    const preco = parseFloat(document.getElementById('ipt_preco').value);
+
+    if (!nome || !preco) {
+        alert("Preencha o nome e o valor do produto!");
+        return;
     }
+
+    const payload = { 
+        nome: nome, 
+        preco: preco, 
+        status: 'Ativo' 
+    };
+
+    let res;
+    if (id) {
+        // Se já tem ID, ele atualiza o produto existente
+        res = await _supabase.from('produtos').update(payload).eq('id', id);
+    } else {
+        // Se não tem ID, ele cria um novo
+        res = await _supabase.from('produtos').insert([payload]);
+    }
+
+    if (res.error) {
+        console.error("Erro ao salvar:", res.error);
+        alert("Erro no Supabase: " + res.error.message);
+    } else {
+        alert("Produto salvo com sucesso!");
+        closeProductModal(); // Fecha o modal
+        carregarProdutos();  // Atualiza a lista na tela
+    }
+}
 
     function editProduct(id, nome, preco) {
         document.getElementById('edit-prod-id').value = id;
