@@ -545,6 +545,7 @@ async function salvarProduto() {
     const inputNome = document.getElementById('ipt_nome');
     const inputPreco = document.getElementById('ipt_preco');
     const inputId = document.getElementById('edit-prod-id');
+    const inputCapa = document.getElementById('edit-prod-capa'); // 1. Captura o novo campo
 
     if (!inputNome.value || !inputPreco.value) {
         alert("Por favor, preencha o nome e o preço.");
@@ -554,6 +555,7 @@ async function salvarProduto() {
     const payload = { 
         nome: inputNome.value, 
         preco: parseFloat(inputPreco.value.replace(',', '.')), 
+        capa_url: inputCapa.value || null, // 2. Adiciona a URL no payload (envia null se estiver vazio)
         status: 'Ativo' 
     };
 
@@ -565,12 +567,14 @@ async function salvarProduto() {
     if (!res.error) { 
         alert("Produto salvo com sucesso!"); 
         closeProductModal(); 
-        carregarProdutos(); 
+        carregarProdutos();
+        // Opcional: Atualiza o marketplace se a função existir na tela
+        if (typeof carregarMarketplaceReal === 'function') carregarMarketplaceReal();
     } else {
-        alert("Erro ao salvar no banco. Verifique as permissões RLS.");
+        alert("Erro ao salvar no banco. Verifique se a coluna 'capa_url' existe na tabela 'produtos'.");
     }
 }
-
+    
 async function deleteProduct(id) {
     if (confirm("Tem certeza que deseja excluir este produto?")) {
         const { error } = await _supabase.from('produtos').delete().eq('id', id);
