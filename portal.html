@@ -489,51 +489,30 @@
         await _supabase.from('vendas').insert([{ produto_id: prodId, valor_total: preco, comissao_maestro: comissao, valor_liquido: liquido, status: 'Paga', metodo_pagamento: 'Pix' }]);
         alert("Simulação de venda concluída!");
         carregarDadosDashboard();
+}
+
+    async function filtrarVendas() {
+        const statusFiltro = document.getElementById('filtro-status')?.value || 'Pagas';
+        const { data: vendas, error } = await _supabase
+            .from('vendas')
+            .select('*, produtos(nome)')
+            .eq('status', statusFiltro)
+            .order('created_at', { ascending: false });
+
+        if(error) return;
+
+        const tbodyVendas = document.getElementById('sales-list-body');
+        if (tbodyVendas) {
+            tbodyVendas.innerHTML = vendas.map(v => `
+                <tr>
+                    <td style="font-weight:700; color:var(--orange)">#${v.id.toString().slice(0,8)}</td>
+                    <td>${v.produtos?.nome || 'Produto'}</td>
+                    <td style="font-weight:700">R$ ${v.valor_total.toFixed(2).replace('.', ',')}</td>
+                    <td>${new Date(v.created_at).toLocaleDateString('pt-BR')}</td>
+                    <td><span class="badge badge-success">${v.status}</span></td>
+                </tr>`).join('');
+        }
     }
-        async function filtrarVendas() {
-
-const statusFiltro = document.getElementById('filtro-status')?.value || 'Pagas';
-
-const { data: vendas, error } = await _supabase
-
-.from('vendas')
-
-.select('*, produtos(nome)')
-
-.eq('status', statusFiltro)
-
-.order('created_at', { ascending: false });
-
-
-
-if(error) return;
-
-
-
-const tbodyVendas = document.getElementById('sales-list-body');
-
-if (tbodyVendas) {
-
-tbodyVendas.innerHTML = vendas.map(v => `
-
-<tr>
-
-<td style="font-weight:700; color:var(--orange)">#${v.id.toString().slice(0,8)}</td>
-
-<td>${v.produtos?.nome || 'Produto'}</td>
-
-<td style="font-weight:700">R$ ${v.valor_total.toFixed(2).replace('.', ',')}</td>
-
-<td>${new Date(v.created_at).toLocaleDateString('pt-BR')}</td>
-
-<td><span class="badge badge-success">${v.status}</span></td>
-
-</tr>).join('');`
-
-}
-
-}
-
     function editProduct(id, nome, preco) {
         document.getElementById('edit-prod-id').value = id;
         document.getElementById('ipt_nome').value = nome;
