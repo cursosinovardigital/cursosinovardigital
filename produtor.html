@@ -3,149 +3,183 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maestro Hub | Modo Produtor</title>
+    <title>Inovar Digital | Estúdio Maestro</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { 
-            --orange: #FF6600; --deep-black: #0A0C0E; --card-bg: #161B22; 
-            --white: #FFFFFF; --text-dim: #8B949E; --border: #30363D;
-            --purple-kiwi: #5D5FEF; --glow: rgba(255, 102, 0, 0.3);
+            --orange: #FF6600; --deep-black: #050608; --card-bg: #0F1216; 
+            --white: #FFFFFF; --text-dim: #94A3B8; --border: #1E293B;
+            --glow: rgba(255, 102, 0, 0.4); --red: #EF4444;
         }
 
-        * { box-sizing: border-box; font-family: 'Inter', sans-serif; transition: 0.3s; }
-        body { margin: 0; background: var(--deep-black); color: var(--white); overflow-x: hidden; }
+        * { box-sizing: border-box; font-family: 'Inter', sans-serif; transition: 0.2s ease; }
+        body { margin: 0; background: var(--deep-black); color: var(--white); overflow-x: hidden; font-size: 14px; }
 
-        /* HEADER DARK PREMIUM */
         header { 
-            height: 80px; background: rgba(10, 12, 14, 0.8); backdrop-filter: blur(10px);
+            height: 65px; background: rgba(5, 6, 8, 0.95); backdrop-filter: blur(15px);
             border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; 
-            align-items: center; padding: 0 50px; position: sticky; top: 0; z-index: 100;
+            align-items: center; padding: 0 40px; position: sticky; top: 0; z-index: 1000;
         }
-        .logo { font-size: 22px; font-weight: 900; color: var(--white); text-decoration: none; display: flex; align-items: center; gap: 12px; }
-        .logo span { color: var(--orange); text-shadow: 0 0 15px var(--glow); }
+        .logo { font-size: 18px; font-weight: 900; letter-spacing: -1px; }
+        .logo span { color: var(--orange); }
 
-        .container { max-width: 1300px; margin: 40px auto; padding: 0 20px; padding-bottom: 100px; }
+        .container { max-width: 1500px; margin: 0 auto; padding: 25px 40px; display: grid; grid-template-columns: 1fr 380px; gap: 30px; }
 
-        /* ÁREA DE UPLOAD GLASS */
-        .upload-section { 
-            background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; 
-            padding: 40px; margin-bottom: 50px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px;
+        /* COLUNA DA ESQUERDA: STUDIO */
+        .main-content { display: flex; flex-direction: column; gap: 25px; }
+        
+        .studio-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 25px; }
+        
+        .drop-zone { 
+            background: #000; border: 2px dashed var(--border); border-radius: 15px; 
+            aspect-ratio: 16/7; display: flex; flex-direction: column; align-items: center; 
+            justify-content: center; cursor: pointer; margin-bottom: 20px; overflow: hidden;
         }
-        .section-title { font-size: 24px; font-weight: 800; margin-bottom: 25px; display: flex; align-items: center; gap: 15px; }
-        .section-title i { color: var(--orange); }
+        .drop-zone:hover { border-color: var(--orange); }
+        .drop-zone video { width: 100%; height: 100%; object-fit: cover; }
 
-        .video-drop-zone { 
-            background: #000; border: 2px dashed var(--orange); border-radius: 15px; 
-            aspect-ratio: 16/9; display: flex; flex-direction: column; align-items: center; 
-            justify-content: center; position: relative; overflow: hidden; cursor: pointer;
-        }
-        .video-drop-zone:hover { background: rgba(255, 102, 0, 0.05); }
-        .video-drop-zone video { width: 100%; height: 100%; object-fit: cover; }
-
-        /* INPUTS PREMIUM */
-        .form-group { margin-bottom: 20px; }
-        .form-group label { font-size: 11px; font-weight: 800; color: var(--text-dim); text-transform: uppercase; margin-bottom: 8px; display: block; }
+        .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+        
         .form-input { 
-            width: 100%; background: #0D1117; border: 1px solid var(--border); 
-            border-radius: 10px; padding: 15px; color: white; outline: none; font-size: 15px;
+            width: 100%; background: #161B22; border: 1px solid var(--border); 
+            border-radius: 10px; padding: 12px 15px; color: white; outline: none; font-size: 14px;
         }
-        .form-input:focus { border-color: var(--orange); box-shadow: 0 0 10px var(--glow); }
+        .form-input:focus { border-color: var(--orange); }
+
+        /* COLUNA DA DIREITA: CONFIGS & VENDAS */
+        .sidebar { display: flex; flex-direction: column; gap: 20px; }
+        
+        .side-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 20px; }
+        .side-title { font-size: 11px; font-weight: 900; text-transform: uppercase; color: var(--orange); margin-bottom: 15px; display: block; letter-spacing: 1px; }
+
+        /* FERRAMENTAS COMPACTAS */
+        .tool-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 13px; }
+        .switch { position: relative; width: 40px; height: 20px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: #1E293B; border-radius: 20px; }
+        .slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background: white; border-radius: 50%; }
+        input:checked + .slider { background: var(--orange); }
+        input:checked + .slider:before { transform: translateX(20px); }
+
+        /* CAPA UPLOAD */
+        .capa-box { 
+            border: 1px dashed var(--border); border-radius: 12px; height: 140px; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; 
+            cursor: pointer; position: relative; overflow: hidden; background: #080A0C;
+        }
+        .capa-box img { position: absolute; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
 
         /* GRADE 3x3 REFINADA */
-        .video-grid { 
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; 
-        }
-        .video-card { 
-            background: var(--card-bg); border: 1px solid var(--border); border-radius: 15px; 
-            overflow: hidden; position: relative;
-        }
-        .video-card:hover { transform: translateY(-10px); border-color: var(--orange); box-shadow: 0 15px 30px rgba(0,0,0,0.4); }
+        .grid-section { grid-column: 1 / -1; margin-top: 20px; }
+        .content-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .content-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px; overflow: hidden; position: relative; }
+        .content-card:hover { border-color: var(--orange); transform: translateY(-5px); }
         
-        .thumb-wrap { width: 100%; aspect-ratio: 16/9; background: #000; position: relative; }
-        .play-overlay { 
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
-            display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.4);
-            opacity: 0;
+        .card-thumb { width: 100%; aspect-ratio: 16/9; background: #000; position: relative; }
+        .card-thumb img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .btn-del { 
+            position: absolute; top: 10px; right: 10px; background: var(--red); color: white; 
+            border: none; width: 30px; height: 30px; border-radius: 8px; cursor: pointer; z-index: 5;
         }
-        .video-card:hover .play-overlay { opacity: 1; }
-        .play-overlay i { font-size: 40px; color: var(--orange); }
 
-        .card-body { padding: 20px; }
-        .card-tag { font-size: 10px; font-weight: 900; color: var(--orange); background: rgba(255, 102, 0, 0.1); padding: 4px 10px; border-radius: 5px; margin-bottom: 10px; display: inline-block; }
-        .card-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
-        .card-desc { font-size: 13px; color: var(--text-dim); line-height: 1.5; }
+        .card-info { padding: 15px; }
+        .card-title { font-size: 15px; font-weight: 800; margin-bottom: 5px; }
+        .card-desc { font-size: 12px; color: var(--text-dim); height: 36px; overflow: hidden; }
 
-        /* BOTÕES */
-        .btn-orange { 
-            background: var(--orange); color: white; border: none; padding: 15px 30px; 
-            border-radius: 10px; font-weight: 800; cursor: pointer; display: flex; 
-            align-items: center; gap: 10px; justify-content: center;
+        .btn-pub { 
+            background: var(--orange); color: white; border: none; padding: 15px; 
+            border-radius: 12px; font-weight: 900; cursor: pointer; width: 100%; margin-top: 10px;
         }
-        .btn-orange:hover { box-shadow: 0 0 20px var(--orange); transform: scale(1.02); }
-
-        .btn-outline { 
-            background: transparent; border: 1px solid var(--border); color: white; 
-            padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer;
-        }
-        .btn-outline:hover { border-color: var(--orange); color: var(--orange); }
+        .btn-pub:hover { box-shadow: 0 0 20px var(--glow); }
 
     </style>
 </head>
 <body>
 
 <header>
-    <a href="portal.html" class="logo"><i class="fas fa-rocket" style="color: var(--orange);"></i> MAESTRO<span>HUB</span></a>
-    <div style="display: flex; gap: 20px;">
-        <button class="btn-outline" onclick="window.location.href='portal.html'">Dashboard</button>
-        <button class="btn-orange" style="padding: 10px 20px; font-size: 13px;">Publicar Produto</button>
+    <div class="logo">INOVAR<span>DIGITAL</span></div>
+    <div style="display: flex; gap: 15px;">
+        <button onclick="window.location.href='portal.html'" style="background:transparent; border:1px solid var(--border); color:white; padding:8px 16px; border-radius:10px; cursor:pointer; font-size:12px;">Voltar</button>
     </div>
 </header>
 
 <div class="container">
     
-    <div class="section-title"><i class="fas fa-terminal"></i> Estúdio de Criação</div>
-
-    <div class="upload-section">
-        <div class="left">
-            <div class="video-drop-zone" id="drop-zone" onclick="document.getElementById('file-video').click()">
-                <div id="placeholder">
-                    <i class="fas fa-clapperboard fa-3x" style="color: var(--orange); margin-bottom: 15px;"></i>
-                    <p style="font-weight: 700;">Arraste o vídeo da aula</p>
-                    <p style="font-size: 12px; color: var(--text-dim);">MP4, MOV ou WebM (Max 2GB)</p>
+    <div class="main-content">
+        <div class="studio-card">
+            <span class="side-title">Estúdio de Criação</span>
+            <div class="drop-zone" onclick="document.getElementById('video-file').click()">
+                <div id="v-placeholder" style="text-align: center;">
+                    <i class="fas fa-play-circle fa-3x" style="color: var(--orange); margin-bottom: 10px;"></i>
+                    <div style="font-weight: 800;">Upload da Videoaula</div>
                 </div>
-                <video id="preview-player" controls style="display: none;"></video>
-                <input type="file" id="file-video" hidden accept="video/*">
+                <video id="v-preview" controls style="display:none;"></video>
+                <input type="file" id="video-file" hidden accept="video/*">
             </div>
-        </div>
 
-        <div class="right">
-            <div class="form-group">
-                <label>Título da Aula</label>
-                <input type="text" id="class-title" class="form-input" placeholder="Ex: Dominando as Escalas Maiores">
+            <div class="input-row">
+                <input type="text" id="ipt-titulo" class="form-input" placeholder="Título da aula">
+                <select id="ipt-cat" class="form-input">
+                    <option value="Música">Música</option>
+                    <option value="Marketing">Marketing</option>
+                    <option value="Negócios">Negócios</option>
+                </select>
             </div>
-            <div class="form-group">
-                <label>Descrição do Conteúdo</label>
-                <textarea id="class-desc" class="form-input" style="height: 100px; resize: none;" placeholder="Descreva os tópicos abordados nesta aula..."></textarea>
-            </div>
-            <button class="btn-orange" style="width: 100%;" onclick="adicionarAula()">
-                <i class="fas fa-plus"></i> Adicionar Aula à Grade
-            </button>
+            <textarea id="ipt-desc" class="form-input" style="height: 80px; resize: none;" placeholder="Descrição rápida para o aluno..."></textarea>
         </div>
     </div>
 
-    <div class="section-title"><i class="fas fa-th-large"></i> Grade de Conteúdo <span style="font-size: 14px; color: var(--text-dim); margin-left: 10px;">(Visualização do Aluno)</span></div>
-    
-    <div class="video-grid" id="main-grid">
-        <div class="video-card">
-            <div class="thumb-wrap">
-                <div class="play-overlay"><i class="fas fa-play-circle"></i></div>
+    <div class="sidebar">
+        <div class="side-card">
+            <span class="side-title">Capa do Marketplace</span>
+            <div class="capa-box" onclick="document.getElementById('capa-file').click()">
+                <img id="capa-preview" style="display:none;">
+                <i class="fas fa-image" style="color:var(--text-dim); margin-bottom:10px"></i>
+                <span style="font-size:11px; color:var(--text-dim)">Upload PNG/JPG</span>
+                <input type="file" id="capa-file" hidden accept="image/*">
             </div>
-            <div class="card-body">
-                <span class="card-tag">MÓDULO 01</span>
-                <div class="card-title">Boas-vindas ao Maestro Hub</div>
-                <div class="card-desc">Conheça as funcionalidades básicas e como navegar na plataforma.</div>
+            <button class="btn-pub" id="btn-master-pub" onclick="publicarFull()">
+                <i class="fas fa-rocket"></i> PUBLICAR NO MAESTRO
+            </button>
+        </div>
+
+        <div class="side-card">
+            <span class="side-title">Estratégias de Venda</span>
+            <div class="tool-item">
+                <span>Order Bump</span>
+                <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+            </div>
+            <div class="tool-item">
+                <span>Recuperação Ativa</span>
+                <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+            </div>
+            <div class="tool-item">
+                <span>Upsell 1-Click</span>
+                <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid-section">
+        <span class="side-title" style="margin-bottom: 20px;">Grade de Conteúdo Atual</span>
+        <div class="content-grid" id="main-grid">
+            <div class="content-card" id="demo-card">
+                <button class="btn-del" onclick="document.getElementById('demo-card').remove()">
+                    <i class="fas fa-trash"></i>
+                </button>
+                <div class="card-thumb">
+                    <img src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=1000&auto=format&fit=crop" alt="Demo">
+                    <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%)">
+                        <i class="fas fa-play-circle fa-2x" style="color:var(--orange)"></i>
+                    </div>
+                </div>
+                <div class="card-info">
+                    <span style="font-size:9px; color:var(--orange); font-weight:900;">DEMO</span>
+                    <div class="card-title">Aula Inaugural: Boas-vindas</div>
+                    <div class="card-desc">Este é um exemplo de como suas aulas aparecerão. Você pode excluir este card.</div>
+                </div>
             </div>
         </div>
     </div>
@@ -153,50 +187,90 @@
 </div>
 
 <script>
-    const fileInput = document.getElementById('file-video');
-    const player = document.getElementById('preview-player');
-    const placeholder = document.getElementById('placeholder');
+    const SUPABASE_URL = 'https://onsbuazkqfehkudhladt.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9uc2J1YXprcWZlaGt1ZGhsYWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzNTI5OTgsImV4cCI6MjA5MzkyODk5OH0.ZypL6LHbPC_z971EDCTh6pVoA7g4qM6hWSWfWVO9a-M';
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    fileInput.onchange = function() {
-        const file = this.files[0];
-        if (file) {
-            const url = URL.createObjectURL(file);
-            player.src = url;
-            player.style.display = 'block';
-            placeholder.style.display = 'none';
+    // Previews
+    document.getElementById('video-file').onchange = (e) => {
+        const file = e.target.files[0];
+        if(file){
+            document.getElementById('v-preview').src = URL.createObjectURL(file);
+            document.getElementById('v-preview').style.display = 'block';
+            document.getElementById('v-placeholder').style.display = 'none';
+        }
+    }
+    document.getElementById('capa-file').onchange = (e) => {
+        const file = e.target.files[0];
+        if(file){
+            document.getElementById('capa-preview').src = URL.createObjectURL(file);
+            document.getElementById('capa-preview').style.display = 'block';
         }
     }
 
-    function adicionarAula() {
-        const title = document.getElementById('class-title').value;
-        const desc = document.getElementById('class-desc').value;
-        const grid = document.getElementById('main-grid');
+    async function publicarFull() {
+        const vFile = document.getElementById('video-file').files[0];
+        const cFile = document.getElementById('capa-file').files[0];
+        const titulo = document.getElementById('ipt-titulo').value;
+        const desc = document.getElementById('ipt-desc').value;
+        const cat = document.getElementById('ipt-cat').value;
+        const btn = document.getElementById('btn-master-pub');
 
-        if(!title) return alert("Defina um título!");
+        if(!vFile || !titulo || !cFile) return alert("Por favor, preencha Vídeo, Capa e Título.");
 
-        const card = document.createElement('div');
-        card.className = 'video-card';
-        card.innerHTML = `
-            <div class="thumb-wrap">
-                <video src="${player.src}" style="width:100%; height:100%; object-fit:cover;"></video>
-                <div class="play-overlay"><i class="fas fa-play-circle"></i></div>
-            </div>
-            <div class="card-body">
-                <span class="card-tag">NOVA AULA</span>
-                <div class="card-title">${title}</div>
-                <div class="card-desc">${desc}</div>
-            </div>
-        `;
-        grid.appendChild(card);
-        
-        // Reset
-        document.getElementById('class-title').value = '';
-        document.getElementById('class-desc').value = '';
-        player.style.display = 'none';
-        placeholder.style.display = 'flex';
-        alert("Aula adicionada com sucesso!");
+        btn.disabled = true;
+        btn.innerText = "Publicando...";
+
+        try {
+            const vName = `v-${Date.now()}`;
+            await _supabase.storage.from('cursos').upload(vName, vFile);
+            const { data: vUrl } = _supabase.storage.from('cursos').getPublicUrl(vName);
+
+            const cName = `c-${Date.now()}`;
+            await _supabase.storage.from('cursos').upload(cName, cFile);
+            const { data: cUrl } = _supabase.storage.from('cursos').getPublicUrl(cName);
+
+            const { error } = await _supabase.from('aulas').insert([{
+                titulo: titulo, descricao: desc, video_url: vUrl.publicUrl, capa_url: cUrl.publicUrl, categoria: cat
+            }]);
+
+            if(error) throw error;
+            location.reload();
+        } catch (e) {
+            alert(e.message);
+            btn.disabled = false;
+        }
     }
-</script>
 
+    async function carregar() {
+        const { data } = await _supabase.from('aulas').select('*').order('created_at', { ascending: false });
+        const grid = document.getElementById('main-grid');
+        if(data) {
+            data.forEach(a => {
+                const card = `
+                    <div class="content-card">
+                        <button class="btn-del" onclick="deletar(${a.id})"><i class="fas fa-trash"></i></button>
+                        <div class="card-thumb"><img src="${a.capa_url}"></div>
+                        <div class="card-info">
+                            <span style="font-size:9px; color:var(--orange); font-weight:900;">${a.categoria}</span>
+                            <div class="card-title">${a.titulo}</div>
+                            <div class="card-desc">${a.descricao}</div>
+                        </div>
+                    </div>
+                `;
+                grid.innerHTML += card;
+            });
+        }
+    }
+
+    async function deletar(id) {
+        if(confirm("Deseja excluir permanentemente?")){
+            await _supabase.from('aulas').delete().eq('id', id);
+            location.reload();
+        }
+    }
+
+    window.onload = carregar;
+</script>
 </body>
 </html>
