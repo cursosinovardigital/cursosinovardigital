@@ -16,7 +16,6 @@
 
         * { box-sizing: border-box; font-family: 'Inter', sans-serif; transition: 0.2s; }
         
-        /* ESTRUTURA MESTRE - GRID PARA NÃO QUEBRAR O CORPO */
         body { 
             margin: 0; 
             display: grid; 
@@ -64,7 +63,6 @@
 
         /* SIDEBAR DEFINITIVA (TRAVADO - MANTIDO 100%) */
         nav { width: 260px; background: var(--side-black); display: flex; flex-direction: column; flex-shrink: 0; }
-        .logo-area { display: none; } /* Removi a logo da lateral para ficar só no topo */
         .nav-scroll { flex: 1; overflow-y: auto; padding: 10px 0; }
         .nav-item { padding: 12px 25px; color: #A0AEC0; cursor: pointer; display: flex; align-items: center; font-size: 14px; border-left: 4px solid transparent; text-decoration: none; }
         .nav-item i { margin-right: 15px; width: 18px; text-align: center; }
@@ -169,7 +167,7 @@
             
             <div class="profile-dropdown" id="pDropdown">
                 <div style="padding:15px; border-bottom:1px solid var(--border); font-size:11px; color:#718096;">inovardigital91@gmail.com</div>
-                <a href="#" class="drop-link"><i class="far fa-user"></i> Meu perfil</a>
+                <a href="perfil.html" class="drop-link"><i class="far fa-user"></i> Meu perfil</a>
                 <a href="#" class="drop-link" style="color:#EF4444; border-top:1px solid var(--border)"><i class="fas fa-sign-out-alt"></i> Sair</a>
             </div>
         </div>
@@ -235,7 +233,12 @@
             <section id="aba-prod" class="aba-section">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;">
                     <h2 style="margin:0; font-weight: 800;">Produtos</h2>
-                    <button class="btn-primary" onclick="openProductModal()"><i class="fas fa-plus"></i> Criar produto</button>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn-primary" onclick="window.location.href='produtor.html'" style="background: var(--orange);">
+                            <i class="fas fa-clapperboard"></i> Estúdio de Criação
+                        </button>
+                        <button class="btn-primary" onclick="openProductModal()"><i class="fas fa-plus"></i> Criar produto</button>
+                    </div>
                 </div>
                 <div class="table-container"><table><thead><tr><th>NOME</th><th>PREÇO</th><th>STATUS</th><th style="text-align:right">AÇÕES</th></tr></thead><tbody id="product-list-body"></tbody></table></div>
             </section>
@@ -243,6 +246,13 @@
             <section id="aba-membro" class="aba-section">
                 <h2>Área de Membros</h2>
                 <div class="sub-nav"><div class="sub-nav-item active">Áreas de membros</div><div class="sub-nav-item">Cursos</div><div class="sub-nav-item">Escolas</div></div>
+                <div style="display: flex; justify-content: space-between; align-items: center; background: #FFF; padding: 20px; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 20px;">
+                    <div>
+                        <h3 style="margin:0">Visualização de Aluno</h3>
+                        <p style="font-size:12px; color:#718096; margin:5px 0 0 0">Acesse a experiência imersiva da área de membros Maestro.</p>
+                    </div>
+                    <button class="btn-primary" onclick="window.location.href='aluno.html'">Acessar como Aluno</button>
+                </div>
                 <div style="display: flex; justify-content: space-between; align-items: center; background: #FFF; padding: 20px; border: 1px solid var(--border); border-radius: 12px 12px 0 0; border-bottom: none;"><div style="position: relative; width: 400px;"><i class="fas fa-search" style="position: absolute; left: 15px; top: 15px; color: #A0AEC0;"></i><input type="text" placeholder="Buscar..." class="search-input"></div><button class="btn-primary">Criar área de membros</button></div>
                 <div class="table-container" style="border-radius: 0 0 12px 12px;"><table><thead><tr><th>NOME</th><th>URL</th><th>ALUNOS</th><th>AÇÕES</th></tr></thead><tbody id="member-list-body"><tr><td>Área Premium Inovar</td><td>inovar.digital/m/premium</td><td>0</td><td><i class="fas fa-edit" style="cursor:pointer"></i></td></tr></tbody></table></div>
             </section>
@@ -266,7 +276,7 @@
 
             <section id="aba-market" class="aba-section">
                 <h2>Marketplace</h2>
-                <div class="market-grid">
+                <div class="market-grid" id="market-full-grid">
                     <div class="market-card">
                         <div class="market-thumb"><img src="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?auto=format&fit=crop&w=400&q=80" alt="Violão"></div>
                         <div class="market-info"><div class="market-title">Curso de Violão do Zero com Víctor</div><div class="market-commission">Até R$ 147,00 de comissão</div></div>
@@ -303,6 +313,13 @@
 
             <section id="aba-finan" class="aba-section">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;"><h2 style="margin:0">Financeiro</h2><select class="select-currency"><option>BRL</option></select></div>
+                <div style="background: var(--side-black); color: white; padding: 25px; border-radius: 12px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h3 style="margin:0">Inteligência Financeira Maestro</h3>
+                        <p style="font-size:12px; opacity: 0.7; margin-top: 5px;">Acesse relatórios de conversão, gráficos de lucro líquido e fluxo de caixa.</p>
+                    </div>
+                    <button class="btn-primary" onclick="window.location.href='financeiro.html'" style="background: var(--orange)">Abrir Dashboard Pro</button>
+                </div>
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:25px; margin-bottom:30px;">
                     <div class="fin-card disponivel"><span class="fin-label">Saldo disponível</span><span class="fin-value" id="fin-disponivel">R$ 0,00</span></div>
                     <div class="fin-card pendente"><span class="fin-label">Saldo pendente <i class="far fa-question-circle" style="font-size:14px; color:#CBD5E0"></i></span><span class="fin-value">R$ 0,00</span></div>
@@ -403,6 +420,24 @@
 
     const TAXA_PERCENTUAL = 0.079; const TAXA_FIXA = 1.00;
 
+    async function carregarMarketplaceReal() {
+        const { data: aulas } = await _supabase.from('aulas').select('*').order('created_at', { ascending: false });
+        const grid = document.getElementById('market-full-grid');
+        const exemplo = `<div class="market-card"><div class="market-thumb"><img src="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?auto=format&fit=crop&w=400&q=80" alt="Violão"></div><div class="market-info"><div class="market-title">Curso de Violão do Zero com Víctor</div><div class="market-commission">Até R$ 147,00 de comissão</div></div></div>`;
+        if (aulas) {
+            grid.innerHTML = exemplo + aulas.map(a => `
+                <div class="market-card" onclick="window.location.href='aluno.html'" style="cursor:pointer">
+                    <div class="market-thumb"><img src="${a.capa_url || ''}"></div>
+                    <div class="market-info">
+                        <div style="font-size:10px; color:var(--orange); font-weight:900;">${a.categoria || 'Geral'}</div>
+                        <div class="market-title">${a.titulo}</div>
+                        <div class="market-commission">Disponível no Maestro</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+    }
+
     async function carregarProdutos() {
         const { data, error } = await _supabase.from('produtos').select('*').order('created_at', { ascending: false });
         if(error) return;
@@ -438,28 +473,9 @@
         else { body.innerHTML = data.map(a => `<tr><td style="font-weight:700">${a.nome}</td><td>${a.produtos?.nome || 'Global'}</td><td><input type="text" readonly class="search-input" style="padding:5px; font-size:11px; width:200px" value="${a.link_afiliado || 'Pendente'}"></td><td>${a.vendas_realizadas}</td><td><i class="fas fa-ellipsis-v" style="cursor:pointer"></i></td></tr>`).join(''); }
     }
 
-    async function convidarAfiliado() {
-        const nome = prompt("Nome:"); const email = prompt("E-mail:");
-        if(nome && email) { await _supabase.from('afiliados').insert([{ nome, email, link_afiliado: `https://inovar.digital/ref/${Math.random().toString(36).substring(7)}` }]); carregarAfiliados(); }
-    }
-
-    async function solicitarSaque() {
-        const saldo = parseFloat(document.getElementById('fin-disponivel').innerText.replace('R$ ', '').replace(',', '.'));
-        if (saldo <= 0) { alert("Sem saldo!"); return; }
-        const valor = prompt("Valor para saque:"); const pix = prompt("Chave PIX:");
-        if (valor && pix) { await _supabase.from('saques').insert([{ valor: parseFloat(valor), chave_pix: pix, status: 'Pendente' }]); alert("Solicitado!"); carregarHistoricoSaques(); }
-    }
-
     async function carregarHistoricoSaques() {
         const { data } = await _supabase.from('saques').select('*').order('created_at', { ascending: false });
         if (data) document.getElementById('lista-saques-body').innerHTML = data.map(s => `<tr><td>${new Date(s.created_at).toLocaleDateString()}</td><td>R$ ${s.valor.toFixed(2)}</td><td>${s.status}</td></tr>`).join('');
-    }
-
-    async function simularVenda(prodId, preco) {
-        const comissaoPlataforma = (preco * TAXA_PERCENTUAL) + TAXA_FIXA;
-        const valorLiquido = preco - comissaoPlataforma;
-        await _supabase.from('vendas').insert([{ produto_id: prodId, valor_total: preco, comissao_maestro: comissaoPlataforma, valor_liquido: valorLiquido, status: 'Paga' }]);
-        carregarDadosDashboard();
     }
 
     async function carregarDadosDashboard() {
@@ -471,7 +487,7 @@
         document.getElementById('dash-valor-liquido').innerText = `R$ ${totalL.toFixed(2).replace('.', ',')}`;
         document.getElementById('dash-count-vendas').innerText = vendas.length;
         document.getElementById('fin-disponivel').innerText = `R$ ${totalL.toFixed(2).replace('.', ',')}`;
-        document.getElementById('sales-list-body').innerHTML = vendas.map(v => `<tr><td>#${v.id.slice(0,8)}</td><td>${v.produtos?.nome || 'Produto'}</td><td>R$ ${v.valor_total.toFixed(2)}</td><td>${new Date(v.created_at).toLocaleDateString()}</td><td><span class="badge badge-success">Paga</span></td></tr>`).join('');
+        document.getElementById('sales-list-body').innerHTML = vendas.map(v => `<tr><td>#${v.id.toString().slice(0,8)}</td><td>${v.produtos?.nome || 'Produto'}</td><td>R$ ${v.valor_total.toFixed(2)}</td><td>${new Date(v.created_at).toLocaleDateString()}</td><td><span class="badge badge-success">Paga</span></td></tr>`).join('');
         if(salesChartInstance) { salesChartInstance.data.datasets[0].data = vendas.slice(0, 7).reverse().map(v => v.valor_total); salesChartInstance.update(); }
     }
 
@@ -481,7 +497,9 @@
         document.getElementById('aba-' + id).classList.add('active');
         el.classList.add('active');
         document.getElementById('header-path').innerHTML = `<strong>Maestro Console</strong> / ${el.innerText.trim()}`;
+        
         if(id === 'prod') carregarProdutos();
+        if(id === 'market') carregarMarketplaceReal();
         if(id === 'afiliados') carregarAfiliados();
         if(id === 'dash' || id === 'vendas' || id === 'finan') carregarDadosDashboard();
         if(id === 'finan') carregarHistoricoSaques();
@@ -501,7 +519,7 @@
     }
 
     window.onload = function() {
-        carregarProdutos(); carregarDadosDashboard();
+        carregarProdutos(); carregarDadosDashboard(); carregarMarketplaceReal();
         const ctx = document.getElementById('salesChart')?.getContext('2d');
         if(ctx) salesChartInstance = new Chart(ctx, { type: 'line', data: { labels: ['V1','V2','V3','V4','V5','V6','V7'], datasets: [{ data: [0,0,0,0,0,0,0], borderColor: '#5D5FEF', backgroundColor: 'rgba(93, 95, 239, 0.1)', fill: true, tension: 0.4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }});
     };
