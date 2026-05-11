@@ -129,7 +129,7 @@
         /* MODAIS */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
         .modal-overlay.active { display: flex !important; }
-        .modal-content { background: #FFF; padding: 30px; border-radius: 12px; width: 450px; position: relative; }
+        .modal-content { background: #FFF; border-radius: 12px; width: 1000px; max-width: 95%; height: 85vh; display: flex; flex-direction: column; overflow: hidden; position: relative; }
 
         /* ESTILO APPS */
         .apps-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
@@ -366,6 +366,8 @@
                     <div class="app-card"><div class="app-icon" style="color:#25D366;"><i class="fab fa-whatsapp"></i></div><div style="font-weight:800; font-size:18px;">Hotzapp</div><button class="btn-app-config">Configurar</button></div>
                 </div>
             </section>
+
+            <section id="aba-ajuda" class="aba-section"><h2>Ajuda</h2></section>
         </div>
     </main>
 </div>
@@ -462,6 +464,33 @@
         if(!res.error) { alert("Produto salvo com sucesso!"); closeProductModal(); carregarProdutos(); }
     }
 
+    async function carregarDadosDashboard() {
+        const { data: vendas, error } = await _supabase.from('vendas').select('*, produtos(nome)').order('created_at', { ascending: false });
+        if(error || !vendas) return;
+        const totalB = vendas.reduce((sum, v) => sum + (v.valor_total || 0), 0);
+        const totalL = vendas.reduce((sum, v) => sum + (v.valor_liquido || 0), 0);
+        document.getElementById('dash-total-vendas').innerText = `R$ ${totalB.toFixed(2).replace('.', ',')}`;
+        document.getElementById('dash-valor-liquido').innerText = `R$ ${totalL.toFixed(2).replace('.', ',')}`;
+        document.getElementById('dash-count-vendas').innerText = vendas.length;
+        document.getElementById('fin-disponivel').innerText = `R$ ${totalL.toFixed(2).replace('.', ',')}`;
+        const tbodyVendas = document.getElementById('sales-list-body');
+        if (tbodyVendas) tbodyVendas.innerHTML = vendas.map(v => `<tr><td style="font-weight:700; color:var(--orange)">#${v.id.toString().slice(0,8)}</td><td>${v.produtos?.nome || 'Produto'}</td><td style="font-weight:700">R$ ${v.valor_total.toFixed(2).replace('.', ',')}</td><td>${new Date(v.created_at).toLocaleDateString('pt-BR')}</td><td><span class="badge badge-success">Paga</span></td></tr>`).join('');
+        if(salesChartInstance && vendas.length > 0) {
+            salesChartInstance.data.datasets[0].data = vendas.slice(0, 7).reverse().map(v => v.valor_total);
+            salesChartInstance.update();
+        }
+    }
+
+    async function simularVenda(prodId, preco) {
+        const { data: { user } } = await _supabase.auth.getUser();
+        if (!user) return alert("Faça login primeiro!");
+        const comissao = (preco * TAXA_PERCENTUAL) + TAXA_FIXA;
+        const liquido = preco - comissao;
+        await _supabase.from('vendas').insert([{ produto_id: prodId, valor_total: preco, comissao_maestro: comissao, valor_liquido: liquido, status: 'Paga', metodo_pagamento: 'Pix' }]);
+        alert("Simulação de venda concluída!");
+        carregarDadosDashboard();
+    }
+
     function editProduct(id, nome, preco) {
         document.getElementById('edit-prod-id').value = id;
         document.getElementById('ipt_nome').value = nome;
@@ -478,6 +507,7 @@
         el.classList.add('active');
         document.getElementById('header-path').innerHTML = `<strong>Maestro Console</strong> / ${el.innerText.trim()}`;
         if(id === 'prod') carregarProdutos();
+        if(id === 'vendas' || id === 'dash' || id === 'finan') carregarDadosDashboard();
     }
 
     function switchProductTab(tab, el) {
@@ -489,9 +519,10 @@
 
     function openProductModal() { document.getElementById('modalProduct').classList.add('active'); }
     function closeProductModal() { document.getElementById('modalProduct').classList.remove('active'); document.getElementById('edit-prod-id').value = ''; }
+    function deleteProductFromModal() { if(confirm("Deseja realmente excluir?")) alert("Em breve..."); }
 
     window.onload = function() {
-        carregarProdutos();
+        carregarProdutos(); carregarDadosDashboard();
         const ctx = document.getElementById('salesChart')?.getContext('2d');
         if(ctx) salesChartInstance = new Chart(ctx, { type: 'line', data: { labels: ['V1','V2','V3','V4','V5','V6','V7'], datasets: [{ data: [0,0,0,0,0,0,0], borderColor: '#5D5FEF', backgroundColor: 'rgba(93, 95, 239, 0.1)', fill: true, tension: 0.4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }});
     };
