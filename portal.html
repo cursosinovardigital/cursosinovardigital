@@ -491,50 +491,6 @@
         if(salesChartInstance) { salesChartInstance.data.datasets[0].data = vendas.slice(0, 7).reverse().map(v => v.valor_total); salesChartInstance.update(); }
     }
 
-    // SUBSTITUA A FUNÇÃO simularVenda ATUAL POR ESTA:
-    async function simularVenda(prodId, preco) {
-        // 1. Pega o usuário que está logado agora para dar o acesso a ele
-        const { data: { user } } = await _supabase.auth.getUser();
-
-        if (!user) {
-            alert("Você precisa estar logado para simular uma compra e ganhar acesso!");
-            return;
-        }
-
-        const comissaoPlataforma = (preco * TAXA_PERCENTUAL) + TAXA_FIXA;
-        const valorLiquido = preco - comissaoPlataforma;
-
-        try {
-            // A) REGISTRA A VENDA (Para o Dashboard/Financeiro)
-            const { error: errVenda } = await _supabase.from('vendas').insert([{ 
-                produto_id: prodId, 
-                valor_total: preco, 
-                comissao_maestro: comissaoPlataforma, 
-                valor_liquido: valorLiquido, 
-                status: 'Paga',
-                metodo_pagamento: 'Pix' 
-            }]);
-
-            if(errVenda) throw errVenda;
-
-            // B) GERA A MATRÍCULA (A chave que abre a porta da aluno.html)
-            const { error: errMatricula } = await _supabase.from('matriculas').insert([{ 
-                user_id: user.id, 
-                produto_id: prodId, 
-                status: 'ativo' 
-            }]);
-
-            if(errMatricula) throw errMatricula;
-
-            alert("Sucesso! Venda registrada e seu acesso foi liberado na Área de Membros.");
-            carregarDadosDashboard(); // Atualiza os balões de saldo na tela
-
-        } catch (e) {
-            console.error(e);
-            alert("Erro ao processar simulação: " + e.message);
-        }
-    }
-
     function nav(id, el) {
         document.querySelectorAll('.aba-section').forEach(s => s.classList.remove('active'));
         document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
