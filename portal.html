@@ -534,7 +534,7 @@
                     <i class="fas fa-edit" style="cursor:pointer; margin-right:15px;" onclick="editProduct('${p.id}', '${p.nome}', ${p.preco})"></i>
                     <i class="fas fa-trash-alt" style="cursor:pointer; color:#EF4444" onclick="deleteProduct('${p.id}')"></i>
                 </td>
-            </tr>`).join('');
+            </tr>`).join('');`
          }
     
 async function salvarProduto() {
@@ -546,27 +546,10 @@ async function salvarProduto() {
         alert("Por favor, preencha o nome e o preço.");
         return;
     }
-    
-    async function deleteProduct(id) {
-    if (confirm("Tem certeza que deseja excluir este produto? Esta ação não pode ser desfeita.")) {
-        const { error } = await _supabase
-            .from('produtos')
-            .delete()
-            .eq('id', id);
-
-        if (!error) {
-            alert("Produto excluído com sucesso!");
-            carregarProdutos(); // Recarrega a lista para sumir o item da tela
-        } else {
-            console.error("Erro ao excluir:", error);
-            alert("Erro ao excluir produto: " + error.message);
-        }
-    }
-}
 
     const payload = { 
         nome: inputNome.value, 
-        preco: parseFloat(inputPreco.value), 
+        preco: parseFloat(inputPreco.value.replace(',', '.')), 
         status: 'Ativo' 
     };
 
@@ -578,9 +561,21 @@ async function salvarProduto() {
     if (!res.error) { 
         alert("Produto salvo com sucesso!"); 
         closeProductModal(); 
-        carregarProdutos(); // Para atualizar a lista na tela
+        carregarProdutos(); 
     } else {
         alert("Erro ao salvar no banco. Verifique as permissões RLS.");
+    }
+}
+
+async function deleteProduct(id) {
+    if (confirm("Tem certeza que deseja excluir este produto?")) {
+        const { error } = await _supabase.from('produtos').delete().eq('id', id);
+        if (!error) {
+            alert("Produto excluído com sucesso!");
+            carregarProdutos();
+        } else {
+            alert("Erro ao excluir: " + error.message);
+        }
     }
 }
 
