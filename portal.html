@@ -491,7 +491,7 @@
         carregarDadosDashboard();
 }
 
-    async function filtrarVendas() {
+async function filtrarVendas() {
         const statusFiltro = document.getElementById('filtro-status')?.value || 'Pagas';
         const { data: vendas, error } = await _supabase
             .from('vendas')
@@ -513,6 +513,7 @@
                 </tr>`).join('');
         }
     }
+    
     function editProduct(id, nome, preco) {
         document.getElementById('edit-prod-id').value = id;
         document.getElementById('ipt_nome').value = nome;
