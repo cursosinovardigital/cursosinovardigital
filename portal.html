@@ -521,11 +521,10 @@
 
     const TAXA_PERCENTUAL = 0.079; const TAXA_FIXA = 1.00;
 
-    // --- 1. PRODUTOS E LINKS DINÂMICOS ---
     async function carregarProdutos() {
         const { data, error } = await _supabase.from('produtos').select('*').order('created_at', { ascending: false });
         if(error) return;
-        document.getElementById('product-list-body').innerHTML = data.map(p => `
+             document.getElementById('product-list-body').innerHTML = data.map(p => `
             <tr>
                 <td style="font-weight:700; color:var(--purple-kiwi)">${p.nome}</td>
                 <td>R$ ${p.preco.toFixed(2).replace('.',',')}</td>
@@ -535,46 +534,51 @@
                     <i class="fas fa-edit" style="cursor:pointer; margin-right:15px;" onclick="editProduct('${p.id}', '${p.nome}', ${p.preco})"></i>
                     <i class="fas fa-trash-alt" style="cursor:pointer; color:#EF4444" onclick="deleteProduct('${p.id}')"></i>
                 </td>
-            </tr>`).join('');
+            </tr>`).join('')
+         }
+    
+async function salvarProduto() {
+    const inputNome = document.getElementById('ipt_nome');
+    const inputPreco = document.getElementById('ipt_preco');
+    const inputId = document.getElementById('edit-prod-id');
+
+    if (!inputNome.value || !inputPreco.value) {
+        alert("Por favor, preencha o nome e o preço.");
+        return;
     }
 
-    async function salvarProduto() {
-        const inputNome = document.getElementById('ipt_nome');
-        const inputPreco = document.getElementById('ipt_preco');
-        const inputId = document.getElementById('edit-prod-id');
-        if (!inputNome.value || !inputPreco.value) { alert("Preencha nome e preço!"); return; }
-        const payload = { nome: inputNome.value, preco: parseFloat(inputPreco.value.replace(',', '.')), status: 'Ativo' };
-        const id = inputId.value;
-        const res = id ? await _supabase.from('produtos').update(payload).eq('id', id) : await _supabase.from('produtos').insert([payload]);
-        if (!res.error) { alert("Produto salvo!"); closeProductModal(); carregarProdutos(); }
-    }
+    const payload = { 
+        nome: inputNome.value, 
+        preco: parseFloat(inputPreco.value.replace(',', '.')), 
+        status: 'Ativo' 
+    };
 
-    async function deleteProduct(id) {
-        if (confirm("Deseja realmente excluir este produto?")) {
-            const { error } = await _supabase.from('produtos').delete().eq('id', id);
-            if (!error) carregarProdutos();
+    const id = inputId.value;
+    const res = id ? 
+        await _supabase.from('produtos').update(payload).eq('id', id) : 
+        await _supabase.from('produtos').insert([payload]);
+
+    if (!res.error) { 
+        alert("Produto salvo com sucesso!"); 
+        closeProductModal(); 
+        carregarProdutos(); 
+    } else {
+        alert("Erro ao salvar no banco. Verifique as permissões RLS.");
+    }
+}
+
+async function deleteProduct(id) {
+    if (confirm("Tem certeza que deseja excluir este produto?")) {
+        const { error } = await _supabase.from('produtos').delete().eq('id', id);
+        if (!error) {
+            alert("Produto excluído com sucesso!");
+            carregarProdutos();
+        } else {
+            alert("Erro ao excluir: " + error.message);
         }
     }
+}
 
-    // --- 2. ÁREA DE MEMBROS E MARKETPLACE (CONSERVAÇÃO TOTAL) ---
-    async function carregarMarketplaceReal() {
-        const { data: aulas, error } = await _supabase.from('aulas').select('*').order('created_at', { ascending: false });
-        const grid = document.getElementById('market-full-grid');
-        if (!grid) return;
-        const exemplo = `<div class="market-card"><div class="market-thumb"><img src="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?auto=format&fit=crop&w=400&q=80"></div><div class="market-info"><div class="market-title">Curso de Violão do Zero com Víctor</div><div class="market-commission">Até R$ 147,00 de comissão</div></div></div>`;
-        if (error || !aulas || aulas.length === 0) { grid.innerHTML = exemplo; return; }
-        grid.innerHTML = exemplo + aulas.map(a => `<div class="market-card" onclick="window.location.href='aluno.html?id=${a.id}'" style="cursor:pointer"><div class="market-thumb"><img src="${a.capa_url || 'https://via.placeholder.com/400x225?text=Sem+Capa'}" onerror="this.src='https://via.placeholder.com/400x225?text=Erro+na+Capa'"></div><div class="market-info"><div style="font-size:10px; color:var(--orange); font-weight:900; text-transform: uppercase; margin-bottom: 5px;">${a.categoria || 'Curso'}</div><div class="market-title">${a.titulo}</div><div class="market-commission">Acesso Liberado no Maestro</div></div></div>`).join('');
-    }
-
-    async function carregarAreasMembros() {
-        const { data: aulas, error } = await _supabase.from('aulas').select('*').order('created_at', { ascending: false });
-        const tbody = document.getElementById('member-list-body');
-        if (!tbody) return;
-        if (error || !aulas || aulas.length === 0) { tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:30px; color:#A0AEC0;">Nenhum curso encontrado.</td></tr>`; return; }
-        tbody.innerHTML = aulas.map(a => `<tr><td style="font-weight:700; color:var(--side-black)">${a.titulo}</td><td style="font-size:12px; color:var(--purple-kiwi)">inovar.digital/aluno.html?id=${a.id.toString().slice(0,6)}</td><td style="font-weight:600">0 alunos</td><td style="text-align:right"><button class="btn-primary" style="padding: 5px 12px; font-size: 11px; background: #F4F7FA; color: var(--text); border: 1px solid var(--border);" onclick="copyToClipboard('https://inovar.digital/aluno.html?id=${a.id}')"><i class="fas fa-link"></i> Gerar Link</button><i class="fas fa-external-link-alt" style="margin-left:15px; cursor:pointer; color:#718096" onclick="window.open('aluno.html?id=${a.id}', '_blank')"></i></td></tr>`).join('');
-    }
-
-    // --- 3. DASHBOARD E FINANCEIRO (REGRAS DE NEGÓCIO) ---
     async function carregarDadosDashboard() {
         const { data: vendas, error } = await _supabase.from('vendas').select('*, produtos(nome)').order('created_at', { ascending: false });
         if(error || !vendas) return;
@@ -585,7 +589,7 @@
         document.getElementById('dash-count-vendas').innerText = vendas.length;
         document.getElementById('fin-disponivel').innerText = `R$ ${totalL.toFixed(2).replace('.', ',')}`;
         const tbodyVendas = document.getElementById('sales-list-body');
-        if (tbodyVendas) tbodyVendas.innerHTML = vendas.map(v => `<tr><td style="font-weight:700; color:var(--orange)">#${v.id.toString().slice(0,8)}</td><td>${v.produtos?.nome || 'Produto'}</td><td style="font-weight:700">R$ ${v.valor_total.toFixed(2).replace('.', ',')}</td><td>${new Date(v.created_at).toLocaleDateString('pt-BR')}</td><td><span class="badge badge-success">${v.status}</span></td></tr>`).join('');
+        if (tbodyVendas) tbodyVendas.innerHTML = vendas.map(v => `<tr><td style="font-weight:700; color:var(--orange)">#${v.id.toString().slice(0,8)}</td><td>${v.produtos?.nome || 'Produto'}</td><td style="font-weight:700">R$ ${v.valor_total.toFixed(2).replace('.', ',')}</td><td>${new Date(v.created_at).toLocaleDateString('pt-BR')}</td><td><span class="badge badge-success">Paga</span></td></tr>`).join('');
         if(salesChartInstance && vendas.length > 0) {
             salesChartInstance.data.datasets[0].data = vendas.slice(0, 7).reverse().map(v => v.valor_total);
             salesChartInstance.update();
@@ -593,47 +597,223 @@
     }
 
     async function simularVenda(prodId, preco) {
+        const { data: { user } } = await _supabase.auth.getUser();
+        if (!user) return alert("Faça login primeiro!");
         const comissao = (preco * TAXA_PERCENTUAL) + TAXA_FIXA;
-        await _supabase.from('vendas').insert([{ produto_id: prodId, valor_total: preco, comissao_maestro: comissao, valor_liquido: preco - comissao, status: 'Paga', metodo_pagamento: 'Pix' }]);
+        const liquido = preco - comissao;
+        await _supabase.from('vendas').insert([{ produto_id: prodId, valor_total: preco, comissao_maestro: comissao, valor_liquido: liquido, status: 'Paga', metodo_pagamento: 'Pix' }]);
+        alert("Simulação de venda concluída!");
         carregarDadosDashboard();
+}
+
+async function filtrarVendas() {
+        const statusFiltro = document.getElementById('filtro-status')?.value || 'Pagas';
+        const { data: vendas, error } = await _supabase
+            .from('vendas')
+            .select('*, produtos(nome)')
+            .eq('status', statusFiltro)
+            .order('created_at', { ascending: false });
+
+        if(error) return;
+
+        const tbodyVendas = document.getElementById('sales-list-body');
+        if (tbodyVendas) {
+            tbodyVendas.innerHTML = vendas.map(v => `
+                <tr>
+                    <td style="font-weight:700; color:var(--orange)">#${v.id.toString().slice(0,8)}</td>
+                    <td>${v.produtos?.nome || 'Produto'}</td>
+                    <td style="font-weight:700">R$ ${v.valor_total.toFixed(2).replace('.', ',')}</td>
+                    <td>${new Date(v.created_at).toLocaleDateString('pt-BR')}</td>
+                    <td><span class="badge badge-success">${v.status}</span></td>
+                </tr>`).join('');
+        }
+    }
+    
+    async function solicitarSaque() {
+        const saldoDisponivelStr = document.getElementById('fin-disponivel').innerText;
+        const saldoAtual = parseFloat(saldoDisponivelStr.replace('R$ ', '').replace(',', '.'));
+
+        if (saldoAtual <= 0) {
+            return alert("Você não possui saldo disponível para saque!");
+        }
+
+        const valorSaque = prompt(`Saldo disponível: R$ ${saldoAtual.toFixed(2)}\nDigite o valor que deseja sacar:`, saldoAtual.toFixed(2));
+        
+        if (!valorSaque || parseFloat(valorSaque) <= 0) return;
+        
+        const valorNumerico = parseFloat(valorSaque);
+
+        if (valorNumerico > saldoAtual) {
+            return alert("Valor solicitado é maior que o saldo disponível!");
+        }
+
+        // Simula o registro do saque no banco de dados
+        const { error } = await _supabase.from('saques').insert([{
+            valor: valorNumerico,
+            status: 'Pendente',
+            chave_pix: 'inovardigital91@gmail.com' // Exemplo usando seu e-mail
+        }]);
+
+        if (!error) {
+            alert("Solicitação de saque enviada com sucesso! O valor será processado em até 24h.");
+            carregarDadosDashboard(); // Atualiza o saldo na tela
+        } else {
+            alert("Erro ao processar saque. Verifique a tabela 'saques' no seu banco.");
+        }
+    }
+    
+    function editProduct(id, nome, preco) {
+        document.getElementById('edit-prod-id').value = id;
+        document.getElementById('ipt_nome').value = nome;
+        document.getElementById('ipt_preco').value = preco;
+        document.getElementById('modal-product-title').innerText = "Editar produto";
+
+        // GERAÇÃO DO LINK DINÂMICO PARA A TABELA
+        const linkCheckout = `https://inovar.digital/pay/${id}`;
+        
+        const linksTable = document.getElementById('prod-links-table');
+        if (linksTable) {
+            linksTable.innerHTML = `
+                <tr>
+                    <td style="font-weight:600; font-size:13px;">Checkout Maestro</td>
+                    <td>
+                        <div style="display:flex; gap:5px; align-items:center;">
+                            <input type="text" readonly class="search-input" 
+                                style="padding:8px; font-size:11px; width: 250px; background: #F8F9FA;" 
+                                value="${linkCheckout}">
+                            <button class="btn-primary" style="padding: 7px 10px; font-size:10px;" 
+                                onclick="copyToClipboard('${linkCheckout}')">
+                                <i class="far fa-copy"></i>
+                            </button>
+                        </div>
+                    </td>
+                    <td><span class="badge" style="background:#EBF4FF; color:var(--purple-kiwi);">Padrão</span></td>
+                    <td>R$ ${preco.toFixed(2)}</td>
+                    <td><span style="color: #22C55E; font-weight: 700;">Ativo</span></td>
+                    <td style="text-align:right">
+                        <i class="fas fa-external-link-alt" style="cursor:pointer; color:#718096" 
+                            onclick="window.open('${linkCheckout}', '_blank')"></i>
+                    </td>
+                </tr>`;
+        }
+        openProductModal();
     }
 
-    // --- 4. FUNÇÕES DE NAVEGAÇÃO E MODAIS (SWITCH TABS) ---
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(() => {
+            alert("Link de checkout copiado!");
+        });
+    }
+    
+    async function carregarMarketplaceReal() {
+        const { data: aulas, error } = await _supabase
+            .from('aulas')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+        const grid = document.getElementById('market-full-grid');
+        if (!grid) return;
+
+        // Card de exemplo fixo (opcional, para não ficar vazio se não tiver nada no banco)
+        const exemplo = `
+            <div class="market-card">
+                <div class="market-thumb"><img src="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?auto=format&fit=crop&w=400&q=80"></div>
+                <div class="market-info">
+                    <div class="market-title">Curso de Violão do Zero com Víctor</div>
+                    <div class="market-commission">Até R$ 147,00 de comissão</div>
+                </div>
+            </div>`;
+
+        if (error || !aulas || aulas.length === 0) {
+            grid.innerHTML = exemplo;
+            return;
+        }
+
+        // Renderiza as aulas reais do Supabase
+        grid.innerHTML = exemplo + aulas.map(a => `
+            <div class="market-card" onclick="window.location.href='aluno.html?id=${a.id}'" style="cursor:pointer">
+                <div class="market-thumb">
+                    <img src="${a.capa_url || 'https://via.placeholder.com/400x225?text=Sem+Capa'}" onerror="this.src='https://via.placeholder.com/400x225?text=Erro+na+Capa'">
+                </div>
+                <div class="market-info">
+                    <div style="font-size:10px; color:var(--orange); font-weight:900; text-transform: uppercase; margin-bottom: 5px;">${a.categoria || 'Curso'}</div>
+                    <div class="market-title">${a.titulo}</div>
+                    <div class="market-commission">Acesso Liberado no Maestro</div>
+                </div>
+            </div>
+        `).join('');
+    }
+    
+async function carregarAreasMembros() {
+    const { data: aulas, error } = await _supabase
+        .from('aulas')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+    const tbody = document.getElementById('member-list-body');
+    if (!tbody) return;
+
+    if (error || !aulas || aulas.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:30px; color:#A0AEC0;">Nenhum curso encontrado.</td></tr>`;
+        return;
+    }
+
+    tbody.innerHTML = aulas.map(a => `
+        <tr>
+            <td style="font-weight:700; color:var(--side-black)">${a.titulo}</td>
+            <td style="font-size:12px; color:var(--purple-kiwi)">cursosinovardigital.github.io/aluno.html?id=${a.id.toString().slice(0,6)}</td>
+            <td style="font-weight:600">0 alunos</td>
+            <td style="text-align:right">
+                <button class="btn-primary" style="padding: 5px 12px; font-size: 11px; background: #F4F7FA; color: var(--text); border: 1px solid var(--border);" 
+                    onclick="copyToClipboard('https://cursosinovardigital.github.io/cursosinovardigital/aluno.html?id=${a.id}')">
+                    <i class="fas fa-link"></i> Gerar Link
+                </button>
+                <i class="fas fa-external-link-alt" style="margin-left:15px; cursor:pointer; color:#718096" 
+                    onclick="window.open('aluno.html?id=${a.id}', '_blank')"></i>
+            </td>
+        </tr>`).join('');
+}
+    
     function nav(id, el) {
         document.querySelectorAll('.aba-section').forEach(s => s.classList.remove('active'));
         document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
         document.getElementById('aba-' + id).classList.add('active');
         el.classList.add('active');
         document.getElementById('header-path').innerHTML = `<strong>Maestro Console</strong> / ${el.innerText.trim()}`;
+        
         if(id === 'membro') carregarAreasMembros();
+        if(id === 'relat') atualizarRelatoriosRapidos();
         if(id === 'prod') carregarProdutos();
         if(id === 'market') carregarMarketplaceReal();
         if(id === 'vendas' || id === 'dash' || id === 'finan') carregarDadosDashboard();
     }
-
-    // ABA INTERNA DO MODAL PRODUTO (RECUPERADO DO PRINT)
-    function switchProductTab(tab, el) {
-        document.querySelectorAll('.prod-modal-tab').forEach(c => c.style.display = 'none');
-        document.querySelectorAll('#productModalNav .sub-nav-item').forEach(i => i.classList.remove('active'));
-        document.getElementById('p-' + tab).style.display = 'block';
-        el.classList.add('active');
+    
+    async function atualizarRelatoriosRapidos() {
+    const { data: vendas, error } = await _supabase.from('vendas').select('*');
+    if (error) {
+        console.error("Erro ao buscar vendas para relatório:", error);
+        return;
     }
 
-    function editProduct(id, nome, preco) {
-        document.getElementById('edit-prod-id').value = id;
-        document.getElementById('ipt_nome').value = nome;
-        document.getElementById('ipt_preco').value = preco;
-        const link = `pay.html?id=${id}`;
-        const table = document.getElementById('prod-links-table');
-        if(table) table.innerHTML = `<tr><td style="font-weight:600; font-size:13px;">Checkout Maestro</td><td><input readonly class="search-input" style="padding:8px; font-size:11px; width: 250px; background: #F8F9FA;" value="${link}"></td><td><button class="btn-primary" style="padding: 7px 10px; font-size:10px;" onclick="copyToClipboard('${link}')"><i class="far fa-copy"></i></button></td></tr>`;
-        openProductModal();
-    }
+    // Calcula Receita Total (Pagas)
+    const receitaTotal = vendas
+        .filter(v => v.status === 'Paga')
+        .reduce((sum, v) => sum + (v.valor_total || 0), 0);
 
-    function openProductModal() { document.getElementById('modalProduct').classList.add('active'); }
-    function closeProductModal() { document.getElementById('modalProduct').classList.remove('active'); }
-    function copyToClipboard(t) { navigator.clipboard.writeText(t).then(() => alert("Copiado!")); }
+    // Conta Vendas Pendentes
+    const pendentes = vendas.filter(v => v.status === 'Pendente').length;
 
-    // --- 5. FINANCEIRO (SAQUES E BANCÁRIO) ---
+    // Atualiza os valores nos cards
+    const campoReceita = document.getElementById('relat-receita-total');
+    const campoPendentes = document.getElementById('relat-vendas-pendentes');
+
+    if (campoReceita) campoReceita.innerText = `R$ ${receitaTotal.toFixed(2).replace('.', ',')}`;
+    if (campoPendentes) campoPendentes.innerText = `${pendentes} vendas`;
+    
+    alert("Relatórios atualizados com dados do banco!");
+}
+    
+    // Alterna entre abas de Saque e Dados Bancários
     function switchFinTab(tab, el) {
         document.querySelectorAll('.fin-tab-content').forEach(c => c.style.display = 'none');
         document.querySelectorAll('#financeiroNav .sub-nav-item').forEach(i => i.classList.remove('active'));
@@ -641,16 +821,49 @@
         el.classList.add('active');
     }
 
-    async function salvarDadosBancarios() {
-        const payload = { tipo_recebimento: document.getElementById('tipo_recebimento').value, chave_pix: document.getElementById('chave_pix_input').value };
-        const { error } = await _supabase.from('dados_bancarios').insert([payload]);
-        if(!error) alert("Salvo com sucesso!");
+    // Alterna entre formulário Pix e Conta
+    function toggleCamposBanco() {
+        const tipo = document.getElementById('tipo_recebimento').value;
+        document.getElementById('campos-pix').style.display = tipo === 'pix' ? 'block' : 'none';
+        document.getElementById('campos-conta').style.display = tipo === 'conta' ? 'block' : 'none';
     }
 
-    // --- 6. CARREGAMENTO INICIAL ---
+    async function salvarDadosBancarios() {
+        const tipo = document.getElementById('tipo_recebimento').value;
+        const payload = {
+            tipo_recebimento: tipo,
+            chave_pix: document.getElementById('chave_pix_input').value,
+            banco: document.getElementById('banco_nome').value,
+            agencia: document.getElementById('agencia_num').value,
+            conta: document.getElementById('conta_num').value,
+            tipo_conta: document.getElementById('tipo_conta').value
+        };
+
+        const { error } = await _supabase.from('dados_bancarios').insert([payload]);
+
+        if(!error) {
+            alert("Dados bancários salvos com sucesso!");
+        } else {
+            alert("Erro ao salvar. Verifique se a tabela 'dados_bancarios' existe.");
+        }
+    }
+
+    function switchProductTab(tab, el) {
+        document.querySelectorAll('.prod-modal-tab').forEach(c => c.style.display = 'none');
+        document.querySelectorAll('#productModalNav .sub-nav-item').forEach(i => i.classList.remove('active'));
+        document.getElementById('p-' + tab).style.display = 'block';
+        el.classList.add('active');
+    }
+
+    function openProductModal() { document.getElementById('modalProduct').classList.add('active'); }
+    function closeProductModal() { document.getElementById('modalProduct').classList.remove('active'); document.getElementById('edit-prod-id').value = ''; }
+    function deleteProductFromModal() { if(confirm("Deseja realmente excluir?")) alert("Em breve..."); }
+
     window.onload = function() {
-        carregarProdutos(); carregarDadosDashboard(); carregarMarketplaceReal(); carregarAreasMembros();
+        carregarProdutos(); carregarDadosDashboard(); carregarMarketplaceReal();
         const ctx = document.getElementById('salesChart')?.getContext('2d');
         if(ctx) salesChartInstance = new Chart(ctx, { type: 'line', data: { labels: ['V1','V2','V3','V4','V5','V6','V7'], datasets: [{ data: [0,0,0,0,0,0,0], borderColor: '#5D5FEF', backgroundColor: 'rgba(93, 95, 239, 0.1)', fill: true, tension: 0.4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }});
     };
 </script>
+</body>
+</html>
