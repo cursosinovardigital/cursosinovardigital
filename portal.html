@@ -572,6 +572,18 @@
             </div>
         `).join('');
     }
+    
+    function nav(id, el) {
+        document.querySelectorAll('.aba-section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        document.getElementById('aba-' + id).classList.add('active');
+        el.classList.add('active');
+        document.getElementById('header-path').innerHTML = `<strong>Maestro Console</strong> / ${el.innerText.trim()}`;
+        
+        if(id === 'prod') carregarProdutos();
+        if(id === 'market') carregarMarketplaceReal();
+        if(id === 'vendas' || id === 'dash' || id === 'finan') carregarDadosDashboard();
+    }
 
     function switchProductTab(tab, el) {
         document.querySelectorAll('.prod-modal-tab').forEach(c => c.style.display = 'none');
