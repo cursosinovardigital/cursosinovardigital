@@ -381,7 +381,7 @@
         <div style="padding: 20px 30px 0 30px;"><div class="sub-nav" id="productModalNav">
             <div class="sub-nav-item active" onclick="switchProductTab('info', this)">Geral</div>
             <div class="sub-nav-item" onclick="switchProductTab('links', this)">Links</div>
-            <div class="sub-nav-item" onclick="alert('Configurações em breve')">Configurações</div>
+            <div class="sub-nav-item" onclick="switchProductTab('config', this)">Configurações</div>
             <div class="sub-nav-item" onclick="alert('Checkout em breve')">Checkout</div>
             <div class="sub-nav-item" onclick="alert('Afiliados em breve')">Afiliados</div>
         </div></div>
@@ -394,9 +394,28 @@
                 <input type="number" id="ipt_preco" class="search-input" style="width:100%; padding-left:15px">
             </div>
             <div id="p-links" class="prod-modal-tab" style="display:none">
-                <div class="table-container"><table><thead><tr><th>NOME DO LINK</th><th>URL</th><th>TIPO</th><th>PREÇO</th><th>STATUS</th><th></th></tr></thead><tbody id="prod-links-table"></tbody></table></div>
+                <div style="padding: 20px; text-align: center;">
+                    <h4 style="margin-bottom:15px; font-weight:800;">Links de Divulgação</h4>
+                    <p style="font-size:13px; color:var(--text-dim); margin-bottom:20px;">Use este link para enviar aos seus alunos.</p>
+                    <div class="table-container">
+                        <table style="width:100%">
+                            <tbody id="prod-links-table"></tbody>
+                        </table>
+                    </div>
+                    <hr style="margin:25px 0; border:0; border-top:1px solid var(--border);">
+                    <button class="btn-primary" onclick="window.location.href='produtor.html'" style="background:var(--orange); width:100%;">
+                        <i class="fas fa-video"></i> GERENCIAR AULAS NO ESTÚDIO
+                    </button>
+                </div>
             </div>
-        </div>
+
+            <div id="p-config" class="prod-modal-tab" style="display:none">
+                <div style="padding:20px;">
+                    <label style="display:block; font-size:12px; font-weight:700; margin-bottom:8px; color:#718096;">PÁGINA DE OBRIGADO (URL)</label>
+                    <input type="text" class="search-input" placeholder="https://..." style="width:100%; margin-bottom:20px; padding-left:15px;">
+                    <button class="btn-primary" style="width:100%" onclick="alert('Configurações salvas!')">Salvar Configurações</button>
+                </div>
+            </div>
         <div class="modal-footer" style="padding: 20px 30px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; background: white;">
             <button class="btn-danger" id="btn-del-prod" onclick="deleteProductFromModal()" style="border-radius: 8px; background: #EF4444; color: white; border: none; padding: 10px 20px; cursor: pointer; font-weight: 700;">Excluir produto</button>
             <button class="btn-primary" onclick="salvarProduto()" id="btn-save-product" style="border-radius: 8px; background: var(--purple-kiwi);">Salvar produto</button>
