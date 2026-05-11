@@ -231,7 +231,57 @@
     }
 
     // Inicia pela checagem de segurança
-    window.onload = checarSeguranca;
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<script>
+    const SUPABASE_URL = 'https://onsbuazkqfehkudhladt.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9uc2J1YXprcWZlaGt1ZGhsYWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzNTI5OTgsImV4cCI6MjA5MzkyODk5OH0.ZypL6LHbPC_z971EDCTh6pVoA7g4qM6hWSWfWVO9a-M';
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    async function carregarConteudoCurso() {
+        // 1. Pega o ID do curso que veio lá da vitrine (pela URL)
+        const urlParams = new URLSearchParams(window.location.search);
+        const cursoId = urlParams.get('id');
+
+        if (!cursoId) {
+            console.error("ID do curso não encontrado na URL");
+            return;
+        }
+
+        // 2. Busca os detalhes desse curso no banco (tabela aulas)
+        const { data: curso, error } = await _supabase
+            .from('aulas')
+            .select('*')
+            .eq('id', cursoId)
+            .single();
+
+        if (error || !curso) {
+            alert("Curso não encontrado!");
+            return;
+        }
+
+        // 3. Atualiza o título e o vídeo na tela do aluno
+        // (Estou usando os IDs padrões que costumamos usar no visual)
+        const tituloElemento = document.getElementById('aula-titulo-principal');
+        const videoContainer = document.getElementById('video-placeholder');
+
+        if (tituloElemento) tituloElemento.innerText = curso.titulo;
+        
+        // Se você tiver uma coluna 'video_url' na tabela 'aulas', aqui ele troca o vídeo:
+        if (videoContainer && curso.video_url) {
+            videoContainer.innerHTML = `<iframe width="100%" height="100%" src="${curso.video_url}" frameborder="0" allowfullscreen></iframe>`;
+        }
+    }
+
+    // Carrega tudo assim que a página abrir
+    window.onload = async function() {
+        // 1. Primeiro garante que a segurança rode
+        if (typeof checarSeguranca === "function") {
+            await checarSeguranca(); 
+        }
+        // 2. Depois carrega o conteúdo do curso dinâmico
+        carregarConteudoCurso(); 
+    };
 </script>
 
 </body>
