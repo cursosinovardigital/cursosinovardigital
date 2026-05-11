@@ -385,21 +385,20 @@
 <div class="sub-nav-item" onclick="switchProductTab('checkout', this)">Checkout</div>
 <div class="sub-nav-item" onclick="switchProductTab('afiliados', this)">Afiliados</div>
         </div></div>
-        <div class="modal-body" style="padding: 30px; flex: 1; overflow-y: auto;">
+<div class="modal-body" style="padding: 30px; flex: 1; overflow-y: auto;">
             <input type="hidden" id="edit-prod-id">
+            
             <div id="p-info" class="prod-modal-tab active">
                 <label style="display:block; font-size:12px; font-weight:700; margin-bottom:8px; color: #718096;">NOME DO PRODUTO</label>
                 <input type="text" id="ipt_nome" class="search-input" style="width:100%; margin-bottom:20px; padding-left:15px">
                 <label style="display:block; font-size:12px; font-weight:700; margin-bottom:8px; color: #718096;">VALOR (R$)</label>
                 <input type="number" id="ipt_preco" class="search-input" style="width:100%; padding-left:15px">
             </div>
+
             <div id="p-links" class="prod-modal-tab" style="display:none">
                 <div style="padding: 20px; text-align: center;">
                     <h4 style="margin-bottom:15px; font-weight:800;">Links de Divulgação</h4>
                     <p style="font-size:13px; color:var(--text-dim); margin-bottom:20px;">Use este link para enviar aos seus alunos.</p>
-<div id="p-links" class="prod-modal-tab" style="display:none">
-                <div style="padding: 20px; text-align: center;">
-                    <h4 style="margin-bottom:15px; font-weight:800;">Links de Divulgação</h4>
                     <div class="table-container">
                         <table style="width:100%"><tbody id="prod-links-table"></tbody></table>
                     </div>
@@ -420,21 +419,14 @@
                 <p style="color:var(--text-dim)">Área de Checkout em desenvolvimento...</p>
             </div>
 
-            <div id="p-afiliados" class="prod-modal-tab" style="display:none; padding:20px; text-align:center;">
+<div id="p-afiliados" class="prod-modal-tab" style="display:none; padding:20px; text-align:center;">
                 <p style="color:var(--text-dim)">Área de Afiliados em desenvolvimento...</p>
             </div>
-
-            <div id="p-checkout" class="prod-modal-tab" style="display:none; padding:20px;">
-                <p style="color:var(--text-dim); text-align:center;">Área de Checkout em desenvolvimento...</p>
-            </div>
-
-            <div id="p-afiliados" class="prod-modal-tab" style="display:none; padding:20px;">
-                <p style="color:var(--text-dim); text-align:center;">Área de Afiliados em desenvolvimento...</p>
-            </div>
-                <div style="padding:20px;">
-                    <label style="display:block; font-size:12px; font-weight:700; margin-bottom:8px; color:#718096;">PÁGINA DE OBRIGADO (URL)</label>
-                    <input type="text" class="search-input" placeholder="https://..." style="width:100%; margin-bottom:20px; padding-left:15px;">
-                    <button class="btn-primary" style="width:100%" onclick="alert('Configurações salvas!')">Salvar Configurações</button>
+        </div> <div class="modal-footer" style="padding: 20px 30px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; background: white; border-radius: 0 0 12px 12px;">
+            <button class="btn-danger" id="btn-del-prod" onclick="deleteProductFromModal()" style="border-radius: 8px; background: #EF4444; color: white; border: none; padding: 10px 20px; cursor: pointer; font-weight: 700;">Excluir produto</button>
+            <button class="btn-primary" onclick="salvarProduto()" id="btn-save-product" style="border-radius: 8px; background: var(--purple-kiwi);">Salvar produto</button>
+        </div>
+    </div> </div>
                 </div>
             </div>
         <div class="modal-footer" style="padding: 20px 30px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; background: white;">
