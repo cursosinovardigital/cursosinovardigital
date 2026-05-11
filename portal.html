@@ -438,11 +438,38 @@
         }
     }
 
-    async function carregarProdutos() {
-        const { data, error } = await _supabase.from('produtos').select('*').order('created_at', { ascending: false });
-        if(error) return;
-        document.getElementById('product-list-body').innerHTML = data.map(p => `<tr><td style="font-weight:700; color:var(--purple-kiwi)">${p.nome}</td><td>R$ ${p.preco.toFixed(2).replace('.',',')}</td><td><span class="badge badge-success">Ativo</span></td><td style="text-align:right"><button class="btn-primary" style="padding: 5px 10px; font-size: 11px; background: var(--green); margin-right:10px;" onclick="simularVenda('${p.id}', ${p.preco})">Venda</button><i class="fas fa-edit" style="cursor:pointer" onclick="editProduct('${p.id}', '${p.nome}', ${p.preco})"></i></td></tr>`).join('');
+async function carregarProdutos() {
+    const { data, error } = await _supabase
+        .from('produtos')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+    if (error) {
+        console.error("Erro ao carregar produtos:", error);
+        return;
     }
+
+    const tbody = document.getElementById('product-list-body');
+    if (!tbody) return;
+
+    if (data.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:30px; color:var(--text-dim)">Nenhum produto encontrado. Clique em "Criar Produto".</td></tr>`;
+        return;
+    }
+
+    tbody.innerHTML = data.map(p => `
+        <tr>
+            <td style="font-weight:700; color:var(--purple-kiwi)">${p.nome}</td>
+            <td>R$ ${p.preco.toFixed(2).replace('.', ',')}</td>
+            <td><span class="badge badge-success">Ativo</span></td>
+            <td style="text-align:right">
+                <button class="btn-primary" style="padding: 5px 10px; font-size: 11px; background: var(--green); margin-right:10px;" 
+                    onclick="simularVenda('${p.id}', ${p.preco})">Venda</button>
+                <i class="fas fa-edit" style="cursor:pointer" onclick="editProduct('${p.id}', '${p.nome}', ${p.preco})"></i>
+            </td>
+        </tr>
+    `).join('');
+}
 
 async function salvarProduto() {
     // Pegando os valores dos inputs do seu Modal (Print 2)
