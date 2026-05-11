@@ -496,25 +496,6 @@
         document.getElementById('ipt_nome').value = nome;
         document.getElementById('ipt_preco').value = preco;
         document.getElementById('modal-product-title').innerText = "Editar produto";
-        document.getElementById('prod-links-table').innerHTML = `<tr><td style="font-weight:600">Checkout</td><td><input type="text" readonly class="search-input" style="padding:8px; font-size:12px; width: 250px; background: #F8F9FA;" value="https://inovar.digital/pay/${id}"></td></tr>`;
-        openProductModal();
-    }
-
-    function nav(id, el) {
-        document.querySelectorAll('.aba-section').forEach(s => s.classList.remove('active'));
-        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-        document.getElementById('aba-' + id).classList.add('active');
-        el.classList.add('active');
-        document.getElementById('header-path').innerHTML = `<strong>Maestro Console</strong> / ${el.innerText.trim()}`;
-        if(id === 'prod') carregarProdutos();
-        if(id === 'vendas' || id === 'dash' || id === 'finan') carregarDadosDashboard();
-    }
-
-    function editProduct(id, nome, preco) {
-        document.getElementById('edit-prod-id').value = id;
-        document.getElementById('ipt_nome').value = nome;
-        document.getElementById('ipt_preco').value = preco;
-        document.getElementById('modal-product-title').innerText = "Editar produto";
 
         // GERAÇÃO DO LINK DINÂMICO PARA A TABELA
         const linkCheckout = `https://inovar.digital/pay/${id}`;
@@ -547,7 +528,6 @@
         openProductModal();
     }
 
-    // ADICIONE ESTA NOVA FUNÇÃO LOGO ABAIXO DA EDITPRODUCT
     function copyToClipboard(text) {
         navigator.clipboard.writeText(text).then(() => {
             alert("Link de checkout copiado!");
