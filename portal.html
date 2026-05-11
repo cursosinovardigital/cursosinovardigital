@@ -631,7 +631,7 @@ async function filtrarVendas() {
     
     async function solicitarSaque() {
         const saldoDisponivelStr = document.getElementById('fin-disponivel').innerText;
-        const saldoAtual = parseFloat(saldoDisponivelStr.replace('R$ ', '').replace(',', '.'));
+        const saldoAtual = parseFloat(saldoDisponivelStr.replace('R$ ', '').split('.').join('').replace(',', '.'));
 
         if (saldoAtual <= 0) {
             return alert("Você não possui saldo disponível para saque!");
