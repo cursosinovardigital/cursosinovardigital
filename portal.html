@@ -705,7 +705,8 @@ async function filtrarVendas() {
         document.getElementById('aba-' + id).classList.add('active');
         el.classList.add('active');
         document.getElementById('header-path').innerHTML = `<strong>Maestro Console</strong> / ${el.innerText.trim()}`;
-        
+
+        if(id === 'relat') atualizarRelatoriosRapidos();
         if(id === 'prod') carregarProdutos();
         if(id === 'market') carregarMarketplaceReal();
         if(id === 'vendas' || id === 'dash' || id === 'finan') carregarDadosDashboard();
