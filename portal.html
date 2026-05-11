@@ -698,6 +698,41 @@ async function filtrarVendas() {
         if(id === 'market') carregarMarketplaceReal();
         if(id === 'vendas' || id === 'dash' || id === 'finan') carregarDadosDashboard();
     }
+    
+    // Alterna entre abas de Saque e Dados Bancários
+    function switchFinTab(tab, el) {
+        document.querySelectorAll('.fin-tab-content').forEach(c => c.style.display = 'none');
+        document.querySelectorAll('#financeiroNav .sub-nav-item').forEach(i => i.classList.remove('active'));
+        document.getElementById('fin-' + tab).style.display = 'block';
+        el.classList.add('active');
+    }
+
+    // Alterna entre formulário Pix e Conta
+    function toggleCamposBanco() {
+        const tipo = document.getElementById('tipo_recebimento').value;
+        document.getElementById('campos-pix').style.display = tipo === 'pix' ? 'block' : 'none';
+        document.getElementById('campos-conta').style.display = tipo === 'conta' ? 'block' : 'none';
+    }
+
+    async function salvarDadosBancarios() {
+        const tipo = document.getElementById('tipo_recebimento').value;
+        const payload = {
+            tipo_recebimento: tipo,
+            chave_pix: document.getElementById('chave_pix_input').value,
+            banco: document.getElementById('banco_nome').value,
+            agencia: document.getElementById('agencia_num').value,
+            conta: document.getElementById('conta_num').value,
+            tipo_conta: document.getElementById('tipo_conta').value
+        };
+
+        const { error } = await _supabase.from('dados_bancarios').insert([payload]);
+
+        if(!error) {
+            alert("Dados bancários salvos com sucesso!");
+        } else {
+            alert("Erro ao salvar. Verifique se a tabela 'dados_bancarios' existe.");
+        }
+    }
 
     function switchProductTab(tab, el) {
         document.querySelectorAll('.prod-modal-tab').forEach(c => c.style.display = 'none');
