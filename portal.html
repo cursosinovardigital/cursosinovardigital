@@ -536,6 +536,23 @@ async function salvarProduto() {
         alert("Por favor, preencha o nome e o preço.");
         return;
     }
+    
+    async function deleteProduct(id) {
+    if (confirm("Tem certeza que deseja excluir este produto? Esta ação não pode ser desfeita.")) {
+        const { error } = await _supabase
+            .from('produtos')
+            .delete()
+            .eq('id', id);
+
+        if (!error) {
+            alert("Produto excluído com sucesso!");
+            carregarProdutos(); // Recarrega a lista para sumir o item da tela
+        } else {
+            console.error("Erro ao excluir:", error);
+            alert("Erro ao excluir produto: " + error.message);
+        }
+    }
+}
 
     const payload = { 
         nome: inputNome.value, 
