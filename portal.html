@@ -711,6 +711,31 @@ async function filtrarVendas() {
         if(id === 'vendas' || id === 'dash' || id === 'finan') carregarDadosDashboard();
     }
     
+    async function atualizarRelatoriosRapidos() {
+    const { data: vendas, error } = await _supabase.from('vendas').select('*');
+    if (error) {
+        console.error("Erro ao buscar vendas para relatório:", error);
+        return;
+    }
+
+    // Calcula Receita Total (Pagas)
+    const receitaTotal = vendas
+        .filter(v => v.status === 'Paga')
+        .reduce((sum, v) => sum + (v.valor_total || 0), 0);
+
+    // Conta Vendas Pendentes
+    const pendentes = vendas.filter(v => v.status === 'Pendente').length;
+
+    // Atualiza os valores nos cards
+    const campoReceita = document.getElementById('relat-receita-total');
+    const campoPendentes = document.getElementById('relat-vendas-pendentes');
+
+    if (campoReceita) campoReceita.innerText = `R$ ${receitaTotal.toFixed(2).replace('.', ',')}`;
+    if (campoPendentes) campoPendentes.innerText = `${pendentes} vendas`;
+    
+    alert("Relatórios atualizados com dados do banco!");
+}
+    
     // Alterna entre abas de Saque e Dados Bancários
     function switchFinTab(tab, el) {
         document.querySelectorAll('.fin-tab-content').forEach(c => c.style.display = 'none');
