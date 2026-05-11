@@ -510,6 +510,50 @@
         if(id === 'vendas' || id === 'dash' || id === 'finan') carregarDadosDashboard();
     }
 
+    function editProduct(id, nome, preco) {
+        document.getElementById('edit-prod-id').value = id;
+        document.getElementById('ipt_nome').value = nome;
+        document.getElementById('ipt_preco').value = preco;
+        document.getElementById('modal-product-title').innerText = "Editar produto";
+
+        // GERAÇÃO DO LINK DINÂMICO PARA A TABELA
+        const linkCheckout = `https://inovar.digital/pay/${id}`;
+        
+        const linksTable = document.getElementById('prod-links-table');
+        if (linksTable) {
+            linksTable.innerHTML = `
+                <tr>
+                    <td style="font-weight:600; font-size:13px;">Checkout Maestro</td>
+                    <td>
+                        <div style="display:flex; gap:5px; align-items:center;">
+                            <input type="text" readonly class="search-input" 
+                                style="padding:8px; font-size:11px; width: 250px; background: #F8F9FA;" 
+                                value="${linkCheckout}">
+                            <button class="btn-primary" style="padding: 7px 10px; font-size:10px;" 
+                                onclick="copyToClipboard('${linkCheckout}')">
+                                <i class="far fa-copy"></i>
+                            </button>
+                        </div>
+                    </td>
+                    <td><span class="badge" style="background:#EBF4FF; color:var(--purple-kiwi);">Padrão</span></td>
+                    <td>R$ ${preco.toFixed(2)}</td>
+                    <td><span style="color: #22C55E; font-weight: 700;">Ativo</span></td>
+                    <td style="text-align:right">
+                        <i class="fas fa-external-link-alt" style="cursor:pointer; color:#718096" 
+                            onclick="window.open('${linkCheckout}', '_blank')"></i>
+                    </td>
+                </tr>`;
+        }
+        openProductModal();
+    }
+
+    // ADICIONE ESTA NOVA FUNÇÃO LOGO ABAIXO DA EDITPRODUCT
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(() => {
+            alert("Link de checkout copiado!");
+        });
+    }
+
     function switchProductTab(tab, el) {
         document.querySelectorAll('.prod-modal-tab').forEach(c => c.style.display = 'none');
         document.querySelectorAll('#productModalNav .sub-nav-item').forEach(i => i.classList.remove('active'));
