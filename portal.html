@@ -366,26 +366,28 @@
                     <div class="app-card"><div class="app-icon" style="color:#25D366;"><i class="fab fa-whatsapp"></i></div><div style="font-weight:800; font-size:18px;">Hotzapp</div><button class="btn-app-config">Configurar</button></div>
                 </div>
             </section>
-
-            <section id="aba-ajuda" class="aba-section"><h2>Ajuda</h2></section>
         </div>
     </main>
 </div>
 
 <div class="modal-overlay" id="modalProduct">
-    <div class="modal-content" style="width: 1000px; max-width: 95%; height: 85vh; display: flex; flex-direction: column;">
+    <div class="modal-content" style="width: 1000px; max-width: 95%; height: 85vh; display: flex; flex-direction: column; padding: 0;">
         <div class="modal-header" style="padding: 20px 30px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
             <h3 id="modal-product-title" style="margin:0; font-weight: 800;">Editar produto</h3>
             <i class="fas fa-times" onclick="closeProductModal()" style="cursor:pointer; color:#A0AEC0"></i>
         </div>
-        <div style="padding: 20px 30px 0 30px;"><div class="sub-nav" id="productModalNav">
-<div class="sub-nav-item" onclick="switchProductTab('info', this)">Geral</div>
-<div class="sub-nav-item" onclick="switchProductTab('links', this)">Links</div>
-<div class="sub-nav-item" onclick="switchProductTab('config', this)">Configurações</div>
-<div class="sub-nav-item" onclick="switchProductTab('checkout', this)">Checkout</div>
-<div class="sub-nav-item" onclick="switchProductTab('afiliados', this)">Afiliados</div>
-        </div></div>
-<div class="modal-body" style="padding: 30px; flex: 1; overflow-y: auto;">
+        
+        <div style="padding: 20px 30px 0 30px;">
+            <div class="sub-nav" id="productModalNav">
+                <div class="sub-nav-item active" onclick="switchProductTab('info', this)">Geral</div>
+                <div class="sub-nav-item" onclick="switchProductTab('links', this)">Links</div>
+                <div class="sub-nav-item" onclick="switchProductTab('config', this)">Configurações</div>
+                <div class="sub-nav-item" onclick="switchProductTab('checkout', this)">Checkout</div>
+                <div class="sub-nav-item" onclick="switchProductTab('afiliados', this)">Afiliados</div>
+            </div>
+        </div>
+
+        <div class="modal-body" style="padding: 30px; flex: 1; overflow-y: auto;">
             <input type="hidden" id="edit-prod-id">
             
             <div id="p-info" class="prod-modal-tab active">
@@ -419,17 +421,12 @@
                 <p style="color:var(--text-dim)">Área de Checkout em desenvolvimento...</p>
             </div>
 
-<div id="p-afiliados" class="prod-modal-tab" style="display:none; padding:20px; text-align:center;">
+            <div id="p-afiliados" class="prod-modal-tab" style="display:none; padding:20px; text-align:center;">
                 <p style="color:var(--text-dim)">Área de Afiliados em desenvolvimento...</p>
             </div>
-        </div> <div class="modal-footer" style="padding: 20px 30px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; background: white; border-radius: 0 0 12px 12px;">
-            <button class="btn-danger" id="btn-del-prod" onclick="deleteProductFromModal()" style="border-radius: 8px; background: #EF4444; color: white; border: none; padding: 10px 20px; cursor: pointer; font-weight: 700;">Excluir produto</button>
-            <button class="btn-primary" onclick="salvarProduto()" id="btn-save-product" style="border-radius: 8px; background: var(--purple-kiwi);">Salvar produto</button>
         </div>
-    </div>
-                </div>
-            </div>
-        <div class="modal-footer" style="padding: 20px 30px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; background: white;">
+
+        <div class="modal-footer" style="padding: 20px 30px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; background: white; border-radius: 0 0 12px 12px;">
             <button class="btn-danger" id="btn-del-prod" onclick="deleteProductFromModal()" style="border-radius: 8px; background: #EF4444; color: white; border: none; padding: 10px 20px; cursor: pointer; font-weight: 700;">Excluir produto</button>
             <button class="btn-primary" onclick="salvarProduto()" id="btn-save-product" style="border-radius: 8px; background: var(--purple-kiwi);">Salvar produto</button>
         </div>
@@ -452,194 +449,37 @@
 
     const TAXA_PERCENTUAL = 0.079; const TAXA_FIXA = 1.00;
 
-    async function carregarMarketplaceReal() {
-        const { data: aulas } = await _supabase.from('aulas').select('*').order('created_at', { ascending: false });
-        const grid = document.getElementById('market-full-grid');
-        const exemplo = `<div class="market-card"><div class="market-thumb"><img src="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?auto=format&fit=crop&w=400&q=80" alt="Violão"></div><div class="market-info"><div class="market-title">Curso de Violão do Zero com Víctor</div><div class="market-commission">Até R$ 147,00 de comissão</div></div></div>`;
-        if (aulas) {
-            grid.innerHTML = exemplo + aulas.map(a => `
-                <div class="market-card" onclick="window.location.href='aluno.html'" style="cursor:pointer">
-                    <div class="market-thumb"><img src="${a.capa_url || ''}"></div>
-                    <div class="market-info">
-                        <div style="font-size:10px; color:var(--orange); font-weight:900;">${a.categoria || 'Geral'}</div>
-                        <div class="market-title">${a.titulo}</div>
-                        <div class="market-commission">Disponível no Maestro</div>
-                    </div>
-                </div>
-            `).join('');
-        }
+    async function carregarProdutos() {
+        const { data, error } = await _supabase.from('produtos').select('*').order('created_at', { ascending: false });
+        if(error) return;
+        document.getElementById('product-list-body').innerHTML = data.map(p => `<tr><td style="font-weight:700; color:var(--purple-kiwi)">${p.nome}</td><td>R$ ${p.preco.toFixed(2).replace('.',',')}</td><td><span class="badge badge-success">Ativo</span></td><td style="text-align:right"><button class="btn-primary" style="padding: 5px 10px; font-size: 11px; background: var(--green); margin-right:10px;" onclick="simularVenda('${p.id}', ${p.preco})">Venda</button><i class="fas fa-edit" style="cursor:pointer" onclick="editProduct('${p.id}', '${p.nome}', ${p.preco})"></i></td></tr>`).join('');
     }
 
-async function carregarProdutos() {
-    const { data, error } = await _supabase
-        .from('produtos')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-    if (error) {
-        console.error("Erro ao carregar produtos:", error);
-        return;
+    async function salvarProduto() {
+        const id = document.getElementById('edit-prod-id').value;
+        const payload = { nome: document.getElementById('ipt_nome').value, preco: parseFloat(document.getElementById('ipt_preco').value), status: 'Ativo' };
+        const res = id ? await _supabase.from('produtos').update(payload).eq('id', id) : await _supabase.from('produtos').insert([payload]);
+        if(!res.error) { alert("Produto salvo com sucesso!"); closeProductModal(); carregarProdutos(); }
     }
-
-    const tbody = document.getElementById('product-list-body');
-    if (!tbody) return;
-
-    if (data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:30px; color:var(--text-dim)">Nenhum produto encontrado. Clique em "Criar Produto".</td></tr>`;
-        return;
-    }
-
-    tbody.innerHTML = data.map(p => `
-        <tr>
-            <td style="font-weight:700; color:var(--purple-kiwi)">${p.nome}</td>
-            <td>R$ ${p.preco.toFixed(2).replace('.', ',')}</td>
-            <td><span class="badge badge-success">Ativo</span></td>
-            <td style="text-align:right">
-                <button class="btn-primary" style="padding: 5px 10px; font-size: 11px; background: var(--green); margin-right:10px;" 
-                    onclick="simularVenda('${p.id}', ${p.preco})">Venda</button>
-                <i class="fas fa-edit" style="cursor:pointer" onclick="editProduct('${p.id}', '${p.nome}', ${p.preco})"></i>
-            </td>
-        </tr>
-    `).join('');
-}
-
-async function salvarProduto() {
-    // Pegando os valores dos inputs do seu Modal (Print 2)
-    const id = document.getElementById('edit-prod-id').value;
-    const nome = document.getElementById('ipt_nome').value;
-    const preco = parseFloat(document.getElementById('ipt_preco').value);
-
-    if (!nome || !preco) {
-        alert("Preencha o nome e o valor do produto!");
-        return;
-    }
-
-    const payload = { 
-        nome: nome, 
-        preco: preco, 
-        status: 'Ativo' 
-    };
-
-    let res;
-    if (id) {
-        // Se já tem ID, ele atualiza o produto existente
-        res = await _supabase.from('produtos').update(payload).eq('id', id);
-    } else {
-        // Se não tem ID, ele cria um novo
-        res = await _supabase.from('produtos').insert([payload]);
-    }
-
-    if (res.error) {
-        console.error("Erro ao salvar:", res.error);
-        alert("Erro no Supabase: " + res.error.message);
-    } else {
-        alert("Produto salvo com sucesso!");
-        closeProductModal(); // Fecha o modal
-        carregarProdutos();  // Atualiza a lista na tela
-    }
-}
 
     function editProduct(id, nome, preco) {
         document.getElementById('edit-prod-id').value = id;
         document.getElementById('ipt_nome').value = nome;
         document.getElementById('ipt_preco').value = preco;
         document.getElementById('modal-product-title').innerText = "Editar produto";
-        document.getElementById('prod-links-table').innerHTML = `<tr><td style="font-weight:600">${nome}</td><td><input type="text" readonly class="search-input" style="padding:8px; font-size:12px; width: 250px; background: #F8F9FA;" value="https://inovar.digital/pay/${id}"></td><td><span class="badge" style="background:#EBF4FF; color:#5D5FEF; padding: 4px 12px;">Checkout</span></td><td>R$ ${preco}</td><td><span style="color: #22C55E; font-weight: 700;">Ativo</span></td><td><i class="fas fa-ellipsis-v"></i></td></tr>`;
+        document.getElementById('prod-links-table').innerHTML = `<tr><td style="font-weight:600">Checkout</td><td><input type="text" readonly class="search-input" style="padding:8px; font-size:12px; width: 250px; background: #F8F9FA;" value="https://inovar.digital/pay/${id}"></td></tr>`;
         openProductModal();
     }
 
-    async function deleteProductFromModal() {
-        const id = document.getElementById('edit-prod-id').value;
-        if(id && confirm("Deseja realmente excluir?")) { await _supabase.from('produtos').delete().eq('id', id); closeProductModal(); carregarProdutos(); }
-    }
-
-    async function carregarAfiliados() {
-        const { data, error } = await _supabase.from('afiliados').select('*, produtos(nome)');
-        if(error || !data) return;
-        const body = document.getElementById('lista-afiliados-body');
-        if (data.length === 0) { body.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 60px; color: #A0AEC0;"><i class="fas fa-users" style="font-size: 40px; margin-bottom: 15px; display: block;"></i>Nenhum afiliado encontrado</td></tr>`; } 
-        else { body.innerHTML = data.map(a => `<tr><td style="font-weight:700">${a.nome}</td><td>${a.produtos?.nome || 'Global'}</td><td><input type="text" readonly class="search-input" style="padding:5px; font-size:11px; width:200px" value="${a.link_afiliado || 'Pendente'}"></td><td>${a.vendas_realizadas}</td><td><i class="fas fa-ellipsis-v" style="cursor:pointer"></i></td></tr>`).join(''); }
-    }
-
-    async function carregarHistoricoSaques() {
-        const { data } = await _supabase.from('saques').select('*').order('created_at', { ascending: false });
-        if (data) document.getElementById('lista-saques-body').innerHTML = data.map(s => `<tr><td>${new Date(s.created_at).toLocaleDateString()}</td><td>R$ ${s.valor.toFixed(2)}</td><td>${s.status}</td></tr>`).join('');
-    }
-
-    async function carregarDadosDashboard() {
-        const { data: vendas, error } = await _supabase.from('vendas').select('*, produtos(nome)').order('created_at', { ascending: false });
-        if(error || !vendas) return;
-        const totalB = vendas.reduce((sum, v) => sum + v.valor_total, 0);
-        const totalL = vendas.reduce((sum, v) => sum + v.valor_liquido, 0);
-        document.getElementById('dash-total-vendas').innerText = `R$ ${totalB.toFixed(2).replace('.', ',')}`;
-        document.getElementById('dash-valor-liquido').innerText = `R$ ${totalL.toFixed(2).replace('.', ',')}`;
-        document.getElementById('dash-count-vendas').innerText = vendas.length;
-        document.getElementById('fin-disponivel').innerText = `R$ ${totalL.toFixed(2).replace('.', ',')}`;
-        document.getElementById('sales-list-body').innerHTML = vendas.map(v => `<tr><td>#${v.id.toString().slice(0,8)}</td><td>${v.produtos?.nome || 'Produto'}</td><td>R$ ${v.valor_total.toFixed(2)}</td><td>${new Date(v.created_at).toLocaleDateString()}</td><td><span class="badge badge-success">Paga</span></td></tr>`).join('');
-        if(salesChartInstance) { salesChartInstance.data.datasets[0].data = vendas.slice(0, 7).reverse().map(v => v.valor_total); salesChartInstance.update(); }
-    }
-
-    async function simularVenda(prodId, preco) {
-        const { data: { user } } = await _supabase.auth.getUser();
-
-        if (!user) {
-            alert("Você precisa estar logado para simular uma compra!");
-            return;
-        }
-
-        const comissaoPlataforma = (preco * TAXA_PERCENTUAL) + TAXA_FIXA;
-        const valorLiquido = preco - comissaoPlataforma;
-
-        try {
-            // 1. REGISTRA A VENDA
-            const { error: errVenda } = await _supabase.from('vendas').insert([{ 
-                produto_id: prodId, 
-                valor_total: preco, 
-                comissao_maestro: comissaoPlataforma, 
-                valor_liquido: valorLiquido, 
-                status: 'Paga',
-                metodo_pagamento: 'Pix' 
-            }]);
-
-            if(errVenda) throw errVenda;
-
-            // 2. CRIA A MATRÍCULA (O seu acesso)
-            const { error: errMatricula } = await _supabase.from('matriculas').insert([{ 
-                user_id: user.id, 
-                produto_id: prodId, 
-                status: 'ativo' 
-            }]);
-
-            if(errMatricula) throw errMatricula;
-
-            alert("Sucesso! Venda registrada e acesso liberado na Área de Membros.");
-            carregarDadosDashboard(); 
-
-        } catch (e) {
-            console.error(e);
-            alert("Erro na simulação: " + e.message);
-        }
-    }
     function nav(id, el) {
         document.querySelectorAll('.aba-section').forEach(s => s.classList.remove('active'));
         document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
         document.getElementById('aba-' + id).classList.add('active');
         el.classList.add('active');
         document.getElementById('header-path').innerHTML = `<strong>Maestro Console</strong> / ${el.innerText.trim()}`;
-        
         if(id === 'prod') carregarProdutos();
-        if(id === 'market') carregarMarketplaceReal();
-        if(id === 'afiliados') carregarAfiliados();
-        if(id === 'dash' || id === 'vendas' || id === 'finan') carregarDadosDashboard();
-        if(id === 'finan') carregarHistoricoSaques();
     }
 
-    function openRelat(t) { document.getElementById('relat-main-list').style.display='none'; document.getElementById('relat-detail').style.display='block'; document.getElementById('relat-title-display').innerText=t; }
-    function closeRelat() { document.getElementById('relat-main-list').style.display='block'; document.getElementById('relat-detail').style.display='none'; }
-    function openColabModal() { document.getElementById('modalColab').classList.add('active'); }
-    function closeColabModal() { document.getElementById('modalColab').classList.remove('active'); }
-    function openProductModal() { document.getElementById('modalProduct').classList.add('active'); }
-    function closeProductModal() { document.getElementById('modalProduct').classList.remove('active'); document.getElementById('edit-prod-id').value = ''; }
     function switchProductTab(tab, el) {
         document.querySelectorAll('.prod-modal-tab').forEach(c => c.style.display = 'none');
         document.querySelectorAll('#productModalNav .sub-nav-item').forEach(i => i.classList.remove('active'));
@@ -647,8 +487,11 @@ async function salvarProduto() {
         el.classList.add('active');
     }
 
+    function openProductModal() { document.getElementById('modalProduct').classList.add('active'); }
+    function closeProductModal() { document.getElementById('modalProduct').classList.remove('active'); document.getElementById('edit-prod-id').value = ''; }
+
     window.onload = function() {
-        carregarProdutos(); carregarDadosDashboard(); carregarMarketplaceReal();
+        carregarProdutos();
         const ctx = document.getElementById('salesChart')?.getContext('2d');
         if(ctx) salesChartInstance = new Chart(ctx, { type: 'line', data: { labels: ['V1','V2','V3','V4','V5','V6','V7'], datasets: [{ data: [0,0,0,0,0,0,0], borderColor: '#5D5FEF', backgroundColor: 'rgba(93, 95, 239, 0.1)', fill: true, tension: 0.4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }});
     };
