@@ -394,15 +394,26 @@
             <section id="aba-relat" class="aba-section">
                 <div id="relat-main-list">
                     <h2>Relatórios</h2>
-                    <div class="report-grid">
-                        <div class="report-card" onclick="openRelat('Receita de co-produção')"><i class="fas fa-users"></i><span>Receita de co-produção</span></div>
-                        <div class="report-card" onclick="openRelat('Receita por produto')"><i class="fas fa-chart-line"></i><span>Receita por produto</span></div>
-                        <div class="report-card" onclick="openRelat('Vendas abandonadas')"><i class="fas fa-shopping-cart"></i><span>Vendas abandonadas</span></div>
-                        <div class="report-card" onclick="openRelat('Engajamento dos alunos')"><i class="far fa-smile"></i><span>Engajamento dos alunos</span></div>
-                        <div class="report-card" onclick="openRelat('Receita por afiliado')"><i class="fas fa-user-friends"></i><span>Receita por afiliado</span></div>
-                        <div class="report-card" onclick="openRelat('Saldo a receber')"><i class="fas fa-wallet"></i><span>Saldo a receber</span></div>
-                        <div class="report-card" onclick="openRelat('Assinaturas canceladas')"><i class="far fa-times-circle"></i><span>Assinaturas canceladas</span></div>
-                    </div>
+<div class="report-grid">
+    <div class="report-card" onclick="atualizarRelatoriosRapidos()">
+        <i class="fas fa-chart-line"></i>
+        <div>
+            <span>Receita por produto</span>
+            <small id="relat-receita-total" style="display:block; color:var(--green); font-weight:800;">R$ 0,00</small>
+        </div>
+    </div>
+    <div class="report-card" onclick="atualizarRelatoriosRapidos()">
+        <i class="fas fa-shopping-cart"></i>
+        <div>
+            <span>Vendas pendentes</span>
+            <small id="relat-vendas-pendentes" style="display:block; color:var(--orange); font-weight:800;">0 vendas</small>
+        </div>
+    </div>
+    <div class="report-card" onclick="openRelat('Receita de co-produção')"><i class="fas fa-users"></i><span>Receita de co-produção</span></div>
+    <div class="report-card" onclick="openRelat('Vendas abandonadas')"><i class="fas fa-shopping-cart"></i><span>Vendas abandonadas</span></div>
+    <div class="report-card" onclick="openRelat('Engajamento dos alunos')"><i class="far fa-smile"></i><span>Engajamento dos alunos</span></div>
+    <div class="report-card" onclick="openRelat('Saldo a receber')"><i class="fas fa-wallet"></i><span>Saldo a receber</span></div>
+</div>
                 </div>
                 <div id="relat-detail" class="report-detail-view"><div class="back-link" onclick="closeRelat()"><i class="fas fa-arrow-left"></i> <span id="relat-title-display"></span></div><div class="card-stat" style="min-height:300px; display:flex; align-items:center; justify-content:center; color:#A0AEC0;"><p>Buscando informações em tempo real...</p></div></div>
             </section>
