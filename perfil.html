@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Perfil | Inovar Digital</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { 
+            --orange: #FF6600; --side-black: #111418; --white: #FFFFFF; 
+            --bg: #F4F7FA; --text: #1A1D23; --border: #E2E8F0; --purple-kiwi: #5D5FEF;
+        }
+
+        * { box-sizing: border-box; font-family: 'Inter', sans-serif; transition: 0.2s; }
+        body { margin: 0; background: var(--bg); color: var(--text); }
+
+        /* HEADER FIXO */
+        header { 
+            height: 70px; background: var(--white); border-bottom: 1px solid var(--border); 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 0 40px; position: sticky; top: 0; z-index: 100;
+        }
+        .logo { font-size: 20px; font-weight: 900; color: var(--side-black); text-decoration: none; }
+        .logo span { color: var(--orange); }
+
+        .btn-back { 
+            text-decoration: none; color: var(--text); font-weight: 700; 
+            display: flex; align-items: center; gap: 10px; font-size: 14px;
+        }
+
+        /* CONTEÚDO CENTRALIZADO */
+        .container { max-width: 800px; margin: 40px auto; padding: 0 20px; }
+        
+        .profile-card { background: var(--white); border-radius: 15px; border: 1px solid var(--border); padding: 40px; }
+        
+        .profile-header { display: flex; align-items: center; gap: 30px; margin-bottom: 40px; }
+        .avatar-circle { 
+            width: 100px; height: 100px; background: #E2E8F0; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; 
+            font-size: 40px; color: #A0AEC0; position: relative; border: 2px solid var(--border);
+            overflow: hidden;
+        }
+        .avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .btn-upload { 
+            position: absolute; bottom: 0; right: 0; background: var(--orange); 
+            width: 32px; height: 32px; border-radius: 50%; border: 3px solid white;
+            color: white; display: flex; align-items: center; justify-content: center; font-size: 12px; cursor: pointer;
+        }
+
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .form-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; }
+        .form-group label { font-size: 12px; font-weight: 700; color: #718096; }
+        .form-input { 
+            padding: 12px 15px; border: 1px solid var(--border); border-radius: 8px; 
+            outline: none; font-size: 14px;
+        }
+        .form-input:focus { border-color: var(--purple-kiwi); box-shadow: 0 0 0 3px rgba(93, 95, 239, 0.1); }
+
+        .section-title { margin: 30px 0 20px 0; font-size: 18px; font-weight: 800; display: flex; align-items: center; gap: 10px; }
+        .section-title i { color: var(--orange); }
+
+        .btn-save { 
+            background: var(--purple-kiwi); color: white; border: none; 
+            padding: 15px 30px; border-radius: 8px; font-weight: 700; 
+            cursor: pointer; width: 100%; margin-top: 20px; font-size: 16px;
+        }
+        .btn-save:hover { opacity: 0.9; transform: translateY(-2px); }
+        .btn-save:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="#" class="logo"><i class="fas fa-rocket" style="color: var(--orange);"></i> Inovar<span>Digital</span></a>
+    <a href="portal.html" class="btn-back"><i class="fas fa-arrow-left"></i> Voltar ao Console</a>
+</header>
+
+<div class="container">
+    <div class="profile-card">
+        <div class="profile-header">
+            <div class="avatar-circle">
+                <i class="fas fa-user" id="default-icon"></i>
+                <img id="profile-img" src="" style="display:none;">
+                <label class="btn-upload">
+                    <i class="fas fa-camera"></i>
+                    <input type="file" id="file-input" style="display:none;" accept="image/*">
+                </label>
+            </div>
+            <div>
+                <h1 style="margin: 0; font-size: 24px; font-weight: 900;" id="display-name">Carregando...</h1>
+                <p style="color: #718096; margin: 5px 0;" id="display-email">...</p>
+            </div>
+        </div>
+
+        <div class="section-title"><i class="fas fa-user-edit"></i> Dados Pessoais</div>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>NOME COMPLETO</label>
+                <input type="text" id="ipt-nome" class="form-input">
+            </div>
+            <div class="form-group">
+                <label>E-MAIL</label>
+                <input type="email" id="ipt-email" class="form-input" readonly style="background: #F8F9FA; cursor: not-allowed;">
+            </div>
+            <div class="form-group">
+                <label>WHATSAPP</label>
+                <input type="text" id="ipt-whats" class="form-input" placeholder="(11) 99999-9999">
+            </div>
+            <div class="form-group">
+                <label>CPF / CNPJ</label>
+                <input type="text" id="ipt-documento" class="form-input" placeholder="000.000.000-00">
+            </div>
+        </div>
+
+        <div class="section-title"><i class="fas fa-lock"></i> Segurança</div>
+        <div class="form-grid">
+            <div class="form-group">
+                <label>NOVA SENHA</label>
+                <input type="password" id="ipt-senha" class="form-input" placeholder="Mínimo 6 caracteres">
+            </div>
+            <div class="form-group">
+                <label>CONFIRMAR SENHA</label>
+                <input type="password" id="ipt-senha-conf" class="form-input" placeholder="Repita a nova senha">
+            </div>
+        </div>
+
+        <div class="section-title"><i class="fas fa-map-marker-alt"></i> Endereço de Faturamento</div>
+        <div class="form-grid">
+            <div class="form-group" style="grid-column: span 2;">
+                <label>LOGRADOURO</label>
+                <input type="text" id="ipt-rua" class="form-input" placeholder="Rua, Avenida...">
+            </div>
+            <div class="form-group">
+                <label>CIDADE</label>
+                <input type="text" id="ipt-cidade" class="form-input">
+            </div>
+            <div class="form-group">
+                <label>ESTADO</label>
+                <input type="text" id="ipt-estado" class="form-input">
+            </div>
+        </div>
+
+        <button class="btn-save" id="btn-save" onclick="salvarPerfil()">Salvar Alterações</button>
+    </div>
+</div>
+
+<script>
+    const SUPABASE_URL = 'https://onsbuazkqfehkudhladt.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9uc2J1YXprcWZlaGt1ZGhsYWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzNTI5OTgsImV4cCI6MjA5MzkyODk5OH0.ZypL6LHbPC_z971EDCTh6pVoA7g4qM6hWSWfWVO9a-M';
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    async function carregarDados() {
+        const { data: { user } } = await _supabase.auth.getUser();
+        if (user) {
+            const meta = user.user_metadata;
+            document.getElementById('display-name').innerText = meta.full_name || 'Usuário Maestro';
+            document.getElementById('display-email').innerText = user.email;
+            
+            document.getElementById('ipt-nome').value = meta.full_name || '';
+            document.getElementById('ipt-email').value = user.email;
+            document.getElementById('ipt-whats').value = meta.whatsapp || '';
+            document.getElementById('ipt-documento').value = meta.documento || '';
+            document.getElementById('ipt-rua').value = meta.rua || '';
+            document.getElementById('ipt-cidade').value = meta.cidade || 'Guarulhos';
+            document.getElementById('ipt-estado').value = meta.estado || 'São Paulo';
+
+            if (meta.avatar_url) {
+                const img = document.getElementById('profile-img');
+                img.src = meta.avatar_url;
+                img.style.display = 'block';
+                document.getElementById('default-icon').style.display = 'none';
+            }
+        }
+    }
+
+    async function salvarPerfil() {
+        const btn = document.getElementById('btn-save');
+        const novaSenha = document.getElementById('ipt-senha').value;
+        const confSenha = document.getElementById('ipt-senha-conf').value;
+        
+        btn.disabled = true;
+        btn.innerText = "Salvando...";
+
+        try {
+            const updates = {
+                data: { 
+                    full_name: document.getElementById('ipt-nome').value,
+                    whatsapp: document.getElementById('ipt-whats').value,
+                    documento: document.getElementById('ipt-documento').value,
+                    rua: document.getElementById('ipt-rua').value,
+                    cidade: document.getElementById('ipt-cidade').value,
+                    estado: document.getElementById('ipt-estado').value
+                }
+            };
+
+            if (novaSenha) {
+                if (novaSenha !== confSenha) throw new Error("As senhas não conferem!");
+                if (novaSenha.length < 6) throw new Error("A senha deve ter no mínimo 6 caracteres.");
+                updates.password = novaSenha;
+            }
+
+            const { error } = await _supabase.auth.updateUser(updates);
+            if (error) throw error;
+
+            alert("Perfil atualizado com sucesso!");
+            location.reload();
+        } catch (err) {
+            alert("Erro: " + err.message);
+        } finally {
+            btn.disabled = false;
+            btn.innerText = "Salvar Alterações";
+        }
+    }
+
+    document.getElementById('file-input').onchange = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        try {
+            const { data: { user } } = await _supabase.auth.getUser();
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${user.id}-${Math.random()}.${fileExt}`;
+            const filePath = `${fileName}`;
+
+            const { error: uploadError } = await _supabase.storage
+                .from('avatars')
+                .upload(filePath, file, { upsert: true });
+
+            if (uploadError) throw uploadError;
+
+            const { data: { publicUrl } } = _supabase.storage.from('avatars').getPublicUrl(filePath);
+            
+            const { error: updateError } = await _supabase.auth.updateUser({ 
+                data: { avatar_url: publicUrl } 
+            });
+
+            if (updateError) throw updateError;
+            
+            location.reload();
+        } catch (err) {
+            alert("Erro no upload: " + err.message);
+        }
+    };
+
+    window.onload = carregarDados;
+</script>
+
+</body>
+</html>
