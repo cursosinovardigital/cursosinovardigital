@@ -227,26 +227,34 @@
         div.style.display = div.style.display === 'none' ? 'block' : 'none';
     }
 
-    function assistir(url, titulo, desc, cat, id) {
-        const player = document.getElementById('main-player');
+function assistir(url, titulo, desc, cat, id) {
+        const wrapper = document.querySelector('.player-wrapper');
         
-        // Se for link do YouTube, converte para embed
-        if (url.includes('youtube.com/watch')) {
-            url = url.replace('watch?v=', 'embed/');
+        if (!url) {
+            alert("Esta aula ainda não possui um vídeo cadastrado.");
+            return;
         }
 
-        // Verifica se é um iframe (YouTube/Vimeo) ou vídeo direto (.mp4)
-        if (url.includes('youtube') || url.includes('vimeo')) {
-            player.parentElement.innerHTML = `<iframe id="main-player" width="100%" height="100%" src="${url}" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
+        // Limpa o player antigo e decide o que renderizar
+        if (url.includes('youtube.com') || url.includes('youtu.be') || url.includes('vimeo.com')) {
+            let embedUrl = url;
+            if (url.includes('youtube.com/watch?v=')) {
+                embedUrl = url.replace('watch?v=', 'embed/');
+            } else if (url.includes('youtu.be/')) {
+                embedUrl = url.replace('youtu.be/', 'youtube.com/embed/');
+            }
+            
+            wrapper.innerHTML = `<iframe id="main-player" width="100%" height="100%" src="${embedUrl}?autoplay=1" frameborder="0" allow="autoplay; fullscreen" allowfullscreen style="border-radius: 24px;"></iframe>`;
         } else {
-            player.src = url;
-            player.play();
+            wrapper.innerHTML = `<video id="main-player" controls autoplay controlsList="nodownload" style="width:100%; height:100%; border-radius: 24px; object-fit: contain;" src="${url}"></video>`;
         }
 
+        // Atualiza os textos da aula
         document.getElementById('view-title').innerText = titulo;
-        document.getElementById('view-desc').innerText = desc || 'Sem descrição.';
+        document.getElementById('view-desc').innerText = desc || 'Sem descrição disponível.';
         document.getElementById('view-cat').innerText = cat || 'Geral';
         
+        // Marca na lateral qual aula está ativa
         document.querySelectorAll('.lesson-item').forEach(i => i.classList.remove('active'));
         const activeItem = document.getElementById('item-' + id);
         if(activeItem) activeItem.classList.add('active');
