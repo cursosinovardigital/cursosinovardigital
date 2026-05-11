@@ -94,14 +94,14 @@
     <a href="#" class="logo">INOVAR<span>DIGITAL</span> | ALUNO</a>
     <div style="display: flex; align-items: center; gap: 20px;">
         <div style="text-align: right;">
-            <div style="font-size: 13px; font-weight: 800;">Víctor Ávila</div>
-            <div style="font-size: 10px; color: var(--orange); font-weight: 900;">PLANILHA PREMIUM</div>
+            <div style="font-size: 13px; font-weight: 800;" id="user-display-name">Carregando...</div>
+            <div style="font-size: 10px; color: var(--orange); font-weight: 900;">ACESSO PREMIUM</div>
         </div>
-        <button class="btn-exit" onclick="window.location.href='portal.html'">Sair do Curso</button>
+        <button class="btn-exit" onclick="window.location.href='portal.html'">Voltar ao Portal</button>
     </div>
 </header>
 
-<main>
+<main id="main-content">
     <section class="video-container">
         <div class="player-wrapper">
             <video id="main-player" controls autoplay controlsList="nodownload"></video>
@@ -131,6 +131,38 @@
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9uc2J1YXprcWZlaGt1ZGhsYWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzNTI5OTgsImV4cCI6MjA5MzkyODk5OH0.ZypL6LHbPC_z971EDCTh6pVoA7g4qM6hWSWfWVO9a-M';
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+    async function checarSeguranca() {
+        const { data: { user } } = await _supabase.auth.getUser();
+
+        // 1. Bloqueio por falta de Login
+        if (!user) {
+            window.location.href = 'index.html';
+            return;
+        }
+
+        // 2. Reconhecimento de Usuário
+        document.getElementById('user-display-name').innerText = user.user_metadata.full_name || user.email.split('@')[0];
+
+        // 3. Bloqueio por falta de Compra (Descomente abaixo quando as matrículas estiverem prontas)
+        /*
+        const { data: matricula } = await _supabase.from('matriculas').select('*').eq('user_id', user.id).eq('status', 'ativo');
+        if (!matricula || matricula.length === 0) {
+             document.getElementById('main-content').innerHTML = `
+                <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:50px;">
+                    <i class="fas fa-lock fa-5x" style="color:var(--orange); margin-bottom:30px; filter: drop-shadow(0 0 20px rgba(255,102,0,0.4))"></i>
+                    <h1 style="font-size:38px; font-weight:900;">Acesso Bloqueado</h1>
+                    <p style="color:var(--text-dim); max-width:500px; line-height:1.6; margin-top:10px;">Você ainda não possui uma licença ativa para este curso. Adquira no marketplace para liberar seu aprendizado.</p>
+                    <button onclick="window.location.href='portal.html'" style="background:var(--orange); color:white; border:none; padding:18px 40px; border-radius:15px; font-weight:900; cursor:pointer; margin-top:30px; letter-spacing:1px;">IR PARA O MARKETPLACE</button>
+                </div>
+             `;
+             return;
+        }
+        */
+
+        // Se estiver tudo OK, inicia o conteúdo
+        init();
+    }
+
     async function init() {
         const { data: aulas, error } = await _supabase
             .from('aulas')
@@ -138,7 +170,6 @@
             .order('created_at', { ascending: true });
 
         if (aulas && aulas.length > 0) {
-            // Lógica para agrupar aulas por módulos
             const grupos = aulas.reduce((acc, aula) => {
                 const modNome = aula.modulo || 'Módulo Geral';
                 if (!acc[modNome]) acc[modNome] = [];
@@ -147,8 +178,6 @@
             }, {});
 
             renderizarModulos(grupos);
-            
-            // Inicia com a primeira aula do primeiro módulo
             const primeiraAula = aulas[0];
             assistir(primeiraAula.video_url, primeiraAula.titulo, primeiraAula.descricao, primeiraAula.categoria, primeiraAula.id);
         } else {
@@ -159,7 +188,6 @@
     function renderizarModulos(grupos) {
         const container = document.getElementById('module-container');
         container.innerHTML = '';
-
         Object.keys(grupos).forEach((modNome, index) => {
             const aulas = grupos[modNome];
             const modHtml = `
@@ -194,17 +222,16 @@
         const player = document.getElementById('main-player');
         player.src = url;
         player.play();
-
         document.getElementById('view-title').innerText = titulo;
         document.getElementById('view-desc').innerText = desc || 'Sem descrição.';
         document.getElementById('view-cat').innerText = cat || 'Geral';
-
-        // Estilo ativo
         document.querySelectorAll('.lesson-item').forEach(i => i.classList.remove('active'));
-        document.getElementById('item-' + id).classList.add('active');
+        const activeItem = document.getElementById('item-' + id);
+        if(activeItem) activeItem.classList.add('active');
     }
 
-    window.onload = init;
+    // Inicia pela checagem de segurança
+    window.onload = checarSeguranca;
 </script>
 
 </body>
