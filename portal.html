@@ -554,7 +554,7 @@ header.maestro-top-bar {
                 <td><span class="badge badge-success">Ativo</span></td>
                 <td style="text-align:right">
                     <button class="btn-primary" style="padding: 5px 10px; font-size: 11px; background: var(--green); margin-right:10px;" onclick="simularVenda('${p.id}', ${p.preco})">Venda</button>
-                    <i class="fas fa-edit" style="cursor:pointer; margin-right:15px;" onclick="editProduct('${p.id}', '${p.nome}', ${p.preco})"></i>
+                    <i class="fas fa-edit" style="cursor:pointer; margin-right:15px;" onclick="editProduct('${p.id}')"></i>
                     <i class="fas fa-trash-alt" style="cursor:pointer; color:#EF4444" onclick="deleteProduct('${p.id}')"></i>
                 </td>
             </tr>`).join('')
