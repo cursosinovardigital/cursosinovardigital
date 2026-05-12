@@ -966,11 +966,9 @@ async function carregarAreasMembros() {
 }
 
 async function carregarAfiliados() {
-    // 1. Busca todos os perfis
     const { data: perfis } = await _supabase.from('perfis').select('*');
     
-    // 2. BUSCA APENAS VENDAS ONDE A COMISSÃO AINDA É FALSA (NÃO PAGA)
-    // Usamos .ilike('status', 'paga') para evitar erro de letra maiúscula/minúscula
+    // Mudança aqui: .ilike('status', 'paga') aceita qualquer variação de letra
     const { data: vendas } = await _supabase
         .from('vendas')
         .select('*, produtos(comissao_afiliado)')
@@ -981,18 +979,16 @@ async function carregarAfiliados() {
     if (!tbody || !perfis) return;
 
     const html = perfis.map(af => {
-        // TROCA 1: Aqui comparamos com af.afiliado_id que é o nome da sua coluna no Supabase
         const vendasDoAfiliado = (vendas || []).filter(v => v.afiliado_id === af.afiliado_id);
         
-        const totalGerado = vendasDoAfiliado.reduce((sum, v) => sum + (v.valor_total || 0), 0);
-        
+        // Se não achou venda pra esse ID, pula pra não poluir a lista
+        if (vendasDoAfiliado.length === 0) return '';
+
+        const totalGerado = vendasDoAfiliado.reduce((sum, v) => sum + (Number(v.valor_total) || 0), 0);
         const comissaoDevida = vendasDoAfiliado.reduce((sum, v) => {
             const perc = v.produtos?.comissao_afiliado || 0;
-            return sum + (v.valor_total * perc / 100);
+            return sum + (Number(v.valor_total) * perc / 100);
         }, 0);
-
-        // Se o afiliado não tiver vendas pendentes, não mostramos ele na lista
-        if (vendasDoAfiliado.length === 0) return '';
 
         return `
             <tr>
