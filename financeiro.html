@@ -156,6 +156,46 @@
             const cards = document.querySelectorAll('.card-stat h2');
             if(cards[3]) cards[3].innerText = (liquidoTotal / vendas.length).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
+            // --- INSERÇÃO CIRÚRGICA: HISTÓRICO E BARRA LATERAL ---
+            try {
+                // Preenche o valor de resgate
+                if(document.getElementById('resgate-valor')) {
+                    document.getElementById('resgate-valor').innerText = liquidoTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+                }
+
+                // Preenche a tabela de transações
+                const tbody = document.getElementById('transacoes-body');
+                if (tbody) {
+                    tbody.innerHTML = vendas.slice(0, 6).map(v => `
+                        <tr>
+                            <td>${new Date(v.created_at).toLocaleDateString('pt-BR')}</td>
+                            <td style="font-weight:800; color:var(--dark)">Venda Maestro</td>
+                            <td><span style="font-size:10px; background:#F1F5F9; padding:4px 8px; border-radius:5px; font-weight:900;">${(v.metodo_pagamento || 'PIX').toUpperCase()}</span></td>
+                            <td style="color:var(--green); font-weight:800;">+ ${v.valor_liquido.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
+                            <td><i class="fas fa-check-circle" style="color:var(--green)"></i></td>
+                        </tr>`).join('');
+                }
+
+                // Preenche a barra de métodos
+                const convBox = document.querySelector('.conversion-box');
+                if (convBox) {
+                    const qtdPix = vendas.filter(v => String(v.metodo_pagamento || '').toLowerCase() === 'pix').length;
+                    const percPix = Math.round((qtdPix / vendas.length) * 100);
+                    convBox.innerHTML = `
+                        <span class="stat-info"><span style="margin-bottom:20px;">MÉTODOS DE PAGAMENTO</span></span>
+                        <div class="conv-item">
+                            <div class="conv-label"><span>Pix</span><span>${percPix}%</span></div>
+                            <div class="bar-bg"><div class="bar-fill" style="width: ${percPix}%; background: #10B981;"></div></div>
+                        </div>
+                        <div class="conv-item">
+                            <div class="conv-label"><span>Outros</span><span>${100 - percPix}%</span></div>
+                            <div class="bar-bg"><div class="bar-fill" style="width: ${100 - percPix}%; background: var(--orange);"></div></div>
+                        </div>`;
+                }
+            } catch (err) {
+                console.error("Erro na atualização dos dados secundários:", err);
+            }
+            // --- FIM DA INSERÇÃO ---
             // Renderiza o gráfico com um pequeno "fôlego" para o navegador
             setTimeout(() => carregarGrafico(vendas), 300);
         }
