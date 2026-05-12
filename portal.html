@@ -875,6 +875,24 @@ async function carregarAreasMembros() {
         if(id === 'vendas' || id === 'dash' || id === 'finan') carregarDadosDashboard();
     }
     
+    async function confirmarPagamento(idAfiliado, valor) {
+    if(confirm(`Confirmar que você enviou o PIX de R$ ${valor.toFixed(2).replace('.',',')} para ${idAfiliado}?`)) {
+        const { error } = await _supabase
+            .from('vendas')
+            .update({ comissao_paga: true })
+            .eq('afiliado_id', idAfiliado)
+            .eq('comissao_paga', false);
+
+        if (!error) {
+            alert("Pagamento registrado! O saldo do afiliado foi zerado.");
+            carregarAfiliados();
+            carregarDadosDashboard();
+        } else {
+            alert("Erro ao registrar no banco: " + error.message);
+        }
+    }
+}
+    
     async function atualizarRelatoriosRapidos() {
     const { data: vendas, error } = await _supabase.from('vendas').select('*');
     if (error) {
