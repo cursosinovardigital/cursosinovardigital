@@ -1044,33 +1044,39 @@ async function carregarAfiliados() {
 }
     
 async function confirmarPagamento(idAfiliado, valor) {
-    if(confirm(`Confirmar que você já enviou o PIX de R$ ${valor.toFixed(2).replace('.',',')} para ${idAfiliado}?`)) {
-        
-        // 1. Busca todas as vendas desse afiliado que ainda não foram pagas
-        const { data: vendasPendentes } = await _supabase
-            .from('vendas')
-            .select('id')
-            .eq('afiliado_id', idAfiliado)
-            .eq('comissao_paga', false);
+    // 1. Confirmação visual para o usuário
+    const confirmacao = confirm(`Confirmar que você já enviou o PIX de R$ ${valor.toFixed(2).replace('.',',')} para ${idAfiliado}?\n\nIsso marcará todas as vendas pendentes dele como pagas.`);
 
-        if (!vendasPendentes || vendasPendentes.length === 0) return;
+    if (!confirmacao) return;
 
-        // 2. Cria uma lista apenas com os IDs dessas vendas
-        const idsParaAtualizar = vendasPendentes.map(v => v.id);
+    try {
+        console.log(`Dando baixa nas vendas do afiliado: ${idAfiliado}`);
 
-        // 3. Dá baixa em todas de uma vez no Supabase
+        // 2. Atualização direta (Mais rápido e seguro)
+        // O .update já aplica o filtro e altera tudo de uma vez
         const { error } = await _supabase
             .from('vendas')
             .update({ comissao_paga: true })
-            .in('id', idsParaAtualizar);
+            .eq('afiliado_id', idAfiliado) // Filtra pelo afiliado
+            .eq('comissao_paga', false)    // Garante que só paga o que deve
+            .ilike('status', 'paga');      // Segurança extra: só paga vendas confirmadas
 
-        if (!error) {
-            alert("Baixa de pagamento registrada! O saldo do afiliado foi zerado.");
-            carregarAfiliados(); // Recarrega a lista para sumir o nome
-            carregarDadosDashboard(); // Atualiza o seu lucro líquido no topo
-        } else {
-            alert("Erro ao registrar no banco: " + error.message);
+        if (error) throw error;
+
+        // 3. Sucesso!
+        alert("Baixa de pagamento registrada! O saldo do afiliado foi zerado.");
+        
+        // 4. Recarrega as funções de tela para atualizar os números na hora
+        await carregarAfiliados(); 
+        
+        // Se você tiver a função de dashboard, ela atualiza o lucro líquido
+        if (typeof carregarDadosDashboard === "function") {
+            await carregarDadosDashboard();
         }
+
+    } catch (error) {
+        console.error("Erro ao processar baixa:", error);
+        alert("Erro ao registrar no banco: " + (error.message || "Erro desconhecido"));
     }
 }
     
