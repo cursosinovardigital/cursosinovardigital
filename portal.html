@@ -640,15 +640,11 @@ async function carregarDadosDashboard() {
 
     if(error || !vendas) return;
 
-    // --- CÁLCULO DE INTELIGÊNCIA FINANCEIRA ---
+// --- CÁLCULO DE INTELIGÊNCIA FINANCEIRA ---
     let totalBruto = 0;
     let totalLiquidoPago = 0;
     let totalPendente = 0;
-
-let totalBruto = 0;
-    let totalLiquidoPago = 0;
-    let totalPendente = 0;
-    let totalComissoesAfiliados = 0; // Nova variável para rastrear o que você deve
+    let totalComissoesAfiliados = 0; 
 
     vendas.forEach(v => {
         totalBruto += v.valor_total || 0;
@@ -666,6 +662,8 @@ let totalBruto = 0;
         }
     });
 
+    // O seu lucro real é o líquido total menos as comissões dos parceiros
+    const lucroRealDono = totalLiquidoPago - totalComissoesAfiliados;
     // O seu lucro real é o líquido total menos as comissões dos parceiros
     const lucroRealDono = totalLiquidoPago - totalComissoesAfiliados;
 
