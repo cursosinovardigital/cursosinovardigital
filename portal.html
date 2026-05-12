@@ -967,21 +967,21 @@ async function carregarAreasMembros() {
 
 async function carregarAfiliados() {
     const { data: perfis } = await _supabase.from('perfis').select('*');
-    
-    // Mudança aqui: .ilike('status', 'paga') aceita qualquer variação de letra
-    const { data: vendas } = await _supabase
-        .from('vendas')
-        .select('*, produtos(comissao_afiliado)')
-        .ilike('status', 'paga') 
-        .eq('comissao_paga', false); 
+    const { data: vendas } = await _supabase.from('vendas').select('*, produtos(comissao_afiliado)');
+
+    console.log("Processando afiliados...");
 
     const tbody = document.getElementById('lista-afiliados-body');
     if (!tbody || !perfis) return;
 
     const html = perfis.map(af => {
-        const vendasDoAfiliado = (vendas || []).filter(v => v.afiliado_id === af.afiliado_id);
-        
-        // Se não achou venda pra esse ID, pula pra não poluir a lista
+        // Filtro ultra-potente: ignora se é maiúsculo ou minúsculo e limpa espaços
+        const vendasDoAfiliado = (vendas || []).filter(v => 
+            v.afiliado_id?.trim().toLowerCase() === af.afiliado_id?.trim().toLowerCase() &&
+            v.status?.trim().toLowerCase() === 'paga' &&
+            v.comissao_paga === false
+        );
+
         if (vendasDoAfiliado.length === 0) return '';
 
         const totalGerado = vendasDoAfiliado.reduce((sum, v) => sum + (Number(v.valor_total) || 0), 0);
