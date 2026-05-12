@@ -844,7 +844,8 @@ async function carregarAreasMembros() {
         document.getElementById('aba-' + id).classList.add('active');
         el.classList.add('active');
         document.getElementById('header-path').innerHTML = `<strong>Maestro Console</strong> / ${el.innerText.trim()}`;
-        
+
+        if(id === 'afiliados') carregarAfiliados();
         if(id === 'membro') carregarAreasMembros();
         if(id === 'relat') atualizarRelatoriosRapidos();
         if(id === 'prod') carregarProdutos();
