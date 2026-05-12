@@ -160,14 +160,14 @@
             const liquidoTotal = vendas.reduce((acc, v) => acc + (v.valor_liquido || 0), 0);
             const ticketMedio = liquidoTotal / vendas.length;
 
-            // 1. Atualiza os Cards Superiores (Correção da formatação de moeda)
+            // 1. Atualiza os Cards Superiores
             document.getElementById('saldo-liquido').innerText = liquidoTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
             document.getElementById('vendas-count').innerText = vendas.length;
             
             const cards = document.querySelectorAll('.card-stat h2');
             if(cards[3]) cards[3].innerText = ticketMedio.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
-            // 2. Inteligência de Métodos de Pagamento (Baseado no banco)
+            // 2. Inteligência de Métodos de Pagamento
             const totalVendas = vendas.length;
             const qtdPix = vendas.filter(v => String(v.metodo_pagamento || '').toLowerCase() === 'pix').length;
             const percPix = Math.round((qtdPix / totalVendas) * 100);
@@ -198,16 +198,19 @@
                 </tr>
             `).join('');
 
-            // 4. Preparação do Gráfico (Correção da lógica de datas)
+            // 4. Preparação do Gráfico (Aqui é onde a mágica acontece)
             const labelsGrafico = [];
             const dadosGrafico = [];
 
             for (let i = 6; i >= 0; i--) {
                 const d = new Date();
                 d.setDate(d.getDate() - i);
-                const dataFormatada = d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' }).replace('.', '');
-                labelsGrafico.push(dataFormatada);
+                
+                // Label formatada: 12 Mai
+                const label = d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' }).replace('.', '');
+                labelsGrafico.push(label);
 
+                // Soma o lucro real desse dia específico
                 const somaDia = vendas
                     .filter(v => new Date(v.created_at).toLocaleDateString('pt-BR') === d.toLocaleDateString('pt-BR'))
                     .reduce((acc, v) => acc + (v.valor_liquido || 0), 0);
@@ -215,6 +218,7 @@
                 dadosGrafico.push(somaDia);
             }
 
+            // AGORA SIM: Chamamos a função de renderização com os dados reais
             renderChart(labelsGrafico, dadosGrafico);
         }
     }
@@ -232,7 +236,7 @@
                     data: data,
                     borderColor: '#FF6600',
                     borderWidth: 4,
-                    pointRadius: 5,
+                    pointRadius: 6,
                     pointBackgroundColor: '#FF6600',
                     fill: true,
                     backgroundColor: (context) => {
