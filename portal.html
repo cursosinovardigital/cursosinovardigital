@@ -975,8 +975,9 @@ async function carregarAreasMembros() {
 }
 
 async function carregarAfiliados() {
-    console.log("Processando inteligência de afiliados...");
-    // 1. Busca os perfis (onde estão os nomes e fotos) e as vendas
+    console.log("Sincronizando saldo de afiliados...");
+    
+    // 1. Busca os dados necessários das tabelas corretas
     const { data: perfis } = await _supabase.from('perfis').select('*');
     const { data: vendas } = await _supabase.from('vendas').select('*');
     const { data: produtos } = await _supabase.from('produtos').select('id, comissao_afiliado');
@@ -984,19 +985,17 @@ async function carregarAfiliados() {
     const tbody = document.getElementById('lista-afiliados-body');
     if (!tbody || !perfis) return;
 
+    // 2. Mapeia os perfis e calcula os valores baseados nas vendas REAIS
     const html = perfis.map(af => {
-        // Filtra vendas deste afiliado que estão pagas e com comissão pendente
         const vendasDoAfiliado = (vendas || []).filter(v => 
             String(v.afiliado_id || '').trim().toLowerCase() === String(af.afiliado_id || '').trim().toLowerCase() &&
-            String(v.status).trim().toLowerCase() === 'paga' &&
+            String(v.status).toLowerCase() === 'paga' &&
             v.comissao_paga === false
         );
 
         if (vendasDoAfiliado.length === 0) return '';
 
         const totalGerado = vendasDoAfiliado.reduce((sum, v) => sum + (Number(v.valor_total) || 0), 0);
-        
-        // Calcula a comissão cruzando com o percentual do produto
         const comissaoDevida = vendasDoAfiliado.reduce((sum, v) => {
             const prod = (produtos || []).find(p => p.id === v.produto_id);
             const perc = prod ? (Number(prod.comissao_afiliado) || 0) : 0;
@@ -1007,7 +1006,7 @@ async function carregarAfiliados() {
             <tr>
                 <td>
                     <div style="display:flex; align-items:center; gap:12px;">
-                        <img src="${af.foto_url || 'https://via.placeholder.com/35'}" style="width:35px; height:35px; border-radius:50%; object-fit:cover; border: 2px solid var(--border);">
+                        <img src="${af.foto_url || 'https://via.placeholder.com/35'}" style="width:35px; height:35px; border-radius:50%; object-fit:cover; border: 1px solid var(--border);">
                         <div>
                             <div style="font-weight:700; color:var(--text)">${af.nome_completo || af.afiliado_id}</div>
                             <div style="font-size:10px; color:var(--text-dim)">${af.afiliado_id}</div>
