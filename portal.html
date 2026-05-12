@@ -707,14 +707,26 @@ async function carregarDadosDashboard() {
     }
 }
 
-    async function simularVenda(prodId, preco) {
-        const { data: { user } } = await _supabase.auth.getUser();
-        if (!user) return alert("Faça login primeiro!");
-        const comissao = (preco * TAXA_PERCENTUAL) + TAXA_FIXA;
-        const liquido = preco - comissao;
-        await _supabase.from('vendas').insert([{ produto_id: prodId, valor_total: preco, comissao_maestro: comissao, valor_liquido: liquido, status: 'Paga', metodo_pagamento: 'Pix' }]);
-        alert("Simulação de venda concluída!");
-        carregarDadosDashboard();
+async function simularVenda(prodId, preco) {
+    const { data: { user } } = await _supabase.auth.getUser();
+    // Se não tiver usuário logado, usamos um ID de teste
+    const comissao = (preco * TAXA_PERCENTUAL) + TAXA_FIXA;
+    const liquido = preco - comissao;
+
+    await _supabase.from('vendas').insert([{ 
+        produto_id: prodId, 
+        valor_total: preco, 
+        comissao_maestro: comissao, 
+        valor_liquido: liquido, 
+        status: 'Paga', 
+        metodo_pagamento: 'Pix',
+        afiliado_id: 'teste_vitor', // <--- ADICIONAMOS ISSO AQUI
+        comissao_paga: false        // <--- E ISSO AQUI
+    }]);
+
+    alert("Simulação de venda COM AFILIADO concluída!");
+    carregarDadosDashboard();
+    if(document.getElementById('aba-afiliados').classList.contains('active')) carregarAfiliados();
 }
 
 async function filtrarVendas() {
