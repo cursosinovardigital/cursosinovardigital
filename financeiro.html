@@ -105,15 +105,16 @@
     </div>
 
     <div class="main-fin">
-        <div class="chart-box">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-                <span class="stat-info"><span>Performance de Receita</span><h3 style="margin:5px 0 0; font-weight:800;">Fluxo de Caixa (7D)</h3></span>
-                <select style="padding:8px; border-radius:8px; border:1px solid var(--border); font-weight:600; outline:none;"><option>Últimos 7 dias</option></select>
-            </div>
-            <div style="position: relative; height: 300px; width: 100%;">
-                <canvas id="financeChart"></canvas>
-            </div>
-        </div>
+<div class="chart-box">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+        <span class="stat-info"><span>Performance de Receita</span><h3 style="margin:5px 0 0; font-weight:800;">Fluxo de Caixa (7D)</h3></span>
+        <select style="padding:8px; border-radius:8px; border:1px solid var(--border); font-weight:600; outline:none;"><option>Últimos 7 dias</option></select>
+    </div>
+    <!-- FORÇANDO ALTURA PARA O GRÁFICO APARECER -->
+    <div style="min-height: 300px; width: 100%; position: relative;">
+        <canvas id="financeChart" style="display: block; width: 100%; height: 300px;"></canvas>
+    </div>
+</div>
 
         <div class="table-box">
             <div class="table-head"><h3 style="margin:0; font-weight:800;">Histórico de Transações</h3><i class="fas fa-search" style="color:var(--text-dim)"></i></div>
@@ -144,57 +145,23 @@
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     async function init() {
-        const { data: vendas, error } = await _supabase.from('vendas').select('*').order('created_at', { ascending: false });
+        const { data: vendas } = await _supabase.from('vendas').select('*').order('created_at', { ascending: false });
         
         if (vendas && vendas.length > 0) {
-            atualizarCards(vendas);
-            atualizarMetodos(vendas);
-            atualizarTransacoes(vendas);
-            // Função separada para carregar e processar o gráfico
-            await carregarDadosGrafico(vendas);
+            // Atualiza o que já está funcionando
+            const liquidoTotal = vendas.reduce((acc, v) => acc + (v.valor_liquido || 0), 0);
+            document.getElementById('saldo-liquido').innerText = liquidoTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+            document.getElementById('vendas-count').innerText = vendas.length;
+            
+            const cards = document.querySelectorAll('.card-stat h2');
+            if(cards[3]) cards[3].innerText = (liquidoTotal / vendas.length).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+            // Renderiza o gráfico com um pequeno "fôlego" para o navegador
+            setTimeout(() => carregarGrafico(vendas), 300);
         }
     }
 
-    function atualizarCards(vendas) {
-        const liquidoTotal = vendas.reduce((acc, v) => acc + (v.valor_liquido || 0), 0);
-        const ticketMedio = liquidoTotal / vendas.length;
-        
-        const valorFormatado = liquidoTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-        document.getElementById('saldo-liquido').innerText = valorFormatado;
-        document.getElementById('resgate-valor').innerText = valorFormatado;
-        document.getElementById('vendas-count').innerText = vendas.length;
-        document.getElementById('ticket-medio').innerText = ticketMedio.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    }
-
-    function atualizarMetodos(vendas) {
-        const qtdPix = vendas.filter(v => String(v.metodo_pagamento || '').toLowerCase() === 'pix').length;
-        const percPix = Math.round((qtdPix / vendas.length) * 100);
-        const convBox = document.querySelector('.conversion-box');
-        convBox.innerHTML = `
-            <span class="stat-info"><span style="margin-bottom:20px;">Métodos de Pagamento</span></span>
-            <div class="conv-item">
-                <div class="conv-label"><span>Pix</span><span>${percPix}%</span></div>
-                <div class="bar-bg"><div class="bar-fill" style="width: ${percPix}%; background: #10B981;"></div></div>
-            </div>
-            <div class="conv-item">
-                <div class="conv-label"><span>Outros</span><span>${100 - percPix}%</span></div>
-                <div class="bar-bg"><div class="bar-fill" style="width: ${100 - percPix}%; background: var(--orange);"></div></div>
-            </div>`;
-    }
-
-    function atualizarTransacoes(vendas) {
-        const tbody = document.getElementById('transacoes-body');
-        tbody.innerHTML = vendas.slice(0, 6).map(v => `
-            <tr>
-                <td>${new Date(v.created_at).toLocaleDateString('pt-BR')}</td>
-                <td style="font-weight:800; color:var(--dark)">Venda Maestro</td>
-                <td><span style="font-size:10px; background:#F1F5F9; padding:4px 8px; border-radius:5px; font-weight:900;">${(v.metodo_pagamento || 'SISTEMA').toUpperCase()}</span></td>
-                <td style="color:var(--green); font-weight:800;">+ ${v.valor_liquido.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
-                <td><i class="fas fa-check-circle" style="color:var(--green)"></i></td>
-            </tr>`).join('');
-    }
-
-    async function carregarDadosGrafico(vendas) {
+    function carregarGrafico(vendas) {
         const labels = [];
         const dados = [];
 
@@ -209,13 +176,9 @@
             dados.push(soma);
         }
 
-        renderizarGrafico(labels, dados);
-    }
+        const ctx = document.getElementById('financeChart');
+        if (!ctx) return;
 
-    function renderizarGrafico(labels, data) {
-        const canvas = document.getElementById('financeChart');
-        if (!canvas) return;
-        const ctx = canvas.getContext('2d');
         if (window.myChart) window.myChart.destroy();
         
         window.myChart = new Chart(ctx, {
@@ -223,13 +186,13 @@
             data: {
                 labels: labels,
                 datasets: [{
-                    data: data,
+                    label: 'Faturamento',
+                    data: dados,
                     borderColor: '#FF6600',
                     borderWidth: 4,
                     pointRadius: 6,
-                    pointBackgroundColor: '#FF6600',
-                    fill: true,
                     backgroundColor: 'rgba(255, 102, 0, 0.1)',
+                    fill: true,
                     tension: 0.4
                 }]
             },
@@ -238,18 +201,15 @@
                 maintainAspectRatio: false,
                 plugins: { legend: { display: false } },
                 scales: {
-                    y: { 
-                        beginAtZero: true, 
-                        grid: { color: '#F1F5F9' },
-                        ticks: { callback: (v) => 'R$ ' + v } 
-                    },
+                    y: { beginAtZero: true, ticks: { callback: (v) => 'R$ ' + v } },
                     x: { grid: { display: false } }
                 }
             }
         });
     }
 
-    window.onload = init;
+    // Garante que o script rode após o carregamento total da janela
+    window.addEventListener('load', init);
 </script>
 </body>
 </html>
