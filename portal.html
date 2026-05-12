@@ -966,27 +966,36 @@ async function carregarAreasMembros() {
 }
 
 async function carregarAfiliados() {
-    const { data: perfis } = await _supabase.from('perfis').select('*');
-    const { data: vendas } = await _supabase.from('vendas').select('*, produtos(comissao_afiliado)');
-
     console.log("Processando afiliados...");
+    
+    // 1. Busca os perfis
+    const { data: perfis } = await _supabase.from('perfis').select('*');
+    
+    // 2. Busca as vendas (SIMPLIFICADO: tiramos o join com produtos para não dar erro 400)
+    const { data: vendas } = await _supabase.from('vendas').select('*');
+    
+    // 3. Busca os produtos separadamente para sabermos as comissões
+    const { data: produtos } = await _supabase.from('produtos').select('id, comissao_afiliado');
 
     const tbody = document.getElementById('lista-afiliados-body');
     if (!tbody || !perfis) return;
 
     const html = perfis.map(af => {
-        // Filtro ultra-potente: ignora se é maiúsculo ou minúsculo e limpa espaços
+        // Filtro inteligente
         const vendasDoAfiliado = (vendas || []).filter(v => 
-            v.afiliado_id?.trim().toLowerCase() === af.afiliado_id?.trim().toLowerCase() &&
-            v.status?.trim().toLowerCase() === 'paga' &&
+            String(v.afiliado_id).trim().toLowerCase() === String(af.afiliado_id).trim().toLowerCase() &&
+            String(v.status).trim().toLowerCase() === 'paga' &&
             v.comissao_paga === false
         );
 
         if (vendasDoAfiliado.length === 0) return '';
 
         const totalGerado = vendasDoAfiliado.reduce((sum, v) => sum + (Number(v.valor_total) || 0), 0);
+        
+        // Calculamos a comissão usando a lista de produtos que baixamos
         const comissaoDevida = vendasDoAfiliado.reduce((sum, v) => {
-            const perc = v.produtos?.comissao_afiliado || 0;
+            const prod = (produtos || []).find(p => p.id === v.produto_id);
+            const perc = prod ? prod.comissao_afiliado : 0;
             return sum + (Number(v.valor_total) * perc / 100);
         }, 0);
 
