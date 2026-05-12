@@ -441,7 +441,7 @@
     let produtoAtual = null;
     let metodoSelecionado = 'pix';
 
-    async function initCheckout() {
+async function initCheckout() {
         const params = new URLSearchParams(window.location.search);
         const id = params.get('id');
 
@@ -463,6 +463,14 @@
 
         produtoAtual = data;
         document.getElementById('prod_nome').innerText = data.nome;
+        
+        // --- AJUSTE DA IMAGEM ---
+        const imgBox = document.querySelector('.product-img-box');
+        if (data.capa_url) {
+            // Se o produto tem foto, substitui o ícone pela imagem real
+            imgBox.innerHTML = `<img src="${data.capa_url}" style="width:100%; height:100%; object-fit:cover;">`;
+        }
+
         const precoFormatado = `R$ ${data.preco.toFixed(2).replace('.', ',')}`;
         document.getElementById('subtotal').innerText = precoFormatado;
         document.getElementById('total_price').innerText = precoFormatado;
