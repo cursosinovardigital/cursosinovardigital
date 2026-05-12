@@ -489,7 +489,7 @@ async function initCheckout() {
         }
     }
 
-    async function processarPagamento() {
+async function processarPagamento() {
         if(metodoSelecionado === 'card') {
             alert("Por favor, selecione Pix. Pagamento via cartão em manutenção.");
             return;
@@ -503,32 +503,39 @@ async function initCheckout() {
             return;
         }
 
+        // --- CÁLCULO DE TAXAS MAESTRO ---
         const taxaPercentual = 0.079;
         const taxaFixa = 1.00;
-        const comissao = (produtoAtual.preco * taxaPercentual) + taxaFixa;
-        const liquido = produtoAtual.preco - comissao;
+        const comissaoMaestro = (produtoAtual.preco * taxaPercentual) + taxaFixa;
+        
+        // Valor que sobra para você (Líquido)
+        const valorLiquido = produtoAtual.preco - comissaoMaestro;
 
-        // Botão visual de carregando
+        // Visual de carregando (UX Profissional)
         const btn = document.querySelector('.btn-pay');
         const originalText = btn.innerHTML;
         btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> PROCESSANDO...`;
         btn.style.opacity = '0.7';
         btn.disabled = true;
 
+        // Registro da venda no Supabase
         const { error } = await _supabase.from('vendas').insert([{
             produto_id: produtoAtual.id,
             valor_total: produtoAtual.preco,
-            comissao_maestro: comissao,
-            valor_liquido: liquido,
-            status: 'Paga', // Simulação
+            comissao_maestro: comissaoMaestro,
+            valor_liquido: valorLiquido,
+            status: 'Paga', 
             metodo_pagamento: 'Pix',
             email_comprador: email,
             nome_comprador: nome
         }]);
 
         if (!error) {
-            alert("Simulação de Pix realizada! Venda registrada com sucesso.");
-            window.location.href = "obrigado.html"; 
+            alert("Pagamento aprovado com sucesso!");
+            
+            // REDIRECIONAMENTO INTELIGENTE
+            const urlRedirecionamento = produtoAtual.url_obrigado || "obrigado.html";
+            window.location.href = urlRedirecionamento; 
         } else {
             alert("Erro ao processar venda: " + error.message);
             btn.innerHTML = originalText;
