@@ -742,42 +742,59 @@ async function filtrarVendas() {
         }
     }
     
-    function editProduct(id, nome, preco) {
-        document.getElementById('edit-prod-id').value = id;
-        document.getElementById('ipt_nome').value = nome;
-        document.getElementById('ipt_preco').value = preco;
-        document.getElementById('modal-product-title').innerText = "Editar produto";
+async function editProduct(id) {
+    // 1. Busca os dados completos no banco (incluindo os novos campos)
+    const { data: p, error } = await _supabase
+        .from('produtos')
+        .select('*')
+        .eq('id', id)
+        .single();
 
-        // GERAÇÃO DO LINK DINÂMICO PARA A TABELA
-        const linkCheckout = `https://inovar.digital/pay/${id}`;
-        
-        const linksTable = document.getElementById('prod-links-table');
-        if (linksTable) {
-            linksTable.innerHTML = `
-                <tr>
-                    <td style="font-weight:600; font-size:13px;">Checkout Maestro</td>
-                    <td>
-                        <div style="display:flex; gap:5px; align-items:center;">
-                            <input type="text" readonly class="search-input" 
-                                style="padding:8px; font-size:11px; width: 250px; background: #F8F9FA;" 
-                                value="${linkCheckout}">
-                            <button class="btn-primary" style="padding: 7px 10px; font-size:10px;" 
-                                onclick="copyToClipboard('${linkCheckout}')">
-                                <i class="far fa-copy"></i>
-                            </button>
-                        </div>
-                    </td>
-                    <td><span class="badge" style="background:#EBF4FF; color:var(--purple-kiwi);">Padrão</span></td>
-                    <td>R$ ${preco.toFixed(2)}</td>
-                    <td><span style="color: #22C55E; font-weight: 700;">Ativo</span></td>
-                    <td style="text-align:right">
-                        <i class="fas fa-external-link-alt" style="cursor:pointer; color:#718096" 
-                            onclick="window.open('${linkCheckout}', '_blank')"></i>
-                    </td>
-                </tr>`;
-        }
-        openProductModal();
+    if (error || !p) return;
+
+    // 2. Preenche os campos básicos que você já tinha
+    document.getElementById('edit-prod-id').value = p.id;
+    document.getElementById('ipt_nome').value = p.nome;
+    document.getElementById('ipt_preco').value = p.preco;
+
+    // 3. Preenche OS NOVOS CAMPOS (A mágica acontece aqui)
+    document.getElementById('ipt_comissao_afiliado').value = p.comissao_afiliado || 0;
+    document.getElementById('ipt_categoria').value = p.categoria || '';
+    document.getElementById('edit-prod-capa').value = p.capa_url || '';
+    document.getElementById('ipt_email_suporte').value = p.email_suporte || '';
+    document.getElementById('ipt_url_obrigado').value = p.url_obrigado || '';
+
+    document.getElementById('modal-product-title').innerText = "Editar produto";
+
+    // 4. Gera o link de checkout (mantendo sua lógica de links)
+    const linkCheckout = `https://inovar.digital/pay/${p.id}`;
+    const linksTable = document.getElementById('prod-links-table');
+    
+    if (linksTable) {
+        linksTable.innerHTML = `
+            <tr>
+                <td style="font-weight:600; font-size:13px;">Checkout Maestro</td>
+                <td>
+                    <div style="display:flex; gap:5px; align-items:center;">
+                        <input type="text" readonly class="search-input" 
+                            style="padding:8px; font-size:11px; width: 220px; background: #F8F9FA;" 
+                            value="${linkCheckout}">
+                        <button class="btn-primary" style="padding: 7px 10px; font-size:10px;" 
+                            onclick="copyToClipboard('${linkCheckout}')">
+                            <i class="far fa-copy"></i>
+                        </button>
+                    </div>
+                </td>
+                <td><span class="badge" style="background:#EBF4FF; color:var(--purple-kiwi);">Padrão</span></td>
+                <td>R$ ${p.preco.toFixed(2)}</td>
+                <td style="text-align:right">
+                    <i class="fas fa-external-link-alt" style="cursor:pointer; color:#718096" 
+                        onclick="window.open('${linkCheckout}', '_blank')"></i>
+                </td>
+            </tr>`;
     }
+    openProductModal();
+}
 
     function copyToClipboard(text) {
         navigator.clipboard.writeText(text).then(() => {
