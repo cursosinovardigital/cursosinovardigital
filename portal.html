@@ -1020,9 +1020,34 @@ async function carregarAfiliados() {
     tbody.innerHTML = html || `<tr><td colspan="5" style="text-align:center; padding:30px;">Nenhum pagamento pendente no momento.</td></tr>`;
 }
     
-function confirmarPagamento(user, valor) {
-    if(confirm(`Confirmar que você já enviou o PIX de R$ ${valor.toFixed(2)} para ${user}?`)) {
-        alert("Pagamento registrado com sucesso!");
+async function confirmarPagamento(idAfiliado, valor) {
+    if(confirm(`Confirmar que você já enviou o PIX de R$ ${valor.toFixed(2).replace('.',',')} para ${idAfiliado}?`)) {
+        
+        // 1. Busca todas as vendas desse afiliado que ainda não foram pagas
+        const { data: vendasPendentes } = await _supabase
+            .from('vendas')
+            .select('id')
+            .eq('afiliado_id', idAfiliado)
+            .eq('comissao_paga', false);
+
+        if (!vendasPendentes || vendasPendentes.length === 0) return;
+
+        // 2. Cria uma lista apenas com os IDs dessas vendas
+        const idsParaAtualizar = vendasPendentes.map(v => v.id);
+
+        // 3. Dá baixa em todas de uma vez no Supabase
+        const { error } = await _supabase
+            .from('vendas')
+            .update({ comissao_paga: true })
+            .in('id', idsParaAtualizar);
+
+        if (!error) {
+            alert("Baixa de pagamento registrada! O saldo do afiliado foi zerado.");
+            carregarAfiliados(); // Recarrega a lista para sumir o nome
+            carregarDadosDashboard(); // Atualiza o seu lucro líquido no topo
+        } else {
+            alert("Erro ao registrar no banco: " + error.message);
+        }
     }
 }
     
