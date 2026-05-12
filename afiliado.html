@@ -6,171 +6,245 @@
     <title>Painel do Afiliado | Inovar Digital</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root { 
-            --orange: #FF6600; 
-            --dark: #111418; 
-            --bg: #F4F7FA; 
-            --border: #E2E8F0; 
-            --green: #22C55E;
+            --orange: #FF6600; --dark: #111418; --bg: #F4F7FA; 
+            --border: #E2E8F0; --green: #22C55E; --white: #FFFFFF;
+            --text-main: #1A1D23; --text-dim: #718096;
         }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; display: flex; height: 100vh; overflow: hidden; }
+        * { box-sizing: border-box; transition: 0.2s; font-family: 'Inter', sans-serif; }
+        body { margin: 0; display: grid; grid-template-rows: 70px 1fr; height: 100vh; background: var(--bg); overflow: hidden; }
+
+        /* --- TOP BAR --- */
+        header.top-bar {
+            grid-row: 1; background: var(--white); border-bottom: 1px solid var(--border);
+            display: flex; justify-content: space-between; align-items: center; padding: 0 30px; z-index: 1000;
+        }
+        .logo-area { display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 900; color: var(--dark); text-decoration: none; }
+        .logo-area span { color: var(--orange); }
+
+        .user-nav { display: flex; align-items: center; gap: 20px; }
+        .user-info { display: flex; align-items: center; gap: 12px; cursor: pointer; position: relative; }
+        .user-photo { width: 38px; height: 38px; border-radius: 50%; background: #E2E8F0; object-fit: cover; border: 2px solid var(--orange); }
         
-        /* Sidebar */
-        nav { width: 260px; background: var(--dark); color: white; padding: 30px 20px; display: flex; flex-direction: column; gap: 10px; }
-        .logo { font-size: 20px; font-weight: 900; margin-bottom: 30px; color: white; text-decoration: none; }
-        .logo span { color: var(--orange); }
-        .nav-item { padding: 12px 15px; cursor: pointer; display: flex; align-items: center; gap: 12px; border-radius: 8px; color: #A0AEC0; text-decoration: none; transition: 0.3s; }
+        .profile-dropdown {
+            display: none; position: absolute; top: 50px; right: 0; background: white;
+            border: 1px solid var(--border); border-radius: 12px; width: 200px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); overflow: hidden;
+        }
+        .profile-dropdown.active { display: block; animation: fadeIn 0.2s ease; }
+        .drop-link { padding: 12px 20px; display: flex; align-items: center; gap: 10px; color: var(--text-main); text-decoration: none; font-size: 14px; }
+        .drop-link:hover { background: #F8F9FA; color: var(--orange); }
+
+        /* --- LAYOUT WRAPPER --- */
+        .wrapper { grid-row: 2; display: flex; overflow: hidden; }
+
+        /* --- SIDEBAR --- */
+        nav { width: 260px; background: var(--dark); display: flex; flex-direction: column; padding: 20px 0; flex-shrink: 0; }
+        .nav-item { padding: 14px 25px; color: #A0AEC0; cursor: pointer; display: flex; align-items: center; gap: 15px; font-size: 14px; text-decoration: none; border-left: 4px solid transparent; }
         .nav-item:hover, .nav-item.active { background: #1E2228; color: white; }
-        .nav-item.active { border-left: 4px solid var(--orange); }
+        .nav-item.active { border-left-color: var(--orange); font-weight: 600; }
 
-        /* Main Content */
+        /* --- MAIN CONTENT --- */
         main { flex: 1; padding: 40px; overflow-y: auto; }
-        .header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        
-        /* Stats */
-        .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px; }
-        .stat-card { background: white; padding: 25px; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
-        .stat-label { font-size: 12px; color: #718096; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-        .stat-value { font-size: 32px; font-weight: 800; margin-top: 10px; color: var(--dark); }
-        
-        /* Link Box */
-        .link-section { background: white; padding: 25px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 30px; }
-        .link-container { display: flex; gap: 10px; margin-top: 15px; }
-        .link-input { flex: 1; padding: 12px 15px; border: 1px solid var(--border); border-radius: 8px; background: #F8F9FA; font-size: 14px; color: #4A5568; outline: none; }
-        .btn-copy { background: var(--orange); color: white; border: none; padding: 0 20px; border-radius: 8px; font-weight: 700; cursor: pointer; }
+        .section { display: none; animation: fadeIn 0.4s ease; }
+        .section.active { display: block; }
 
-        /* Table */
-        .table-container { background: white; border-radius: 12px; border: 1px solid var(--border); overflow: hidden; }
+        /* --- UI COMPONENTS --- */
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .stat-card { background: white; padding: 25px; border-radius: 16px; border: 1px solid var(--border); box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+        .stat-label { font-size: 11px; color: var(--text-dim); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        .stat-value { font-size: 30px; font-weight: 800; margin-top: 8px; color: var(--dark); }
+
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; font-size: 12px; font-weight: 700; color: var(--text-dim); margin-bottom: 8px; }
+        input[type="text"], input[type="email"] {
+            width: 100%; padding: 12px 15px; border-radius: 10px; border: 1.5px solid var(--border); outline: none; font-size: 14px;
+        }
+        input:focus { border-color: var(--orange); background: #FFF9F5; }
+
+        .btn-main { 
+            background: var(--orange); color: white; border: none; padding: 12px 25px; 
+            border-radius: 10px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
+        }
+        .btn-main:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255,102,0,0.3); }
+
+        .table-container { background: white; border-radius: 16px; border: 1px solid var(--border); overflow: hidden; margin-top: 20px; }
         table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; padding: 15px; background: #F8F9FA; font-size: 11px; color: #718096; text-transform: uppercase; }
-        td { padding: 15px; border-bottom: 1px solid var(--border); font-size: 14px; color: #4A5568; }
-        .badge-paga { background: #DCFCE7; color: #166534; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; }
+        th { text-align: left; padding: 18px; background: #F8F9FA; font-size: 11px; color: var(--text-dim); text-transform: uppercase; }
+        td { padding: 18px; border-bottom: 1px solid var(--border); font-size: 14px; color: #4A5568; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
-<nav>
-    <a href="#" class="logo"><i class="fas fa-rocket"></i> Inovar<span>Digital</span></a>
-    <div class="nav-item active"><i class="fas fa-home"></i> Dashboard</div>
-    <div class="nav-item"><i class="fas fa-link"></i> Meus Links</div>
-    <div class="nav-item"><i class="fas fa-wallet"></i> Financeiro</div>
-    <div class="nav-item"><i class="fas fa-user"></i> Meu Perfil</div>
-</nav>
-
-<main>
-    <div class="header-flex">
-        <h1 style="font-weight: 800; margin:0;">Olá, <span id="afiliado-user">Parceiro</span> 🚀</h1>
-        <div style="color: #718096; font-weight: 600;">ID: <span id="afiliado-id-display">--</span></div>
-    </div>
-
-    <div class="link-section">
-        <div class="stat-label">Seu Link de Divulgação (Principal)</div>
-        <div class="link-container">
-            <input type="text" id="ipt-link" class="link-input" readonly value="Carregando link...">
-            <button class="btn-copy" onclick="copyLink()">COPIAR</button>
+<header class="top-bar">
+    <a href="#" class="logo-area"><i class="fas fa-rocket" style="color:var(--orange)"></i> Inovar<span>Digital</span></a>
+    
+    <div class="user-nav">
+        <div class="user-info" onclick="toggleDropdown()">
+            <div style="text-align: right; line-height: 1.2;">
+                <span style="display: block; font-size: 13px; font-weight: 700;" id="top-username">Víctor Soati</span>
+                <span style="font-size: 10px; color: var(--orange); font-weight: 800;">AFILIADO BRONZE</span>
+            </div>
+            <img src="https://via.placeholder.com/150" class="user-photo" id="top-user-img">
+            
+            <div class="profile-dropdown" id="userDrop">
+                <a href="#" class="drop-link" onclick="navegar('perfil', document.getElementById('nav-perfil'))"><i class="far fa-user"></i> Meu Perfil</a>
+                <a href="portal.html" class="drop-link"><i class="fas fa-exchange-alt"></i> Mudar para Admin</a>
+                <a href="#" class="drop-link" style="color:#EF4444; border-top: 1px solid var(--border);"><i class="fas fa-sign-out-alt"></i> Sair</a>
+            </div>
         </div>
     </div>
+</header>
 
-    <div class="card-grid">
-        <div class="stat-card">
-            <div class="stat-label">Saldo Disponível</div>
-            <div class="stat-value" style="color: var(--green)" id="saldo-afiliado">R$ 0,00</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-label">Total de Vendas</div>
-            <div class="stat-value" id="vendas-count">0</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-label">Cliques no Link</div>
-            <div class="stat-value" style="color: #5D5FEF">--</div>
-        </div>
-    </div>
+<div class="wrapper">
+    <nav>
+        <div class="nav-item active" onclick="navegar('dash', this)"><i class="fas fa-chart-pie"></i> Dashboard</div>
+        <div class="nav-item" onclick="navegar('links', this)"><i class="fas fa-link"></i> Meus Links</div>
+        <div class="nav-item" onclick="navegar('finan', this)"><i class="fas fa-wallet"></i> Financeiro</div>
+        <div class="nav-item" id="nav-perfil" onclick="navegar('perfil', this)"><i class="fas fa-user-cog"></i> Configurações</div>
+    </nav>
 
-    <h3 style="font-weight: 800; margin-bottom: 20px;">Vendas Recentes</h3>
-    <div class="table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th>Data</th>
-                    <th>Produto</th>
-                    <th>Valor Venda</th>
-                    <th>Minha Comissão</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody id="vendas-afiliado-body">
-                <tr><td colspan="5" style="text-align:center; padding:30px;">Buscando suas vendas...</td></tr>
-            </tbody>
-        </table>
-    </div>
-</main>
+    <main>
+        <section id="aba-dash" class="section active">
+            <h1 style="font-weight: 800; margin-top: 0;">Bem-vindo, <span id="dash-nome">...</span> 👋</h1>
+            <div class="card-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Saldo Disponível</div>
+                    <div class="stat-value" style="color: var(--green)" id="saldo-afiliado">R$ 0,00</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Total de Vendas</div>
+                    <div class="stat-value" id="vendas-count">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Cliques Totais</div>
+                    <div class="stat-value" style="color: #5D5FEF">124</div>
+                </div>
+            </div>
+
+            <h3 style="font-weight: 800;">Vendas Recentes</h3>
+            <div class="table-container">
+                <table>
+                    <thead><tr><th>Data</th><th>Produto</th><th>Valor</th><th>Comissão</th><th>Status</th></tr></thead>
+                    <tbody id="vendas-afiliado-body"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="aba-perfil" class="section">
+            <h1 style="font-weight: 800; margin-top: 0;">Configurações de Perfil</h1>
+            <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 30px; margin-top: 30px;">
+                <div class="stat-card" style="text-align: center;">
+                    <img src="https://via.placeholder.com/150" id="perfil-img-preview" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; margin-bottom: 20px; border: 4px solid var(--bg);">
+                    <div class="input-group">
+                        <label>URL DA SUA FOTO</label>
+                        <input type="text" id="ipt-foto-url" placeholder="https://..." onchange="atualizarPreview(this.value)">
+                    </div>
+                    <p style="font-size: 11px; color: var(--text-dim);">Dica: Use a URL da sua foto do Gmail ou LinkedIn.</p>
+                </div>
+
+                <div class="stat-card">
+                    <div class="input-group">
+                        <label>NOME COMPLETO</label>
+                        <input type="text" id="ipt-perfil-nome" value="Víctor Soati">
+                    </div>
+                    <div class="input-group">
+                        <label>E-MAIL DE CONTATO</label>
+                        <input type="email" id="ipt-perfil-email" value="contato@inovardigital.com">
+                    </div>
+                    <div class="input-group">
+                        <label>CHAVE PIX (PARA RECEBIMENTO)</label>
+                        <input type="text" id="ipt-perfil-pix" placeholder="CPF ou E-mail">
+                    </div>
+                    <button class="btn-main" onclick="salvarPerfil()"><i class="fas fa-check"></i> SALVAR ALTERAÇÕES</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="aba-links" class="section">
+            <h1 style="font-weight: 800; margin-top: 0;">Seus Links de Afiliado</h1>
+            <div id="lista-links-container" style="margin-top: 25px;"></div>
+        </section>
+
+        <section id="aba-finan" class="section">
+            <h1 style="font-weight: 800; margin-top: 0;">Meus Ganhos</h1>
+            <div class="stat-card" style="max-width: 450px; border-left: 6px solid var(--green);">
+                <div class="stat-label">Disponível para Saque</div>
+                <div class="stat-value" id="saldo-saque">R$ 0,00</div>
+                <button class="btn-main" style="width:100%; margin-top: 20px;" onclick="alert('Solicitação enviada com sucesso!')">SOLICITAR SAQUE PIX</button>
+            </div>
+        </section>
+    </main>
+</div>
 
 <script>
     const SUPABASE_URL = 'https://onsbuazkqfehkudhladt.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9uc2J1YXprcWZlaGt1ZGhsYWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzNTI5OTgsImV4cCI6MjA5MzkyODk5OH0.ZypL6LHbPC_z971EDCTh6pVoA7g4qM6hWSWfWVO9a-M';
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // Identificador único do afiliado para o teste
-    const AFILIADO_ATUAL = 'teste_vitor'; 
+    let AFILIADO_ATUAL = 'teste_vitor'; 
 
-    async function initAfiliado() {
-        document.getElementById('afiliado-user').innerText = AFILIADO_ATUAL;
-        document.getElementById('afiliado-id-display').innerText = AFILIADO_ATUAL;
-        
-        // Monta um link de exemplo com o primeiro produto do banco
-        const { data: prod } = await _supabase.from('produtos').select('id').limit(1).single();
-        if(prod) {
-            const meuLink = `https://cursosinovardigital.github.io/cursosinovardigital/pay.html?id=${prod.id}&af=${AFILIADO_ATUAL}`;
-            document.getElementById('ipt-link').value = meuLink;
-        }
-
-        carregarVendasAfiliado();
+    function toggleDropdown() { document.getElementById('userDrop').classList.toggle('active'); }
+    
+    function navegar(id, el) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        document.getElementById('aba-' + id).classList.add('active');
+        el.classList.add('active');
+        if(id === 'userDrop') toggleDropdown();
     }
 
-    async function carregarVendasAfiliado() {
-        // Busca vendas onde o afiliado_id seja igual ao dele
-        const { data: vendas, error } = await _supabase
-            .from('vendas')
-            .select('*, produtos(nome, comissao_afiliado)')
-            .eq('afiliado_id', AFILIADO_ATUAL)
-            .order('created_at', { ascending: false });
+    function atualizarPreview(url) {
+        if(url) {
+            document.getElementById('perfil-img-preview').src = url;
+            document.getElementById('top-user-img').src = url;
+        }
+    }
 
-        if(error || !vendas) return;
+    function salvarPerfil() {
+        const novoNome = document.getElementById('ipt-perfil-nome').value;
+        document.getElementById('top-username').innerText = novoNome;
+        document.getElementById('dash-nome').innerText = novoNome;
+        alert("Perfil atualizado com sucesso!");
+    }
+
+    async function carregarDadosAfiliado() {
+        const { data: vendas } = await _supabase.from('vendas').select('*, produtos(nome, comissao_afiliado)').eq('afiliado_id', AFILIADO_ATUAL);
+        if(!vendas) return;
 
         let saldoTotal = 0;
-
         const html = vendas.map(v => {
-            // Calcula a comissão baseada na % que você definiu no portal
-            const porcComissao = v.produtos?.comissao_afiliado || 0;
-            const valorComissao = (v.valor_total * porcComissao) / 100;
-            
-            if(v.status === 'Paga') saldoTotal += valorComissao;
-
-            return `
-                <tr>
-                    <td>${new Date(v.created_at).toLocaleDateString('pt-BR')}</td>
-                    <td style="font-weight:700;">${v.produtos?.nome || 'Produto'}</td>
-                    <td>R$ ${parseFloat(v.valor_total).toFixed(2).replace('.',',')}</td>
-                    <td style="color: var(--orange); font-weight:700;">R$ ${valorComissao.toFixed(2).replace('.',',')}</td>
-                    <td><span class="badge-paga">${v.status}</span></td>
-                </tr>
-            `;
+            const val = (v.valor_total * (v.produtos?.comissao_afiliado || 0)) / 100;
+            saldoTotal += val;
+            return `<tr><td>${new Date(v.created_at).toLocaleDateString()}</td><td style="font-weight:700">${v.produtos?.nome}</td><td>R$ ${v.valor_total}</td><td style="color:var(--orange); font-weight:700">R$ ${val.toFixed(2)}</td><td><span style="background:#DCFCE7; color:#166534; padding:4px 8px; border-radius:6px; font-size:11px; font-weight:800">PAGA</span></td></tr>`;
         }).join('');
 
-        document.getElementById('vendas-afiliado-body').innerHTML = html || '<tr><td colspan="5" style="text-align:center;">Nenhuma venda encontrada ainda.</td></tr>';
+        document.getElementById('vendas-afiliado-body').innerHTML = html;
+        document.getElementById('saldo-afiliado').innerText = `R$ ${saldoTotal.toFixed(2)}`;
+        document.getElementById('saldo-saque').innerText = `R$ ${saldoTotal.toFixed(2)}`;
         document.getElementById('vendas-count').innerText = vendas.length;
-        document.getElementById('saldo-afiliado').innerText = `R$ ${saldoTotal.toFixed(2).replace('.',',')}`;
+        document.getElementById('dash-nome').innerText = document.getElementById('ipt-perfil-nome').value;
     }
 
-    function copyLink() {
-        const copyText = document.getElementById("ipt-link");
-        copyText.select();
-        navigator.clipboard.writeText(copyText.value);
-        alert("Link de afiliado copiado! Divulgue e ganhe comissões.");
+    async function carregarLinksAfiliado() {
+        const { data: produtos } = await _supabase.from('produtos').select('*').eq('status', 'Ativo');
+        const container = document.getElementById('lista-links-container');
+        container.innerHTML = produtos.map(p => `
+            <div class="stat-card" style="margin-bottom:15px; display:flex; justify-content:space-between; align-items:center;">
+                <div><small style="color:var(--orange); font-weight:800;">CHECKOUT</small><div style="font-weight:700;">${p.nome}</div></div>
+                <div style="display:flex; gap:10px; flex:1; max-width:500px; margin-left:20px;">
+                    <input type="text" readonly value="https://cursosinovardigital.github.io/cursosinovardigital/pay.html?id=${p.id}&af=${AFILIADO_ATUAL}" style="background:#F8F9FA; font-size:12px;">
+                    <button class="btn-main" onclick="navigator.clipboard.writeText(this.previousElementSibling.value); alert('Copiado!')">COPIAR</button>
+                </div>
+            </div>
+        `).join('');
     }
 
-    window.onload = initAfiliado;
+    window.onload = () => { carregarDadosAfiliado(); carregarLinksAfiliado(); };
 </script>
 </body>
 </html>
