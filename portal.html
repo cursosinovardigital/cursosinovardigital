@@ -632,37 +632,42 @@ async function deleteProduct(id) {
 }
 
 async function carregarDadosDashboard() {
-    // 1. Busca os dados com as relações necessárias
-    const { data: vendas, error } = await _supabase
-        .from('vendas')
-        .select('*, produtos(nome, comissao_afiliado)')
-        .order('created_at', { ascending: false });
+    console.log("Atualizando Dashboard Geral...");
+    
+    // 1. Busca os dados de forma segura (Tabelas Separadas para evitar Erro 400)
+    const { data: vendas, error: errVendas } = await _supabase.from('vendas').select('*').order('created_at', { ascending: false });
+    const { data: produtos, error: errProd } = await _supabase.from('produtos').select('id, nome, comissao_afiliado');
 
-    if(error || !vendas) return;
+    if(errVendas || !vendas) return;
 
-    // 2. Inicializa as variáveis de soma (UMA ÚNICA VEZ)
+    // 2. Variáveis de soma
     let totalBruto = 0;
     let totalLiquidoPago = 0;
     let totalPendente = 0;
     let totalComissoesAfiliadosPendente = 0; 
 
     vendas.forEach(v => {
-        totalBruto += v.valor_total || 0;
+        const valorTotal = Number(v.valor_total) || 0;
+        const statusLimpo = String(v.status || '').toLowerCase();
         
-        if (v.status === 'Paga') {
-            totalLiquidoPago += v.valor_liquido || 0;
+        totalBruto += valorTotal;
+        
+        if (statusLimpo === 'paga') {
+            totalLiquidoPago += Number(v.valor_liquido) || 0;
             
-            // Só desconta se houve afiliado e você AINDA NÃO PAGOU ele
+            // Lógica de Comissão de Afiliado
             if(v.afiliado_id && v.comissao_paga === false) {
-                const perc = v.produtos?.comissao_afiliado || 0;
-                totalComissoesAfiliadosPendente += (v.valor_total * perc / 100);
+                // Busca o produto na lista que baixamos
+                const prod = (produtos || []).find(p => String(p.id).trim() === String(v.produto_id).trim());
+                const perc = prod ? (Number(prod.comissao_afiliado) || 0) : 0;
+                totalComissoesAfiliadosPendente += (valorTotal * perc / 100);
             }
-        } else if (v.status === 'Pendente') {
-            totalPendente += v.valor_liquido || 0;
+        } else if (statusLimpo === 'pendente') {
+            totalPendente += Number(v.valor_liquido) || 0;
         }
     });
 
-    // 3. O lucro real do dono é o que caiu no banco menos o que ele deve pagar aos afiliados
+    // 3. Lucro Real (O que sobra para a empresa)
     const lucroRealDono = totalLiquidoPago - totalComissoesAfiliadosPendente;
 
     // 4. LÓGICA DA META (R$ 10.000)
@@ -674,12 +679,12 @@ async function carregarDadosDashboard() {
     if (barraFill) barraFill.style.width = `${Math.min(progresso, 100)}%`;
     if (textoMeta) textoMeta.innerText = `R$ ${totalBruto.toFixed(0)} / R$ 10K`;
 
-    // 5. ATUALIZA OS CARDS (DASHBOARD) - Agora usando o lucroRealDono
-    document.getElementById('dash-total-vendas').innerText = `R$ ${totalBruto.toFixed(2).replace('.', ',')}`;
-    document.getElementById('dash-valor-liquido').innerText = `R$ ${lucroRealDono.toFixed(2).replace('.', ',')}`;
-    document.getElementById('dash-count-vendas').innerText = vendas.length;
+    // 5. ATUALIZA OS CARDS DO DASHBOARD
+    if(document.getElementById('dash-total-vendas')) document.getElementById('dash-total-vendas').innerText = `R$ ${totalBruto.toFixed(2).replace('.', ',')}`;
+    if(document.getElementById('dash-valor-liquido')) document.getElementById('dash-valor-liquido').innerText = `R$ ${lucroRealDono.toFixed(2).replace('.', ',')}`;
+    if(document.getElementById('dash-count-vendas')) document.getElementById('dash-count-vendas').innerText = vendas.length;
 
-    // 6. ATUALIZA OS CARDS (FINANCEIRO)
+    // 6. ATUALIZA OS CARDS DO FINANCEIRO
     const cardFinDisponivel = document.getElementById('fin-disponivel');
     const cardFinPendente = document.querySelector('.fin-card.pendente .fin-value');
 
@@ -689,19 +694,23 @@ async function carregarDadosDashboard() {
     // 7. LISTA DE VENDAS RECENTES
     const tbodyVendas = document.getElementById('sales-list-body');
     if (tbodyVendas) {
-        tbodyVendas.innerHTML = vendas.map(v => `
-            <tr>
-                <td style="font-weight:700; color:var(--orange)">#${v.id.toString().slice(0,8)}</td>
-                <td>${v.produtos?.nome || 'Produto'}</td>
-                <td style="font-weight:700">R$ ${v.valor_total.toFixed(2).replace('.', ',')}</td>
-                <td>${new Date(v.created_at).toLocaleDateString('pt-BR')}</td>
-                <td><span class="badge ${v.status === 'Paga' ? 'badge-success' : 'badge-warning'}">${v.status}</span></td>
-            </tr>`).join('');
+        tbodyVendas.innerHTML = vendas.map(v => {
+            const prod = (produtos || []).find(p => String(p.id).trim() === String(v.produto_id).trim());
+            const statusVenda = String(v.status || '').toLowerCase();
+            return `
+                <tr>
+                    <td style="font-weight:700; color:var(--orange)">#${v.id.toString().slice(0,8)}</td>
+                    <td>${prod ? prod.nome : 'Produto'}</td>
+                    <td style="font-weight:700">R$ ${Number(v.valor_total).toFixed(2).replace('.', ',')}</td>
+                    <td>${new Date(v.created_at).toLocaleDateString('pt-BR')}</td>
+                    <td><span class="badge ${statusVenda === 'paga' ? 'badge-success' : 'badge-warning'}">${v.status}</span></td>
+                </tr>`;
+        }).join('');
     }
 
     // 8. GRÁFICO DINÂMICO
-    if(salesChartInstance && vendas.length > 0) {
-        const vendasParaGrafico = vendas.filter(v => v.status === 'Paga').slice(0, 7).reverse();
+    if(typeof salesChartInstance !== 'undefined' && salesChartInstance && vendas.length > 0) {
+        const vendasParaGrafico = vendas.filter(v => String(v.status).toLowerCase() === 'paga').slice(0, 7).reverse();
         salesChartInstance.data.datasets[0].data = vendasParaGrafico.map(v => v.valor_total);
         salesChartInstance.update();
     }
