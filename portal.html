@@ -792,6 +792,7 @@ async function carregarMarketplaceReal() {
     const grid = document.getElementById('market-full-grid');
     if (!grid) return;
 
+    // Mantendo o seu card de exemplo fixo
     const exemplo = `
         <div class="market-card">
             <div class="market-thumb"><img src="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?auto=format&fit=crop&w=400&q=80"></div>
@@ -801,6 +802,7 @@ async function carregarMarketplaceReal() {
             </div>
         </div>`;
 
+    // 1. Mapeando as Aulas (Área de Membros)
     let htmlAulas = (aulas || []).map(a => `
         <div class="market-card" onclick="window.location.href='aluno.html?id=${a.id}'" style="cursor:pointer">
             <div class="market-thumb">
@@ -813,17 +815,29 @@ async function carregarMarketplaceReal() {
             </div>
         </div>`).join('');
 
-    let htmlProdutos = (prods || []).map(p => `
+    // 2. Mapeando os Produtos (Vendas/Checkout) - USANDO OS CAMPOS NOVOS
+    let htmlProdutos = (prods || []).map(p => {
+        // Cálculo da comissão em Reais baseada na porcentagem que criamos
+        const valorComissao = ((p.preco * (p.comissao_afiliado || 0)) / 100).toFixed(2).replace('.', ',');
+        
+        return `
         <div class="market-card" onclick="window.location.href='pay.html?id=${p.id}'" style="cursor:pointer">
             <div class="market-thumb">
-                <img src="https://via.placeholder.com/400x225?text=${p.nome.replace(/ /g, '+')}" onerror="this.src='https://via.placeholder.com/400x225?text=Produto'">
+                <img src="${p.capa_url || 'https://via.placeholder.com/400x225?text=' + p.nome.replace(/ /g, '+')}" 
+                     onerror="this.src='https://via.placeholder.com/400x225?text=Produto'">
             </div>
             <div class="market-info">
-                <div style="font-size:10px; color:#5D5FEF; font-weight:900; text-transform: uppercase; margin-bottom: 5px;">PRODUTO DIGITAL</div>
+                <div style="font-size:10px; color:#5D5FEF; font-weight:900; text-transform: uppercase; margin-bottom: 5px;">${p.categoria || 'PRODUTO DIGITAL'}</div>
                 <div class="market-title">${p.nome}</div>
-                <div class="market-commission">Venda por R$ ${p.preco.toFixed(2).replace('.', ',')}</div>
+                <div class="market-commission">
+                    R$ ${p.preco.toFixed(2).replace('.', ',')} 
+                    <span style="color:#718096; font-weight:400; font-size:11px; margin-left:5px;">
+                        (Comissão: R$ ${valorComissao})
+                    </span>
+                </div>
             </div>
-        </div>`).join('');
+        </div>`;
+    }).join('');
 
     grid.innerHTML = exemplo + htmlAulas + htmlProdutos;
 }
