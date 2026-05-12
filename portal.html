@@ -285,16 +285,37 @@ header.maestro-top-bar {
                 </div>
             </section>
 
-            <section id="aba-afiliados" class="aba-section">
-                <h2>Meus Afiliados</h2>
-                <div class="sub-nav"><div class="sub-nav-item active">Meus afiliados</div><div class="sub-nav-item">Solicitações</div></div>
-                <div style="display: flex; gap: 15px; margin-bottom: 20px;">
-                    <div style="flex: 1; position: relative;"><i class="fas fa-search" style="position: absolute; left: 15px; top: 15px; color: #A0AEC0;"></i><input type="text" class="search-input" placeholder="Filtrar por nome ou e-mail..."></div>
-                    <div style="width: 250px;"><select class="search-input" style="padding-left: 15px;"><option>Todos os produtos</option></select></div>
-                    <button class="btn-primary" onclick="convidarAfiliado()">Convidar Afiliado</button>
-                </div>
-                <div class="table-container"><table><thead><tr><th>NOME</th><th>PRODUTO</th><th>LINK ÚNICO</th><th>VENDAS</th><th>AÇÕES</th></tr></thead><tbody id="lista-afiliados-body"></tbody></table></div>
-            </section>
+    <section id="aba-afiliados" class="aba-section">
+    <h2>Meus Afiliados</h2>
+    <div class="sub-nav">
+        <div class="sub-nav-item active">Meus afiliados</div>
+        <div class="sub-nav-item">Solicitações</div>
+    </div>
+    <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+        <div style="flex: 1; position: relative;">
+            <i class="fas fa-search" style="position: absolute; left: 15px; top: 15px; color: #A0AEC0;"></i>
+            <input type="text" class="search-input" placeholder="Filtrar por nome ou e-mail...">
+        </div>
+        <button class="btn-primary" onclick="alert('Link de convite: inovar.digital/cadastro-afiliado')">Convidar Afiliado</button>
+    </div>
+    
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>NOME / USERNAME</th>
+                    <th>VENDAS</th>
+                    <th>TOTAL GERADO</th>
+                    <th>COMISSÃO DEVIDA</th>
+                    <th style="text-align:right">AÇÕES</th>
+                </tr>
+            </thead>
+            <tbody id="lista-afiliados-body">
+                <tr><td colspan="5" style="text-align:center; padding:40px; color:#A0AEC0;">Carregando inteligência de afiliados...</td></tr>
+            </tbody>
+        </table>
+    </div>
+</section>
 
             <section id="aba-assin" class="aba-section">
                 <h2>Assinaturas</h2>
