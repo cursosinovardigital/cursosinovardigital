@@ -901,6 +901,7 @@ const html = perfis.map(af => {
 }).join('');
 
 tbody.innerHTML = html || `<tr><td colspan="5" style="text-align:center; padding:30px;">Nenhum pagamento pendente no momento.</td></tr>`;
+    }
     
     function nav(id, el) {
         document.querySelectorAll('.aba-section').forEach(s => s.classList.remove('active'));
