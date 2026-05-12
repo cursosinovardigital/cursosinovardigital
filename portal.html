@@ -966,24 +966,34 @@ async function carregarAreasMembros() {
 }
 
 async function carregarAfiliados() {
-    // Busca perfis e vendas pagas para cruzar os dados
+    // 1. Busca todos os perfis
     const { data: perfis } = await _supabase.from('perfis').select('*');
-    const { data: vendas } = await _supabase.from('vendas').select('*, produtos(comissao_afiliado)').eq('status', 'Paga');
+    
+    // 2. BUSCA APENAS VENDAS ONDE A COMISSÃO AINDA É FALSA (NÃO PAGA)
+    // Isso garante que o saldo zere quando você der a baixa
+    const { data: vendas } = await _supabase
+        .from('vendas')
+        .select('*, produtos(comissao_afiliado)')
+        .eq('status', 'Paga')
+        .eq('comissao_paga', false); 
 
     const tbody = document.getElementById('lista-afiliados-body');
     if (!tbody || !perfis) return;
 
     const html = perfis.map(af => {
-        // Filtra apenas as vendas desse afiliado específico
+        // Filtra as vendas pendentes deste afiliado
         const vendasDoAfiliado = (vendas || []).filter(v => v.afiliado_id === af.username);
         
         const totalGerado = vendasDoAfiliado.reduce((sum, v) => sum + (v.valor_total || 0), 0);
         
-        // Calcula a comissão total baseada na % de cada produto que ele vendeu
         const comissaoDevida = vendasDoAfiliado.reduce((sum, v) => {
             const perc = v.produtos?.comissao_afiliado || 0;
             return sum + (v.valor_total * perc / 100);
         }, 0);
+
+        // Só mostra na lista se ele tiver algo a receber ou se você quiser ver todos
+        // Se quiser ver apenas quem tem saldo, descomente a linha abaixo:
+        // if (comissaoDevida <= 0) return '';
 
         return `
             <tr>
@@ -1000,16 +1010,17 @@ async function carregarAfiliados() {
                 <td style="font-weight:600">R$ ${totalGerado.toFixed(2).replace('.',',')}</td>
                 <td style="font-weight:800; color:var(--orange)">R$ ${comissaoDevida.toFixed(2).replace('.',',')}</td>
                 <td style="text-align:right">
-                    <button class="btn-primary" style="padding: 6px 12px; font-size: 11px; background:var(--green)" onclick="confirmarPagamento('${af.username}', ${comissaoDevida})">
+                    <button class="btn-primary" style="padding: 6px 12px; font-size: 11px; background:var(--green)" 
+                        onclick="confirmarPagamento('${af.username}', ${comissaoDevida})">
                         PAGAR VIA PIX
                     </button>
                 </td>
             </tr>`;
     }).join('');
 
-    tbody.innerHTML = html || `<tr><td colspan="5" style="text-align:center; padding:30px;">Nenhum afiliado com vendas ainda.</td></tr>`;
+    tbody.innerHTML = html || `<tr><td colspan="5" style="text-align:center; padding:30px;">Nenhum pagamento pendente no momento.</td></tr>`;
 }
-
+    
 function confirmarPagamento(user, valor) {
     if(confirm(`Confirmar que você já enviou o PIX de R$ ${valor.toFixed(2)} para ${user}?`)) {
         alert("Pagamento registrado com sucesso!");
