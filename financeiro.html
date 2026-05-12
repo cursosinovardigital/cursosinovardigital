@@ -140,7 +140,7 @@
 </div>
 
 <script>
-   const SUPABASE_URL = 'https://onsbuazkqfehkudhladt.supabase.co';
+    const SUPABASE_URL = 'https://onsbuazkqfehkudhladt.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9uc2J1YXprcWZlaGt1ZGhsYWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzNTI5OTgsImV4cCI6MjA5MzkyODk5OH0.ZypL6LHbPC_z971EDCTh6pVoA7g4qM6hWSWfWVO9a-M';
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
@@ -148,7 +148,7 @@
         const { data: vendas } = await _supabase.from('vendas').select('*').order('created_at', { ascending: false });
         
         if (vendas && vendas.length > 0) {
-            // 1. ATUALIZA OS CARDS (Saldo e Ticket Médio)
+            // --- PARTE QUE VOCÊ JÁ TEM E ESTÁ FUNCIONANDO ---
             const liquidoTotal = vendas.reduce((acc, v) => acc + (v.valor_liquido || 0), 0);
             document.getElementById('saldo-liquido').innerText = liquidoTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
             document.getElementById('vendas-count').innerText = vendas.length;
@@ -156,24 +156,7 @@
             const cards = document.querySelectorAll('.card-stat h2');
             if(cards[3]) cards[3].innerText = (liquidoTotal / vendas.length).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
-            // 2. ATUALIZA OS MÉTODOS DE PAGAMENTO (Barra lateral)
-            const qtdPix = vendas.filter(v => String(v.metodo_pagamento || '').toLowerCase() === 'pix').length;
-            const percPix = Math.round((qtdPix / vendas.length) * 100);
-            const convBox = document.querySelector('.conversion-box');
-            if(convBox) {
-                convBox.innerHTML = `
-                    <span class="stat-info"><span style="margin-bottom:20px;">Métodos de Pagamento</span></span>
-                    <div class="conv-item">
-                        <div class="conv-label"><span>Pix</span><span>${percPix}%</span></div>
-                        <div class="bar-bg"><div class="bar-fill" style="width: ${percPix}%; background: #10B981;"></div></div>
-                    </div>
-                    <div class="conv-item">
-                        <div class="conv-label"><span>Outros</span><span>${100 - percPix}%</span></div>
-                        <div class="bar-bg"><div class="bar-fill" style="width: ${100 - percPix}%; background: var(--orange);"></div></div>
-                    </div>`;
-            }
-
-            // 3. ATUALIZA O HISTÓRICO DE TRANSAÇÕES (Tabela)
+            // --- ADICIONANDO APENAS A TABELA (Sem mexer no resto) ---
             const tbody = document.getElementById('transacoes-body');
             if (tbody) {
                 tbody.innerHTML = vendas.slice(0, 6).map(v => `
@@ -187,7 +170,24 @@
                 `).join('');
             }
 
-            // 4. CARREGA O GRÁFICO (Com o fôlego de segurança)
+            // --- ADICIONANDO APENAS A BARRA DE MÉTODOS ---
+            const qtdPix = vendas.filter(v => String(v.metodo_pagamento || '').toLowerCase() === 'pix').length;
+            const percPix = Math.round((qtdPix / vendas.length) * 100);
+            const convBox = document.querySelector('.conversion-box');
+            if (convBox) {
+                convBox.innerHTML = `
+                    <span class="stat-info"><span style="margin-bottom:20px;">Métodos de Pagamento</span></span>
+                    <div class="conv-item">
+                        <div class="conv-label"><span>Pix</span><span>${percPix}%</span></div>
+                        <div class="bar-bg"><div class="bar-fill" style="width: ${percPix}%; background: #10B981;"></div></div>
+                    </div>
+                    <div class="conv-item">
+                        <div class="conv-label"><span>Outros</span><span>${100 - percPix}%</span></div>
+                        <div class="bar-bg"><div class="bar-fill" style="width: ${100 - percPix}%; background: var(--orange);"></div></div>
+                    </div>`;
+            }
+
+            // --- SEU GRÁFICO IGUALZINHO ---
             setTimeout(() => carregarGrafico(vendas), 300);
         }
     }
@@ -195,18 +195,23 @@
     function carregarGrafico(vendas) {
         const labels = [];
         const dados = [];
+
         for (let i = 6; i >= 0; i--) {
             const d = new Date();
             d.setDate(d.getDate() - i);
             labels.push(d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' }).replace('.', ''));
+
             const soma = vendas
                 .filter(v => new Date(v.created_at).toLocaleDateString('pt-BR') === d.toLocaleDateString('pt-BR'))
                 .reduce((acc, v) => acc + (v.valor_liquido || 0), 0);
             dados.push(soma);
         }
+
         const ctx = document.getElementById('financeChart');
         if (!ctx) return;
+
         if (window.myChart) window.myChart.destroy();
+        
         window.myChart = new Chart(ctx, {
             type: 'line',
             data: {
