@@ -155,6 +155,41 @@
             
             const cards = document.querySelectorAll('.card-stat h2');
             if(cards[3]) cards[3].innerText = (liquidoTotal / vendas.length).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+            // 1. ATUALIZA O VALOR DE RESGATE NA SIDEBAR
+            if(document.getElementById('resgate-valor')) {
+                document.getElementById('resgate-valor').innerText = liquidoTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+            }
+
+            // 2. ATUALIZA A TABELA DE TRANSAÇÕES
+            const tbody = document.getElementById('transacoes-body');
+            if (tbody) {
+                tbody.innerHTML = vendas.slice(0, 6).map(v => `
+                    <tr>
+                        <td>${new Date(v.created_at).toLocaleDateString('pt-BR')}</td>
+                        <td style="font-weight:800; color:var(--dark)">Venda Maestro</td>
+                        <td><span style="font-size:10px; background:#F1F5F9; padding:4px 8px; border-radius:5px; font-weight:900;">${(v.metodo_pagamento || 'PIX').toUpperCase()}</span></td>
+                        <td style="color:var(--green); font-weight:800;">+ ${v.valor_liquido.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
+                        <td><i class="fas fa-check-circle" style="color:var(--green)"></i></td>
+                    </tr>
+                `).join('');
+            }
+
+            // 3. ATUALIZA A BARRA DE MÉTODOS DE PAGAMENTO
+            const qtdPix = vendas.filter(v => String(v.metodo_pagamento || '').toLowerCase() === 'pix').length;
+            const percPix = Math.round((qtdPix / vendas.length) * 100);
+            const convBox = document.querySelector('.conversion-box');
+            if (convBox) {
+                convBox.innerHTML = `
+                    <span class="stat-info"><span style="margin-bottom:20px;">Métodos de Pagamento</span></span>
+                    <div class="conv-item">
+                        <div class="conv-label"><span>Pix</span><span>${percPix}%</span></div>
+                        <div class="bar-bg"><div class="bar-fill" style="width: ${percPix}%; background: #10B981;"></div></div>
+                    </div>
+                    <div class="conv-item">
+                        <div class="conv-label"><span>Outros</span><span>${100 - percPix}%</span></div>
+                        <div class="bar-bg"><div class="bar-fill" style="width: ${100 - percPix}%; background: var(--orange);"></div></div>
+                    </div>`;
+            }
 
             // Renderiza o gráfico com um pequeno "fôlego" para o navegador
             setTimeout(() => carregarGrafico(vendas), 300);
