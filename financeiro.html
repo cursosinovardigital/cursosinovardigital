@@ -148,19 +148,19 @@
         const { data: vendas } = await _supabase.from('vendas').select('*').order('created_at', { ascending: false });
         
         if (vendas && vendas.length > 0) {
-            // Atualiza o que já está funcionando
+            // 1. ATUALIZAÇÃO DOS CARDS (Mantido exatamente como o seu)
             const liquidoTotal = vendas.reduce((acc, v) => acc + (v.valor_liquido || 0), 0);
             document.getElementById('saldo-liquido').innerText = liquidoTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
             document.getElementById('vendas-count').innerText = vendas.length;
             
             const cards = document.querySelectorAll('.card-stat h2');
             if(cards[3]) cards[3].innerText = (liquidoTotal / vendas.length).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-            // 1. ATUALIZA O VALOR DE RESGATE NA SIDEBAR
+
             if(document.getElementById('resgate-valor')) {
                 document.getElementById('resgate-valor').innerText = liquidoTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
             }
 
-            // 2. ATUALIZA A TABELA DE TRANSAÇÕES
+            // 2. INSERÇÃO DO HISTÓRICO DE TRANSAÇÕES (Adicionado sem alterar o resto)
             const tbody = document.getElementById('transacoes-body');
             if (tbody) {
                 tbody.innerHTML = vendas.slice(0, 6).map(v => `
@@ -174,7 +174,7 @@
                 `).join('');
             }
 
-            // 3. ATUALIZA A BARRA DE MÉTODOS DE PAGAMENTO
+            // 3. INSERÇÃO DA BARRA DE MÉTODOS (Adicionado sem alterar o resto)
             const qtdPix = vendas.filter(v => String(v.metodo_pagamento || '').toLowerCase() === 'pix').length;
             const percPix = Math.round((qtdPix / vendas.length) * 100);
             const convBox = document.querySelector('.conversion-box');
@@ -191,7 +191,7 @@
                     </div>`;
             }
 
-            // Renderiza o gráfico com um pequeno "fôlego" para o navegador
+            // 4. RENDERIZAÇÃO DO GRÁFICO (Mantido exatamente como o seu)
             setTimeout(() => carregarGrafico(vendas), 300);
         }
     }
@@ -243,7 +243,6 @@
         });
     }
 
-    // Garante que o script rode após o carregamento total da janela
     window.addEventListener('load', init);
 </script>
 </body>
