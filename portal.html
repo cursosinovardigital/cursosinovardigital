@@ -645,14 +645,29 @@ async function carregarDadosDashboard() {
     let totalLiquidoPago = 0;
     let totalPendente = 0;
 
+let totalBruto = 0;
+    let totalLiquidoPago = 0;
+    let totalPendente = 0;
+    let totalComissoesAfiliados = 0; // Nova variável para rastrear o que você deve
+
     vendas.forEach(v => {
         totalBruto += v.valor_total || 0;
+        
         if (v.status === 'Paga') {
             totalLiquidoPago += v.valor_liquido || 0;
+            
+            // Subtrai a parte do afiliado se houver um indicado na venda
+            if(v.afiliado_id) {
+                const perc = v.produtos?.comissao_afiliado || 0;
+                totalComissoesAfiliados += (v.valor_total * perc / 100);
+            }
         } else if (v.status === 'Pendente') {
             totalPendente += v.valor_liquido || 0;
         }
     });
+
+    // O seu lucro real é o líquido total menos as comissões dos parceiros
+    const lucroRealDono = totalLiquidoPago - totalComissoesAfiliados;
 
     // --- LÓGICA DA META (R$ 10.000) ---
     const metaValor = 10000;
