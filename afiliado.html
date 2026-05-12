@@ -269,22 +269,38 @@
         btn.disabled = false;
     }
 
-    async function carregarDadosAfiliado() {
-        const { data: vendas } = await _supabase.from('vendas').select('*, produtos(nome, comissao_afiliado)').eq('afiliado_id', AFILIADO_ATUAL);
-        if(!vendas) return;
+async function carregarDadosAfiliado() {
+    // Adicionado o filtro .eq('comissao_paga', false) para listar apenas o que você deve ao afiliado
+    const { data: vendas } = await _supabase
+        .from('vendas')
+        .select('*, produtos(nome, comissao_afiliado)')
+        .eq('afiliado_id', AFILIADO_ATUAL)
+        .eq('comissao_paga', false); 
 
-        let saldoTotal = 0;
-        const html = vendas.map(v => {
-            const val = (v.valor_total * (v.produtos?.comissao_afiliado || 0)) / 100;
-            saldoTotal += val;
-            return `<tr><td>${new Date(v.created_at).toLocaleDateString()}</td><td style="font-weight:700">${v.produtos?.nome}</td><td>R$ ${v.valor_total}</td><td style="color:var(--orange); font-weight:700">R$ ${val.toFixed(2)}</td><td><span style="background:#DCFCE7; color:#166534; padding:4px 8px; border-radius:6px; font-size:11px; font-weight:800">PAGA</span></td></tr>`;
-        }).join('');
+    if(!vendas) return;
 
-        document.getElementById('vendas-afiliado-body').innerHTML = html || '<tr><td colspan="5" style="text-align:center">Nenhuma venda encontrada.</td></tr>';
-        document.getElementById('saldo-afiliado').innerText = `R$ ${saldoTotal.toFixed(2)}`;
-        document.getElementById('saldo-saque').innerText = `R$ ${saldoTotal.toFixed(2)}`;
-        document.getElementById('vendas-count').innerText = vendas.length;
-    }
+    let saldoTotal = 0;
+    const html = vendas.map(v => {
+        const val = (v.valor_total * (v.produtos?.comissao_afiliado || 0)) / 100;
+        saldoTotal += val;
+        
+        return `
+            <tr>
+                <td>${new Date(v.created_at).toLocaleDateString()}</td>
+                <td style="font-weight:700">${v.produtos?.nome}</td>
+                <td>R$ ${v.valor_total}</td>
+                <td style="color:var(--orange); font-weight:700">R$ ${val.toFixed(2)}</td>
+                <td>
+                    <span style="background:#FFF7ED; color:#C2410C; padding:4px 8px; border-radius:6px; font-size:11px; font-weight:800">PENDENTE</span>
+                </td>
+            </tr>`;
+    }).join('');
+
+    document.getElementById('vendas-afiliado-body').innerHTML = html || '<tr><td colspan="5" style="text-align:center">Nenhuma venda pendente encontrada.</td></tr>';
+    document.getElementById('saldo-afiliado').innerText = `R$ ${saldoTotal.toFixed(2)}`;
+    document.getElementById('saldo-saque').innerText = `R$ ${saldoTotal.toFixed(2)}`;
+    document.getElementById('vendas-count').innerText = vendas.length;
+}
 
     async function carregarLinksAfiliado() {
         const { data: produtos } = await _supabase.from('produtos').select('*').eq('status', 'Ativo');
