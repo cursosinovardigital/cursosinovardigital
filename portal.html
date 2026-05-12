@@ -966,9 +966,11 @@ async function carregarAreasMembros() {
 }
 
 async function carregarAfiliados() {
+    // 1. Busca todos os perfis
     const { data: perfis } = await _supabase.from('perfis').select('*');
     
-    // Mudamos aqui: ele vai aceitar "Paga" ou "paga" (ilike)
+    // 2. BUSCA APENAS VENDAS ONDE A COMISSÃO AINDA É FALSA (NÃO PAGA)
+    // Usamos .ilike('status', 'paga') para evitar erro de letra maiúscula/minúscula
     const { data: vendas } = await _supabase
         .from('vendas')
         .select('*, produtos(comissao_afiliado)')
@@ -979,14 +981,17 @@ async function carregarAfiliados() {
     if (!tbody || !perfis) return;
 
     const html = perfis.map(af => {
-        const vendasDoAfiliado = (vendas || []).filter(v => v.afiliado_id === af.username);
-        const totalGerado = vendasDoAfiliado.reduce((sum, v) => sum + (Number(v.valor_total) || 0), 0);
+        // TROCA 1: Aqui comparamos com af.afiliado_id que é o nome da sua coluna no Supabase
+        const vendasDoAfiliado = (vendas || []).filter(v => v.afiliado_id === af.afiliado_id);
+        
+        const totalGerado = vendasDoAfiliado.reduce((sum, v) => sum + (v.valor_total || 0), 0);
+        
         const comissaoDevida = vendasDoAfiliado.reduce((sum, v) => {
             const perc = v.produtos?.comissao_afiliado || 0;
-            return sum + (Number(v.valor_total) * perc / 100);
+            return sum + (v.valor_total * perc / 100);
         }, 0);
 
-        // Se o afiliado não tem venda, a gente pula ele para a lista não ficar cheia de zeros
+        // Se o afiliado não tiver vendas pendentes, não mostramos ele na lista
         if (vendasDoAfiliado.length === 0) return '';
 
         return `
@@ -995,8 +1000,8 @@ async function carregarAfiliados() {
                     <div style="display:flex; align-items:center; gap:12px;">
                         <img src="${af.foto_url || 'https://via.placeholder.com/35'}" style="width:35px; height:35px; border-radius:50%; object-fit:cover; border: 2px solid var(--border);">
                         <div>
-                            <div style="font-weight:700; color:var(--text)">${af.nome_completo || af.username}</div>
-                            <div style="font-size:10px; color:var(--text-dim)">${af.username}</div>
+                            <div style="font-weight:700; color:var(--text)">${af.nome_completo || af.afiliado_id}</div>
+                            <div style="font-size:10px; color:var(--text-dim)">${af.afiliado_id}</div>
                         </div>
                     </div>
                 </td>
@@ -1005,7 +1010,7 @@ async function carregarAfiliados() {
                 <td style="font-weight:800; color:var(--orange)">R$ ${comissaoDevida.toFixed(2).replace('.',',')}</td>
                 <td style="text-align:right">
                     <button class="btn-primary" style="padding: 6px 12px; font-size: 11px; background:var(--green)" 
-                        onclick="confirmarPagamento('${af.username}', ${comissaoDevida})">
+                        onclick="confirmarPagamento('${af.afiliado_id}', ${comissaoDevida})">
                         PAGAR VIA PIX
                     </button>
                 </td>
