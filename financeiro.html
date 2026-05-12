@@ -149,7 +149,7 @@
 </div>
 
 <script>
-    const SUPABASE_URL = 'https://onsbuazkqfehkudhladt.supabase.co';
+const SUPABASE_URL = 'https://onsbuazkqfehkudhladt.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9uc2J1YXprcWZlaGt1ZGhsYWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzNTI5OTgsImV4cCI6MjA5MzkyODk5OH0.ZypL6LHbPC_z971EDCTh6pVoA7g4qM6hWSWfWVO9a-M';
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
@@ -157,37 +157,54 @@
         const { data: vendas } = await _supabase.from('vendas').select('*').order('created_at', { ascending: false });
         
         if (vendas) {
+            // Cálculos de Impacto
             const liquidoTotal = vendas.reduce((acc, v) => acc + (v.valor_liquido || 0), 0);
             document.getElementById('saldo-liquido').innerText = `R$ ${liquidoTotal.toLocaleString('pt-br', {minimumFractionDigits: 2})}`;
             document.getElementById('vendas-count').innerText = vendas.length;
 
+            // Histórico de Transações (Últimas 6)
             const tbody = document.getElementById('transacoes-body');
             tbody.innerHTML = vendas.slice(0, 6).map(v => `
                 <tr>
-                    <td>${new Date(v.created_at).toLocaleDateString()}</td>
+                    <td>${new Date(v.created_at).toLocaleDateString('pt-br')}</td>
                     <td style="font-weight:800; color:var(--dark)">Venda Maestro</td>
-                    <td><span style="font-size:10px; background:#F1F5F9; padding:4px 8px; border-radius:5px; font-weight:900;">PIX</span></td>
-                    <td style="color:var(--green); font-weight:800;">+ R$ ${v.valor_liquido.toFixed(2)}</td>
+                    <td><span style="font-size:10px; background:#F1F5F9; padding:4px 8px; border-radius:5px; font-weight:900;">SISTEMA</span></td>
+                    <td style="color:var(--green); font-weight:800;">+ R$ ${v.valor_liquido.toFixed(2).replace('.',',')}</td>
                     <td><i class="fas fa-check-circle" style="color:var(--green)"></i></td>
                 </tr>
             `).join('');
 
-            renderChart();
+            // PREPARAÇÃO DE DADOS PARA O GRÁFICO (Últimos 7 dias)
+            const ultimos7Dias = Array.from({length: 7}, (_, i) => {
+                const d = new Date();
+                d.setDate(d.getDate() - i);
+                return d.toLocaleDateString('pt-br', { day: '2-digit', month: 'short' });
+            }).reverse();
+
+            const valoresPorDia = ultimos7Dias.map(diaLabel => {
+                const totalDoDia = vendas
+                    .filter(v => new Date(v.created_at).toLocaleDateString('pt-br', { day: '2-digit', month: 'short' }) === diaLabel)
+                    .reduce((acc, v) => acc + (v.valor_liquido || 0), 0);
+                return totalDoDia;
+            });
+
+            renderChart(ultimos7Dias, valoresPorDia);
         }
     }
 
-    function renderChart() {
+    function renderChart(labels, data) {
         const ctx = document.getElementById('financeChart').getContext('2d');
         new Chart(ctx, {
             type: 'line',
             data: {
-                labels: ['04 Mai', '05 Mai', '06 Mai', '07 Mai', '08 Mai', '09 Mai', '10 Mai'],
+                labels: labels, // Agora dinâmico
                 datasets: [{
                     label: 'Lucro Líquido',
-                    data: [120, 450, 300, 900, 600, 850, 1100],
+                    data: data, // Agora dinâmico
                     borderColor: '#FF6600',
                     borderWidth: 4,
-                    pointRadius: 0,
+                    pointRadius: 4,
+                    pointBackgroundColor: '#FF6600',
                     fill: true,
                     backgroundColor: (context) => {
                         const gradient = context.chart.ctx.createLinearGradient(0, 0, 0, 400);
@@ -204,7 +221,13 @@
                 plugins: { legend: { display: false } },
                 scales: {
                     x: { grid: { display: false }, border: { display: false } },
-                    y: { grid: { color: '#F1F5F9' }, border: { display: false } }
+                    y: { 
+                        grid: { color: '#F1F5F9' }, 
+                        border: { display: false },
+                        ticks: {
+                            callback: (value) => 'R$ ' + value
+                        }
+                    }
                 }
             }
         });
