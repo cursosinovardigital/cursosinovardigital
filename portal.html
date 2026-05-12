@@ -611,28 +611,50 @@ async function deleteProduct(id) {
 }
 
 async function carregarDadosDashboard() {
-    const { data: vendas, error } = await _supabase.from('vendas').select('*, produtos(nome)').order('created_at', { ascending: false });
+    // Adicionamos a busca pela comissão de afiliado também
+    const { data: vendas, error } = await _supabase
+        .from('vendas')
+        .select('*, produtos(nome, comissao_afiliado)')
+        .order('created_at', { ascending: false });
+
     if(error || !vendas) return;
 
-    const totalB = vendas.reduce((sum, v) => sum + (v.valor_total || 0), 0);
-    const totalL = vendas.reduce((sum, v) => sum + (v.valor_liquido || 0), 0);
+    // --- CÁLCULO DE INTELIGÊNCIA FINANCEIRA ---
+    let totalBruto = 0;
+    let totalLiquidoPago = 0;
+    let totalPendente = 0;
+
+    vendas.forEach(v => {
+        totalBruto += v.valor_total || 0;
+        if (v.status === 'Paga') {
+            totalLiquidoPago += v.valor_liquido || 0;
+        } else if (v.status === 'Pendente') {
+            totalPendente += v.valor_liquido || 0;
+        }
+    });
 
     // --- LÓGICA DA META (R$ 10.000) ---
     const metaValor = 10000;
-    const progresso = (totalB / metaValor) * 100;
+    const progresso = (totalBruto / metaValor) * 100;
     const barraFill = document.getElementById('bar-meta-fill');
     const textoMeta = document.getElementById('txt-meta');
 
     if (barraFill) barraFill.style.width = `${Math.min(progresso, 100)}%`;
-    if (textoMeta) textoMeta.innerText = `R$ ${totalB.toFixed(0)} / R$ 10K`;
+    if (textoMeta) textoMeta.innerText = `R$ ${totalBruto.toFixed(0)} / R$ 10K`;
 
-    // Atualiza os cards e saldos
-    document.getElementById('dash-total-vendas').innerText = `R$ ${totalB.toFixed(2).replace('.', ',')}`;
-    document.getElementById('dash-valor-liquido').innerText = `R$ ${totalL.toFixed(2).replace('.', ',')}`;
+    // --- ATUALIZA OS CARDS (DASHBOARD) ---
+    document.getElementById('dash-total-vendas').innerText = `R$ ${totalBruto.toFixed(2).replace('.', ',')}`;
+    document.getElementById('dash-valor-liquido').innerText = `R$ ${totalLiquidoPago.toFixed(2).replace('.', ',')}`;
     document.getElementById('dash-count-vendas').innerText = vendas.length;
-    document.getElementById('fin-disponivel').innerText = `R$ ${totalL.toFixed(2).replace('.', ',')}`;
 
-    // Lista de vendas recentes
+    // --- ATUALIZA OS CARDS (FINANCEIRO) ---
+    const cardFinDisponivel = document.getElementById('fin-disponivel');
+    const cardFinPendente = document.querySelector('.fin-card.pendente .fin-value');
+
+    if (cardFinDisponivel) cardFinDisponivel.innerText = `R$ ${totalLiquidoPago.toFixed(2).replace('.', ',')}`;
+    if (cardFinPendente) cardFinPendente.innerText = `R$ ${totalPendente.toFixed(2).replace('.', ',')}`;
+
+    // --- LISTA DE VENDAS RECENTES ---
     const tbodyVendas = document.getElementById('sales-list-body');
     if (tbodyVendas) {
         tbodyVendas.innerHTML = vendas.map(v => `
@@ -641,13 +663,15 @@ async function carregarDadosDashboard() {
                 <td>${v.produtos?.nome || 'Produto'}</td>
                 <td style="font-weight:700">R$ ${v.valor_total.toFixed(2).replace('.', ',')}</td>
                 <td>${new Date(v.created_at).toLocaleDateString('pt-BR')}</td>
-                <td><span class="badge badge-success">Paga</span></td>
+                <td><span class="badge ${v.status === 'Paga' ? 'badge-success' : 'badge-warning'}">${v.status}</span></td>
             </tr>`).join('');
     }
 
-    // Gráfico dinâmico
+    // --- GRÁFICO DINÂMICO ---
     if(salesChartInstance && vendas.length > 0) {
-        salesChartInstance.data.datasets[0].data = vendas.slice(0, 7).reverse().map(v => v.valor_total);
+        // Pega as últimas 7 vendas pagas para o gráfico ser realista
+        const vendasParaGrafico = vendas.filter(v => v.status === 'Paga').slice(0, 7).reverse();
+        salesChartInstance.data.datasets[0].data = vendasParaGrafico.map(v => v.valor_total);
         salesChartInstance.update();
     }
 }
