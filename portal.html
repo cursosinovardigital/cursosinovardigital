@@ -285,37 +285,16 @@ header.maestro-top-bar {
                 </div>
             </section>
 
-    <section id="aba-afiliados" class="aba-section">
-    <h2>Meus Afiliados</h2>
-    <div class="sub-nav">
-        <div class="sub-nav-item active">Meus afiliados</div>
-        <div class="sub-nav-item">Solicitações</div>
-    </div>
-    <div style="display: flex; gap: 15px; margin-bottom: 20px;">
-        <div style="flex: 1; position: relative;">
-            <i class="fas fa-search" style="position: absolute; left: 15px; top: 15px; color: #A0AEC0;"></i>
-            <input type="text" class="search-input" placeholder="Filtrar por nome ou e-mail...">
-        </div>
-        <button class="btn-primary" onclick="alert('Link de convite: inovar.digital/cadastro-afiliado')">Convidar Afiliado</button>
-    </div>
-    
-    <div class="table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th>NOME / USERNAME</th>
-                    <th>VENDAS</th>
-                    <th>TOTAL GERADO</th>
-                    <th>COMISSÃO DEVIDA</th>
-                    <th style="text-align:right">AÇÕES</th>
-                </tr>
-            </thead>
-            <tbody id="lista-afiliados-body">
-                <tr><td colspan="5" style="text-align:center; padding:40px; color:#A0AEC0;">Carregando inteligência de afiliados...</td></tr>
-            </tbody>
-        </table>
-    </div>
-</section>
+            <section id="aba-afiliados" class="aba-section">
+                <h2>Meus Afiliados</h2>
+                <div class="sub-nav"><div class="sub-nav-item active">Meus afiliados</div><div class="sub-nav-item">Solicitações</div></div>
+                <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+                    <div style="flex: 1; position: relative;"><i class="fas fa-search" style="position: absolute; left: 15px; top: 15px; color: #A0AEC0;"></i><input type="text" class="search-input" placeholder="Filtrar por nome ou e-mail..."></div>
+                    <div style="width: 250px;"><select class="search-input" style="padding-left: 15px;"><option>Todos os produtos</option></select></div>
+                    <button class="btn-primary" onclick="convidarAfiliado()">Convidar Afiliado</button>
+                </div>
+                <div class="table-container"><table><thead><tr><th>NOME</th><th>PRODUTO</th><th>LINK ÚNICO</th><th>VENDAS</th><th>AÇÕES</th></tr></thead><tbody id="lista-afiliados-body"></tbody></table></div>
+            </section>
 
             <section id="aba-assin" class="aba-section">
                 <h2>Assinaturas</h2>
@@ -575,7 +554,7 @@ header.maestro-top-bar {
                 <td><span class="badge badge-success">Ativo</span></td>
                 <td style="text-align:right">
                     <button class="btn-primary" style="padding: 5px 10px; font-size: 11px; background: var(--green); margin-right:10px;" onclick="simularVenda('${p.id}', ${p.preco})">Venda</button>
-                    <i class="fas fa-edit" style="cursor:pointer; margin-right:15px;" onclick="editProduct('${p.id}')"></i>
+                    <i class="fas fa-edit" style="cursor:pointer; margin-right:15px;" onclick="editProduct('${p.id}', '${p.nome}', ${p.preco})"></i>
                     <i class="fas fa-trash-alt" style="cursor:pointer; color:#EF4444" onclick="deleteProduct('${p.id}')"></i>
                 </td>
             </tr>`).join('')
@@ -632,175 +611,79 @@ async function deleteProduct(id) {
 }
 
 async function carregarDadosDashboard() {
-    console.log("Atualizando Dashboard Geral...");
-    
-    // 1. Busca os dados separadamente (Evita Erro 400 e ganha performance)
-    const { data: vendas, error: errVendas } = await _supabase.from('vendas').select('*').order('created_at', { ascending: false });
-    const { data: produtos, error: errProd } = await _supabase.from('produtos').select('id, nome, comissao_afiliado');
+    const { data: vendas, error } = await _supabase.from('vendas').select('*, produtos(nome)').order('created_at', { ascending: false });
+    if(error || !vendas) return;
 
-    if(errVendas || !vendas) return;
+    const totalB = vendas.reduce((sum, v) => sum + (v.valor_total || 0), 0);
+    const totalL = vendas.reduce((sum, v) => sum + (v.valor_liquido || 0), 0);
 
-    // 2. Variáveis de soma blindadas
-    let totalBrutoPagas = 0;           // Faturamento Real (Dinheiro no Banco)
-    let totalLiquidoBrutoDono = 0;     // Lucro antes de pagar afiliados
-    let totalPendente = 0;             // Boletos/Pix aguardando
-    let totalComissoesPendentes = 0;   // O que você deve para os afiliados
-
-    vendas.forEach(v => {
-        const valorTotal = Number(v.valor_total) || 0;
-        const statusLimpo = String(v.status || '').toLowerCase(); // Blindagem para maiúsculas/minúsculas
-        
-        if (statusLimpo === 'paga') {
-            totalBrutoPagas += valorTotal; 
-            totalLiquidoBrutoDono += Number(v.valor_liquido) || 0;
-            
-            // Lógica de Comissão de Afiliado (Só desconta o que você AINDA não pagou)
-            if(v.afiliado_id && v.comissao_paga === false) {
-                const prod = (produtos || []).find(p => String(p.id).trim() === String(v.produto_id).trim());
-                const perc = prod ? (Number(prod.comissao_afiliado) || 0) : 0;
-                totalComissoesPendentes += (valorTotal * perc / 100);
-            }
-        } else if (statusLimpo === 'pendente') {
-            totalPendente += Number(v.valor_liquido) || 0;
-        }
-    });
-
-    // 3. Lucro Real (O que é seu de fato após pagar todo mundo)
-    const lucroRealFinal = totalLiquidoBrutoDono - totalComissoesPendentes;
-
-    // 4. LÓGICA DA META (R$ 10.000) - Baseada em vendas REAIS
+    // --- LÓGICA DA META (R$ 10.000) ---
     const metaValor = 10000;
-    const progresso = (totalBrutoPagas / metaValor) * 100;
+    const progresso = (totalB / metaValor) * 100;
     const barraFill = document.getElementById('bar-meta-fill');
     const textoMeta = document.getElementById('txt-meta');
 
     if (barraFill) barraFill.style.width = `${Math.min(progresso, 100)}%`;
-    if (textoMeta) textoMeta.innerText = `R$ ${totalBrutoPagas.toFixed(0)} / R$ 10K`;
+    if (textoMeta) textoMeta.innerText = `R$ ${totalB.toFixed(0)} / R$ 10K`;
 
-    // 5. ATUALIZA CARDS (DASHBOARD & FINANCEIRO)
-    const atualizarTexto = (id, texto) => {
-        const el = document.getElementById(id);
-        if (el) el.innerText = texto;
-    };
+    // Atualiza os cards e saldos
+    document.getElementById('dash-total-vendas').innerText = `R$ ${totalB.toFixed(2).replace('.', ',')}`;
+    document.getElementById('dash-valor-liquido').innerText = `R$ ${totalL.toFixed(2).replace('.', ',')}`;
+    document.getElementById('dash-count-vendas').innerText = vendas.length;
+    document.getElementById('fin-disponivel').innerText = `R$ ${totalL.toFixed(2).replace('.', ',')}`;
 
-    atualizarTexto('dash-total-vendas', `R$ ${totalBrutoPagas.toFixed(2).replace('.', ',')}`);
-    atualizarTexto('dash-valor-liquido', `R$ ${lucroRealFinal.toFixed(2).replace('.', ',')}`);
-    atualizarTexto('dash-count-vendas', vendas.filter(v => String(v.status).toLowerCase() === 'paga').length);
-    atualizarTexto('fin-disponivel', `R$ ${lucroRealFinal.toFixed(2).replace('.', ',')}`);
-
-    const cardFinPendente = document.querySelector('.fin-card.pendente .fin-value');
-    if (cardFinPendente) cardFinPendente.innerText = `R$ ${totalPendente.toFixed(2).replace('.', ',')}`;
-
-    // 6. LISTA DE VENDAS RECENTES (Com tratamento visual de status)
+    // Lista de vendas recentes
     const tbodyVendas = document.getElementById('sales-list-body');
     if (tbodyVendas) {
-        tbodyVendas.innerHTML = vendas.map(v => {
-            const prod = (produtos || []).find(p => String(p.id).trim() === String(v.produto_id).trim());
-            const statusLimpo = String(v.status || '').toLowerCase();
-            return `
-                <tr>
-                    <td style="font-weight:700; color:var(--orange)">#${v.id.toString().slice(0,8)}</td>
-                    <td>${prod ? prod.nome : 'Produto'}</td>
-                    <td style="font-weight:700">R$ ${Number(v.valor_total).toFixed(2).replace('.', ',')}</td>
-                    <td>${new Date(v.created_at).toLocaleDateString('pt-BR')}</td>
-                    <td><span class="badge ${statusLimpo === 'paga' ? 'badge-success' : 'badge-warning'}">${v.status}</span></td>
-                </tr>`;
-        }).join('');
-    }
-
-    // 7. GRÁFICO DINÂMICO
-    if(typeof salesChartInstance !== 'undefined' && salesChartInstance && vendas.length > 0) {
-        const vendasParaGrafico = vendas.filter(v => String(v.status).toLowerCase() === 'paga').slice(0, 7).reverse();
-        salesChartInstance.data.datasets[0].data = vendasParaGrafico.map(v => v.valor_total);
-        salesChartInstance.update();
-    }
-}
-
-    // 8. GRÁFICO DINÂMICO
-    if(typeof salesChartInstance !== 'undefined' && salesChartInstance && vendas.length > 0) {
-        const vendasParaGrafico = vendas.filter(v => String(v.status).toLowerCase() === 'paga').slice(0, 7).reverse();
-        salesChartInstance.data.datasets[0].data = vendasParaGrafico.map(v => v.valor_total);
-        salesChartInstance.update();
-    }
-}
-
-async function simularVenda(prodId, preco) {
-    const { data: { user } } = await _supabase.auth.getUser();
-    // Se não tiver usuário logado, usamos um ID de teste
-    const comissao = (preco * TAXA_PERCENTUAL) + TAXA_FIXA;
-    const liquido = preco - comissao;
-
-    await _supabase.from('vendas').insert([{ 
-        produto_id: prodId, 
-        valor_total: preco, 
-        comissao_maestro: comissao, 
-        valor_liquido: liquido, 
-        status: 'Paga', 
-        metodo_pagamento: 'Pix',
-        afiliado_id: 'teste_vitor', // <--- ADICIONAMOS ISSO AQUI
-        comissao_paga: false        // <--- E ISSO AQUI
-    }]);
-
-    alert("Simulação de venda COM AFILIADO concluída!");
-    carregarDadosDashboard();
-    if(document.getElementById('aba-afiliados').classList.contains('active')) carregarAfiliados();
-}
-
-async function filtrarVendas() {
-    // Ajustado para 'Paga' sem o 's' para bater com o banco
-    const statusFiltro = document.getElementById('filtro-status')?.value || 'Paga';
-    
-    const { data: vendas, error } = await _supabase
-        .from('vendas')
-        .select('*, produtos(nome)')
-        .eq('status', statusFiltro)
-        .order('created_at', { ascending: false });
-
-    if(error) return;
-
-    // --- CÁLCULO DO RESUMO POR PRODUTO ---
-    const resumo = (vendas || []).reduce((acc, v) => {
-        const nome = v.produtos?.nome || 'Produto Removido';
-        acc[nome] = (acc[nome] || 0) + v.valor_total;
-        return acc;
-    }, {});
-
-    // Monta o HTML das caixinhas de resumo
-    let resumoHTML = `<div style="display:flex; gap:15px; margin-bottom:20px; flex-wrap:wrap;">`;
-    for (const [prod, total] of Object.entries(resumo)) {
-        resumoHTML += `
-            <div style="background:#FFF; padding:12px 20px; border-radius:10px; border:1px solid var(--border); box-shadow: 0 2px 5px rgba(0,0,0,0.02);">
-                <small style="display:block; color:var(--orange); font-weight:800; font-size:10px; text-transform:uppercase; margin-bottom:4px;">${prod}</small>
-                <span style="font-weight:800; color:var(--side-black); font-size:16px;">R$ ${total.toFixed(2).replace('.', ',')}</span>
-            </div>`;
-    }
-    resumoHTML += `</div>`;
-
-    const tbodyVendas = document.getElementById('sales-list-body');
-    if (tbodyVendas) {
-        // Inserção inteligente do resumo acima da tabela
-        const containerTabela = document.querySelector('#aba-vendas .table-container');
-        
-        // Limpa resumo anterior se houver
-        const resumoExistente = document.getElementById('resumo-vendas-dinamico');
-        if(resumoExistente) resumoExistente.remove();
-
-        const divResumo = document.createElement('div');
-        divResumo.id = 'resumo-vendas-dinamico';
-        divResumo.innerHTML = resumoHTML;
-        containerTabela.parentNode.insertBefore(divResumo, containerTabela);
-
-        // Preenche a tabela exatamente como no seu código antigo
         tbodyVendas.innerHTML = vendas.map(v => `
             <tr>
                 <td style="font-weight:700; color:var(--orange)">#${v.id.toString().slice(0,8)}</td>
                 <td>${v.produtos?.nome || 'Produto'}</td>
                 <td style="font-weight:700">R$ ${v.valor_total.toFixed(2).replace('.', ',')}</td>
                 <td>${new Date(v.created_at).toLocaleDateString('pt-BR')}</td>
-                <td><span class="badge ${v.status === 'Paga' ? 'badge-success' : 'badge-warning'}">${v.status}</span></td>
+                <td><span class="badge badge-success">Paga</span></td>
             </tr>`).join('');
     }
+
+    // Gráfico dinâmico
+    if(salesChartInstance && vendas.length > 0) {
+        salesChartInstance.data.datasets[0].data = vendas.slice(0, 7).reverse().map(v => v.valor_total);
+        salesChartInstance.update();
+    }
 }
+
+    async function simularVenda(prodId, preco) {
+        const { data: { user } } = await _supabase.auth.getUser();
+        if (!user) return alert("Faça login primeiro!");
+        const comissao = (preco * TAXA_PERCENTUAL) + TAXA_FIXA;
+        const liquido = preco - comissao;
+        await _supabase.from('vendas').insert([{ produto_id: prodId, valor_total: preco, comissao_maestro: comissao, valor_liquido: liquido, status: 'Paga', metodo_pagamento: 'Pix' }]);
+        alert("Simulação de venda concluída!");
+        carregarDadosDashboard();
+}
+
+async function filtrarVendas() {
+        const statusFiltro = document.getElementById('filtro-status')?.value || 'Pagas';
+        const { data: vendas, error } = await _supabase
+            .from('vendas')
+            .select('*, produtos(nome)')
+            .eq('status', statusFiltro)
+            .order('created_at', { ascending: false });
+
+        if(error) return;
+
+        const tbodyVendas = document.getElementById('sales-list-body');
+        if (tbodyVendas) {
+            tbodyVendas.innerHTML = vendas.map(v => `
+                <tr>
+                    <td style="font-weight:700; color:var(--orange)">#${v.id.toString().slice(0,8)}</td>
+                    <td>${v.produtos?.nome || 'Produto'}</td>
+                    <td style="font-weight:700">R$ ${v.valor_total.toFixed(2).replace('.', ',')}</td>
+                    <td>${new Date(v.created_at).toLocaleDateString('pt-BR')}</td>
+                    <td><span class="badge badge-success">${v.status}</span></td>
+                </tr>`).join('');
+        }
+    }
     
     async function solicitarSaque() {
         const saldoDisponivelStr = document.getElementById('fin-disponivel').innerText;
@@ -835,59 +718,42 @@ async function filtrarVendas() {
         }
     }
     
-async function editProduct(id) {
-    // 1. Busca os dados completos no banco (incluindo os novos campos)
-    const { data: p, error } = await _supabase
-        .from('produtos')
-        .select('*')
-        .eq('id', id)
-        .single();
+    function editProduct(id, nome, preco) {
+        document.getElementById('edit-prod-id').value = id;
+        document.getElementById('ipt_nome').value = nome;
+        document.getElementById('ipt_preco').value = preco;
+        document.getElementById('modal-product-title').innerText = "Editar produto";
 
-    if (error || !p) return;
-
-    // 2. Preenche os campos básicos que você já tinha
-    document.getElementById('edit-prod-id').value = p.id;
-    document.getElementById('ipt_nome').value = p.nome;
-    document.getElementById('ipt_preco').value = p.preco;
-
-    // 3. Preenche OS NOVOS CAMPOS (A mágica acontece aqui)
-    document.getElementById('ipt_comissao_afiliado').value = p.comissao_afiliado || 0;
-    document.getElementById('ipt_categoria').value = p.categoria || '';
-    document.getElementById('edit-prod-capa').value = p.capa_url || '';
-    document.getElementById('ipt_email_suporte').value = p.email_suporte || '';
-    document.getElementById('ipt_url_obrigado').value = p.url_obrigado || '';
-
-    document.getElementById('modal-product-title').innerText = "Editar produto";
-
-    // 4. Gera o link de checkout (mantendo sua lógica de links)
-    const linkCheckout = `https://inovar.digital/pay/${p.id}`;
-    const linksTable = document.getElementById('prod-links-table');
-    
-    if (linksTable) {
-        linksTable.innerHTML = `
-            <tr>
-                <td style="font-weight:600; font-size:13px;">Checkout Maestro</td>
-                <td>
-                    <div style="display:flex; gap:5px; align-items:center;">
-                        <input type="text" readonly class="search-input" 
-                            style="padding:8px; font-size:11px; width: 220px; background: #F8F9FA;" 
-                            value="${linkCheckout}">
-                        <button class="btn-primary" style="padding: 7px 10px; font-size:10px;" 
-                            onclick="copyToClipboard('${linkCheckout}')">
-                            <i class="far fa-copy"></i>
-                        </button>
-                    </div>
-                </td>
-                <td><span class="badge" style="background:#EBF4FF; color:var(--purple-kiwi);">Padrão</span></td>
-                <td>R$ ${p.preco.toFixed(2)}</td>
-                <td style="text-align:right">
-                    <i class="fas fa-external-link-alt" style="cursor:pointer; color:#718096" 
-                        onclick="window.open('${linkCheckout}', '_blank')"></i>
-                </td>
-            </tr>`;
+        // GERAÇÃO DO LINK DINÂMICO PARA A TABELA
+        const linkCheckout = `https://inovar.digital/pay/${id}`;
+        
+        const linksTable = document.getElementById('prod-links-table');
+        if (linksTable) {
+            linksTable.innerHTML = `
+                <tr>
+                    <td style="font-weight:600; font-size:13px;">Checkout Maestro</td>
+                    <td>
+                        <div style="display:flex; gap:5px; align-items:center;">
+                            <input type="text" readonly class="search-input" 
+                                style="padding:8px; font-size:11px; width: 250px; background: #F8F9FA;" 
+                                value="${linkCheckout}">
+                            <button class="btn-primary" style="padding: 7px 10px; font-size:10px;" 
+                                onclick="copyToClipboard('${linkCheckout}')">
+                                <i class="far fa-copy"></i>
+                            </button>
+                        </div>
+                    </td>
+                    <td><span class="badge" style="background:#EBF4FF; color:var(--purple-kiwi);">Padrão</span></td>
+                    <td>R$ ${preco.toFixed(2)}</td>
+                    <td><span style="color: #22C55E; font-weight: 700;">Ativo</span></td>
+                    <td style="text-align:right">
+                        <i class="fas fa-external-link-alt" style="cursor:pointer; color:#718096" 
+                            onclick="window.open('${linkCheckout}', '_blank')"></i>
+                    </td>
+                </tr>`;
+        }
+        openProductModal();
     }
-    openProductModal();
-}
 
     function copyToClipboard(text) {
         navigator.clipboard.writeText(text).then(() => {
@@ -902,7 +768,6 @@ async function carregarMarketplaceReal() {
     const grid = document.getElementById('market-full-grid');
     if (!grid) return;
 
-    // Mantendo o seu card de exemplo fixo
     const exemplo = `
         <div class="market-card">
             <div class="market-thumb"><img src="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?auto=format&fit=crop&w=400&q=80"></div>
@@ -912,7 +777,6 @@ async function carregarMarketplaceReal() {
             </div>
         </div>`;
 
-    // 1. Mapeando as Aulas (Área de Membros)
     let htmlAulas = (aulas || []).map(a => `
         <div class="market-card" onclick="window.location.href='aluno.html?id=${a.id}'" style="cursor:pointer">
             <div class="market-thumb">
@@ -925,29 +789,17 @@ async function carregarMarketplaceReal() {
             </div>
         </div>`).join('');
 
-    // 2. Mapeando os Produtos (Vendas/Checkout) - USANDO OS CAMPOS NOVOS
-    let htmlProdutos = (prods || []).map(p => {
-        // Cálculo da comissão em Reais baseada na porcentagem que criamos
-        const valorComissao = ((p.preco * (p.comissao_afiliado || 0)) / 100).toFixed(2).replace('.', ',');
-        
-        return `
+    let htmlProdutos = (prods || []).map(p => `
         <div class="market-card" onclick="window.location.href='pay.html?id=${p.id}'" style="cursor:pointer">
             <div class="market-thumb">
-                <img src="${p.capa_url || 'https://via.placeholder.com/400x225?text=' + p.nome.replace(/ /g, '+')}" 
-                     onerror="this.src='https://via.placeholder.com/400x225?text=Produto'">
+                <img src="https://via.placeholder.com/400x225?text=${p.nome.replace(/ /g, '+')}" onerror="this.src='https://via.placeholder.com/400x225?text=Produto'">
             </div>
             <div class="market-info">
-                <div style="font-size:10px; color:#5D5FEF; font-weight:900; text-transform: uppercase; margin-bottom: 5px;">${p.categoria || 'PRODUTO DIGITAL'}</div>
+                <div style="font-size:10px; color:#5D5FEF; font-weight:900; text-transform: uppercase; margin-bottom: 5px;">PRODUTO DIGITAL</div>
                 <div class="market-title">${p.nome}</div>
-                <div class="market-commission">
-                    R$ ${p.preco.toFixed(2).replace('.', ',')} 
-                    <span style="color:#718096; font-weight:400; font-size:11px; margin-left:5px;">
-                        (Comissão: R$ ${valorComissao})
-                    </span>
-                </div>
+                <div class="market-commission">Venda por R$ ${p.preco.toFixed(2).replace('.', ',')}</div>
             </div>
-        </div>`;
-    }).join('');
+        </div>`).join('');
 
     grid.innerHTML = exemplo + htmlAulas + htmlProdutos;
 }
@@ -982,119 +834,30 @@ async function carregarAreasMembros() {
         </tr>`).join('');
 }
 
-async function carregarAfiliados() {
-    console.log("Iniciando carregamento de afiliados e comissões...");
-    
-    // 1. Busca os perfis
-    const { data: perfis, error: errPerfis } = await _supabase.from('perfis').select('*');
-    
-    // 2. Busca as vendas (Status 'paga' e comissão ainda não paga ao afiliado)
-    const { data: vendas, error: errVendas } = await _supabase.from('vendas').select('*');
-    
-    // 3. Busca os produtos para cruzar os percentuais de comissão
-    const { data: produtos, error: errProdutos } = await _supabase.from('produtos').select('id, comissao_afiliado');
+    async function carregarAfiliados() {
+    const { data: afiliados, error } = await _supabase
+        .from('afiliados') // Certifique-se que essa tabela existe no Supabase
+        .select('*');
 
-    // Logs de depuração (ajudam a ver o que está acontecendo no F12)
-    if (errPerfis || errVendas || errProdutos) {
-        console.error("Erro ao buscar dados:", { errPerfis, errVendas, errProdutos });
+    const tbody = document.getElementById('lista-afiliados-body');
+    if (!tbody) return;
+
+    if (error || !afiliados || afiliados.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:30px; color:#A0AEC0;">Nenhum afiliado encontrado.</td></tr>`;
         return;
     }
 
-    const tbody = document.getElementById('lista-afiliados-body');
-    if (!tbody || !perfis) return;
-
-    const html = perfis.map(af => {
-        // Filtro Inteligente: Compara IDs ignorando espaços e maiúsculas
-        const vendasDoAfiliado = (vendas || []).filter(v => {
-            const idVenda = String(v.afiliado_id || '').trim().toLowerCase();
-            const idPerfil = String(af.afiliado_id || '').trim().toLowerCase();
-            const statusVenda = String(v.status || '').trim().toLowerCase();
-            
-            return idVenda === idPerfil && statusVenda === 'paga' && v.comissao_paga === false;
-        });
-
-        // Se o afiliado não tem vendas pendentes de pagamento, não mostra na lista
-        if (vendasDoAfiliado.length === 0) return '';
-
-        // Soma o Total Gerado em Vendas Brutas
-        const totalGerado = vendasDoAfiliado.reduce((sum, v) => sum + (Number(v.valor_total) || 0), 0);
-        
-        // Cálculo da Comissão Devida (Cruzando com a tabela de produtos)
-        const comissaoDevida = vendasDoAfiliado.reduce((sum, v) => {
-            // Busca o produto da venda na lista de produtos baixada
-            const prod = (produtos || []).find(p => 
-                String(p.id).trim() === String(v.produto_id).trim()
-            );
-            
-            const percentual = prod ? (Number(prod.comissao_afiliado) || 0) : 0;
-            const valorVenda = Number(v.valor_total) || 0;
-            
-            console.log(`Afiliado: ${af.afiliado_id} | Produto: ${v.produto_id} | Comissão: ${percentual}%`);
-            
-            return sum + (valorVenda * percentual / 100);
-        }, 0);
-
-        return `
-            <tr>
-                <td>
-                    <div style="display:flex; align-items:center; gap:12px;">
-                        <img src="${af.foto_url || 'https://via.placeholder.com/35'}" style="width:35px; height:35px; border-radius:50%; object-fit:cover; border: 2px solid var(--border);">
-                        <div>
-                            <div style="font-weight:700; color:var(--text)">${af.nome_completo || af.afiliado_id}</div>
-                            <div style="font-size:10px; color:var(--text-dim)">${af.afiliado_id}</div>
-                        </div>
-                    </div>
-                </td>
-                <td style="font-weight:600">${vendasDoAfiliado.length}</td>
-                <td style="font-weight:600">R$ ${totalGerado.toFixed(2).replace('.',',')}</td>
-                <td style="font-weight:800; color:var(--orange)">R$ ${comissaoDevida.toFixed(2).replace('.',',')}</td>
-                <td style="text-align:right">
-                    <button class="btn-primary" style="padding: 6px 12px; font-size: 11px; background:var(--green)" 
-                        onclick="confirmarPagamento('${af.afiliado_id}', ${comissaoDevida})">
-                        PAGAR VIA PIX
-                    </button>
-                </td>
-            </tr>`;
-    }).join('');
-
-    tbody.innerHTML = html || `<tr><td colspan="5" style="text-align:center; padding:30px;">Nenhum pagamento pendente no momento.</td></tr>`;
-}
-    
-async function confirmarPagamento(idAfiliado, valor) {
-    // 1. Confirmação visual para o usuário
-    const confirmacao = confirm(`Confirmar que você já enviou o PIX de R$ ${valor.toFixed(2).replace('.',',')} para ${idAfiliado}?\n\nIsso marcará todas as vendas pendentes dele como pagas.`);
-
-    if (!confirmacao) return;
-
-    try {
-        console.log(`Dando baixa nas vendas do afiliado: ${idAfiliado}`);
-
-        // 2. Atualização direta (Mais rápido e seguro)
-        // O .update já aplica o filtro e altera tudo de uma vez
-        const { error } = await _supabase
-            .from('vendas')
-            .update({ comissao_paga: true })
-            .eq('afiliado_id', idAfiliado) // Filtra pelo afiliado
-            .eq('comissao_paga', false)    // Garante que só paga o que deve
-            .ilike('status', 'paga');      // Segurança extra: só paga vendas confirmadas
-
-        if (error) throw error;
-
-        // 3. Sucesso!
-        alert("Baixa de pagamento registrada! O saldo do afiliado foi zerado.");
-        
-        // 4. Recarrega as funções de tela para atualizar os números na hora
-        await carregarAfiliados(); 
-        
-        // Se você tiver a função de dashboard, ela atualiza o lucro líquido
-        if (typeof carregarDadosDashboard === "function") {
-            await carregarDadosDashboard();
-        }
-
-    } catch (error) {
-        console.error("Erro ao processar baixa:", error);
-        alert("Erro ao registrar no banco: " + (error.message || "Erro desconhecido"));
-    }
+    tbody.innerHTML = afiliados.map(af => `
+        <tr>
+            <td style="font-weight:700; color:var(--side-black)">${af.nome}</td>
+            <td>${af.produto_nome || 'Todos'}</td>
+            <td style="font-size:12px; color:var(--purple-kiwi)">inovar.digital/af/${af.id.toString().slice(0,6)}</td>
+            <td style="font-weight:600">${af.total_vendas || 0}</td>
+            <td style="text-align:right">
+                <i class="fas fa-edit" style="cursor:pointer; margin-right:15px;"></i>
+                <i class="fas fa-trash-alt" style="cursor:pointer; color:#EF4444"></i>
+            </td>
+        </tr>`).join('');
 }
     
     function nav(id, el) {
