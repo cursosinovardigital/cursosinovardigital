@@ -14,19 +14,7 @@
             
             const cards = document.querySelectorAll('.card-stat h2');
             if(cards[3]) cards[3].innerText = (liquidoTotal / vendas.length).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-// --- CONECTANDO O HISTÓRICO DE TRANSAÇÕES ---
-            const tbody = document.getElementById('transacoes-body');
-            if (tbody) {
-                tbody.innerHTML = vendas.slice(0, 6).map(v => `
-                    <tr>
-                        <td>${new Date(v.created_at).toLocaleDateString('pt-BR')}</td>
-                        <td style="font-weight:800; color:var(--dark)">Venda Maestro</td>
-                        <td><span style="font-size:10px; background:#F1F5F9; padding:4px 8px; border-radius:5px; font-weight:900;">${(v.metodo_pagamento || 'PIX').toUpperCase()}</span></td>
-                        <td style="color:var(--green); font-weight:800;">+ ${v.valor_liquido.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
-                        <td><i class="fas fa-check-circle" style="color:var(--green)"></i></td>
-                    </tr>
-                `).join('');
-            }
+
             // Renderiza o gráfico com um pequeno "fôlego" para o navegador
             setTimeout(() => carregarGrafico(vendas), 300);
         }
