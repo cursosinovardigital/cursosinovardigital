@@ -571,10 +571,14 @@ async function salvarProduto() {
         return;
     }
 
-    const payload = { 
-        nome: inputNome.value, 
-        preco: parseFloat(inputPreco.value.replace(',', '.')), 
-        capa_url: inputCapa.value || null, // 2. Adiciona a URL no payload (envia null se estiver vazio)
+const payload = { 
+        nome: document.getElementById('ipt_nome').value, 
+        preco: parseFloat(document.getElementById('ipt_preco').value.replace(',', '.')), 
+        capa_url: document.getElementById('edit-prod-capa').value || null,
+        comissao_afiliado: parseFloat(document.getElementById('ipt_comissao_afiliado').value) || 0,
+        categoria: document.getElementById('ipt_categoria').value,
+        email_suporte: document.getElementById('ipt_email_suporte').value,
+        url_obrigado: document.getElementById('ipt_url_obrigado').value,
         status: 'Ativo' 
     };
 
