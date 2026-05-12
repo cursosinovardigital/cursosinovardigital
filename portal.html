@@ -718,53 +718,42 @@ async function filtrarVendas() {
         }
     }
     
-  async function editProduct(id) {
-    // 1. Busca os dados atualizados do banco (incluindo comissão, suporte, etc)
-    const { data: p, error } = await _supabase.from('produtos').select('*').eq('id', id).single();
-    if (error || !p) return;
+    function editProduct(id, nome, preco) {
+        document.getElementById('edit-prod-id').value = id;
+        document.getElementById('ipt_nome').value = nome;
+        document.getElementById('ipt_preco').value = preco;
+        document.getElementById('modal-product-title').innerText = "Editar produto";
 
-    // 2. Preenche os campos do Modal com os dados que vieram do banco
-    document.getElementById('edit-prod-id').value = p.id;
-    document.getElementById('ipt_nome').value = p.nome;
-    document.getElementById('ipt_preco').value = p.preco;
-    document.getElementById('ipt_comissao_afiliado').value = p.comissao_afiliado || 0;
-    document.getElementById('ipt_categoria').value = p.categoria || '';
-    document.getElementById('edit-prod-capa').value = p.capa_url || '';
-    document.getElementById('ipt_email_suporte').value = p.email_suporte || '';
-    document.getElementById('ipt_url_obrigado').value = p.url_obrigado || '';
-    
-    document.getElementById('modal-product-title').innerText = "Editar produto";
-
-    // 3. REINCLUÍDO: Gera o link dinâmico para a tabela de links (para você não perder essa função)
-    const linkCheckout = `https://inovar.digital/pay/${id}`;
-    const linksTable = document.getElementById('prod-links-table');
-    if (linksTable) {
-        linksTable.innerHTML = `
-            <tr>
-                <td style="font-weight:600; font-size:13px;">Checkout Maestro</td>
-                <td>
-                    <div style="display:flex; gap:5px; align-items:center;">
-                        <input type="text" readonly class="search-input" 
-                            style="padding:8px; font-size:11px; width: 250px; background: #F8F9FA;" 
-                            value="${linkCheckout}">
-                        <button class="btn-primary" style="padding: 7px 10px; font-size:10px;" 
-                            onclick="copyToClipboard('${linkCheckout}')">
-                            <i class="far fa-copy"></i>
-                        </button>
-                    </div>
-                </td>
-                <td><span class="badge" style="background:#EBF4FF; color:var(--purple-kiwi);">Padrão</span></td>
-                <td>R$ ${p.preco.toFixed(2)}</td>
-                <td style="text-align:right">
-                    <i class="fas fa-external-link-alt" style="cursor:pointer; color:#718096" 
-                        onclick="window.open('${linkCheckout}', '_blank')"></i>
-                </td>
-            </tr>`;
+        // GERAÇÃO DO LINK DINÂMICO PARA A TABELA
+        const linkCheckout = `https://inovar.digital/pay/${id}`;
+        
+        const linksTable = document.getElementById('prod-links-table');
+        if (linksTable) {
+            linksTable.innerHTML = `
+                <tr>
+                    <td style="font-weight:600; font-size:13px;">Checkout Maestro</td>
+                    <td>
+                        <div style="display:flex; gap:5px; align-items:center;">
+                            <input type="text" readonly class="search-input" 
+                                style="padding:8px; font-size:11px; width: 250px; background: #F8F9FA;" 
+                                value="${linkCheckout}">
+                            <button class="btn-primary" style="padding: 7px 10px; font-size:10px;" 
+                                onclick="copyToClipboard('${linkCheckout}')">
+                                <i class="far fa-copy"></i>
+                            </button>
+                        </div>
+                    </td>
+                    <td><span class="badge" style="background:#EBF4FF; color:var(--purple-kiwi);">Padrão</span></td>
+                    <td>R$ ${preco.toFixed(2)}</td>
+                    <td><span style="color: #22C55E; font-weight: 700;">Ativo</span></td>
+                    <td style="text-align:right">
+                        <i class="fas fa-external-link-alt" style="cursor:pointer; color:#718096" 
+                            onclick="window.open('${linkCheckout}', '_blank')"></i>
+                    </td>
+                </tr>`;
+        }
+        openProductModal();
     }
-
-    // 4. Abre o modal
-    openProductModal();
-}
 
     function copyToClipboard(text) {
         navigator.clipboard.writeText(text).then(() => {
@@ -844,64 +833,31 @@ async function carregarAreasMembros() {
             </td>
         </tr>`).join('');
 }
-    
-async function carregarAfiliados() {
-// Substitua apenas o conteúdo dentro da sua carregarAfiliados atual:
-console.log("Processando inteligência de afiliados...");
 
-// 1. Busca os perfis (onde estão os nomes e fotos)
-const { data: perfis } = await _supabase.from('perfis').select('*');
+    async function carregarAfiliados() {
+    const { data: afiliados, error } = await _supabase
+        .from('afiliados') // Certifique-se que essa tabela existe no Supabase
+        .select('*');
 
-// 2. Busca as vendas e produtos (Separados para evitar erro 400)
-const { data: vendas } = await _supabase.from('vendas').select('*');
-const { data: produtos } = await _supabase.from('produtos').select('id, comissao_afiliado');
+    const tbody = document.getElementById('lista-afiliados-body');
+    if (!tbody) return;
 
-const tbody = document.getElementById('lista-afiliados-body');
-if (!tbody || !perfis) return;
+    if (error || !afiliados || afiliados.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:30px; color:#A0AEC0;">Nenhum afiliado encontrado.</td></tr>`;
+        return;
+    }
 
-const html = perfis.map(af => {
-    // Filtra vendas deste afiliado que estão pagas mas a comissão ainda não foi enviada
-    const vendasDoAfiliado = (vendas || []).filter(v => 
-        String(v.afiliado_id || '').trim().toLowerCase() === String(af.afiliado_id || '').trim().toLowerCase() &&
-        String(v.status).trim().toLowerCase() === 'paga' &&
-        v.comissao_paga === false
-    );
-
-    if (vendasDoAfiliado.length === 0) return '';
-
-    const totalGerado = vendasDoAfiliado.reduce((sum, v) => sum + (Number(v.valor_total) || 0), 0);
-    
-    // Calcula a comissão cruzando com a tabela de produtos
-    const comissaoDevida = vendasDoAfiliado.reduce((sum, v) => {
-        const prod = (produtos || []).find(p => p.id === v.produto_id);
-        const perc = prod ? (Number(prod.comissao_afiliado) || 0) : 0;
-        return sum + (Number(v.valor_total) * perc / 100);
-    }, 0);
-
-    return `
+    tbody.innerHTML = afiliados.map(af => `
         <tr>
-            <td>
-                <div style="display:flex; align-items:center; gap:12px;">
-                    <img src="${af.foto_url || 'https://via.placeholder.com/35'}" style="width:35px; height:35px; border-radius:50%; object-fit:cover; border: 2px solid var(--border);">
-                    <div>
-                        <div style="font-weight:700; color:var(--text)">${af.nome_completo || af.afiliado_id}</div>
-                        <div style="font-size:10px; color:var(--text-dim)">${af.afiliado_id}</div>
-                    </div>
-                </div>
-            </td>
-            <td style="font-weight:600">${vendasDoAfiliado.length}</td>
-            <td style="font-weight:600">R$ ${totalGerado.toFixed(2).replace('.',',')}</td>
-            <td style="font-weight:800; color:var(--orange)">R$ ${comissaoDevida.toFixed(2).replace('.',',')}</td>
+            <td style="font-weight:700; color:var(--side-black)">${af.nome}</td>
+            <td>${af.produto_nome || 'Todos'}</td>
+            <td style="font-size:12px; color:var(--purple-kiwi)">inovar.digital/af/${af.id.toString().slice(0,6)}</td>
+            <td style="font-weight:600">${af.total_vendas || 0}</td>
             <td style="text-align:right">
-                <button class="btn-primary" style="padding: 6px 12px; font-size: 11px; background:var(--green)" 
-                    onclick="confirmarPagamento('${af.afiliado_id}', ${comissaoDevida})">
-                    PAGAR VIA PIX
-                </button>
+                <i class="fas fa-edit" style="cursor:pointer; margin-right:15px;"></i>
+                <i class="fas fa-trash-alt" style="cursor:pointer; color:#EF4444"></i>
             </td>
-        </tr>`;
-}).join('');
-
-tbody.innerHTML = html || `<tr><td colspan="5" style="text-align:center; padding:30px;">Nenhum pagamento pendente no momento.</td></tr>`;
+        </tr>`).join('');
 }
     
     function nav(id, el) {
@@ -918,24 +874,6 @@ tbody.innerHTML = html || `<tr><td colspan="5" style="text-align:center; padding
         if(id === 'market') carregarMarketplaceReal();
         if(id === 'vendas' || id === 'dash' || id === 'finan') carregarDadosDashboard();
     }
-    
-    async function confirmarPagamento(idAfiliado, valor) {
-    if(confirm(`Confirmar que você enviou o PIX de R$ ${valor.toFixed(2).replace('.',',')} para ${idAfiliado}?`)) {
-        const { error } = await _supabase
-            .from('vendas')
-            .update({ comissao_paga: true })
-            .eq('afiliado_id', idAfiliado)
-            .eq('comissao_paga', false);
-
-        if (!error) {
-            alert("Pagamento registrado! O saldo do afiliado foi zerado.");
-            carregarAfiliados();
-            carregarDadosDashboard();
-        } else {
-            alert("Erro ao registrar no banco: " + error.message);
-        }
-    }
-}
     
     async function atualizarRelatoriosRapidos() {
     const { data: vendas, error } = await _supabase.from('vendas').select('*');
