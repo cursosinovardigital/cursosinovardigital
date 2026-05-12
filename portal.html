@@ -966,34 +966,28 @@ async function carregarAreasMembros() {
 }
 
 async function carregarAfiliados() {
-    // 1. Busca todos os perfis
     const { data: perfis } = await _supabase.from('perfis').select('*');
     
-    // 2. BUSCA APENAS VENDAS ONDE A COMISSÃO AINDA É FALSA (NÃO PAGA)
-    // Isso garante que o saldo zere quando você der a baixa
+    // Mudamos aqui: ele vai aceitar "Paga" ou "paga" (ilike)
     const { data: vendas } = await _supabase
         .from('vendas')
         .select('*, produtos(comissao_afiliado)')
-        .eq('status', 'Paga')
+        .ilike('status', 'paga') 
         .eq('comissao_paga', false); 
 
     const tbody = document.getElementById('lista-afiliados-body');
     if (!tbody || !perfis) return;
 
     const html = perfis.map(af => {
-        // Filtra as vendas pendentes deste afiliado
         const vendasDoAfiliado = (vendas || []).filter(v => v.afiliado_id === af.username);
-        
-        const totalGerado = vendasDoAfiliado.reduce((sum, v) => sum + (v.valor_total || 0), 0);
-        
+        const totalGerado = vendasDoAfiliado.reduce((sum, v) => sum + (Number(v.valor_total) || 0), 0);
         const comissaoDevida = vendasDoAfiliado.reduce((sum, v) => {
             const perc = v.produtos?.comissao_afiliado || 0;
-            return sum + (v.valor_total * perc / 100);
+            return sum + (Number(v.valor_total) * perc / 100);
         }, 0);
 
-        // Só mostra na lista se ele tiver algo a receber ou se você quiser ver todos
-        // Se quiser ver apenas quem tem saldo, descomente a linha abaixo:
-        // if (comissaoDevida <= 0) return '';
+        // Se o afiliado não tem venda, a gente pula ele para a lista não ficar cheia de zeros
+        if (vendasDoAfiliado.length === 0) return '';
 
         return `
             <tr>
