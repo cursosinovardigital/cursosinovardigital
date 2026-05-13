@@ -648,7 +648,7 @@ header.maestro-top-bar {
         }
 
         const payload = {
-            tipo_produto: 'curso',
+            tipo_produto: document.getElementById('ipt_tipo_produto').value,
             nome: document.getElementById('ipt_nome').value,
             preco: parseFloat(document.getElementById('ipt_preco').value.replace(',', '.')),
             capa_url: document.getElementById('edit-prod-capa').value || null,
