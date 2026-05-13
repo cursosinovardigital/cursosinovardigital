@@ -1174,7 +1174,7 @@ async function confirmarPagamento(idAfiliado, valor) {
     function closeProductModal() { document.getElementById('modalProduct').classList.remove('active'); document.getElementById('edit-prod-id').value = ''; }
     function deleteProductFromModal() { if(confirm("Deseja realmente excluir?")) alert("Em breve..."); }
 
-    window.onload = function() {
+    window.onload = async function() {
         carregarProdutos(); carregarDadosDashboard(); carregarMarketplaceReal();
         const ctx = document.getElementById('salesChart')?.getContext('2d');
         if(ctx) salesChartInstance = new Chart(ctx, { type: 'line', data: { labels: ['V1','V2','V3','V4','V5','V6','V7'], datasets: [{ data: [0,0,0,0,0,0,0], borderColor: '#5D5FEF', backgroundColor: 'rgba(93, 95, 239, 0.1)', fill: true, tension: 0.4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }});
