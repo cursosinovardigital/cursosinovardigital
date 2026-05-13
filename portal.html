@@ -894,16 +894,17 @@ async function editProduct(id) {
         });
     }
     
-    function switchSubTab(category, el) {
-    // Remove a classe 'active' de todas as abas no mesmo grupo
+// FUNÇÃO QUE FALTAVA PARA AS ABAS FUNCIONAREM
+function switchSubTab(category, el) {
+    // 1. Remove a cor azul de todas as abas do grupo
     const parent = el.parentElement;
     parent.querySelectorAll('.sub-nav-item').forEach(item => item.classList.remove('active'));
     
-    // Adiciona 'active' na aba clicada
+    // 2. Coloca a cor azul na aba que você clicou
     el.classList.add('active');
     
-    // Feedback visual para você saber que funcionou
-    console.log("Navegando para: " + category);
+    // 3. Log no console para conferirmos o clique
+    console.log("Navegando para a categoria: " + category);
 }
     
 async function carregarMarketplaceReal() {
