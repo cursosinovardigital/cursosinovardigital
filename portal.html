@@ -41,9 +41,26 @@ header.maestro-top-bar {
 .logo-top span { color: var(--orange) !important; }
 
         .top-right { display: flex; align-items: center; gap: 30px; }
-        .meta-container { display: flex; align-items: center; gap: 12px; }
-        .meta-bar-bg { width: 180px; height: 8px; background: #E2E8F0; border-radius: 10px; overflow: hidden; }
-        .meta-bar-fill { height: 100%; background: var(--purple-kiwi); width: 15%; transition: 1s; }
+.goals-container {
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.goal-bar-bg {
+    width:180px;
+    height:8px;
+    background:#E2E8F0;
+    border-radius:999px;
+    overflow:hidden;
+}
+
+.goal-bar-fill {
+    height:100%;
+    width:0%;
+    background:var(--purple-kiwi);
+    transition:.4s;
+}
         
         .user-profile { display: flex; align-items: center; gap: 12px; cursor: pointer; position: relative; }
         .profile-dropdown { 
@@ -68,7 +85,7 @@ header.maestro-top-bar {
         .nav-item:hover, .nav-item.active { background: #1E2228; color: #FFF; border-left-color: var(--orange); }
 
         main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
-        header { height: 70px; background: var(--white); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; padding: 0 40px; }
+        main > header { height: 70px; background: var(--white); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; padding: 0 40px; }
         
         .content-area { padding: 35px; overflow-y: auto; flex: 1; }
         .aba-section { display: none; }
@@ -1665,6 +1682,50 @@ async function fazerLogout() {
 
   }
 
+}
+    function inicializarGrafico() {
+
+    const ctx = document
+        .getElementById('salesChart');
+
+    if (!ctx) return;
+
+    if (salesChartInstance) {
+        salesChartInstance.destroy();
+    }
+
+    salesChartInstance = new Chart(ctx, {
+
+        type: 'line',
+
+        data: {
+            labels: ['0h','4h','8h','12h','16h','20h','24h'],
+            datasets: [{
+                label: 'Vendas',
+                data: [0,0,0,0,0,0,0],
+                borderWidth: 3,
+                tension: .4,
+                fill: true
+            }]
+        },
+
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+
+            plugins: {
+                legend: {
+                    display:false
+                }
+            },
+
+            scales: {
+                y: {
+                    beginAtZero:true
+                }
+            }
+        }
+    });
 }
     function openProductModal() { document.getElementById('modalProduct').classList.add('active'); }
     function closeProductModal() { document.getElementById('modalProduct').classList.remove('active'); document.getElementById('edit-prod-id').value = ''; }
