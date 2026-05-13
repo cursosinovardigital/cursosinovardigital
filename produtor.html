@@ -217,9 +217,14 @@
             const { data: cUrl } = _supabase.storage.from('cursos').getPublicUrl(cName);
 
             const { error } = await _supabase.from('aulas').insert([{
-                titulo: titulo, modulo: modulo, descricao: desc, video_url: vUrl.publicUrl, capa_url: cUrl.publicUrl, categoria: cat
-            }]);
-
+   produto_id: produtoId,
+   titulo: titulo,
+   modulo: modulo,
+   descricao: desc,
+   video_url: vUrl.publicUrl,
+   capa_url: cUrl.publicUrl,
+   categoria: cat
+}]);
             if(error) throw error;
             location.reload();
         } catch (e) {
