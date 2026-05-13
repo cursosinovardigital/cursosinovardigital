@@ -787,11 +787,11 @@ if (fileInput.files.length > 0) {
         `${SUPABASE_URL}/storage/v1/object/public/capas/${fileName}`;
 }
         
-        const payload = {
-            tipo_produto: document.getElementById('ipt_tipo_produto').value,
-            nome: document.getElementById('ipt_nome').value,
-            preco: parseFloat(document.getElementById('ipt_preco').value.replace(',', '.')),
-            capa_url: null,
+const payload = {
+    tipo_produto: document.getElementById('ipt_tipo_produto').value,
+    nome: document.getElementById('ipt_nome').value,
+    preco: parseFloat(document.getElementById('ipt_preco').value.replace(',', '.')),
+    capa_url: capaUrl,
             comissao_afiliado: parseFloat(document.getElementById('ipt_comissao_afiliado').value) || 0,
             categoria: document.getElementById('ipt_categoria').value,
             email_suporte: document.getElementById('ipt_email_suporte').value,
