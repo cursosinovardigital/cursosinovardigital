@@ -1096,43 +1096,30 @@ const exemplo = `
                 (p.preco * (p.comissao_afiliado || 0)) / 100
             ).toFixed(2).replace('.', ',');
 
-            return `
-                <div class="market-card"
-                     onclick="window.location.href='pay.html?id=${p.id}'"
-                     style="cursor:pointer">
+return `
+    <div class="market-card"
+         onclick="window.location.href='pay.html?id=${p.id}'"
+         style="cursor:pointer">
 
-                    <div class="market-thumb">
-                        <img src="${p.capa_url || ''}"
-            
-                        
-                             onerror="this.onerror=null; this.src='https://placehold.co/400x140?text=${encodeURIComponent(p.nome)}'">
-                    </div>
+        <div class="market-thumb">
+            <img src="${p.capa_url || ''}"
+                 onerror="this.onerror=null; this.src='https://placehold.co/400x140?text=${encodeURIComponent(p.nome)}'">
+        </div>
 
-                    <div class="market-info">
+        <div class="market-info">
 
-                            
+            <div class="market-title">
+                ${p.nome}
+            </div>
 
-                        <div class="market-title">
-                            ${p.nome}
-                        </div>
+            <div class="market-commission">
+                Até R$ ${valorComissao} de comissão
+            </div>
 
-                        <div class="market-commission">
-                            R$ ${p.preco.toFixed(2).replace('.', ',')}
+        </div>
 
-                            <span style="
-                                color:#718096;
-                                font-weight:400;
-                                font-size:11px;
-                                margin-left:5px;
-                            ">
-                                Comissão: R$ ${valorComissao}
-                            </span>
-
-                        </div>
-                    </div>
-                </div>
-            `;
-        }).join('');
+    </div>
+`;
 
         // Render final
         grid.innerHTML = exemplo + htmlProdutos;
