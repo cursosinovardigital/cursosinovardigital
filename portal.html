@@ -1174,8 +1174,8 @@ async function confirmarPagamento(idAfiliado, valor) {
     function closeProductModal() { document.getElementById('modalProduct').classList.remove('active'); document.getElementById('edit-prod-id').value = ''; }
     function deleteProductFromModal() { if(confirm("Deseja realmente excluir?")) alert("Em breve..."); }
 
-window.onload = async function() {
-    // 1. Cria o gráfico primeiro para destravar a tela
+window.onload = function() {
+    // 1. DESENHA O GRÁFICO NA HORA (Evita tela branca)
     const ctx = document.getElementById('salesChart')?.getContext('2d');
     if(ctx) {
         salesChartInstance = new Chart(ctx, { 
@@ -1185,12 +1185,9 @@ window.onload = async function() {
         });
     }
 
-    // 2. Pausa de segurança corrigida (800ms)
-    await new Promise(res => setTimeout(res, 800));
-
-    // 3. Carrega os dados na ordem certa
-    await carregarDadosDashboard(); 
+    // 2. CHAMA OS DADOS (Sem travar a página)
     carregarProdutos(); 
+    carregarDadosDashboard(); 
     carregarMarketplaceReal();
 };
 </script>
