@@ -889,6 +889,18 @@ async function editProduct(id) {
         });
     }
     
+    function switchSubTab(category, el) {
+    // Remove a classe 'active' de todas as abas no mesmo grupo
+    const parent = el.parentElement;
+    parent.querySelectorAll('.sub-nav-item').forEach(item => item.classList.remove('active'));
+    
+    // Adiciona 'active' na aba clicada
+    el.classList.add('active');
+    
+    // Feedback visual para você saber que funcionou
+    console.log("Navegando para: " + category);
+}
+    
 async function carregarMarketplaceReal() {
     const { data: aulas } = await _supabase.from('aulas').select('*').order('created_at', { ascending: false });
     const { data: prods } = await _supabase.from('produtos').select('*').order('created_at', { ascending: false });
