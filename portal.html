@@ -1150,10 +1150,34 @@ const payload = {
         document.getElementById('edit-prod-id').value = p.id;
         document.getElementById('ipt_nome').value = p.nome;
         document.getElementById('ipt_preco').value = p.preco;
-        document.getElementById('ipt_tipo_produto').value =
-    p.tipo_produto || 'curso';
+        const tipo = p.tipo_produto || 'curso';
+
+document.getElementById('ipt_tipo_produto').value = tipo;
+
+const selectCategoria =
+    document.getElementById('ipt_categoria');
+
+selectCategoria.innerHTML =
+    '<option value="">Selecione uma categoria</option>';
+
+if (categoriasPorTipo[tipo]) {
+
+    categoriasPorTipo[tipo].forEach(categoria => {
+
+        const option = document.createElement('option');
+
+        option.value = categoria;
+
+        option.textContent = categoria;
+
+        selectCategoria.appendChild(option);
+
+    });
+
+}
+
+selectCategoria.value = p.categoria || '';
         document.getElementById('ipt_comissao_afiliado').value = p.comissao_afiliado || 0;
-        document.getElementById('ipt_categoria').value = p.categoria || '';
         document.getElementById('ipt_email_suporte').value = p.email_suporte || '';
         document.getElementById('ipt_url_obrigado').value = p.url_obrigado || '';
         document.getElementById('modal-product-title').innerText = "Editar produto";
