@@ -869,69 +869,105 @@ header.maestro-top-bar {
         el.classList.add('active');
     }
 
-    async function carregarMarketplaceReal() {
-        try {
-            const { data: aulas } = await _supabase.from('aulas').select('*').order('created_at', { ascending: false });
-            const { data: prods } = await _supabase.from('produtos').select('*').order('created_at', { ascending: false });
+  async function carregarMarketplaceReal() {
+    try {
 
-            // ✅ Busca foto do usuário de forma segura (sem via.placeholder)
-            const userSession = await _supabase.auth.getUser();
-            const fotoUrl = userSession?.data?.user?.user_metadata?.avatar_url;
-            setProfilePhoto(fotoUrl || null);
+        // PRODUTOS = CURSOS
+        const { data: produtos } = await _supabase
+            .from('produtos')
+            .select('*')
+            .order('created_at', { ascending: false });
 
-            const grid = document.getElementById('market-full-grid');
-            if (!grid) return;
+        // Foto do usuário
+        const userSession = await _supabase.auth.getUser();
+        const fotoUrl = userSession?.data?.user?.user_metadata?.avatar_url;
 
-            const exemplo = `
-                <div class="market-card">
-                    <div class="market-thumb">
-                        <img src="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?auto=format&fit=crop&w=400&q=80"
-                             onerror="this.onerror=null; this.src='https://placehold.co/400x140?text=Sem+Imagem'">
+        setProfilePhoto(fotoUrl || null);
+
+        const grid = document.getElementById('market-full-grid');
+
+        if (!grid) return;
+
+        // Card exemplo destaque
+        const exemplo = `
+            <div class="market-card">
+                <div class="market-thumb">
+                    <img src="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?auto=format&fit=crop&w=400&q=80"
+                         onerror="this.onerror=null; this.src='https://placehold.co/400x140?text=Sem+Imagem'">
+                </div>
+
+                <div class="market-info">
+                    <div class="market-title">
+                        Curso de Violão do Zero com Víctor
                     </div>
-                    <div class="market-info">
-                        <div class="market-title">Curso de Violão do Zero com Víctor</div>
-                        <div class="market-commission">Até R$ 147,00 de comissão</div>
-                    </div>
-                </div>`;
 
-            let htmlAulas = (aulas || []).map(a => `
-                <div class="market-card" onclick="window.location.href='aluno.html?id=${a.id}'" style="cursor:pointer">
-                    <div class="market-thumb">
-                        <img src="${a.capa_url || ''}"
-                             onerror="this.onerror=null; this.src='https://placehold.co/400x140?text=Sem+Capa'">
+                    <div class="market-commission">
+                        Até R$ 147,00 de comissão
                     </div>
-                    <div class="market-info">
-                        <div style="font-size:10px; color:var(--orange); font-weight:900; text-transform: uppercase; margin-bottom: 5px;">${a.categoria || 'Curso'}</div>
-                        <div class="market-title">${a.titulo}</div>
-                        <div class="market-commission">Acesso Liberado no Maestro</div>
-                    </div>
-                </div>`).join('');
+                </div>
+            </div>
+        `;
 
-            let htmlProdutos = (prods || []).map(p => {
-                const valorComissao = ((p.preco * (p.comissao_afiliado || 0)) / 100).toFixed(2).replace('.', ',');
-                return `
-                <div class="market-card" onclick="window.location.href='pay.html?id=${p.id}'" style="cursor:pointer">
+        // Produtos reais
+        let htmlProdutos = (produtos || []).map(p => {
+
+            const valorComissao = (
+                (p.preco * (p.comissao_afiliado || 0)) / 100
+            ).toFixed(2).replace('.', ',');
+
+            return `
+                <div class="market-card"
+                     onclick="window.location.href='pay.html?id=${p.id}'"
+                     style="cursor:pointer">
+
                     <div class="market-thumb">
                         <img src="${p.capa_url || ''}"
                              onerror="this.onerror=null; this.src='https://placehold.co/400x140?text=${encodeURIComponent(p.nome)}'">
                     </div>
+
                     <div class="market-info">
-                        <div style="font-size:10px; color:#5D5FEF; font-weight:900; text-transform: uppercase; margin-bottom: 5px;">${p.categoria || 'PRODUTO DIGITAL'}</div>
-                        <div class="market-title">${p.nome}</div>
+
+                        <div style="
+                            font-size:10px;
+                            color:#5D5FEF;
+                            font-weight:900;
+                            text-transform: uppercase;
+                            margin-bottom: 5px;
+                        ">
+                            ${p.categoria || 'PRODUTO DIGITAL'}
+                        </div>
+
+                        <div class="market-title">
+                            ${p.nome}
+                        </div>
+
                         <div class="market-commission">
                             R$ ${p.preco.toFixed(2).replace('.', ',')}
-                            <span style="color:#718096; font-weight:400; font-size:11px; margin-left:5px;">(Comissão: R$ ${valorComissao})</span>
+
+                            <span style="
+                                color:#718096;
+                                font-weight:400;
+                                font-size:11px;
+                                margin-left:5px;
+                            ">
+                                Comissão: R$ ${valorComissao}
+                            </span>
+
                         </div>
                     </div>
-                </div>`;
-            }).join('');
+                </div>
+            `;
+        }).join('');
 
-            grid.innerHTML = exemplo + htmlAulas + htmlProdutos;
-        } catch (e) {
-            console.log("Erro no marketplace:", e);
-        }
+        // Render final
+        grid.innerHTML = exemplo + htmlProdutos;
+
+    } catch (e) {
+
+        console.log("Erro no marketplace:", e);
+
     }
-
+}
     async function carregarAreasMembros() {
         const { data: produtos, error } = await _supabase
     .from('produtos')
