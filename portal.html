@@ -924,7 +924,8 @@ if (fileInput.files.length > 0) {
         .upload(fileName, file);
 
     if (error) {
-        alert('Erro ao enviar imagem.');
+        alert(error.message);
+         console.error(error);
         return;
     }
 
