@@ -150,8 +150,37 @@
         const urlParams = new URLSearchParams(window.location.search);
         const aulaId = urlParams.get('aula');
 
-        const { data: aulas, error } = await _supabase.from('aulas').select('*').order('created_at', { ascending: true });
-        if (error || !aulas) return;
+// Buscar usuário logado
+const { data: { user } } = await _supabase.auth.getUser();
+
+if (!user) {
+    window.location.href = 'login.html';
+    return;
+}
+
+// Buscar assinatura do aluno
+const { data: assinatura, error: assinaturaError } = await _supabase
+    .from('assinaturas')
+    .select('*')
+    .eq('user_id', user.id)
+    .single();
+
+if (assinaturaError || !assinatura) {
+    alert('Você não possui acesso a nenhum curso.');
+    return;
+}
+
+// Buscar aulas apenas do curso comprado
+const { data: aulas, error } = await _supabase
+    .from('aulas')
+    .select('*')
+    .eq('curso_id', assinatura.novo_curso_id)
+    .order('ordem', { ascending: true });
+
+if (error || !aulas || aulas.length === 0) {
+    console.error('Erro ao carregar aulas:', error);
+    return;
+}
 
         const grupos = aulas.reduce((acc, aula) => {
             const modNome = aula.modulo || 'Início';
