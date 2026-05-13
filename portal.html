@@ -295,7 +295,6 @@ header.maestro-top-bar {
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;">
                     <h2 style="margin:0; font-weight: 800;">Produtos</h2>
                     <div style="display: flex; gap: 10px;">
-                        <button class="btn-primary" onclick="window.location.href=`produtor.html?id=${p.id}`" style="background: var(--orange);">
                             <i class="fas fa-clapperboard"></i> Estúdio de Criação
                         </button>
                         <button class="btn-primary" onclick="openProductModal()"><i class="fas fa-plus"></i> Criar produto</button>
@@ -805,10 +804,46 @@ header.maestro-top-bar {
                 <td>R$ ${p.preco.toFixed(2).replace('.', ',')}</td>
                 <td><span class="badge badge-success">Ativo</span></td>
                 <td style="text-align:right">
-                    <button class="btn-primary" style="padding: 5px 10px; font-size: 11px; background: var(--green); margin-right:10px;" onclick="simularVenda('${p.id}', ${p.preco})">Venda</button>
-                    <i class="fas fa-edit" style="cursor:pointer; margin-right:15px;" onclick="editProduct('${p.id}')"></i>
-                    <i class="fas fa-trash-alt" style="cursor:pointer; color:#EF4444" onclick="deleteProduct('${p.id}')"></i>
-                </td>
+
+    <button
+        class="btn-primary"
+        style="
+            padding:5px 10px;
+            font-size:11px;
+            background:var(--orange);
+            margin-right:10px;
+        "
+        onclick="window.location.href='produtor.html?id=${p.id}'"
+    >
+        Estúdio
+    </button>
+
+    <button
+        class="btn-primary"
+        style="
+            padding:5px 10px;
+            font-size:11px;
+            background:var(--green);
+            margin-right:10px;
+        "
+        onclick="simularVenda('${p.id}', ${p.preco})"
+    >
+        Venda
+    </button>
+
+    <i
+        class="fas fa-edit"
+        style="cursor:pointer; margin-right:15px;"
+        onclick="editProduct('${p.id}')"
+    ></i>
+
+    <i
+        class="fas fa-trash-alt"
+        style="cursor:pointer; color:#EF4444"
+        onclick="deleteProduct('${p.id}')"
+    ></i>
+
+</td>
             </tr>`).join('');
     }
 document
