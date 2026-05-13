@@ -1105,6 +1105,13 @@ header.maestro-top-bar {
         el.classList.add('active');
     }
 
+    async function fazerLogout() {
+  await supabase.auth.signOut();
+  localStorage.clear();
+  sessionStorage.clear();
+  window.location.href = "login.html";
+}
+
     function openProductModal() { document.getElementById('modalProduct').classList.add('active'); }
     function closeProductModal() { document.getElementById('modalProduct').classList.remove('active'); document.getElementById('edit-prod-id').value = ''; }
     function deleteProductFromModal() { if (confirm("Deseja realmente excluir?")) alert("Em breve..."); }
@@ -1112,10 +1119,8 @@ header.maestro-top-bar {
     function closeColabModal() { document.getElementById('modalColab').classList.remove('active'); }
     function openRelat(titulo) { document.getElementById('relat-main-list').style.display = 'none'; document.getElementById('relat-detail').classList.add('active'); document.getElementById('relat-title-display').innerText = titulo; }
     function closeRelat() { document.getElementById('relat-main-list').style.display = 'block'; document.getElementById('relat-detail').classList.remove('active'); }
-async function fazerLogout() {
-  await supabase.auth.signOut();
-  window.location.href = "login.html";
-}
+
+    
     // ✅ window.onload LIMPO - sem duplo carregamento, sem setTimeout desnecessário
     window.onload = function () {
         // Define o avatar padrão imediatamente (sem depender de URL externa)
