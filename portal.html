@@ -1112,7 +1112,10 @@ header.maestro-top-bar {
     function closeColabModal() { document.getElementById('modalColab').classList.remove('active'); }
     function openRelat(titulo) { document.getElementById('relat-main-list').style.display = 'none'; document.getElementById('relat-detail').classList.add('active'); document.getElementById('relat-title-display').innerText = titulo; }
     function closeRelat() { document.getElementById('relat-main-list').style.display = 'block'; document.getElementById('relat-detail').classList.remove('active'); }
-
+async function logout() {
+  await supabase.auth.signOut();
+  window.location.href = "login.html";
+}
     // ✅ window.onload LIMPO - sem duplo carregamento, sem setTimeout desnecessário
     window.onload = function () {
         // Define o avatar padrão imediatamente (sem depender de URL externa)
