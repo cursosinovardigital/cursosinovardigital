@@ -788,7 +788,29 @@ header.maestro-top-bar {
                 </td>
             </tr>`).join('');
     }
+document
+    .getElementById('edit-prod-capa-file')
+    .addEventListener('change', function(e) {
 
+    const file = e.target.files[0];
+
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = function(event) {
+
+        const preview =
+            document.getElementById('preview-capa-produto');
+
+        preview.src = event.target.result;
+
+        preview.style.display = 'block';
+    };
+
+    reader.readAsDataURL(file);
+});
+    
     async function salvarProduto() {
         const inputNome = document.getElementById('ipt_nome');
         const inputPreco = document.getElementById('ipt_preco');
