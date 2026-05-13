@@ -1175,13 +1175,22 @@ async function confirmarPagamento(idAfiliado, valor) {
     function deleteProductFromModal() { if(confirm("Deseja realmente excluir?")) alert("Em breve..."); }
 
 window.onload = async function() {
-    // 1. Primeiro desenha o gráfico (o ctx e o new Chart)
+    // 1. Cria o gráfico primeiro (vazio) para a página não parecer travada
     const ctx = document.getElementById('salesChart')?.getContext('2d');
-    if(ctx) salesChartInstance = new Chart(ctx, { type: 'line', data: { labels: ['V1','V2','V3','V4','V5','V6','V7'], datasets: [{ data: [0,0,0,0,0,0,0], borderColor: '#5D5FEF', backgroundColor: 'rgba(93, 95, 239, 0.1)', fill: true, tension: 0.4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }});
+    if(ctx) {
+        salesChartInstance = new Chart(ctx, { 
+            type: 'line', 
+            data: { labels: ['V1','V2','V3','V4','V5','V6','V7'], datasets: [{ data: [0,0,0,0,0,0,0], borderColor: '#5D5FEF', backgroundColor: 'rgba(93, 95, 239, 0.1)', fill: true, tension: 0.4 }] }, 
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+        });
+    }
 
-    // 2. Depois chama as funções de dados
+    // 2. Pequena pausa de segurança (meio segundo) para o banco de dados respirar
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    // 3. Agora sim, busca os dados em ordem de importância
+    await carregarDadosDashboard(); 
     carregarProdutos(); 
-    await carregarDadosDashboard(); // Este await aqui é o segredo para os números voltarem
     carregarMarketplaceReal();
 };
 </script>
