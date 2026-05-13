@@ -764,12 +764,34 @@ header.maestro-top-bar {
             alert("Por favor, preencha o nome e o preço.");
             return;
         }
+const fileInput = document.getElementById('edit-prod-capa-file');
+let capaUrl = null;
 
+if (fileInput.files.length > 0) {
+
+    const file = fileInput.files[0];
+
+    const fileName = `${Date.now()}-${file.name}`;
+
+    const { data, error } = await _supabase
+        .storage
+        .from('capas')
+        .upload(fileName, file);
+
+    if (error) {
+        alert('Erro ao enviar imagem.');
+        return;
+    }
+
+    capaUrl =
+        `${SUPABASE_URL}/storage/v1/object/public/capas/${fileName}`;
+}
+        
         const payload = {
             tipo_produto: document.getElementById('ipt_tipo_produto').value,
             nome: document.getElementById('ipt_nome').value,
             preco: parseFloat(document.getElementById('ipt_preco').value.replace(',', '.')),
-            capa_url: document.getElementById('edit-prod-capa').value || null,
+            capa_url: null,
             comissao_afiliado: parseFloat(document.getElementById('ipt_comissao_afiliado').value) || 0,
             categoria: document.getElementById('ipt_categoria').value,
             email_suporte: document.getElementById('ipt_email_suporte').value,
