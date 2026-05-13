@@ -27,9 +27,9 @@
 
 header.maestro-top-bar { 
     grid-row: 1;
-    background: #FFFFFF; /* Voltamos para o branco limpo */
-    border-bottom: 1px solid rgba(0,0,0,0.05); /* Borda quase invisível */
-    box-shadow: 0 2px 10px rgba(0,0,0,0.03); /* Sombra bem sutil para separar do conteúdo */
+    background: #FFFFFF;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.03);
     display: flex; 
     justify-content: space-between; 
     align-items: center; 
@@ -55,21 +55,18 @@ header.maestro-top-bar {
         .drop-link { padding: 12px 20px; display: flex; align-items: center; gap: 10px; color: #4A5568; text-decoration: none; font-size: 14px; }
         .drop-link:hover { background: #F8F9FA; color: var(--purple-kiwi); }
 
-        /* --- WRAPPER PARA O SEU CÓDIGO ORIGINAL --- */
         .maestro-wrapper { 
             grid-row: 2;
             display: flex; 
             overflow: hidden; 
         }
 
-        /* SIDEBAR DEFINITIVA (TRAVADO - MANTIDO 100%) */
         nav { width: 260px; background: var(--side-black); display: flex; flex-direction: column; flex-shrink: 0; }
         .nav-scroll { flex: 1; overflow-y: auto; padding: 10px 0; }
         .nav-item { padding: 12px 25px; color: #A0AEC0; cursor: pointer; display: flex; align-items: center; font-size: 14px; border-left: 4px solid transparent; text-decoration: none; }
         .nav-item i { margin-right: 15px; width: 18px; text-align: center; }
         .nav-item:hover, .nav-item.active { background: #1E2228; color: #FFF; border-left-color: var(--orange); }
 
-        /* MAIN STRUCTURE (MANTIDO 100%) */
         main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
         header { height: 70px; background: var(--white); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; padding: 0 40px; }
         
@@ -77,7 +74,6 @@ header.maestro-top-bar {
         .aba-section { display: none; }
         .aba-section.active { display: block; animation: fadeIn 0.3s ease; }
 
-        /* COMPONENTES REUTILIZÁVEIS (TRAVADO - MANTIDO 100%) */
         .btn-primary { background: var(--purple-kiwi); color: white; border: none; padding: 12px 25px; border-radius: 8px; font-weight: 700; cursor: pointer; }
         .table-container { background:#FFF; border:1px solid var(--border); border-radius:12px; overflow:hidden; }
         table { width: 100%; border-collapse: collapse; }
@@ -89,7 +85,6 @@ header.maestro-top-bar {
         .sub-nav-item { padding: 10px 5px; cursor: pointer; color: #718096; font-weight: 600; border-bottom: 3px solid transparent; }
         .sub-nav-item.active { color: var(--purple-kiwi); border-bottom-color: var(--purple-kiwi); }
 
-        /* MARKETPLACE (TRAVADO - MANTIDO 100%) */
         .market-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 25px; }
         .market-card { background: #FFF; border-radius: 15px; border: 1px solid var(--border); overflow: hidden; }
         .market-thumb { width: 100%; height: 140px; background: #333; position: relative; }
@@ -98,14 +93,12 @@ header.maestro-top-bar {
         .market-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
         .market-commission { color: var(--green); font-size: 13px; font-weight: 700; }
 
-        /* VENDAS (TRAVADO - MANTIDO 100%) */
         .sales-filters { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 20px; }
         .filter-group { display: flex; flex-direction: column; gap: 5px; }
         .filter-group label { font-size: 12px; font-weight: 600; color: #718096; }
         .badge { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
         .badge-success { background: #DCFCE7; color: #166534; }
 
-        /* FINANCEIRO ESPECIFICO (TRAVADO - MANTIDO 100%) */
         .fin-card { background: #FFF; padding: 30px; border-radius: 12px; border: 1px solid var(--border); display: flex; flex-direction: column; gap: 10px; position: relative; }
         .fin-card.disponivel { border-left: 6px solid var(--green); }
         .fin-card.pendente { border-left: 6px solid #EAB308; }
@@ -113,10 +106,8 @@ header.maestro-top-bar {
         .fin-value { font-size: 32px; font-weight: 800; color: var(--text); }
         .select-currency { border: 1px solid var(--border); padding: 8px 15px; border-radius: 8px; font-weight: 600; color: #4A5568; outline: none; cursor: pointer; }
 
-        /* ASSINATURAS E CARDS */
         .card-stat { background: #FFF; padding: 25px; border-radius: 12px; border: 1px solid var(--border); }
 
-        /* ESTILO RELATÓRIOS */
         .report-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
         .report-card { background: #FFF; padding: 25px; border-radius: 12px; border: 1px solid var(--border); display: flex; align-items: center; gap: 20px; cursor: pointer; }
         .report-card:hover { border-color: var(--purple-kiwi); background: #F8F9FF; }
@@ -127,18 +118,15 @@ header.maestro-top-bar {
         .report-detail-view.active { display: block; }
         .back-link { cursor: pointer; color: var(--text); font-weight: 700; font-size: 18px; margin-bottom: 20px; display: inline-flex; align-items: center; gap: 10px; }
 
-        /* MODAIS */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
         .modal-overlay.active { display: flex !important; }
         .modal-content { background: #FFF; border-radius: 12px; width: 1000px; max-width: 95%; height: 85vh; display: flex; flex-direction: column; overflow: hidden; position: relative; }
 
-        /* ESTILO APPS */
         .apps-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
         .app-card { background: #FFF; border: 1px solid var(--border); border-radius: 15px; padding: 30px 20px; display: flex; flex-direction: column; align-items: center; text-align: center; }
         .app-icon { width: 60px; height: 60px; background: #F8F9FA; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; font-size: 26px; }
         .btn-app-config { width: 100%; padding: 12px; border: 1px solid var(--border); background: none; border-radius: 10px; font-weight: 700; cursor: pointer; color: #4A5568; margin-top: 15px; }
 
-        /* ESTILO INTERNO MODAL PRODUTOS */
         .prod-modal-tab { display: none; }
         .prod-modal-tab.active { display: block; }
         
@@ -164,22 +152,26 @@ header.maestro-top-bar {
                 <span style="font-weight:700; font-size:13px; display:block;">Víctor Soati Ávila</span>
                 <span style="font-size:10px; color:#718096; font-weight:700">NÍVEL BRONZE</span>
             </div>
-<img id="minha_foto_gmail" src="https://via.placeholder.com/38" 
-     style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid var(--orange);"
-     onerror="this.src='https://via.placeholder.com/38'" />
+
+            <!-- ✅ CORREÇÃO DO LOOP INFINITO: this.onerror=null evita o loop circular -->
+            <img id="minha_foto_gmail"
+                 src=""
+                 style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid var(--orange);"
+                 onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2238%22 height=%2238%22 viewBox=%220 0 38 38%22%3E%3Ccircle cx=%2219%22 cy=%2219%22 r=%2219%22 fill=%22%23FF6600%22/%3E%3Ctext x=%2219%22 y=%2224%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2216%22 font-family=%22sans-serif%22%3EV%3C/text%3E%3C/svg%3E'" />
             
             <div class="profile-dropdown" id="pDropdown">
                 <div style="padding:15px; border-bottom:1px solid var(--border); font-size:11px; color:#718096;">inovardigital91@gmail.com</div>
                 <a href="perfil.html" class="drop-link"><i class="far fa-user"></i> Meu perfil</a>
                 <a href="#" class="drop-link" style="color:#EF4444; border-top:1px solid var(--border)"><i class="fas fa-sign-out-alt"></i> Sair</a>
-            </div>         </div>
+            </div>
+        </div>
     </div>
 </header>
 
 <div class="maestro-wrapper">
     <nav>
         <div class="nav-scroll">
-            <div class="nav-item" onclick="nav('dash', this)"><i class="fas fa-home"></i> Dashboard</div>
+            <div class="nav-item active" onclick="nav('dash', this)"><i class="fas fa-home"></i> Dashboard</div>
             <div class="nav-item" onclick="nav('prod', this)"><i class="fas fa-tag"></i> Produtos</div>
             <div class="nav-item" onclick="nav('membro', this)"><i class="fas fa-play-circle"></i> Área de Membros</div>
             <div class="nav-item" onclick="nav('market', this)"><i class="fas fa-shopping-cart"></i> Marketplace</div>
@@ -189,7 +181,7 @@ header.maestro-top-bar {
             <div class="nav-item" onclick="nav('finan', this)"><i class="fas fa-wallet"></i> Financeiro</div>
             <div class="nav-item" onclick="nav('relat', this)"><i class="fas fa-chart-line"></i> Relatórios</div>
             <div class="nav-item" onclick="nav('colab', this)"><i class="fas fa-user-friends"></i> Colaboradores</div>
-            <div class="nav-item active" onclick="nav('apps', this)"><i class="fas fa-th"></i> Apps</div>
+            <div class="nav-item" onclick="nav('apps', this)"><i class="fas fa-th"></i> Apps</div>
             <a href="ajuda.html" target="_blank" class="nav-item"><i class="fas fa-question-circle"></i> Ajuda</a>
         </div>
     </nav>
@@ -270,7 +262,7 @@ header.maestro-top-bar {
                     </div>
                     <div style="display: flex; justify-content: flex-end; gap: 10px;">
                         <button class="btn-primary" style="background: #FFF; color: var(--text); border: 1px solid var(--border);"><i class="fas fa-download"></i> Exportar</button>
-                  <button class="btn-primary" onclick="filtrarVendas()">Filtrar</button>
+                        <button class="btn-primary" onclick="filtrarVendas()">Filtrar</button>
                     </div>
                 </div>
                 <div class="table-container"><table><thead><tr><th>ID VENDA</th><th>PRODUTO</th><th>VALOR</th><th>DATA</th><th>STATUS</th></tr></thead><tbody id="sales-list-body"></tbody></table></div>
@@ -280,43 +272,42 @@ header.maestro-top-bar {
                 <h2>Marketplace</h2>
                 <div class="market-grid" id="market-full-grid">
                     <div class="market-card">
-                        <div class="market-thumb"><img src="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?auto=format&fit=crop&w=400&q=80" alt="Violão"></div>
+                        <div class="market-thumb"><img src="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?auto=format&fit=crop&w=400&q=80" alt="Violão" onerror="this.onerror=null; this.src='https://via.placeholder.com/400x140?text=Sem+Imagem'"></div>
                         <div class="market-info"><div class="market-title">Curso de Violão do Zero com Víctor</div><div class="market-commission">Até R$ 147,00 de comissão</div></div>
                     </div>
                 </div>
             </section>
 
-    <section id="aba-afiliados" class="aba-section">
-    <h2>Meus Afiliados</h2>
-    <div class="sub-nav">
-        <div class="sub-nav-item active">Meus afiliados</div>
-        <div class="sub-nav-item">Solicitações</div>
-    </div>
-    <div style="display: flex; gap: 15px; margin-bottom: 20px;">
-        <div style="flex: 1; position: relative;">
-            <i class="fas fa-search" style="position: absolute; left: 15px; top: 15px; color: #A0AEC0;"></i>
-            <input type="text" class="search-input" placeholder="Filtrar por nome ou e-mail...">
-        </div>
-        <button class="btn-primary" onclick="alert('Link de convite: inovar.digital/cadastro-afiliado')">Convidar Afiliado</button>
-    </div>
-    
-    <div class="table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th>NOME / USERNAME</th>
-                    <th>VENDAS</th>
-                    <th>TOTAL GERADO</th>
-                    <th>COMISSÃO DEVIDA</th>
-                    <th style="text-align:right">AÇÕES</th>
-                </tr>
-            </thead>
-            <tbody id="lista-afiliados-body">
-                <tr><td colspan="5" style="text-align:center; padding:40px; color:#A0AEC0;">Carregando inteligência de afiliados...</td></tr>
-            </tbody>
-        </table>
-    </div>
-</section>
+            <section id="aba-afiliados" class="aba-section">
+                <h2>Meus Afiliados</h2>
+                <div class="sub-nav">
+                    <div class="sub-nav-item active">Meus afiliados</div>
+                    <div class="sub-nav-item">Solicitações</div>
+                </div>
+                <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+                    <div style="flex: 1; position: relative;">
+                        <i class="fas fa-search" style="position: absolute; left: 15px; top: 15px; color: #A0AEC0;"></i>
+                        <input type="text" class="search-input" placeholder="Filtrar por nome ou e-mail...">
+                    </div>
+                    <button class="btn-primary" onclick="alert('Link de convite: inovar.digital/cadastro-afiliado')">Convidar Afiliado</button>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>NOME / USERNAME</th>
+                                <th>VENDAS</th>
+                                <th>TOTAL GERADO</th>
+                                <th>COMISSÃO DEVIDA</th>
+                                <th style="text-align:right">AÇÕES</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lista-afiliados-body">
+                            <tr><td colspan="5" style="text-align:center; padding:40px; color:#A0AEC0;">Carregando inteligência de afiliados...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
 
             <section id="aba-assin" class="aba-section">
                 <h2>Assinaturas</h2>
@@ -351,92 +342,89 @@ header.maestro-top-bar {
                     <a href="#" style="color:var(--purple-kiwi); font-weight:600; text-decoration:none; font-size:14px;">Alterar minha conta para CNPJ</a>
                     <button class="btn-primary" onclick="solicitarSaque()">Efetuar saque</button>
                 </div>
-<div class="sub-nav" id="financeiroNav">
-    <div class="sub-nav-item active" onclick="switchFinTab('saques', this)">Saques</div>
-    <div class="sub-nav-item" onclick="switchFinTab('banco', this)">Dados bancários</div>
-</div>
-
-<div id="fin-saques" class="fin-tab-content">
-    <div class="table-container">
-        <table>
-            <thead><tr><th>DATA</th><th>VALOR</th><th>STATUS</th></tr></thead>
-            <tbody id="lista-saques-body">
-                <tr><td colspan="3" style="text-align:center; padding:50px; color:#A0AEC0;">Exibindo 0 de 0 páginas</td></tr>
-            </tbody>
-        </table>
-    </div>
-</div>
-
-<div id="fin-banco" class="fin-tab-content" style="display:none;">
-    <div style="background:#FFF; border:1px solid var(--border); border-radius:12px; padding:30px;">
-        <h4 style="margin-top:0">Configurações de Recebimento</h4>
-        <div style="margin-bottom:20px;">
-            <label style="display:block; font-size:12px; font-weight:700; color:#718096; margin-bottom:10px;">TIPO DE RECEBIMENTO</label>
-            <select id="tipo_recebimento" class="search-input" style="padding:10px; width: 100%;" onchange="toggleCamposBanco()">
-                <option value="pix">Chave Pix</option>
-                <option value="conta">Conta Bancária (TED/DOC)</option>
-            </select>
-        </div>
-
-        <div id="campos-pix">
-            <label style="display:block; font-size:12px; font-weight:700; color:#718096; margin-bottom:5px;">CHAVE PIX</label>
-            <input type="text" id="chave_pix_input" class="search-input" style="padding:10px; margin-bottom:15px;" placeholder="CPF, E-mail ou Celular">
-        </div>
-
-        <div id="campos-conta" style="display:none;">
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-bottom:15px;">
-                <div>
-                    <label style="display:block; font-size:12px; font-weight:700; color:#718096;">BANCO</label>
-                    <input type="text" id="banco_nome" class="search-input" style="padding:10px;" placeholder="Ex: Itaú">
+                <div class="sub-nav" id="financeiroNav">
+                    <div class="sub-nav-item active" onclick="switchFinTab('saques', this)">Saques</div>
+                    <div class="sub-nav-item" onclick="switchFinTab('banco', this)">Dados bancários</div>
                 </div>
-                <div>
-                    <label style="display:block; font-size:12px; font-weight:700; color:#718096;">TIPO DE CONTA</label>
-                    <select id="tipo_conta" class="search-input" style="padding:10px;">
-                        <option value="corrente">Conta Corrente</option>
-                        <option value="poupanca">Conta Poupança</option>
-                    </select>
-                </div>
-            </div>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-bottom:15px;">
-                <div>
-                    <label style="display:block; font-size:12px; font-weight:700; color:#718096;">AGÊNCIA</label>
-                    <input type="text" id="agencia_num" class="search-input" style="padding:10px;">
-                </div>
-                <div>
-                    <label style="display:block; font-size:12px; font-weight:700; color:#718096;">CONTA (COM DÍGITO)</label>
-                    <input type="text" id="conta_num" class="search-input" style="padding:10px;">
-                </div>
-            </div>
-        </div>
 
-        <button class="btn-primary" style="width: 100%; margin-top: 10px;" onclick="salvarDadosBancarios()">Salvar Dados Bancários</button>
-    </div>
-</div>
-                </section>
+                <div id="fin-saques" class="fin-tab-content">
+                    <div class="table-container">
+                        <table>
+                            <thead><tr><th>DATA</th><th>VALOR</th><th>STATUS</th></tr></thead>
+                            <tbody id="lista-saques-body">
+                                <tr><td colspan="3" style="text-align:center; padding:50px; color:#A0AEC0;">Exibindo 0 de 0 páginas</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="fin-banco" class="fin-tab-content" style="display:none;">
+                    <div style="background:#FFF; border:1px solid var(--border); border-radius:12px; padding:30px;">
+                        <h4 style="margin-top:0">Configurações de Recebimento</h4>
+                        <div style="margin-bottom:20px;">
+                            <label style="display:block; font-size:12px; font-weight:700; color:#718096; margin-bottom:10px;">TIPO DE RECEBIMENTO</label>
+                            <select id="tipo_recebimento" class="search-input" style="padding:10px; width: 100%;" onchange="toggleCamposBanco()">
+                                <option value="pix">Chave Pix</option>
+                                <option value="conta">Conta Bancária (TED/DOC)</option>
+                            </select>
+                        </div>
+                        <div id="campos-pix">
+                            <label style="display:block; font-size:12px; font-weight:700; color:#718096; margin-bottom:5px;">CHAVE PIX</label>
+                            <input type="text" id="chave_pix_input" class="search-input" style="padding:10px; margin-bottom:15px;" placeholder="CPF, E-mail ou Celular">
+                        </div>
+                        <div id="campos-conta" style="display:none;">
+                            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-bottom:15px;">
+                                <div>
+                                    <label style="display:block; font-size:12px; font-weight:700; color:#718096;">BANCO</label>
+                                    <input type="text" id="banco_nome" class="search-input" style="padding:10px;" placeholder="Ex: Itaú">
+                                </div>
+                                <div>
+                                    <label style="display:block; font-size:12px; font-weight:700; color:#718096;">TIPO DE CONTA</label>
+                                    <select id="tipo_conta" class="search-input" style="padding:10px;">
+                                        <option value="corrente">Conta Corrente</option>
+                                        <option value="poupanca">Conta Poupança</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-bottom:15px;">
+                                <div>
+                                    <label style="display:block; font-size:12px; font-weight:700; color:#718096;">AGÊNCIA</label>
+                                    <input type="text" id="agencia_num" class="search-input" style="padding:10px;">
+                                </div>
+                                <div>
+                                    <label style="display:block; font-size:12px; font-weight:700; color:#718096;">CONTA (COM DÍGITO)</label>
+                                    <input type="text" id="conta_num" class="search-input" style="padding:10px;">
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn-primary" style="width: 100%; margin-top: 10px;" onclick="salvarDadosBancarios()">Salvar Dados Bancários</button>
+                    </div>
+                </div>
+            </section>
 
             <section id="aba-relat" class="aba-section">
                 <div id="relat-main-list">
                     <h2>Relatórios</h2>
-<div class="report-grid">
-    <div class="report-card" onclick="atualizarRelatoriosRapidos()">
-        <i class="fas fa-chart-line"></i>
-        <div>
-            <span>Receita por produto</span>
-            <small id="relat-receita-total" style="display:block; color:var(--green); font-weight:800;">R$ 0,00</small>
-        </div>
-    </div>
-    <div class="report-card" onclick="atualizarRelatoriosRapidos()">
-        <i class="fas fa-shopping-cart"></i>
-        <div>
-            <span>Vendas pendentes</span>
-            <small id="relat-vendas-pendentes" style="display:block; color:var(--orange); font-weight:800;">0 vendas</small>
-        </div>
-    </div>
-    <div class="report-card" onclick="openRelat('Receita de co-produção')"><i class="fas fa-users"></i><span>Receita de co-produção</span></div>
-    <div class="report-card" onclick="openRelat('Vendas abandonadas')"><i class="fas fa-shopping-cart"></i><span>Vendas abandonadas</span></div>
-    <div class="report-card" onclick="openRelat('Engajamento dos alunos')"><i class="far fa-smile"></i><span>Engajamento dos alunos</span></div>
-    <div class="report-card" onclick="openRelat('Saldo a receber')"><i class="fas fa-wallet"></i><span>Saldo a receber</span></div>
-</div>
+                    <div class="report-grid">
+                        <div class="report-card" onclick="atualizarRelatoriosRapidos()">
+                            <i class="fas fa-chart-line"></i>
+                            <div>
+                                <span>Receita por produto</span>
+                                <small id="relat-receita-total" style="display:block; color:var(--green); font-weight:800;">R$ 0,00</small>
+                            </div>
+                        </div>
+                        <div class="report-card" onclick="atualizarRelatoriosRapidos()">
+                            <i class="fas fa-shopping-cart"></i>
+                            <div>
+                                <span>Vendas pendentes</span>
+                                <small id="relat-vendas-pendentes" style="display:block; color:var(--orange); font-weight:800;">0 vendas</small>
+                            </div>
+                        </div>
+                        <div class="report-card" onclick="openRelat('Receita de co-produção')"><i class="fas fa-users"></i><span>Receita de co-produção</span></div>
+                        <div class="report-card" onclick="openRelat('Vendas abandonadas')"><i class="fas fa-shopping-cart"></i><span>Vendas abandonadas</span></div>
+                        <div class="report-card" onclick="openRelat('Engajamento dos alunos')"><i class="far fa-smile"></i><span>Engajamento dos alunos</span></div>
+                        <div class="report-card" onclick="openRelat('Saldo a receber')"><i class="fas fa-wallet"></i><span>Saldo a receber</span></div>
+                    </div>
                 </div>
                 <div id="relat-detail" class="report-detail-view"><div class="back-link" onclick="closeRelat()"><i class="fas fa-arrow-left"></i> <span id="relat-title-display"></span></div><div class="card-stat" style="min-height:300px; display:flex; align-items:center; justify-content:center; color:#A0AEC0;"><p>Buscando informações em tempo real...</p></div></div>
             </section>
@@ -450,14 +438,14 @@ header.maestro-top-bar {
                 <div class="table-container" style="border-radius: 0 0 12px 12px;"><table><thead><tr><th>EMAIL</th><th>STATUS</th><th>DATA DO CONVITE</th></tr></thead><tbody><tr><td colspan="3" style="text-align: center; padding: 40px; color: #A0AEC0;">Exibindo 1 de 0 páginas</td></tr></tbody></table></div>
             </section>
 
-            <section id="aba-apps" class="aba-section active">
+            <section id="aba-apps" class="aba-section">
                 <h2 style="margin:0">Apps e Integrações</h2>
                 <div class="apps-grid" style="margin-top:35px;">
                     <div class="app-card">
-    <div class="app-icon" style="color:#FFE01B;"><i class="fab fa-mailchimp"></i></div>
-    <div style="font-weight:800; font-size:18px;">MailChimp</div>
-    <button class="btn-app-config" onclick="alert('Integração MailChimp em breve: Prepare sua API Key.')">Conectar</button>
-</div>
+                        <div class="app-icon" style="color:#FFE01B;"><i class="fab fa-mailchimp"></i></div>
+                        <div style="font-weight:800; font-size:18px;">MailChimp</div>
+                        <button class="btn-app-config" onclick="alert('Integração MailChimp em breve: Prepare sua API Key.')">Conectar</button>
+                    </div>
                     <div class="app-card"><div class="app-icon" style="color:#22C55E;"><i class="fas fa-link"></i></div><div style="font-weight:800; font-size:18px;">Webhooks</div><button class="btn-app-config">Configurar</button></div>
                     <div class="app-card"><div class="app-icon" style="color:#FF6600;"><i class="fas fa-bolt"></i></div><div style="font-weight:800; font-size:18px;">Zapier</div><button class="btn-app-config">Conectar</button></div>
                     <div class="app-card"><div class="app-icon" style="color:#356ae6;"><i class="fas fa-envelope-open-text"></i></div><div style="font-weight:800; font-size:18px;">ActiveCampaign</div><button class="btn-app-config">Configurar</button></div>
@@ -490,34 +478,34 @@ header.maestro-top-bar {
         <div class="modal-body" style="padding: 30px; flex: 1; overflow-y: auto;">
             <input type="hidden" id="edit-prod-id">
             
-   <div id="p-info" class="prod-modal-tab active">
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-        <div>
-            <label style="display:block; font-size:12px; font-weight:700; margin-bottom:8px; color: #718096;">NOME DO PRODUTO</label>
-            <input type="text" id="ipt_nome" class="search-input" style="width:100%; margin-bottom:20px; padding-left:15px">
-            
-            <label style="display:block; font-size:12px; font-weight:700; margin-bottom:8px; color: #718096;">VALOR (R$)</label>
-            <input type="number" id="ipt_preco" class="search-input" style="width:100%; padding-left:15px; margin-bottom:20px;">
+            <div id="p-info" class="prod-modal-tab active">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <label style="display:block; font-size:12px; font-weight:700; margin-bottom:8px; color: #718096;">NOME DO PRODUTO</label>
+                        <input type="text" id="ipt_nome" class="search-input" style="width:100%; margin-bottom:20px; padding-left:15px">
+                        
+                        <label style="display:block; font-size:12px; font-weight:700; margin-bottom:8px; color: #718096;">VALOR (R$)</label>
+                        <input type="number" id="ipt_preco" class="search-input" style="width:100%; padding-left:15px; margin-bottom:20px;">
 
-            <label style="display:block; font-size:12px; font-weight:700; margin-bottom:8px; color: #718096;">COMISSÃO AFILIADO (%)</label>
-            <input type="number" id="ipt_comissao_afiliado" class="search-input" style="width:100%; padding-left:15px; margin-bottom:20px;" placeholder="Ex: 50">
-        </div>
+                        <label style="display:block; font-size:12px; font-weight:700; margin-bottom:8px; color: #718096;">COMISSÃO AFILIADO (%)</label>
+                        <input type="number" id="ipt_comissao_afiliado" class="search-input" style="width:100%; padding-left:15px; margin-bottom:20px;" placeholder="Ex: 50">
+                    </div>
 
-        <div>
-            <label style="display:block; font-size:12px; font-weight:700; margin-bottom:8px; color: #718096;">CATEGORIA</label>
-            <input type="text" id="ipt_categoria" class="search-input" style="width:100%; margin-bottom:20px; padding-left:15px;" placeholder="Ex: Música, E-commerce...">
+                    <div>
+                        <label style="display:block; font-size:12px; font-weight:700; margin-bottom:8px; color: #718096;">CATEGORIA</label>
+                        <input type="text" id="ipt_categoria" class="search-input" style="width:100%; margin-bottom:20px; padding-left:15px;" placeholder="Ex: Música, E-commerce...">
 
-            <label style="display:block; font-size:12px; font-weight:700; margin-bottom:8px; color: #718096;">URL DA CAPA (FOTO)</label>
-            <input type="text" id="edit-prod-capa" class="search-input" style="width:100%; padding-left:15px; margin-bottom:20px;" placeholder="https://...">
+                        <label style="display:block; font-size:12px; font-weight:700; margin-bottom:8px; color: #718096;">URL DA CAPA (FOTO)</label>
+                        <input type="text" id="edit-prod-capa" class="search-input" style="width:100%; padding-left:15px; margin-bottom:20px;" placeholder="https://...">
 
-            <label style="display:block; font-size:12px; font-weight:700; margin-bottom:8px; color: #718096;">E-MAIL DE SUPORTE</label>
-            <input type="email" id="ipt_email_suporte" class="search-input" style="width:100%; padding-left:15px;" placeholder="seu@email.com">
-        </div>
-    </div>
+                        <label style="display:block; font-size:12px; font-weight:700; margin-bottom:8px; color: #718096;">E-MAIL DE SUPORTE</label>
+                        <input type="email" id="ipt_email_suporte" class="search-input" style="width:100%; padding-left:15px;" placeholder="seu@email.com">
+                    </div>
+                </div>
 
-    <label style="display:block; font-size:12px; font-weight:700; margin-top:10px; margin-bottom:8px; color: #718096;">URL PÁGINA DE OBRIGADO</label>
-    <input type="text" id="ipt_url_obrigado" class="search-input" style="width:100%; padding-left:15px;" placeholder="https://sua-pagina.com/obrigado">
-</div>
+                <label style="display:block; font-size:12px; font-weight:700; margin-top:10px; margin-bottom:8px; color: #718096;">URL PÁGINA DE OBRIGADO</label>
+                <input type="text" id="ipt_url_obrigado" class="search-input" style="width:100%; padding-left:15px;" placeholder="https://sua-pagina.com/obrigado">
+            </div>
             
             <div id="p-links" class="prod-modal-tab" style="display:none">
                 <div style="padding: 20px; text-align: center;">
@@ -569,239 +557,240 @@ header.maestro-top-bar {
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     let salesChartInstance = null;
 
-    const TAXA_PERCENTUAL = 0.079; const TAXA_FIXA = 1.00;
+    const TAXA_PERCENTUAL = 0.079;
+    const TAXA_FIXA = 1.00;
+
+    // ✅ AVATAR SVG INLINE - Fallback seguro, sem dependência de URL externa
+    const AVATAR_FALLBACK = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='38' height='38' viewBox='0 0 38 38'%3E%3Ccircle cx='19' cy='19' r='19' fill='%23FF6600'/%3E%3Ctext x='19' y='24' text-anchor='middle' fill='white' font-size='16' font-family='sans-serif'%3EV%3C/text%3E%3C/svg%3E";
+
+    // ✅ Função utilitária para setar foto de perfil com segurança
+    function setProfilePhoto(url) {
+        const img = document.getElementById('minha_foto_gmail');
+        if (!img) return;
+        if (url) {
+            img.src = url;
+        } else {
+            img.src = AVATAR_FALLBACK;
+        }
+    }
 
     async function carregarProdutos() {
         const { data, error } = await _supabase.from('produtos').select('*').order('created_at', { ascending: false });
-        if(error) return;
-             document.getElementById('product-list-body').innerHTML = data.map(p => `
+        if (error) return;
+        document.getElementById('product-list-body').innerHTML = data.map(p => `
             <tr>
                 <td style="font-weight:700; color:var(--purple-kiwi)">${p.nome}</td>
-                <td>R$ ${p.preco.toFixed(2).replace('.',',')}</td>
+                <td>R$ ${p.preco.toFixed(2).replace('.', ',')}</td>
                 <td><span class="badge badge-success">Ativo</span></td>
                 <td style="text-align:right">
                     <button class="btn-primary" style="padding: 5px 10px; font-size: 11px; background: var(--green); margin-right:10px;" onclick="simularVenda('${p.id}', ${p.preco})">Venda</button>
                     <i class="fas fa-edit" style="cursor:pointer; margin-right:15px;" onclick="editProduct('${p.id}')"></i>
                     <i class="fas fa-trash-alt" style="cursor:pointer; color:#EF4444" onclick="deleteProduct('${p.id}')"></i>
                 </td>
-            </tr>`).join('')
-         }
-    
-async function salvarProduto() {
-    const inputNome = document.getElementById('ipt_nome');
-    const inputPreco = document.getElementById('ipt_preco');
-    const inputId = document.getElementById('edit-prod-id');
-    const inputCapa = document.getElementById('edit-prod-capa'); // 1. Captura o novo campo
-
-    if (!inputNome.value || !inputPreco.value) {
-        alert("Por favor, preencha o nome e o preço.");
-        return;
-    }
-
-const payload = { 
-        nome: document.getElementById('ipt_nome').value, 
-        preco: parseFloat(document.getElementById('ipt_preco').value.replace(',', '.')), 
-        capa_url: document.getElementById('edit-prod-capa').value || null,
-        comissao_afiliado: parseFloat(document.getElementById('ipt_comissao_afiliado').value) || 0,
-        categoria: document.getElementById('ipt_categoria').value,
-        email_suporte: document.getElementById('ipt_email_suporte').value,
-        url_obrigado: document.getElementById('ipt_url_obrigado').value,
-        status: 'Ativo' 
-    };
-
-    const id = inputId.value;
-    const res = id ? 
-        await _supabase.from('produtos').update(payload).eq('id', id) : 
-        await _supabase.from('produtos').insert([payload]);
-
-    if (!res.error) { 
-        alert("Produto salvo com sucesso!"); 
-        closeProductModal(); 
-        carregarProdutos();
-        // Opcional: Atualiza o marketplace se a função existir na tela
-        if (typeof carregarMarketplaceReal === 'function') carregarMarketplaceReal();
-    } else {
-        alert("Erro ao salvar no banco. Verifique se a coluna 'capa_url' existe na tabela 'produtos'.");
-    }
-}
-    
-async function deleteProduct(id) {
-    if (confirm("Tem certeza que deseja excluir este produto?")) {
-        const { error } = await _supabase.from('produtos').delete().eq('id', id);
-        if (!error) {
-            alert("Produto excluído com sucesso!");
-            carregarProdutos();
-        } else {
-            alert("Erro ao excluir: " + error.message);
-        }
-    }
-}
-
-async function carregarDadosDashboard() {
-    try {
-        // --- PARTE NOVA: BUSCA A FOTO DO GMAIL DO VÍCTOR ---
-        const { data: _userData } = await _supabase.auth.getUser();
-        if (_userData.user?.user_metadata?.avatar_url) {
-            const imgFoto = document.getElementById('minha_foto_gmail');
-            if (imgFoto) imgFoto.src = _userData.user.user_metadata.avatar_url;
-        }
-
-        console.log("Atualizando Dashboard Geral...");
-        
-        // --- SEU CÓDIGO ORIGINAL (IGUALZINHO) ---
-        // 1. Busca os dados de forma segura
-        const { data: vendas, error: errVendas } = await _supabase.from('vendas').select('*').order('created_at', { ascending: false });
-        const { data: produtos, error: errProd } = await _supabase.from('produtos').select('id, nome, comissao_afiliado');
-
-        if(errVendas || !vendas) return;
-
-        // 2. Variáveis de soma
-        let totalBruto = 0;
-        let totalLiquidoPago = 0;
-        let totalPendente = 0;
-        let totalComissoesAfiliadosPendente = 0; 
-
-        vendas.forEach(v => {
-            const valorTotal = Number(v.valor_total) || 0;
-            const statusLimpo = String(v.status || '').toLowerCase();
-            totalBruto += valorTotal;
-            if (statusLimpo === 'paga') {
-                totalLiquidoPago += Number(v.valor_liquido) || 0;
-                if(v.afiliado_id && v.comissao_paga === false) {
-                    const prod = (produtos || []).find(p => String(p.id).trim() === String(v.produto_id).trim());
-                    const perc = prod ? (Number(prod.comissao_afiliado) || 0) : 0;
-                    totalComissoesAfiliadosPendente += (valorTotal * perc / 100);
-                }
-            } else if (statusLimpo === 'pendente') {
-                totalPendente += Number(v.valor_liquido) || 0;
-            }
-        });
-
-        const lucroRealDono = totalLiquidoPago - totalComissoesAfiliadosPendente;
-
-        // 4. LÓGICA DA META
-        const metaValor = 10000;
-        const progresso = (totalBruto / metaValor) * 100;
-        const barraFill = document.getElementById('bar-meta-fill');
-        const textoMeta = document.getElementById('txt-meta');
-        if (barraFill) barraFill.style.width = `${Math.min(progresso, 100)}%`;
-        if (textoMeta) textoMeta.innerText = `R$ ${totalBruto.toFixed(0)} / R$ 10K`;
-
-        // 5. ATUALIZA OS CARDS
-        if(document.getElementById('dash-total-vendas')) document.getElementById('dash-total-vendas').innerText = `R$ ${totalBruto.toFixed(2).replace('.', ',')}`;
-        if(document.getElementById('dash-valor-liquido')) document.getElementById('dash-valor-liquido').innerText = `R$ ${lucroRealDono.toFixed(2).replace('.', ',')}`;
-        if(document.getElementById('dash-count-vendas')) document.getElementById('dash-count-vendas').innerText = vendas.length;
-
-        // 6. ATUALIZA FINANCEIRO
-        const cardFinDisponivel = document.getElementById('fin-disponivel');
-        const cardFinPendente = document.querySelector('.fin-card.pendente .fin-value');
-        if (cardFinDisponivel) cardFinDisponivel.innerText = `R$ ${lucroRealDono.toFixed(2).replace('.', ',')}`;
-        if (cardFinPendente) cardFinPendente.innerText = `R$ ${totalPendente.toFixed(2).replace('.', ',')}`;
-
-        // 7. LISTA DE VENDAS RECENTES
-        const tbodyVendas = document.getElementById('sales-list-body');
-        if (tbodyVendas) {
-            tbodyVendas.innerHTML = vendas.map(v => {
-                const prod = (produtos || []).find(p => String(p.id).trim() === String(v.produto_id).trim());
-                const statusVenda = String(v.status || '').toLowerCase();
-                return `
-                    <tr>
-                        <td style="font-weight:700; color:var(--orange)">#${v.id.toString().slice(0,8)}</td>
-                        <td>${prod ? prod.nome : 'Produto'}</td>
-                        <td style="font-weight:700">R$ ${Number(v.valor_total).toFixed(2).replace('.', ',')}</td>
-                        <td>${new Date(v.created_at).toLocaleDateString('pt-BR')}</td>
-                        <td><span class="badge ${statusVenda === 'paga' ? 'badge-success' : 'badge-warning'}">${v.status}</span></td>
-                    </tr>`;
-            }).join('');
-        }
-
-        // 8. GRÁFICO DINÂMICO
-        if(typeof salesChartInstance !== 'undefined' && salesChartInstance && vendas.length > 0) {
-            const vendasParaGrafico = vendas.filter(v => String(v.status).toLowerCase() === 'paga').slice(0, 7).reverse();
-            salesChartInstance.data.datasets[0].data = vendasParaGrafico.map(v => v.valor_total);
-            salesChartInstance.update();
-        }
-    } catch (e) { console.error("Erro no dashboard:", e); }
-}
-
-async function simularVenda(prodId, preco) {
-    const { data: { user } } = await _supabase.auth.getUser();
-    // Se não tiver usuário logado, usamos um ID de teste
-    const comissao = (preco * TAXA_PERCENTUAL) + TAXA_FIXA;
-    const liquido = preco - comissao;
-
-    await _supabase.from('vendas').insert([{ 
-        produto_id: prodId, 
-        valor_total: preco, 
-        comissao_maestro: comissao, 
-        valor_liquido: liquido, 
-        status: 'Paga', 
-        metodo_pagamento: 'Pix',
-        afiliado_id: 'teste_vitor', // <--- ADICIONAMOS ISSO AQUI
-        comissao_paga: false        // <--- E ISSO AQUI
-    }]);
-
-    alert("Simulação de venda COM AFILIADO concluída!");
-    carregarDadosDashboard();
-    if(document.getElementById('aba-afiliados').classList.contains('active')) carregarAfiliados();
-}
-
-async function filtrarVendas() {
-    // Ajustado para 'Paga' sem o 's' para bater com o banco
-    const statusFiltro = document.getElementById('filtro-status')?.value || 'Paga';
-    
-    const { data: vendas, error } = await _supabase
-        .from('vendas')
-        .select('*, produtos(nome)')
-        .eq('status', statusFiltro)
-        .order('created_at', { ascending: false });
-
-    if(error) return;
-
-    // --- CÁLCULO DO RESUMO POR PRODUTO ---
-    const resumo = (vendas || []).reduce((acc, v) => {
-        const nome = v.produtos?.nome || 'Produto Removido';
-        acc[nome] = (acc[nome] || 0) + v.valor_total;
-        return acc;
-    }, {});
-
-    // Monta o HTML das caixinhas de resumo
-    let resumoHTML = `<div style="display:flex; gap:15px; margin-bottom:20px; flex-wrap:wrap;">`;
-    for (const [prod, total] of Object.entries(resumo)) {
-        resumoHTML += `
-            <div style="background:#FFF; padding:12px 20px; border-radius:10px; border:1px solid var(--border); box-shadow: 0 2px 5px rgba(0,0,0,0.02);">
-                <small style="display:block; color:var(--orange); font-weight:800; font-size:10px; text-transform:uppercase; margin-bottom:4px;">${prod}</small>
-                <span style="font-weight:800; color:var(--side-black); font-size:16px;">R$ ${total.toFixed(2).replace('.', ',')}</span>
-            </div>`;
-    }
-    resumoHTML += `</div>`;
-
-    const tbodyVendas = document.getElementById('sales-list-body');
-    if (tbodyVendas) {
-        // Inserção inteligente do resumo acima da tabela
-        const containerTabela = document.querySelector('#aba-vendas .table-container');
-        
-        // Limpa resumo anterior se houver
-        const resumoExistente = document.getElementById('resumo-vendas-dinamico');
-        if(resumoExistente) resumoExistente.remove();
-
-        const divResumo = document.createElement('div');
-        divResumo.id = 'resumo-vendas-dinamico';
-        divResumo.innerHTML = resumoHTML;
-        containerTabela.parentNode.insertBefore(divResumo, containerTabela);
-
-        // Preenche a tabela exatamente como no seu código antigo
-        tbodyVendas.innerHTML = vendas.map(v => `
-            <tr>
-                <td style="font-weight:700; color:var(--orange)">#${v.id.toString().slice(0,8)}</td>
-                <td>${v.produtos?.nome || 'Produto'}</td>
-                <td style="font-weight:700">R$ ${v.valor_total.toFixed(2).replace('.', ',')}</td>
-                <td>${new Date(v.created_at).toLocaleDateString('pt-BR')}</td>
-                <td><span class="badge ${v.status === 'Paga' ? 'badge-success' : 'badge-warning'}">${v.status}</span></td>
             </tr>`).join('');
     }
-}
-    
+
+    async function salvarProduto() {
+        const inputNome = document.getElementById('ipt_nome');
+        const inputPreco = document.getElementById('ipt_preco');
+        const inputId = document.getElementById('edit-prod-id');
+
+        if (!inputNome.value || !inputPreco.value) {
+            alert("Por favor, preencha o nome e o preço.");
+            return;
+        }
+
+        const payload = {
+            nome: document.getElementById('ipt_nome').value,
+            preco: parseFloat(document.getElementById('ipt_preco').value.replace(',', '.')),
+            capa_url: document.getElementById('edit-prod-capa').value || null,
+            comissao_afiliado: parseFloat(document.getElementById('ipt_comissao_afiliado').value) || 0,
+            categoria: document.getElementById('ipt_categoria').value,
+            email_suporte: document.getElementById('ipt_email_suporte').value,
+            url_obrigado: document.getElementById('ipt_url_obrigado').value,
+            status: 'Ativo'
+        };
+
+        const id = inputId.value;
+        const res = id ?
+            await _supabase.from('produtos').update(payload).eq('id', id) :
+            await _supabase.from('produtos').insert([payload]);
+
+        if (!res.error) {
+            alert("Produto salvo com sucesso!");
+            closeProductModal();
+            carregarProdutos();
+            if (typeof carregarMarketplaceReal === 'function') carregarMarketplaceReal();
+        } else {
+            alert("Erro ao salvar no banco. Verifique se a coluna 'capa_url' existe na tabela 'produtos'.");
+        }
+    }
+
+    async function deleteProduct(id) {
+        if (confirm("Tem certeza que deseja excluir este produto?")) {
+            const { error } = await _supabase.from('produtos').delete().eq('id', id);
+            if (!error) {
+                alert("Produto excluído com sucesso!");
+                carregarProdutos();
+            } else {
+                alert("Erro ao excluir: " + error.message);
+            }
+        }
+    }
+
+    async function carregarDadosDashboard() {
+        try {
+            // ✅ Busca a foto do usuário e usa setProfilePhoto (sem loop)
+            const { data: _userData } = await _supabase.auth.getUser();
+            if (_userData?.user?.user_metadata?.avatar_url) {
+                setProfilePhoto(_userData.user.user_metadata.avatar_url);
+            }
+
+            const { data: vendas, error: errVendas } = await _supabase.from('vendas').select('*').order('created_at', { ascending: false });
+            const { data: produtos } = await _supabase.from('produtos').select('id, nome, comissao_afiliado');
+
+            if (errVendas || !vendas) return;
+
+            let totalBruto = 0;
+            let totalLiquidoPago = 0;
+            let totalPendente = 0;
+            let totalComissoesAfiliadosPendente = 0;
+
+            vendas.forEach(v => {
+                const valorTotal = Number(v.valor_total) || 0;
+                const statusLimpo = String(v.status || '').toLowerCase();
+                totalBruto += valorTotal;
+                if (statusLimpo === 'paga') {
+                    totalLiquidoPago += Number(v.valor_liquido) || 0;
+                    if (v.afiliado_id && v.comissao_paga === false) {
+                        const prod = (produtos || []).find(p => String(p.id).trim() === String(v.produto_id).trim());
+                        const perc = prod ? (Number(prod.comissao_afiliado) || 0) : 0;
+                        totalComissoesAfiliadosPendente += (valorTotal * perc / 100);
+                    }
+                } else if (statusLimpo === 'pendente') {
+                    totalPendente += Number(v.valor_liquido) || 0;
+                }
+            });
+
+            const lucroRealDono = totalLiquidoPago - totalComissoesAfiliadosPendente;
+
+            // Barra de meta
+            const metaValor = 10000;
+            const progresso = (totalBruto / metaValor) * 100;
+            const barraFill = document.getElementById('bar-meta-fill');
+            const textoMeta = document.getElementById('txt-meta');
+            if (barraFill) barraFill.style.width = `${Math.min(progresso, 100)}%`;
+            if (textoMeta) textoMeta.innerText = `R$ ${totalBruto.toFixed(0)} / R$ 10K`;
+
+            // Cards do dashboard
+            if (document.getElementById('dash-total-vendas')) document.getElementById('dash-total-vendas').innerText = `R$ ${totalBruto.toFixed(2).replace('.', ',')}`;
+            if (document.getElementById('dash-valor-liquido')) document.getElementById('dash-valor-liquido').innerText = `R$ ${lucroRealDono.toFixed(2).replace('.', ',')}`;
+            if (document.getElementById('dash-count-vendas')) document.getElementById('dash-count-vendas').innerText = vendas.length;
+
+            // Cards financeiro
+            const cardFinDisponivel = document.getElementById('fin-disponivel');
+            const cardFinPendente = document.querySelector('.fin-card.pendente .fin-value');
+            if (cardFinDisponivel) cardFinDisponivel.innerText = `R$ ${lucroRealDono.toFixed(2).replace('.', ',')}`;
+            if (cardFinPendente) cardFinPendente.innerText = `R$ ${totalPendente.toFixed(2).replace('.', ',')}`;
+
+            // Tabela de vendas
+            const tbodyVendas = document.getElementById('sales-list-body');
+            if (tbodyVendas) {
+                tbodyVendas.innerHTML = vendas.map(v => {
+                    const prod = (produtos || []).find(p => String(p.id).trim() === String(v.produto_id).trim());
+                    const statusVenda = String(v.status || '').toLowerCase();
+                    return `
+                        <tr>
+                            <td style="font-weight:700; color:var(--orange)">#${v.id.toString().slice(0, 8)}</td>
+                            <td>${prod ? prod.nome : 'Produto'}</td>
+                            <td style="font-weight:700">R$ ${Number(v.valor_total).toFixed(2).replace('.', ',')}</td>
+                            <td>${new Date(v.created_at).toLocaleDateString('pt-BR')}</td>
+                            <td><span class="badge ${statusVenda === 'paga' ? 'badge-success' : 'badge-warning'}">${v.status}</span></td>
+                        </tr>`;
+                }).join('');
+            }
+
+            // Gráfico
+            if (salesChartInstance && vendas.length > 0) {
+                const vendasParaGrafico = vendas.filter(v => String(v.status).toLowerCase() === 'paga').slice(0, 7).reverse();
+                salesChartInstance.data.datasets[0].data = vendasParaGrafico.map(v => v.valor_total);
+                salesChartInstance.update();
+            }
+
+        } catch (e) {
+            console.error("Erro no dashboard:", e);
+        }
+    }
+
+    async function simularVenda(prodId, preco) {
+        const comissao = (preco * TAXA_PERCENTUAL) + TAXA_FIXA;
+        const liquido = preco - comissao;
+
+        await _supabase.from('vendas').insert([{
+            produto_id: prodId,
+            valor_total: preco,
+            comissao_maestro: comissao,
+            valor_liquido: liquido,
+            status: 'Paga',
+            metodo_pagamento: 'Pix',
+            afiliado_id: 'teste_vitor',
+            comissao_paga: false
+        }]);
+
+        alert("Simulação de venda COM AFILIADO concluída!");
+        carregarDadosDashboard();
+        if (document.getElementById('aba-afiliados').classList.contains('active')) carregarAfiliados();
+    }
+
+    async function filtrarVendas() {
+        const statusFiltro = document.getElementById('filtro-status')?.value || 'Paga';
+
+        const { data: vendas, error } = await _supabase
+            .from('vendas')
+            .select('*, produtos(nome)')
+            .eq('status', statusFiltro)
+            .order('created_at', { ascending: false });
+
+        if (error) return;
+
+        const resumo = (vendas || []).reduce((acc, v) => {
+            const nome = v.produtos?.nome || 'Produto Removido';
+            acc[nome] = (acc[nome] || 0) + v.valor_total;
+            return acc;
+        }, {});
+
+        let resumoHTML = `<div style="display:flex; gap:15px; margin-bottom:20px; flex-wrap:wrap;">`;
+        for (const [prod, total] of Object.entries(resumo)) {
+            resumoHTML += `
+                <div style="background:#FFF; padding:12px 20px; border-radius:10px; border:1px solid var(--border); box-shadow: 0 2px 5px rgba(0,0,0,0.02);">
+                    <small style="display:block; color:var(--orange); font-weight:800; font-size:10px; text-transform:uppercase; margin-bottom:4px;">${prod}</small>
+                    <span style="font-weight:800; color:var(--side-black); font-size:16px;">R$ ${total.toFixed(2).replace('.', ',')}</span>
+                </div>`;
+        }
+        resumoHTML += `</div>`;
+
+        const tbodyVendas = document.getElementById('sales-list-body');
+        if (tbodyVendas) {
+            const containerTabela = document.querySelector('#aba-vendas .table-container');
+            const resumoExistente = document.getElementById('resumo-vendas-dinamico');
+            if (resumoExistente) resumoExistente.remove();
+
+            const divResumo = document.createElement('div');
+            divResumo.id = 'resumo-vendas-dinamico';
+            divResumo.innerHTML = resumoHTML;
+            containerTabela.parentNode.insertBefore(divResumo, containerTabela);
+
+            tbodyVendas.innerHTML = vendas.map(v => `
+                <tr>
+                    <td style="font-weight:700; color:var(--orange)">#${v.id.toString().slice(0, 8)}</td>
+                    <td>${v.produtos?.nome || 'Produto'}</td>
+                    <td style="font-weight:700">R$ ${v.valor_total.toFixed(2).replace('.', ',')}</td>
+                    <td>${new Date(v.created_at).toLocaleDateString('pt-BR')}</td>
+                    <td><span class="badge ${v.status === 'Paga' ? 'badge-success' : 'badge-warning'}">${v.status}</span></td>
+                </tr>`).join('');
+        }
+    }
+
     async function solicitarSaque() {
         const saldoDisponivelStr = document.getElementById('fin-disponivel').innerText;
         const saldoAtual = parseFloat(saldoDisponivelStr.replace('R$ ', '').split('.').join('').replace(',', '.'));
@@ -811,285 +800,242 @@ async function filtrarVendas() {
         }
 
         const valorSaque = prompt(`Saldo disponível: R$ ${saldoAtual.toFixed(2)}\nDigite o valor que deseja sacar:`, saldoAtual.toFixed(2));
-        
         if (!valorSaque || parseFloat(valorSaque) <= 0) return;
-        
-        const valorNumerico = parseFloat(valorSaque);
 
+        const valorNumerico = parseFloat(valorSaque);
         if (valorNumerico > saldoAtual) {
             return alert("Valor solicitado é maior que o saldo disponível!");
         }
 
-        // Simula o registro do saque no banco de dados
         const { error } = await _supabase.from('saques').insert([{
             valor: valorNumerico,
             status: 'Pendente',
-            chave_pix: 'inovardigital91@gmail.com' // Exemplo usando seu e-mail
+            chave_pix: 'inovardigital91@gmail.com'
         }]);
 
         if (!error) {
             alert("Solicitação de saque enviada com sucesso! O valor será processado em até 24h.");
-            carregarDadosDashboard(); // Atualiza o saldo na tela
+            carregarDadosDashboard();
         } else {
             alert("Erro ao processar saque. Verifique a tabela 'saques' no seu banco.");
         }
     }
-    
-async function editProduct(id) {
-    // 1. Busca os dados completos no banco (incluindo os novos campos)
-    const { data: p, error } = await _supabase
-        .from('produtos')
-        .select('*')
-        .eq('id', id)
-        .single();
 
-    if (error || !p) return;
+    async function editProduct(id) {
+        const { data: p, error } = await _supabase.from('produtos').select('*').eq('id', id).single();
+        if (error || !p) return;
 
-    // 2. Preenche os campos básicos que você já tinha
-    document.getElementById('edit-prod-id').value = p.id;
-    document.getElementById('ipt_nome').value = p.nome;
-    document.getElementById('ipt_preco').value = p.preco;
+        document.getElementById('edit-prod-id').value = p.id;
+        document.getElementById('ipt_nome').value = p.nome;
+        document.getElementById('ipt_preco').value = p.preco;
+        document.getElementById('ipt_comissao_afiliado').value = p.comissao_afiliado || 0;
+        document.getElementById('ipt_categoria').value = p.categoria || '';
+        document.getElementById('edit-prod-capa').value = p.capa_url || '';
+        document.getElementById('ipt_email_suporte').value = p.email_suporte || '';
+        document.getElementById('ipt_url_obrigado').value = p.url_obrigado || '';
+        document.getElementById('modal-product-title').innerText = "Editar produto";
 
-    // 3. Preenche OS NOVOS CAMPOS (A mágica acontece aqui)
-    document.getElementById('ipt_comissao_afiliado').value = p.comissao_afiliado || 0;
-    document.getElementById('ipt_categoria').value = p.categoria || '';
-    document.getElementById('edit-prod-capa').value = p.capa_url || '';
-    document.getElementById('ipt_email_suporte').value = p.email_suporte || '';
-    document.getElementById('ipt_url_obrigado').value = p.url_obrigado || '';
-
-    document.getElementById('modal-product-title').innerText = "Editar produto";
-
-    // 4. Gera o link de checkout (mantendo sua lógica de links)
-    const linkCheckout = `https://inovar.digital/pay/${p.id}`;
-    const linksTable = document.getElementById('prod-links-table');
-    
-    if (linksTable) {
-        linksTable.innerHTML = `
-            <tr>
-                <td style="font-weight:600; font-size:13px;">Checkout Maestro</td>
-                <td>
-                    <div style="display:flex; gap:5px; align-items:center;">
-                        <input type="text" readonly class="search-input" 
-                            style="padding:8px; font-size:11px; width: 220px; background: #F8F9FA;" 
-                            value="${linkCheckout}">
-                        <button class="btn-primary" style="padding: 7px 10px; font-size:10px;" 
-                            onclick="copyToClipboard('${linkCheckout}')">
-                            <i class="far fa-copy"></i>
-                        </button>
-                    </div>
-                </td>
-                <td><span class="badge" style="background:#EBF4FF; color:var(--purple-kiwi);">Padrão</span></td>
-                <td>R$ ${p.preco.toFixed(2)}</td>
-                <td style="text-align:right">
-                    <i class="fas fa-external-link-alt" style="cursor:pointer; color:#718096" 
-                        onclick="window.open('${linkCheckout}', '_blank')"></i>
-                </td>
-            </tr>`;
+        const linkCheckout = `https://inovar.digital/pay/${p.id}`;
+        const linksTable = document.getElementById('prod-links-table');
+        if (linksTable) {
+            linksTable.innerHTML = `
+                <tr>
+                    <td style="font-weight:600; font-size:13px;">Checkout Maestro</td>
+                    <td>
+                        <div style="display:flex; gap:5px; align-items:center;">
+                            <input type="text" readonly class="search-input" style="padding:8px; font-size:11px; width: 220px; background: #F8F9FA;" value="${linkCheckout}">
+                            <button class="btn-primary" style="padding: 7px 10px; font-size:10px;" onclick="copyToClipboard('${linkCheckout}')">
+                                <i class="far fa-copy"></i>
+                            </button>
+                        </div>
+                    </td>
+                    <td><span class="badge" style="background:#EBF4FF; color:var(--purple-kiwi);">Padrão</span></td>
+                    <td>R$ ${p.preco.toFixed(2)}</td>
+                    <td style="text-align:right">
+                        <i class="fas fa-external-link-alt" style="cursor:pointer; color:#718096" onclick="window.open('${linkCheckout}', '_blank')"></i>
+                    </td>
+                </tr>`;
+        }
+        openProductModal();
     }
-    openProductModal();
-}
 
     function copyToClipboard(text) {
-        navigator.clipboard.writeText(text).then(() => {
-            alert("Link de checkout copiado!");
-        });
-    }
-    
-// FUNÇÃO QUE FALTAVA PARA AS ABAS FUNCIONAREM
-function switchSubTab(category, el) {
-    // 1. Remove a cor azul de todas as abas do grupo
-    const parent = el.parentElement;
-    parent.querySelectorAll('.sub-nav-item').forEach(item => item.classList.remove('active'));
-    
-    // 2. Coloca a cor azul na aba que você clicou
-    el.classList.add('active');
-    
-    // 3. Log no console para conferirmos o clique
-    console.log("Navegando para a categoria: " + category);
-}
-    
-async function carregarMarketplaceReal() {
-    try { const { data: aulas } = await _supabase.from('aulas').select('*').order('created_at', { ascending: false });
-    const userSession = await _supabase.auth.getUser();
-    const fotoUrl = userSession.data.user?.user_metadata.avatar_url;
-    if (fotoUrl) document.getElementById('minha_foto_gmail').src = fotoUrl;
-    const { data: prods } = await _supabase.from('produtos').select('*').order('created_at', { ascending: false });
-
-    const grid = document.getElementById('market-full-grid');
-    if (!grid) return;
-
-    // Mantendo o seu card de exemplo fixo
-    const exemplo = `
-        <div class="market-card">
-            <div class="market-thumb"><img src="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?auto=format&fit=crop&w=400&q=80"></div>
-            <div class="market-info">
-                <div class="market-title">Curso de Violão do Zero com Víctor</div>
-                <div class="market-commission">Até R$ 147,00 de comissão</div>
-            </div>
-        </div>`;
-
-    // 1. Mapeando as Aulas (Área de Membros)
-    let htmlAulas = (aulas || []).map(a => `
-        <div class="market-card" onclick="window.location.href='aluno.html?id=${a.id}'" style="cursor:pointer">
-            <div class="market-thumb">
-                <img src="${a.capa_url || 'https://via.placeholder.com/400x225?text=Sem+Capa'}" onerror="this.src='https://via.placeholder.com/400x225?text=Erro+na+Capa'">
-            </div>
-            <div class="market-info">
-                <div style="font-size:10px; color:var(--orange); font-weight:900; text-transform: uppercase; margin-bottom: 5px;">${a.categoria || 'Curso'}</div>
-                <div class="market-title">${a.titulo}</div>
-                <div class="market-commission">Acesso Liberado no Maestro</div>
-            </div>
-        </div>`).join('');
-
-    // 2. Mapeando os Produtos (Vendas/Checkout) - USANDO OS CAMPOS NOVOS
-    let htmlProdutos = (prods || []).map(p => {
-        // Cálculo da comissão em Reais baseada na porcentagem que criamos
-        const valorComissao = ((p.preco * (p.comissao_afiliado || 0)) / 100).toFixed(2).replace('.', ',');
-        
-        return `
-        <div class="market-card" onclick="window.location.href='pay.html?id=${p.id}'" style="cursor:pointer">
-            <div class="market-thumb">
-                <img src="${p.capa_url || 'https://via.placeholder.com/400x225?text=' + p.nome.replace(/ /g, '+')}" 
-                     onerror="this.src='https://via.placeholder.com/400x225?text=Produto'">
-            </div>
-            <div class="market-info">
-                <div style="font-size:10px; color:#5D5FEF; font-weight:900; text-transform: uppercase; margin-bottom: 5px;">${p.categoria || 'PRODUTO DIGITAL'}</div>
-                <div class="market-title">${p.nome}</div>
-                <div class="market-commission">
-                    R$ ${p.preco.toFixed(2).replace('.', ',')} 
-                    <span style="color:#718096; font-weight:400; font-size:11px; margin-left:5px;">
-                        (Comissão: R$ ${valorComissao})
-                    </span>
-                </div>
-            </div>
-        </div>`;
-    }).join('');
-
-    grid.innerHTML = exemplo + htmlAulas + htmlProdutos;
-         } catch (e) { console.log("Erro no market ignorado"); }
-}
-    
-async function carregarAreasMembros() {
-    const { data: aulas, error } = await _supabase
-        .from('aulas')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-    const tbody = document.getElementById('member-list-body');
-    if (!tbody) return;
-
-    if (error || !aulas || aulas.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:30px; color:#A0AEC0;">Nenhum curso encontrado.</td></tr>`;
-        return;
+        navigator.clipboard.writeText(text).then(() => alert("Link de checkout copiado!"));
     }
 
-    tbody.innerHTML = aulas.map(a => `
-        <tr>
-            <td style="font-weight:700; color:var(--side-black)">${a.titulo}</td>
-            <td style="font-size:12px; color:var(--purple-kiwi)">cursosinovardigital.github.io/aluno.html?id=${a.id.toString().slice(0,6)}</td>
-            <td style="font-weight:600">0 alunos</td>
-            <td style="text-align:right">
-                <button class="btn-primary" style="padding: 5px 12px; font-size: 11px; background: #F4F7FA; color: var(--text); border: 1px solid var(--border);" 
-                    onclick="copyToClipboard('https://cursosinovardigital.github.io/cursosinovardigital/aluno.html?id=${a.id}')">
-                    <i class="fas fa-link"></i> Gerar Link
-                </button>
-                <i class="fas fa-external-link-alt" style="margin-left:15px; cursor:pointer; color:#718096" 
-                    onclick="window.open('aluno.html?id=${a.id}', '_blank')"></i>
-            </td>
-        </tr>`).join('');
-}
+    function switchSubTab(category, el) {
+        const parent = el.parentElement;
+        parent.querySelectorAll('.sub-nav-item').forEach(item => item.classList.remove('active'));
+        el.classList.add('active');
+    }
 
-async function carregarAfiliados() {
-    console.log("Sincronizando saldo de afiliados...");
-    
-    // 1. Busca os dados necessários das tabelas corretas
-    const { data: perfis } = await _supabase.from('perfis').select('*');
-    const { data: vendas } = await _supabase.from('vendas').select('*');
-    const { data: produtos } = await _supabase.from('produtos').select('id, comissao_afiliado');
+    async function carregarMarketplaceReal() {
+        try {
+            const { data: aulas } = await _supabase.from('aulas').select('*').order('created_at', { ascending: false });
+            const { data: prods } = await _supabase.from('produtos').select('*').order('created_at', { ascending: false });
 
-    const tbody = document.getElementById('lista-afiliados-body');
-    if (!tbody || !perfis) return;
+            // ✅ Busca foto do usuário de forma segura (sem via.placeholder)
+            const userSession = await _supabase.auth.getUser();
+            const fotoUrl = userSession?.data?.user?.user_metadata?.avatar_url;
+            setProfilePhoto(fotoUrl || null);
 
-    // 2. Mapeia os perfis e calcula os valores baseados nas vendas REAIS
-    const html = perfis.map(af => {
-        const vendasDoAfiliado = (vendas || []).filter(v => 
-            String(v.afiliado_id || '').trim().toLowerCase() === String(af.afiliado_id || '').trim().toLowerCase() &&
-            String(v.status).toLowerCase() === 'paga' &&
-            v.comissao_paga === false
-        );
+            const grid = document.getElementById('market-full-grid');
+            if (!grid) return;
 
-        if (vendasDoAfiliado.length === 0) return '';
+            const exemplo = `
+                <div class="market-card">
+                    <div class="market-thumb">
+                        <img src="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?auto=format&fit=crop&w=400&q=80"
+                             onerror="this.onerror=null; this.src='https://placehold.co/400x140?text=Sem+Imagem'">
+                    </div>
+                    <div class="market-info">
+                        <div class="market-title">Curso de Violão do Zero com Víctor</div>
+                        <div class="market-commission">Até R$ 147,00 de comissão</div>
+                    </div>
+                </div>`;
 
-        const totalGerado = vendasDoAfiliado.reduce((sum, v) => sum + (Number(v.valor_total) || 0), 0);
-        const comissaoDevida = vendasDoAfiliado.reduce((sum, v) => {
-            const prod = (produtos || []).find(p => p.id === v.produto_id);
-            const perc = prod ? (Number(prod.comissao_afiliado) || 0) : 0;
-            return sum + (Number(v.valor_total) * perc / 100);
-        }, 0);
+            let htmlAulas = (aulas || []).map(a => `
+                <div class="market-card" onclick="window.location.href='aluno.html?id=${a.id}'" style="cursor:pointer">
+                    <div class="market-thumb">
+                        <img src="${a.capa_url || ''}"
+                             onerror="this.onerror=null; this.src='https://placehold.co/400x140?text=Sem+Capa'">
+                    </div>
+                    <div class="market-info">
+                        <div style="font-size:10px; color:var(--orange); font-weight:900; text-transform: uppercase; margin-bottom: 5px;">${a.categoria || 'Curso'}</div>
+                        <div class="market-title">${a.titulo}</div>
+                        <div class="market-commission">Acesso Liberado no Maestro</div>
+                    </div>
+                </div>`).join('');
 
-        return `
-            <tr>
-                <td>
-                    <div style="display:flex; align-items:center; gap:12px;">
-                        <img src="${af.foto_url || 'https://via.placeholder.com/35'}" style="width:35px; height:35px; border-radius:50%; object-fit:cover; border: 1px solid var(--border);">
-                        <div>
-                            <div style="font-weight:700; color:var(--text)">${af.nome_completo || af.afiliado_id}</div>
-                            <div style="font-size:10px; color:var(--text-dim)">${af.afiliado_id}</div>
+            let htmlProdutos = (prods || []).map(p => {
+                const valorComissao = ((p.preco * (p.comissao_afiliado || 0)) / 100).toFixed(2).replace('.', ',');
+                return `
+                <div class="market-card" onclick="window.location.href='pay.html?id=${p.id}'" style="cursor:pointer">
+                    <div class="market-thumb">
+                        <img src="${p.capa_url || ''}"
+                             onerror="this.onerror=null; this.src='https://placehold.co/400x140?text=${encodeURIComponent(p.nome)}'">
+                    </div>
+                    <div class="market-info">
+                        <div style="font-size:10px; color:#5D5FEF; font-weight:900; text-transform: uppercase; margin-bottom: 5px;">${p.categoria || 'PRODUTO DIGITAL'}</div>
+                        <div class="market-title">${p.nome}</div>
+                        <div class="market-commission">
+                            R$ ${p.preco.toFixed(2).replace('.', ',')}
+                            <span style="color:#718096; font-weight:400; font-size:11px; margin-left:5px;">(Comissão: R$ ${valorComissao})</span>
                         </div>
                     </div>
-                </td>
-                <td style="font-weight:600">${vendasDoAfiliado.length}</td>
-                <td style="font-weight:600">R$ ${totalGerado.toFixed(2).replace('.',',')}</td>
-                <td style="font-weight:800; color:var(--orange)">R$ ${comissaoDevida.toFixed(2).replace('.',',')}</td>
-                <td style="text-align:right">
-                    <button class="btn-primary" style="padding: 6px 12px; font-size: 11px; background:var(--green)" 
-                        onclick="confirmarPagamento('${af.afiliado_id}', ${comissaoDevida})">
-                        PAGAR VIA PIX
-                    </button>
-                </td>
-            </tr>`;
-    }).join('');
+                </div>`;
+            }).join('');
 
-    tbody.innerHTML = html || `<tr><td colspan="5" style="text-align:center; padding:30px; color:#A0AEC0;">Nenhum pagamento pendente no momento.</td></tr>`;
-}
-    
-async function confirmarPagamento(idAfiliado, valor) {
-    // 1. Confirmação visual para o usuário
-    const confirmacao = confirm(`Confirmar que você já enviou o PIX de R$ ${valor.toFixed(2).replace('.',',')} para ${idAfiliado}?\n\nIsso marcará todas as vendas pendentes dele como pagas.`);
+            grid.innerHTML = exemplo + htmlAulas + htmlProdutos;
+        } catch (e) {
+            console.log("Erro no marketplace:", e);
+        }
+    }
 
-    if (!confirmacao) return;
+    async function carregarAreasMembros() {
+        const { data: aulas, error } = await _supabase.from('aulas').select('*').order('created_at', { ascending: false });
+        const tbody = document.getElementById('member-list-body');
+        if (!tbody) return;
 
-    try {
-        console.log(`Dando baixa nas vendas do afiliado: ${idAfiliado}`);
-
-        // 2. Atualização direta (Mais rápido e seguro)
-        // O .update já aplica o filtro e altera tudo de uma vez
-        const { error } = await _supabase
-            .from('vendas')
-            .update({ comissao_paga: true })
-            .eq('afiliado_id', idAfiliado) // Filtra pelo afiliado
-            .eq('comissao_paga', false)    // Garante que só paga o que deve
-            .ilike('status', 'paga');      // Segurança extra: só paga vendas confirmadas
-
-        if (error) throw error;
-
-        // 3. Sucesso!
-        alert("Baixa de pagamento registrada! O saldo do afiliado foi zerado.");
-        
-        // 4. Recarrega as funções de tela para atualizar os números na hora
-        await carregarAfiliados(); 
-        
-        // Se você tiver a função de dashboard, ela atualiza o lucro líquido
-        if (typeof carregarDadosDashboard === "function") {
-            await carregarDadosDashboard();
+        if (error || !aulas || aulas.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:30px; color:#A0AEC0;">Nenhum curso encontrado.</td></tr>`;
+            return;
         }
 
-    } catch (error) {
-        console.error("Erro ao processar baixa:", error);
-        alert("Erro ao registrar no banco: " + (error.message || "Erro desconhecido"));
+        tbody.innerHTML = aulas.map(a => `
+            <tr>
+                <td style="font-weight:700; color:var(--side-black)">${a.titulo}</td>
+                <td style="font-size:12px; color:var(--purple-kiwi)">cursosinovardigital.github.io/aluno.html?id=${a.id.toString().slice(0, 6)}</td>
+                <td style="font-weight:600">0 alunos</td>
+                <td style="text-align:right">
+                    <button class="btn-primary" style="padding: 5px 12px; font-size: 11px; background: #F4F7FA; color: var(--text); border: 1px solid var(--border);"
+                        onclick="copyToClipboard('https://cursosinovardigital.github.io/cursosinovardigital/aluno.html?id=${a.id}')">
+                        <i class="fas fa-link"></i> Gerar Link
+                    </button>
+                    <i class="fas fa-external-link-alt" style="margin-left:15px; cursor:pointer; color:#718096"
+                        onclick="window.open('aluno.html?id=${a.id}', '_blank')"></i>
+                </td>
+            </tr>`).join('');
     }
-}
-    
+
+    async function carregarAfiliados() {
+        const { data: perfis } = await _supabase.from('perfis').select('*');
+        const { data: vendas } = await _supabase.from('vendas').select('*');
+        const { data: produtos } = await _supabase.from('produtos').select('id, comissao_afiliado');
+
+        const tbody = document.getElementById('lista-afiliados-body');
+        if (!tbody || !perfis) return;
+
+        const html = perfis.map(af => {
+            const vendasDoAfiliado = (vendas || []).filter(v =>
+                String(v.afiliado_id || '').trim().toLowerCase() === String(af.afiliado_id || '').trim().toLowerCase() &&
+                String(v.status).toLowerCase() === 'paga' &&
+                v.comissao_paga === false
+            );
+
+            if (vendasDoAfiliado.length === 0) return '';
+
+            const totalGerado = vendasDoAfiliado.reduce((sum, v) => sum + (Number(v.valor_total) || 0), 0);
+            const comissaoDevida = vendasDoAfiliado.reduce((sum, v) => {
+                const prod = (produtos || []).find(p => p.id === v.produto_id);
+                const perc = prod ? (Number(prod.comissao_afiliado) || 0) : 0;
+                return sum + (Number(v.valor_total) * perc / 100);
+            }, 0);
+
+            // ✅ Avatar do afiliado também com proteção contra loop
+            const fotoAfiliado = af.foto_url
+                ? `<img src="${af.foto_url}" style="width:35px; height:35px; border-radius:50%; object-fit:cover; border: 1px solid var(--border);" onerror="this.onerror=null; this.style.display='none'">`
+                : `<div style="width:35px; height:35px; border-radius:50%; background:var(--orange); display:flex; align-items:center; justify-content:center; color:white; font-weight:800; font-size:14px;">${(af.nome_completo || af.afiliado_id || 'A')[0].toUpperCase()}</div>`;
+
+            return `
+                <tr>
+                    <td>
+                        <div style="display:flex; align-items:center; gap:12px;">
+                            ${fotoAfiliado}
+                            <div>
+                                <div style="font-weight:700; color:var(--text)">${af.nome_completo || af.afiliado_id}</div>
+                                <div style="font-size:10px; color:#718096">${af.afiliado_id}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td style="font-weight:600">${vendasDoAfiliado.length}</td>
+                    <td style="font-weight:600">R$ ${totalGerado.toFixed(2).replace('.', ',')}</td>
+                    <td style="font-weight:800; color:var(--orange)">R$ ${comissaoDevida.toFixed(2).replace('.', ',')}</td>
+                    <td style="text-align:right">
+                        <button class="btn-primary" style="padding: 6px 12px; font-size: 11px; background:var(--green)"
+                            onclick="confirmarPagamento('${af.afiliado_id}', ${comissaoDevida})">
+                            PAGAR VIA PIX
+                        </button>
+                    </td>
+                </tr>`;
+        }).join('');
+
+        tbody.innerHTML = html || `<tr><td colspan="5" style="text-align:center; padding:30px; color:#A0AEC0;">Nenhum pagamento pendente no momento.</td></tr>`;
+    }
+
+    async function confirmarPagamento(idAfiliado, valor) {
+        const confirmacao = confirm(`Confirmar que você já enviou o PIX de R$ ${valor.toFixed(2).replace('.', ',')} para ${idAfiliado}?\n\nIsso marcará todas as vendas pendentes dele como pagas.`);
+        if (!confirmacao) return;
+
+        try {
+            const { error } = await _supabase
+                .from('vendas')
+                .update({ comissao_paga: true })
+                .eq('afiliado_id', idAfiliado)
+                .eq('comissao_paga', false)
+                .ilike('status', 'paga');
+
+            if (error) throw error;
+
+            alert("Baixa de pagamento registrada! O saldo do afiliado foi zerado.");
+            await carregarAfiliados();
+            if (typeof carregarDadosDashboard === "function") await carregarDadosDashboard();
+        } catch (error) {
+            console.error("Erro ao processar baixa:", error);
+            alert("Erro ao registrar no banco: " + (error.message || "Erro desconhecido"));
+        }
+    }
+
     function nav(id, el) {
         document.querySelectorAll('.aba-section').forEach(s => s.classList.remove('active'));
         document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
@@ -1097,40 +1043,29 @@ async function confirmarPagamento(idAfiliado, valor) {
         el.classList.add('active');
         document.getElementById('header-path').innerHTML = `<strong>Maestro Console</strong> / ${el.innerText.trim()}`;
 
-        if(id === 'afiliados') carregarAfiliados();
-        if(id === 'membro') carregarAreasMembros();
-        if(id === 'relat') atualizarRelatoriosRapidos();
-        if(id === 'prod') carregarProdutos();
-        if(id === 'market') carregarMarketplaceReal();
-        if(id === 'vendas' || id === 'dash' || id === 'finan') carregarDadosDashboard();
+        if (id === 'afiliados') carregarAfiliados();
+        if (id === 'membro') carregarAreasMembros();
+        if (id === 'relat') atualizarRelatoriosRapidos();
+        if (id === 'prod') carregarProdutos();
+        if (id === 'market') carregarMarketplaceReal();
+        if (id === 'vendas' || id === 'dash' || id === 'finan') carregarDadosDashboard();
     }
-    
+
     async function atualizarRelatoriosRapidos() {
-    const { data: vendas, error } = await _supabase.from('vendas').select('*');
-    if (error) {
-        console.error("Erro ao buscar vendas para relatório:", error);
-        return;
+        const { data: vendas, error } = await _supabase.from('vendas').select('*');
+        if (error) return;
+
+        const receitaTotal = vendas.filter(v => v.status === 'Paga').reduce((sum, v) => sum + (v.valor_total || 0), 0);
+        const pendentes = vendas.filter(v => v.status === 'Pendente').length;
+
+        const campoReceita = document.getElementById('relat-receita-total');
+        const campoPendentes = document.getElementById('relat-vendas-pendentes');
+        if (campoReceita) campoReceita.innerText = `R$ ${receitaTotal.toFixed(2).replace('.', ',')}`;
+        if (campoPendentes) campoPendentes.innerText = `${pendentes} vendas`;
+
+        alert("Relatórios atualizados com dados do banco!");
     }
 
-    // Calcula Receita Total (Pagas)
-    const receitaTotal = vendas
-        .filter(v => v.status === 'Paga')
-        .reduce((sum, v) => sum + (v.valor_total || 0), 0);
-
-    // Conta Vendas Pendentes
-    const pendentes = vendas.filter(v => v.status === 'Pendente').length;
-
-    // Atualiza os valores nos cards
-    const campoReceita = document.getElementById('relat-receita-total');
-    const campoPendentes = document.getElementById('relat-vendas-pendentes');
-
-    if (campoReceita) campoReceita.innerText = `R$ ${receitaTotal.toFixed(2).replace('.', ',')}`;
-    if (campoPendentes) campoPendentes.innerText = `${pendentes} vendas`;
-    
-    alert("Relatórios atualizados com dados do banco!");
-}
-    
-    // Alterna entre abas de Saque e Dados Bancários
     function switchFinTab(tab, el) {
         document.querySelectorAll('.fin-tab-content').forEach(c => c.style.display = 'none');
         document.querySelectorAll('#financeiroNav .sub-nav-item').forEach(i => i.classList.remove('active'));
@@ -1138,7 +1073,6 @@ async function confirmarPagamento(idAfiliado, valor) {
         el.classList.add('active');
     }
 
-    // Alterna entre formulário Pix e Conta
     function toggleCamposBanco() {
         const tipo = document.getElementById('tipo_recebimento').value;
         document.getElementById('campos-pix').style.display = tipo === 'pix' ? 'block' : 'none';
@@ -1157,8 +1091,7 @@ async function confirmarPagamento(idAfiliado, valor) {
         };
 
         const { error } = await _supabase.from('dados_bancarios').insert([payload]);
-
-        if(!error) {
+        if (!error) {
             alert("Dados bancários salvos com sucesso!");
         } else {
             alert("Erro ao salvar. Verifique se a tabela 'dados_bancarios' existe.");
@@ -1174,43 +1107,46 @@ async function confirmarPagamento(idAfiliado, valor) {
 
     function openProductModal() { document.getElementById('modalProduct').classList.add('active'); }
     function closeProductModal() { document.getElementById('modalProduct').classList.remove('active'); document.getElementById('edit-prod-id').value = ''; }
-    function deleteProductFromModal() { if(confirm("Deseja realmente excluir?")) alert("Em breve..."); }
+    function deleteProductFromModal() { if (confirm("Deseja realmente excluir?")) alert("Em breve..."); }
+    function openColabModal() { document.getElementById('modalColab').classList.add('active'); }
+    function closeColabModal() { document.getElementById('modalColab').classList.remove('active'); }
+    function openRelat(titulo) { document.getElementById('relat-main-list').style.display = 'none'; document.getElementById('relat-detail').classList.add('active'); document.getElementById('relat-title-display').innerText = titulo; }
+    function closeRelat() { document.getElementById('relat-main-list').style.display = 'block'; document.getElementById('relat-detail').classList.remove('active'); }
 
-window.onload = function() {
-    // 1. CARREGA OS DADOS PRIMEIRO (Para garantir os R$ 685,00 e a Foto)
-    carregarProdutos(); 
-    carregarDadosDashboard(); 
-    carregarMarketplaceReal();
+    // ✅ window.onload LIMPO - sem duplo carregamento, sem setTimeout desnecessário
+    window.onload = function () {
+        // Define o avatar padrão imediatamente (sem depender de URL externa)
+        setProfilePhoto(null);
 
-    // 2. CARREGA O GRÁFICO SÓ DEPOIS QUE TUDO ESTIVER PRONTO
-    // Isso evita que o gráfico trave o carregamento dos números
-    setTimeout(() => {
+        // Carrega os dados uma única vez
+        carregarProdutos();
+        carregarDadosDashboard();
+        carregarMarketplaceReal();
+
+        // Inicializa o gráfico separado dos dados (sem chamar dashboard de novo)
         const canvas = document.getElementById('salesChart');
         if (canvas) {
             const ctx = canvas.getContext('2d');
-            salesChartInstance = new Chart(ctx, { 
-                type: 'line', 
-                data: { 
-                    labels: ['V1','V2','V3','V4','V5','V6','V7'], 
-                    datasets: [{ 
-                        data: [0,0,0,0,0,0,0], 
-                        borderColor: '#5D5FEF', 
-                        backgroundColor: 'rgba(93, 95, 239, 0.1)', 
-                        fill: true, 
-                        tension: 0.4 
-                    }] 
-                }, 
-                options: { 
-                    responsive: true, 
-                    maintainAspectRatio: false, 
-                    plugins: { legend: { display: false } } 
+            salesChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['V1', 'V2', 'V3', 'V4', 'V5', 'V6', 'V7'],
+                    datasets: [{
+                        data: [0, 0, 0, 0, 0, 0, 0],
+                        borderColor: '#5D5FEF',
+                        backgroundColor: 'rgba(93, 95, 239, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } }
                 }
             });
-            // Atualiza o gráfico com os dados que já baixaram
-            carregarDadosDashboard();
         }
-    }, 1500); // 1.5 segundos de segurança para o site respirar
-};
+    };
 </script>
 </body>
 </html>
