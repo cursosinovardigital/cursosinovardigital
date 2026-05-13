@@ -987,6 +987,8 @@ header.maestro-top-bar {
         document.getElementById('edit-prod-id').value = p.id;
         document.getElementById('ipt_nome').value = p.nome;
         document.getElementById('ipt_preco').value = p.preco;
+        document.getElementById('ipt_tipo_produto').value =
+    p.tipo_produto || 'curso';
         document.getElementById('ipt_comissao_afiliado').value = p.comissao_afiliado || 0;
         document.getElementById('ipt_categoria').value = p.categoria || '';
         document.getElementById('edit-prod-capa').value = p.capa_url || '';
@@ -1112,11 +1114,41 @@ return `
     z-index:5;
     display:flex;
     gap:8px;
+;
     flex-wrap:wrap;
 ">
 
-    ...
+    <span style="
+        background:rgba(255,255,255,.95);
+        backdrop-filter:blur(8px);
+        color:#5D5FEF;
+        font-size:10px;
+        font-weight:900;
+        padding:6px 10px;
+        border-radius:999px;
+        text-transform:uppercase;
+        letter-spacing:.5px;
+        box-shadow:0 5px 15px rgba(0,0,0,.08);
+    ">
+        ${p.tipo_produto || 'produto'}
+    </span>
+
+    <span style="
+        background:rgba(0,0,0,.55);
+        backdrop-filter:blur(8px);
+        color:#FFF;
+        font-size:10px;
+        font-weight:800;
+        padding:6px 10px;
+        border-radius:999px;
+        text-transform:uppercase;
+        letter-spacing:.5px;
+    ">
+        ${p.categoria || 'Digital'}
+    </span>
+
 </div>
+
         <div class="market-info">
 
             <div class="market-title">
