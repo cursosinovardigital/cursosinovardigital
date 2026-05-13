@@ -907,10 +907,10 @@ function switchSubTab(category, el) {
 }
     
 async function carregarMarketplaceReal() {
+    try { const { data: aulas } = await _supabase.from('aulas').select('*').order('created_at', { ascending: false });
     const userSession = await _supabase.auth.getUser();
     const fotoUrl = userSession.data.user?.user_metadata.avatar_url;
     if (fotoUrl) document.getElementById('minha_foto_gmail').src = fotoUrl;
-    try { const { data: aulas } = await _supabase.from('aulas').select('*').order('created_at', { ascending: false });
     const { data: prods } = await _supabase.from('produtos').select('*').order('created_at', { ascending: false });
 
     const grid = document.getElementById('market-full-grid');
