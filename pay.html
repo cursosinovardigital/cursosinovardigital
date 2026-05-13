@@ -497,6 +497,25 @@ async function processarPagamento() {
 
         const nome = document.getElementById('cust_name').value;
         const email = document.getElementById('cust_email').value;
+    // Verifica se usuário já possui acesso
+const { data: userData } = await _supabase.auth.getUser();
+
+if (userData?.user) {
+
+    const { data: assinaturaExistente } = await _supabase
+        .from('assinaturas')
+        .select('*')
+        .eq('user_id', userData.user.id)
+        .eq('produto_id', produtoAtual.id)
+        .eq('status', 'ativa')
+        .single();
+
+    if (assinaturaExistente) {
+        alert("Você já possui acesso a este produto!");
+        window.location.href = `aluno.html?id=${produtoAtual.id}`;
+        return;
+    }
+}
 
         if (!nome || !email) {
             alert("Por favor, preencha seu nome e e-mail para receber o acesso.");
