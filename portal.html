@@ -1177,17 +1177,11 @@ async function confirmarPagamento(idAfiliado, valor) {
     function deleteProductFromModal() { if(confirm("Deseja realmente excluir?")) alert("Em breve..."); }
 
 window.onload = function() {
-    // 1. DESENHA O GRÁFICO NA HORA (Evita tela branca)
+    // 1. Cria o gráfico vazio na hora para não travar a tela
     const ctx = document.getElementById('salesChart')?.getContext('2d');
-    if(ctx) {
-        salesChartInstance = new Chart(ctx, { 
-            type: 'line', 
-            data: { labels: ['V1','V2','V3','V4','V5','V6','V7'], datasets: [{ data: [0,0,0,0,0,0,0], borderColor: '#5D5FEF', backgroundColor: 'rgba(93, 95, 239, 0.1)', fill: true, tension: 0.4 }] }, 
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
-        });
-    }
+    if(ctx) salesChartInstance = new Chart(ctx, { type: 'line', data: { labels: ['V1','V2','V3','V4','V5','V6','V7'], datasets: [{ data: [0,0,0,0,0,0,0], borderColor: '#5D5FEF', backgroundColor: 'rgba(93, 95, 239, 0.1)', fill: true, tension: 0.4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }});
 
-    // 2. CHAMA OS DADOS (Sem travar a página)
+    // 2. Dispara a busca dos dados (Foto e Vendas)
     carregarProdutos(); 
     carregarDadosDashboard(); 
     carregarMarketplaceReal();
