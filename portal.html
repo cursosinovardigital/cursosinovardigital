@@ -673,7 +673,13 @@ header.maestro-top-bar {
 
                     <div>
                         <label style="display:block; font-size:12px; font-weight:700; margin-bottom:8px; color: #718096;">CATEGORIA</label>
-                        <input type="text" id="ipt_categoria" class="search-input" style="width:100%; margin-bottom:20px; padding-left:15px;" placeholder="Ex: Música, E-commerce...">
+                        <select id="ipt_categoria"
+        class="search-input"
+        style="width:100%; padding-left:15px; margin-bottom:20px;">
+
+    <option value="">Selecione uma categoria</option>
+
+</select>
 
                         <label style="display:block; font-size:12px; font-weight:700; margin-bottom:8px; color: #718096;">
     CAPA DO PRODUTO
@@ -809,6 +815,76 @@ document
     };
 
     reader.readAsDataURL(file);
+});
+
+const categoriasPorTipo = {
+
+    "Curso": [
+        "Marketing Digital",
+        "Programação",
+        "Música",
+        "Idiomas",
+        "Investimentos",
+        "Desenvolvimento Pessoal"
+    ],
+
+    "Mentoria": [
+        "Negócios",
+        "Carreira",
+        "Relacionamento",
+        "Fitness"
+    ],
+
+    "Produto Físico": [
+        "Suplementos",
+        "Cosméticos",
+        "Saúde",
+        "Emagrecimento"
+    ],
+
+    "Serviço": [
+        "Design",
+        "Tráfego Pago",
+        "Consultoria",
+        "Edição de Vídeo"
+    ],
+
+    "Software": [
+        "Automação",
+        "IA",
+        "Marketing",
+        "Produtividade"
+    ]
+
+};
+
+document
+    .getElementById('ipt_tipo_produto')
+    .addEventListener('change', function() {
+
+    const tipo = this.value;
+
+    const selectCategoria =
+        document.getElementById('ipt_categoria');
+
+    selectCategoria.innerHTML =
+        '<option value="">Selecione uma categoria</option>';
+
+    if (!categoriasPorTipo[tipo]) return;
+
+    categoriasPorTipo[tipo].forEach(categoria => {
+
+        const option =
+            document.createElement('option');
+
+        option.value = categoria;
+
+        option.textContent = categoria;
+
+        selectCategoria.appendChild(option);
+
+    });
+
 });
     
     async function salvarProduto() {
