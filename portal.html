@@ -1177,14 +1177,39 @@ async function confirmarPagamento(idAfiliado, valor) {
     function deleteProductFromModal() { if(confirm("Deseja realmente excluir?")) alert("Em breve..."); }
 
 window.onload = function() {
-    // 1. Cria o gráfico vazio na hora para não travar a tela
-    const ctx = document.getElementById('salesChart')?.getContext('2d');
-    if(ctx) salesChartInstance = new Chart(ctx, { type: 'line', data: { labels: ['V1','V2','V3','V4','V5','V6','V7'], datasets: [{ data: [0,0,0,0,0,0,0], borderColor: '#5D5FEF', backgroundColor: 'rgba(93, 95, 239, 0.1)', fill: true, tension: 0.4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }});
-
-    // 2. Dispara a busca dos dados (Foto e Vendas)
+    // 1. CARREGA OS DADOS PRIMEIRO (Para garantir os R$ 685,00 e a Foto)
     carregarProdutos(); 
     carregarDadosDashboard(); 
     carregarMarketplaceReal();
+
+    // 2. CARREGA O GRÁFICO SÓ DEPOIS QUE TUDO ESTIVER PRONTO
+    // Isso evita que o gráfico trave o carregamento dos números
+    setTimeout(() => {
+        const canvas = document.getElementById('salesChart');
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            salesChartInstance = new Chart(ctx, { 
+                type: 'line', 
+                data: { 
+                    labels: ['V1','V2','V3','V4','V5','V6','V7'], 
+                    datasets: [{ 
+                        data: [0,0,0,0,0,0,0], 
+                        borderColor: '#5D5FEF', 
+                        backgroundColor: 'rgba(93, 95, 239, 0.1)', 
+                        fill: true, 
+                        tension: 0.4 
+                    }] 
+                }, 
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    plugins: { legend: { display: false } } 
+                }
+            });
+            // Atualiza o gráfico com os dados que já baixaram
+            carregarDadosDashboard();
+        }
+    }, 1500); // 1.5 segundos de segurança para o site respirar
 };
 </script>
 </body>
