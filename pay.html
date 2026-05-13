@@ -532,7 +532,13 @@ async function processarPagamento() {
 
         if (!error) {
             alert("Pagamento aprovado com sucesso!");
-            
+
+            // Criar assinatura automática
+await _supabase.from('assinaturas').insert([{
+    user_id: (await _supabase.auth.getUser()).data.user.id,
+    produto_id: produtoAtual.id,
+    status: 'ativa'
+}]);
             // REDIRECIONAMENTO INTELIGENTE
             const urlRedirecionamento = produtoAtual.url_obrigado || "obrigado.html";
             window.location.href = urlRedirecionamento; 
