@@ -908,7 +908,7 @@ function switchSubTab(category, el) {
 }
     
 async function carregarMarketplaceReal() {
-    const { data: aulas } = await _supabase.from('aulas').select('*').order('created_at', { ascending: false });
+    try { const { data: aulas } = await _supabase.from('aulas').select('*').order('created_at', { ascending: false });
     const { data: prods } = await _supabase.from('produtos').select('*').order('created_at', { ascending: false });
 
     const grid = document.getElementById('market-full-grid');
@@ -962,6 +962,7 @@ async function carregarMarketplaceReal() {
     }).join('');
 
     grid.innerHTML = exemplo + htmlAulas + htmlProdutos;
+         } catch (e) { console.log("Erro no market ignorado"); }
 }
     
 async function carregarAreasMembros() {
