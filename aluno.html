@@ -257,13 +257,49 @@ if (error || !aulas || aulas.length === 0) {
         document.getElementById('item-' + id)?.classList.add('active');
     }
 
-    function toggleComplete() {
-        const btn = document.getElementById('btn-complete');
-        btn.classList.toggle('done');
-        const isDone = btn.classList.contains('done');
-        btn.innerHTML = isDone ? `<i class="fas fa-check-circle"></i> Aula Concluída` : `<i class="far fa-check-circle"></i> Concluir Aula`;
-        if(isDone) confetti(); // Se quiser adicionar um efeito de festa depois
+async function toggleComplete() {
+
+    const { data: { user } } = await _supabase.auth.getUser();
+
+    if (!user || !aulaAtualId) return;
+
+    const btn = document.getElementById('btn-complete');
+
+    const jaConcluida = btn.classList.contains('done');
+
+    if (jaConcluida) {
+
+        await _supabase
+            .from('progresso_aulas')
+            .delete()
+            .eq('user_id', user.id)
+            .eq('aula_id', aulaAtualId);
+
+        btn.classList.remove('done');
+
+        btn.innerHTML = `
+            <i class="far fa-check-circle"></i>
+            Concluir Aula
+        `;
+
+    } else {
+
+        await _supabase
+            .from('progresso_aulas')
+            .insert({
+                user_id: user.id,
+                aula_id: aulaAtualId,
+                concluida: true
+            });
+
+        btn.classList.add('done');
+
+        btn.innerHTML = `
+            <i class="fas fa-check-circle"></i>
+            Aula Concluída
+        `;
     }
+}
 
     function toggleModule(id) {
         const el = document.getElementById(id);
