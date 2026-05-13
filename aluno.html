@@ -148,7 +148,7 @@
 
     async function carregarConteudoCurso() {
         const urlParams = new URLSearchParams(window.location.search);
-        const cursoId = urlParams.get('id');
+        const aulaId = urlParams.get('aula');
 
         const { data: aulas, error } = await _supabase.from('aulas').select('*').order('created_at', { ascending: true });
         if (error || !aulas) return;
