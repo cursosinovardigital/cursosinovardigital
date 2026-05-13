@@ -863,11 +863,30 @@ header.maestro-top-bar {
         navigator.clipboard.writeText(text).then(() => alert("Link de checkout copiado!"));
     }
 
-    function switchSubTab(category, el) {
-        const parent = el.parentElement;
-        parent.querySelectorAll('.sub-nav-item').forEach(item => item.classList.remove('active'));
-        el.classList.add('active');
+function switchSubTab(tab, el) {
+
+    // ativa botão
+    const parent = el.parentElement;
+
+    parent.querySelectorAll('.sub-nav-item')
+        .forEach(item => item.classList.remove('active'));
+
+    el.classList.add('active');
+
+    // pega seção principal
+    const section = el.closest('.aba-section');
+
+    // esconde conteúdos internos
+    section.querySelectorAll('.sub-content')
+        .forEach(c => c.style.display = 'none');
+
+    // mostra conteúdo correspondente
+    const target = section.querySelector(`#sub-${tab}`);
+
+    if (target) {
+        target.style.display = 'block';
     }
+}
 
   async function carregarMarketplaceReal() {
     try {
