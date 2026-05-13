@@ -1015,14 +1015,40 @@ function switchSubTab(tab, el) {
 
                     <div class="market-info">
 
-                        <div style="
-                            font-size:10px;
-                            color:#5D5FEF;
-                            font-weight:900;
-                            text-transform: uppercase;
-                            margin-bottom: 5px;
-                        ">
-                            ${p.categoria || 'PRODUTO DIGITAL'}
+                            <div style="
+    display:flex;
+    gap:8px;
+    margin-bottom:10px;
+    flex-wrap:wrap;
+">
+
+    <span style="
+        background:#EEF2FF;
+        color:#5D5FEF;
+        font-size:10px;
+        font-weight:800;
+        padding:5px 10px;
+        border-radius:999px;
+        text-transform:uppercase;
+        letter-spacing:.5px;
+    ">
+        ${p.tipo_produto || 'produto'}
+    </span>
+
+    <span style="
+        background:#FFF7ED;
+        color:#EA580C;
+        font-size:10px;
+        font-weight:800;
+        padding:5px 10px;
+        border-radius:999px;
+        text-transform:uppercase;
+        letter-spacing:.5px;
+    ">
+        ${p.categoria || 'Digital'}
+    </span>
+
+</div>
                         </div>
 
                         <div class="market-title">
