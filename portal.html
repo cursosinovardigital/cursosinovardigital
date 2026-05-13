@@ -1206,15 +1206,12 @@ if (linksTable) {
                         value="${linkCheckout}"
                     >
 
-                    <button
-                        class="btn-primary"
-                        style="padding:7px 10px; font-size:10px;"
-                        onclick="copyToClipboard('${linkCheckout}')"
-                    >
-
-                        <i class="far fa-copy"></i>
-
-                    </button>
+<button
+    class="btn-primary"
+    style="padding:7px 10px; font-size:10px;"
+    onclick="copyToClipboard('${linkCheckout}')">
+    <i class="far fa-copy"></i>
+</button>
 
                 </div>
 
@@ -1707,9 +1704,10 @@ async function fazerLogout() {
                     maintainAspectRatio: false,
                     plugins: { legend: { display: false } }
                 }
-            });
-        }
-    };
+    });
+};
+
+}
 </script>
 </body>
 </html>
