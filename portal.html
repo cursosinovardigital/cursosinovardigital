@@ -1175,7 +1175,7 @@ async function confirmarPagamento(idAfiliado, valor) {
     function deleteProductFromModal() { if(confirm("Deseja realmente excluir?")) alert("Em breve..."); }
 
 window.onload = async function() {
-    // 1. Cria o gráfico primeiro (vazio) para a página não parecer travada
+    // 1. Cria o gráfico primeiro para destravar a tela
     const ctx = document.getElementById('salesChart')?.getContext('2d');
     if(ctx) {
         salesChartInstance = new Chart(ctx, { 
@@ -1185,10 +1185,10 @@ window.onload = async function() {
         });
     }
 
-    // 2. Pequena pausa de segurança (meio segundo) para o banco de dados respirar
-    await new Promise(resolve => setTimeout(resolve, 500));
+    // 2. Pausa de segurança corrigida (800ms)
+    await new Promise(res => setTimeout(res, 800));
 
-    // 3. Agora sim, busca os dados em ordem de importância
+    // 3. Carrega os dados na ordem certa
     await carregarDadosDashboard(); 
     carregarProdutos(); 
     carregarMarketplaceReal();
