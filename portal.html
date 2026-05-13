@@ -299,7 +299,7 @@ header.maestro-top-bar {
     <button
         class="btn-primary"
         style="background: var(--orange);"
-        onclick="window.location.href='produtor.html'"
+        onclick="window.location.href='produtor.html?id=' + document.getElementById('edit-prod-id').value"
     >
         <i class="fas fa-clapperboard"></i>
         Estúdio de Criação
@@ -751,7 +751,7 @@ header.maestro-top-bar {
                         <table style="width:100%"><tbody id="prod-links-table"></tbody></table>
                     </div>
                     <hr style="margin:25px 0; border:0; border-top:1px solid var(--border);">
-                    <button class="btn-primary" onclick="window.location.href='produtor.html'" style="background:var(--orange); width:100%;">
+                    <button class="btn-primary" onclick="window.location.href='produtor.html?id=' + document.getElementById('edit-prod-id').value" style="background:var(--orange); width:100%;">
                         <i class="fas fa-video"></i> GERENCIAR AULAS NO ESTÚDIO
                     </button>
                 </div>
