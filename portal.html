@@ -162,7 +162,7 @@ header.maestro-top-bar {
             <div class="profile-dropdown" id="pDropdown">
                 <div style="padding:15px; border-bottom:1px solid var(--border); font-size:11px; color:#718096;">inovardigital91@gmail.com</div>
                 <a href="perfil.html" class="drop-link"><i class="far fa-user"></i> Meu perfil</a>
-                <a href="#" onclick="logout()" class="drop-link" style="color:#FF4444; border-top:1px solid var(--border)"><i class="fas fa-sign-out-alt"></i> Sair</a>
+                <a href="#" onclick="fazerLogout()" class="drop-link" style="color:#FF4444; border-top:1px solid var(--border)"><i class="fas fa-sign-out-alt"></i> Sair</a>
             </div>
         </div>
     </div>
@@ -1112,7 +1112,7 @@ header.maestro-top-bar {
     function closeColabModal() { document.getElementById('modalColab').classList.remove('active'); }
     function openRelat(titulo) { document.getElementById('relat-main-list').style.display = 'none'; document.getElementById('relat-detail').classList.add('active'); document.getElementById('relat-title-display').innerText = titulo; }
     function closeRelat() { document.getElementById('relat-main-list').style.display = 'block'; document.getElementById('relat-detail').classList.remove('active'); }
-async function logout() {
+async function fazerLogout() {
   await supabase.auth.signOut();
   window.location.href = "login.html";
 }
