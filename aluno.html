@@ -175,7 +175,7 @@ if (assinaturaError || !assinatura) {
 const { data: aulas, error } = await _supabase
     .from('aulas')
     .select('*')
-    .eq('curso_id', assinatura.novo_curso_id)
+    .eq('produto_id', assinatura.produto_id)
     .order('ordem', { ascending: true });
 
 if (error || !aulas || aulas.length === 0) {
