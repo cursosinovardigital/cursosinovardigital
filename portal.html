@@ -104,7 +104,40 @@ header.maestro-top-bar {
 
     border-color: #D6DAFF;
 }
-        .market-thumb { width: 100%; height: 140px; background: #333; position: relative; }
+        .market-thumb {
+    width: 100%;
+    height: 160px;
+    background: #333;
+    position: relative;
+    overflow: hidden;
+}
+
+.market-thumb::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(
+            to top,
+            rgba(0,0,0,.65),
+            rgba(0,0,0,.05)
+        );
+
+    opacity: .85;
+}
+
+.market-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+
+    transition: transform .4s ease;
+}
+
+.market-card:hover .market-thumb img {
+    transform: scale(1.06);
+}
         .market-thumb img { width: 100%; height: 100%; object-fit: cover; }
         .market-info { padding: 15px; }
         .market-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
