@@ -239,6 +239,28 @@
         }
     }
 
+    async function carregarProduto() {
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const produtoId = urlParams.get('id');
+
+    if (!produtoId) return;
+
+    const { data, error } = await _supabase
+        .from('produtos')
+        .select('*')
+        .eq('id', produtoId)
+        .single();
+
+    if (error || !data) {
+        console.error(error);
+        return;
+    }
+
+    console.log("Produto carregado:", data);
+
+}
+    
     async function carregar() {
         const urlParams = new URLSearchParams(window.location.search);
 const produtoId = urlParams.get('id');
