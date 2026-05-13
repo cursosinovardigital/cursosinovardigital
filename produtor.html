@@ -192,6 +192,8 @@
     }
 
     async function publicarFull() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const produtoId = urlParams.get('id');
         const vFile = document.getElementById('video-file').files[0];
         const cFile = document.getElementById('capa-file').files[0];
         const titulo = document.getElementById('ipt-titulo').value;
