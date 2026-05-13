@@ -239,7 +239,11 @@ header.maestro-top-bar {
 
             <section id="aba-membro" class="aba-section">
                 <h2>Área de Membros</h2>
-                <div class="sub-nav"><div class="sub-nav-item active">Áreas de membros</div><div class="sub-nav-item" onclick="switchSubTab('Cursos', this)">Cursos</div><div class="sub-nav-item">Escolas</div></div>
+                <div class="sub-nav"><div class="sub-nav-item active" onclick="switchSubTab('Cursos', this)">
+    Cursos
+</div><div class="sub-nav-item" onclick="switchSubTab('Cursos', this)">Cursos</div><div class="sub-nav-item" onclick="switchSubTab('Escolas', this)">
+    Escolas
+</div></div>
                 <div style="display: flex; justify-content: space-between; align-items: center; background: #FFF; padding: 20px; border: 1px solid var(--border); border-radius: 12px; margin-bottom: 20px;">
                     <div>
                         <h3 style="margin:0">Visualização de Aluno</h3>
@@ -248,7 +252,50 @@ header.maestro-top-bar {
                     <button class="btn-primary" onclick="window.location.href='aluno.html'">Acessar como Aluno</button>
                 </div>
                 <div style="display: flex; justify-content: space-between; align-items: center; background: #FFF; padding: 20px; border: 1px solid var(--border); border-radius: 12px 12px 0 0; border-bottom: none;"><div style="position: relative; width: 400px;"><i class="fas fa-search" style="position: absolute; left: 15px; top: 15px; color: #A0AEC0;"></i><input type="text" placeholder="Buscar..." class="search-input"></div><button class="btn-primary">Criar área de membros</button></div>
-                <div class="table-container" style="border-radius: 0 0 12px 12px;"><table><thead><tr><th>NOME</th><th>URL</th><th>ALUNOS</th><th>AÇÕES</th></tr></thead><tbody id="member-list-body"><tr><td>Área Premium Inovar</td><td>inovar.digital/m/premium</td><td>0</td><td><i class="fas fa-edit" style="cursor:pointer"></i></td></tr></tbody></table></div>
+                <div id="sub-Cursos" class="sub-content">
+
+    <div class="table-container" style="border-radius: 0 0 12px 12px;">
+
+        <table>
+            <thead>
+                <tr>
+                    <th>NOME</th>
+                    <th>URL</th>
+                    <th>ALUNOS</th>
+                    <th>AÇÕES</th>
+                </tr>
+            </thead>
+
+            <tbody id="member-list-body">
+                <tr>
+                    <td colspan="4" style="text-align:center; padding:40px; color:#A0AEC0;">
+                        Carregando cursos...
+                    </td>
+                </tr>
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+                <div id="sub-Escolas" class="sub-content" style="display:none;">
+
+    <div class="table-container">
+
+        <table>
+            <tbody>
+                <tr>
+                    <td style="padding:40px; text-align:center; color:#A0AEC0;">
+                        Nenhuma escola criada ainda.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
             </section>
 
             <section id="aba-vendas" class="aba-section">
