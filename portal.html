@@ -299,7 +299,12 @@ header.maestro-top-bar {
     <button
         class="btn-primary"
         style="background: var(--orange);"
-        onclick="window.location.href='produtor.html?id=' + document.getElementById('edit-prod-id').value"
+        onclick="
+if(document.getElementById('edit-prod-id').value){
+    window.location.href='produtor.html?id=' + document.getElementById('edit-prod-id').value
+}else{
+    alert('Abra um produto primeiro.')
+}"
     >
         <i class="fas fa-clapperboard"></i>
         Estúdio de Criação
@@ -982,8 +987,20 @@ if (fileInput.files.length > 0) {
     capaUrl =
         `${SUPABASE_URL}/storage/v1/object/public/capas/${fileName}`;
 }
+  let capaFinal = capaUrl;
         
 const payload = {
+    if (!capaFinal && inputId.value) {
+
+    const { data: produtoAtual } =
+        await _supabase
+            .from('produtos')
+            .select('capa_url')
+            .eq('id', inputId.value)
+            .single();
+
+    capaFinal = produtoAtual?.capa_url || null;
+}
     tipo_produto: document.getElementById('ipt_tipo_produto').value,
     nome: document.getElementById('ipt_nome').value,
     preco: parseFloat(document.getElementById('ipt_preco').value.replace(',', '.')),
