@@ -163,7 +163,7 @@
         renderizarModulos(grupos);
 
         // Auto-play na aula da URL ou na primeira
-        const aulaParaIniciar = cursoId ? aulas.find(a => a.id == cursoId) : aulas[0];
+        const aulaParaIniciar = aulaId ? aulas.find(a => a.id == aulaId) : aulas[0];
         if (aulaParaIniciar) {
             assistir(aulaParaIniciar.video_url, aulaParaIniciar.titulo, aulaParaIniciar.descricao, aulaParaIniciar.categoria, aulaParaIniciar.id, aulaParaIniciar.material_url);
         }
