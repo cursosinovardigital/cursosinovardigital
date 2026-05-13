@@ -142,27 +142,33 @@
 
     async function init() {
         try {
-            const { data: vendas } = await _supabase.from('vendas').select('*').order('created_at', { ascending: false });
+            const { data: vendas, error } = await _supabase.from('vendas').select('*').order('created_at', { ascending: false });
+            if (error) throw error;
             
             if (vendas && vendas.length > 0) {
                 // 1. ATUALIZA SALDOS
                 const liquidoTotal = vendas.reduce((acc, v) => acc + (v.valor_liquido || 0), 0);
-                if(document.getElementById('saldo-liquido')) document.getElementById('saldo-liquido').innerText = liquidoTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-                if(document.getElementById('vendas-count')) document.getElementById('vendas-count').innerText = vendas.length;
-                if(document.getElementById('resgate-valor')) document.getElementById('resgate-valor').innerText = liquidoTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+                const saldoElem = document.getElementById('saldo-liquido');
+                if(saldoElem) saldoElem.innerText = liquidoTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+                
+                const countElem = document.getElementById('vendas-count');
+                if(countElem) countElem.innerText = vendas.length;
+                
+                const resgateElem = document.getElementById('resgate-valor');
+                if(resgateElem) resgateElem.innerText = liquidoTotal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
                 
                 const cards = document.querySelectorAll('.card-stat h2');
                 if(cards[3]) cards[3].innerText = (liquidoTotal / vendas.length).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
-                // 2. POPULA TABELA (USANDO O ID DA SUA IMAGEM: transacoes-body)
-                const tbody = document.getElementById('transacoes-body');
+                // 2. POPULA TABELA (Com verificação de ID)
+                const tbody = document.getElementById('transacoes-body') || document.getElementById('transactions-body');
                 if (tbody) {
                     tbody.innerHTML = vendas.slice(0, 6).map(v => `
                         <tr>
                             <td>${new Date(v.created_at).toLocaleDateString('pt-BR')}</td>
                             <td style="font-weight:800; color:var(--dark)">Venda Maestro</td>
                             <td><span style="font-size:10px; background:#F1F5F9; padding:4px 8px; border-radius:5px; font-weight:900;">${(v.metodo_pagamento || 'PIX').toUpperCase()}</span></td>
-                            <td style="color:var(--green); font-weight:800;">+ ${v.valor_liquido.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
+                            <td style="color:var(--green); font-weight:800;">+ ${(v.valor_liquido || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</td>
                             <td><i class="fas fa-check-circle" style="color:var(--green)"></i></td>
                         </tr>`).join('');
                 }
@@ -184,11 +190,13 @@
                         </div>`;
                 }
 
-                // 4. GRÁFICO
+                // 4. GRÁFICO (Sempre por último)
                 setTimeout(() => carregarGrafico(vendas), 500);
             }
         } catch (err) {
-            console.error("Erro:", err);
+            console.error("Erro detectado:", err);
+            // Mesmo com erro, tentamos carregar o gráfico se houver dados
+            if (typeof vendas !== 'undefined') carregarGrafico(vendas);
         }
     }
 
@@ -235,7 +243,6 @@
     }
 
     window.addEventListener('load', init);
-    
 </script>
 </body>
 </html>
