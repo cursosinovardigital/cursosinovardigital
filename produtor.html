@@ -296,7 +296,10 @@ const { data } = await _supabase
         }
     }
 
-    window.onload = carregar;
+    window.onload = () => {
+    carregarProduto();
+    carregar();
+};
 </script>
 </body>
 </html>
