@@ -240,7 +240,14 @@
     }
 
     async function carregar() {
-        const { data } = await _supabase.from('aulas').select('*').order('created_at', { ascending: false });
+        const urlParams = new URLSearchParams(window.location.search);
+const produtoId = urlParams.get('id');
+
+const { data } = await _supabase
+    .from('aulas')
+    .select('*')
+    .eq('produto_id', produtoId)
+    .order('created_at', { ascending: false });
         const grid = document.getElementById('main-grid');
         if(data) {
             data.forEach(a => {
