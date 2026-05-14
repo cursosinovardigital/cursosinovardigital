@@ -535,6 +535,14 @@ body{
     background:#E5E7EB;
     border-radius:999px;
 }
+    .step.completed .step-circle{
+    background:#10B981;
+    color:white;
+}
+
+.step.completed .step-text{
+    color:#10B981;
+}
     
 </style>
 
@@ -560,7 +568,7 @@ Inovar <span>Digital</span>
 
 <div class="checkout-steps">
 
-<div class="step active">
+<div class="step active" id="step-identificacao">
 
 <div class="step-circle">
 1
@@ -574,7 +582,7 @@ Identificação
 
 <div class="step-line"></div>
 
-<div class="step active">
+<div class="step" id="step-pagamento">
 
 <div class="step-circle">
 2
@@ -588,7 +596,7 @@ Pagamento
 
 <div class="step-line"></div>
 
-<div class="step">
+<div class="step" id="step-liberacao">
 
 <div class="step-circle">
 3
