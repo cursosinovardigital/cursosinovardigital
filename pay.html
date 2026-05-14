@@ -377,7 +377,88 @@ body{
 }
 
 }
+/* ===== UX PREMIUM ===== */
 
+.payment-content{
+    overflow:hidden;
+    animation:fadeSlide .35s ease;
+}
+
+@keyframes fadeSlide{
+    from{
+        opacity:0;
+        transform:translateY(14px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.method{
+    position:relative;
+    overflow:hidden;
+}
+
+.method::before{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:linear-gradient(
+    135deg,
+    rgba(255,107,0,.08),
+    transparent
+    );
+    opacity:0;
+    transition:.25s;
+}
+
+.method:hover::before{
+    opacity:1;
+}
+
+.method.active{
+    transform:translateY(-2px) scale(1.01);
+    border-color:var(--primary);
+    box-shadow:
+    0 10px 30px rgba(255,107,0,.12),
+    0 0 0 4px rgba(255,107,0,.06);
+}
+
+.buy-btn{
+    position:relative;
+    overflow:hidden;
+}
+
+.buy-btn::before{
+    content:'';
+    position:absolute;
+    top:0;
+    left:-120%;
+    width:120%;
+    height:100%;
+    background:linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,.15),
+    transparent
+    );
+    transition:.7s;
+}
+
+.buy-btn:hover::before{
+    left:120%;
+}
+
+.fade-in{
+    animation:fadeSlide .35s ease;
+}
+
+.hidden{
+    display:none !important;
+}
+    
 </style>
 
 </head>
@@ -432,7 +513,51 @@ Preencha seus dados para receber acesso imediato.
 Escolha como deseja pagar.
 </div>
 
-<div id="cardPaymentBrick_container" style="margin-bottom:30px;"></div>
+<div class="payment-content">
+
+<div id="pix-area">
+
+<div style="
+background:#FFF8F3;
+border:1px solid #FFE2CC;
+padding:18px;
+border-radius:18px;
+margin-bottom:25px;
+">
+
+<div style="
+display:flex;
+align-items:center;
+gap:12px;
+font-weight:700;
+color:#FF6B00;
+margin-bottom:8px;
+">
+
+<i class="fas fa-bolt"></i>
+Pagamento instantâneo via PIX
+
+</div>
+
+<div style="
+font-size:14px;
+color:#64748B;
+line-height:1.6;
+">
+Seu acesso será liberado automaticamente após a confirmação do pagamento.
+</div>
+
+</div>
+
+</div>
+
+<div id="card-area" class="hidden">
+
+<div id="cardPaymentBrick_container"></div>
+
+</div>
+
+</div>
 
 <div class="methods">
 
@@ -571,14 +696,37 @@ SUPABASE_KEY
 
 let produtoAtual=null;
 
-document.querySelectorAll('.method').forEach(method=>{
+const methods=document.querySelectorAll('.method');
+
+methods.forEach((method,index)=>{
 
 method.addEventListener('click',()=>{
 
-document.querySelectorAll('.method')
-.forEach(m=>m.classList.remove('active'));
+methods.forEach(m=>m.classList.remove('active'));
 
 method.classList.add('active');
+
+const pixArea=document.getElementById('pix-area');
+
+const cardArea=document.getElementById('card-area');
+
+if(index===0){
+
+pixArea.classList.remove('hidden');
+cardArea.classList.add('hidden');
+
+}else{
+
+pixArea.classList.add('hidden');
+cardArea.classList.remove('hidden');
+
+cardArea.classList.add('fade-in');
+
+setTimeout(()=>{
+cardArea.classList.remove('fade-in');
+},400);
+
+}
 
 });
 
