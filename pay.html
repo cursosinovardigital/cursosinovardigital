@@ -924,6 +924,36 @@ document.getElementById('product_image').innerHTML=`
 
 async function processarPagamento(){
 
+    async function finalizarCheckout(){
+
+const metodoAtivo=document.querySelector('.method.active');
+
+const index=[...methods].indexOf(metodoAtivo);
+
+if(index===0){
+
+processarPagamento();
+
+}else{
+
+const brick=document.querySelector('#cardPaymentBrick_container iframe');
+
+if(brick){
+
+const submitBtn=document.querySelector(
+'#cardPaymentBrick_container button'
+);
+
+if(submitBtn){
+submitBtn.click();
+}
+
+}
+
+}
+
+}
+
 const nome=document.getElementById('cust_name').value;
 
 const email=document.getElementById('cust_email').value;
