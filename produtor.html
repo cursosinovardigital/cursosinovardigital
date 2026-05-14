@@ -105,6 +105,9 @@
     <div class="main-content">
         <div class="studio-card">
             <span class="side-title">Estúdio de Criação</span>
+            <h1 id="nome-produto" style="margin:10px 0 5px; font-size:28px;"></h1>
+
+<p id="descricao-produto" style="color:#94A3B8; margin-bottom:20px;"></p>
             <div class="drop-zone" onclick="document.getElementById('video-file').click()">
                 <div id="v-placeholder" style="text-align: center;">
                     <i class="fas fa-play-circle fa-3x" style="color: var(--orange); margin-bottom: 10px;"></i>
@@ -239,7 +242,7 @@
         }
     }
 
-    async function carregarProduto() {
+async function carregarProduto() {
 
     const urlParams = new URLSearchParams(window.location.search);
     const produtoId = urlParams.get('id');
@@ -257,7 +260,19 @@
         return;
     }
 
-    console.log("Produto carregado:", data);
+    // nome
+    document.getElementById('nome-produto').innerText =
+        data.nome || 'Produto';
+
+    // descrição
+    document.getElementById('descricao-produto').innerText =
+        data.descricao || '';
+
+    // thumb
+    if(data.thumb){
+        document.getElementById('capa-preview').src = data.thumb;
+        document.getElementById('capa-preview').style.display = 'block';
+    }
 
 }
     
