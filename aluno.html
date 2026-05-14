@@ -324,7 +324,32 @@ if (error || !aulas || aulas.length === 0) {
         atualizarProgresso(aulas);
 
         // Auto-play na aula da URL ou na primeira
-        const aulaParaIniciar = aulaId ? aulas.find(a => a.id == aulaId) : aulas[0];
+        let aulaParaIniciar = null;
+
+// prioridade 1 = aula da URL
+if (aulaId) {
+
+    aulaParaIniciar =
+        aulas.find(a => a.id == aulaId);
+
+}
+
+// prioridade 2 = última aula salva
+else if (assinatura.ultima_aula_id) {
+
+    aulaParaIniciar =
+        aulas.find(a =>
+            a.id == assinatura.ultima_aula_id
+        );
+
+}
+
+// prioridade 3 = primeira aula
+else {
+
+    aulaParaIniciar = aulas[0];
+
+}
         if (aulaParaIniciar) {
             assistir(aulaParaIniciar.video_url, aulaParaIniciar.titulo, aulaParaIniciar.descricao, aulaParaIniciar.categoria, aulaParaIniciar.id, aulaParaIniciar.material_url);
         }
