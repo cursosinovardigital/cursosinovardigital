@@ -810,6 +810,64 @@ Quero me afiliar
 
 </button>
 
+<div
+id="affiliateLinkBox"
+style="
+display:none;
+margin-top:18px;
+background:#F8FAFC;
+border:1px solid #E2E8F0;
+padding:18px;
+border-radius:18px;
+"
+>
+
+<div style="
+font-size:13px;
+font-weight:700;
+margin-bottom:10px;
+">
+
+Seu link de afiliado
+
+</div>
+
+<input
+id="affiliateLinkInput"
+readonly
+style="
+width:100%;
+height:52px;
+border:1px solid #E2E8F0;
+border-radius:14px;
+padding:0 16px;
+font-size:14px;
+outline:none;
+background:white;
+"
+/>
+
+<button
+onclick="copiarLinkAfiliado()"
+style="
+margin-top:12px;
+width:100%;
+height:50px;
+border:none;
+border-radius:14px;
+background:#111827;
+color:white;
+font-weight:800;
+cursor:pointer;
+"
+>
+
+Copiar link
+
+</button>
+
+</div>
+
 <button
 class="action-btn secondary-btn"
 onclick="irCheckout()"
@@ -970,7 +1028,33 @@ return;
 
 }
 
+const link =
+`${window.location.origin}/pay.html?id=${produtoId}&ref=${user.id}`;
+
+document.getElementById(
+'affiliateLinkInput'
+).value = link;
+
+document.getElementById(
+'affiliateLinkBox'
+).style.display = 'block';
+
 alert('Afiliado com sucesso 😭🔥');
+
+}
+
+function copiarLinkAfiliado(){
+
+const input =
+document.getElementById(
+'affiliateLinkInput'
+);
+
+navigator.clipboard.writeText(
+input.value
+);
+
+alert('Link copiado 😭🔥');
 
 }
 
