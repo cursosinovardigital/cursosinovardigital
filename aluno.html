@@ -185,7 +185,60 @@
     </section>
 
     <aside class="sidebar">
-        <div class="sidebar-header"><h3>Conteúdo do Treinamento</h3></div>
+        <div class="sidebar-header">
+
+    <h3 style="margin-bottom:18px;">
+        Conteúdo do Treinamento
+    </h3>
+
+    <div>
+
+        <div style="
+            display:flex;
+            justify-content:space-between;
+            font-size:11px;
+            font-weight:700;
+            margin-bottom:8px;
+            color:var(--text-dim);
+        ">
+
+            <span id="progress-text">
+                0% concluído
+            </span>
+
+            <span id="progress-count">
+                0/0 aulas
+            </span>
+
+        </div>
+
+        <div style="
+            width:100%;
+            height:8px;
+            background:#1E293B;
+            border-radius:999px;
+            overflow:hidden;
+        ">
+
+            <div id="progress-bar"
+                 style="
+                    width:0%;
+                    height:100%;
+                    background:linear-gradient(
+                        90deg,
+                        #FF6600,
+                        #ff9248
+                    );
+                    border-radius:999px;
+                    transition:.3s ease;
+                 ">
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
         <div class="sidebar-content" id="module-container"></div>
     </aside>
 </main>
@@ -268,6 +321,7 @@ if (error || !aulas || aulas.length === 0) {
         }, {});
 
         renderizarModulos(grupos);
+        atualizarProgresso(aulas);
 
         // Auto-play na aula da URL ou na primeira
         const aulaParaIniciar = aulaId ? aulas.find(a => a.id == aulaId) : aulas[0];
@@ -275,6 +329,43 @@ if (error || !aulas || aulas.length === 0) {
             assistir(aulaParaIniciar.video_url, aulaParaIniciar.titulo, aulaParaIniciar.descricao, aulaParaIniciar.categoria, aulaParaIniciar.id, aulaParaIniciar.material_url);
         }
     }
+    async function atualizarProgresso(aulas) {
+
+    const { data: { user } } =
+        await _supabase.auth.getUser();
+
+    if (!user) return;
+
+    const { data: progresso } = await _supabase
+        .from('progresso_aulas')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('concluida', true);
+
+    const concluidasIds =
+        (progresso || []).map(p => p.aula_id);
+
+    const total = aulas.length;
+
+    const concluidas =
+        aulas.filter(a =>
+            concluidasIds.includes(a.id)
+        ).length;
+
+    const porcentagem =
+        total > 0
+            ? Math.round((concluidas / total) * 100)
+            : 0;
+
+    document.getElementById('progress-text').innerText =
+        `${porcentagem}% concluído`;
+
+    document.getElementById('progress-count').innerText =
+        `${concluidas}/${total} aulas`;
+
+    document.getElementById('progress-bar').style.width =
+        `${porcentagem}%`;
+}
 
     function renderizarModulos(grupos) {
         const container = document.getElementById('module-container');
@@ -383,13 +474,16 @@ if (error || !aulas || aulas.length === 0) {
 
 async function toggleComplete() {
 
-    const { data: { user } } = await _supabase.auth.getUser();
+    const { data: { user } } =
+        await _supabase.auth.getUser();
 
     if (!user || !aulaAtualId) return;
 
-    const btn = document.getElementById('btn-complete');
+    const btn =
+        document.getElementById('btn-complete');
 
-    const jaConcluida = btn.classList.contains('done');
+    const jaConcluida =
+        btn.classList.contains('done');
 
     if (jaConcluida) {
 
@@ -423,6 +517,15 @@ async function toggleComplete() {
             Aula Concluída
         `;
     }
+
+    // ← AQUI FORA DO ELSE
+
+    const { data: aulasAtualizadas } =
+        await _supabase
+            .from('aulas')
+            .select('*');
+
+    atualizarProgresso(aulasAtualizadas);
 }
 
     function toggleModule(id) {
