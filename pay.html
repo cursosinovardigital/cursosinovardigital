@@ -551,7 +551,7 @@ Finalizar Compra
 
 const SUPABASE_URL='https://onsbuazkqfehkudhladt.supabase.co';
 
-const SUPABASE_KEY='SUA_ANON_KEY_AQUI';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9uc2J1YXprcWZlaGt1ZGhsYWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzNTI5OTgsImV4cCI6MjA5MzkyODk5OH0.ZypL6LHbPC_z971EDCTh6pVoA7g4qM6hWSWfWVO9a-M';
 
 const _supabase=supabase.createClient(
 SUPABASE_URL,
@@ -639,7 +639,7 @@ const response=await fetch(
 method:'POST',
 headers:{
 'Content-Type':'application/json',
-'Authorization':'Bearer SUA_ANON_KEY_AQUI'
+'Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9uc2J1YXprcWZlaGt1ZGhsYWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzNTI5OTgsImV4cCI6MjA5MzkyODk5OH0.ZypL6LHbPC_z971EDCTh6pVoA7g4qM6hWSWfWVO9a-M'
 },
 body:JSON.stringify({
 amount:produtoAtual.preco,
