@@ -389,7 +389,7 @@ async function liberarAluno() {
     const {
         data: usuario
     } = await _supabase
-        .from('usuarios')
+        .from('perfis')
         .select('*')
         .eq('email', email)
         .single();
