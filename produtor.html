@@ -302,10 +302,13 @@ async function carregarProduto() {
         data.descricao || '';
 
     // thumb
-    if(data.thumb){
-        document.getElementById('capa-preview').src = data.thumb;
-        document.getElementById('capa-preview').style.display = 'block';
-    }
+if(data.capa_url){
+    document.getElementById('capa-preview').src =
+        data.capa_url;
+
+    document.getElementById('capa-preview').style.display =
+        'block';
+}
 
 }
     
@@ -319,7 +322,9 @@ const { data } = await _supabase
     .eq('produto_id', produtoId)
     .order('created_at', { ascending: false });
         const grid = document.getElementById('main-grid');
-        if(data) {
+        if(data && data.length > 0) {
+
+    document.getElementById('demo-card')?.remove();
             data.forEach(a => {
                 const card = `
                     <div class="content-card">
