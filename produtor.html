@@ -97,6 +97,22 @@
     <div class="logo">INOVAR<span>DIGITAL</span></div>
     <div style="display: flex; gap: 15px;">
         <button onclick="window.location.href='portal.html'" style="background:transparent; border:1px solid var(--border); color:white; padding:8px 16px; border-radius:10px; cursor:pointer; font-size:12px;">Voltar</button>
+        <button
+    onclick="abrirModalAluno()"
+    style="
+        background:var(--orange);
+        border:none;
+        color:white;
+        padding:8px 16px;
+        border-radius:10px;
+        cursor:pointer;
+        font-size:12px;
+        font-weight:700;
+    ">
+
+    + Aluno
+
+</button>
     </div>
 </header>
 
@@ -348,11 +364,113 @@ const { data } = await _supabase
             location.reload();
         }
     }
+function abrirModalAluno() {
 
+    document
+        .getElementById('modal-aluno')
+        .style.display = 'flex';
+
+}
+
+async function liberarAluno() {
+
+    const email =
+        document
+            .getElementById('email-aluno')
+            .value;
+
+    if (!email) {
+
+        alert('Digite um email');
+        return;
+
+    }
+
+    const {
+        data: usuario
+    } = await _supabase
+        .from('usuarios')
+        .select('*')
+        .eq('email', email)
+        .single();
+
+    if (!usuario) {
+
+        alert('Usuário não encontrado');
+        return;
+
+    }
+
+    const urlParams =
+        new URLSearchParams(window.location.search);
+
+    const produtoId =
+        urlParams.get('id');
+
+    await _supabase
+        .from('assinaturas')
+        .insert([{
+
+            user_id: usuario.id,
+            produto_id: produtoId,
+            status: 'ativo'
+
+        }]);
+
+    alert('Aluno liberado 😭🔥');
+
+    document
+        .getElementById('modal-aluno')
+        .style.display = 'none';
+
+}
+    
     window.onload = () => {
     carregarProduto();
     carregar();
 };
 </script>
+    <div id="modal-aluno"
+     style="
+        display:none;
+        position:fixed;
+        inset:0;
+        background:rgba(0,0,0,.7);
+        z-index:99999;
+        align-items:center;
+        justify-content:center;
+     ">
+
+    <div style="
+        width:420px;
+        background:#0F1216;
+        border:1px solid var(--border);
+        border-radius:20px;
+        padding:25px;
+    ">
+
+        <h2 style="margin-top:0;">
+            Liberar aluno
+        </h2>
+
+        <input
+            id="email-aluno"
+            type="email"
+            placeholder="Email do aluno"
+            class="form-input"
+            style="margin-bottom:15px;"
+        >
+
+        <button
+            class="btn-pub"
+            onclick="liberarAluno()">
+
+            Liberar acesso
+
+        </button>
+
+    </div>
+
+</div>
 </body>
 </html>
