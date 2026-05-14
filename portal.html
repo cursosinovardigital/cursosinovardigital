@@ -40,6 +40,41 @@ header.maestro-top-bar {
 .logo-top { display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 900; color: var(--side-black) !important; text-decoration: none; }
 .logo-top span { color: var(--orange) !important; }
 
+    .top-left{
+    display:flex;
+    align-items:center;
+    gap:18px;
+}
+
+.menu-toggle{
+    width:44px;
+    height:44px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#F8FAFC;
+
+    color:var(--side-black);
+
+    cursor:pointer;
+
+    font-size:18px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    transition:.25s;
+}
+
+.menu-toggle:hover{
+    background:#EEF2FF;
+    color:var(--purple-kiwi);
+    transform:scale(1.05);
+}
+
         .top-right { display: flex; align-items: center; gap: 30px; }
 .goals-container {
     display:flex;
@@ -78,7 +113,19 @@ header.maestro-top-bar {
             overflow: hidden; 
         }
 
-        nav { width: 260px; background: var(--side-black); display: flex; flex-direction: column; flex-shrink: 0; }
+        nav{
+    width:260px;
+    background:var(--side-black);
+
+    display:flex;
+    flex-direction:column;
+
+    flex-shrink:0;
+
+    transition:.3s ease;
+
+    overflow:hidden;
+}
         .nav-scroll { flex: 1; overflow-y: auto; padding: 10px 0; }
         .nav-item { padding: 12px 25px; color: #A0AEC0; cursor: pointer; display: flex; align-items: center; font-size: 14px; border-left: 4px solid transparent; text-decoration: none; }
         .nav-item i { margin-right: 15px; width: 18px; text-align: center; }
@@ -196,6 +243,24 @@ header.maestro-top-bar {
 
         .prod-modal-tab { display: none; }
         .prod-modal-tab.active { display: block; }
+
+        body.sidebar-collapsed nav{
+    width:88px;
+}
+
+body.sidebar-collapsed .nav-item{
+    justify-content:center;
+    padding:14px;
+}
+
+body.sidebar-collapsed .nav-item span{
+    display:none;
+}
+
+body.sidebar-collapsed .nav-item i{
+    margin-right:0;
+    font-size:18px;
+}
         
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -204,6 +269,9 @@ header.maestro-top-bar {
 
 <header class="maestro-top-bar">
     <div class="top-left">
+        <button class="menu-toggle" onclick="toggleSidebar()">
+    <i class="fas fa-bars"></i>
+</button>
         <a href="#" class="logo-top"><i class="fas fa-rocket" style="color:var(--orange)"></i> Inovar<span>Digital</span></a>
     </div>
     
@@ -238,8 +306,14 @@ header.maestro-top-bar {
 <div class="maestro-wrapper">
     <nav>
         <div class="nav-scroll">
-            <div class="nav-item active" onclick="nav('dash', this)"><i class="fas fa-home"></i> Dashboard</div>
-            <div class="nav-item" onclick="nav('prod', this)"><i class="fas fa-tag"></i> Produtos</div>
+            <div class="nav-item active" onclick="nav('dash', this)">
+    <i class="fas fa-home"></i>
+    <span>Dashboard</span>
+</div>
+            <div class="nav-item" onclick="nav('prod', this)">
+    <i class="fas fa-tag"></i>
+    <span>Produtos</span>
+</div>
             <div class="nav-item" onclick="nav('membro', this)"><i class="fas fa-play-circle"></i> Área de Membros</div>
             <div class="nav-item" onclick="nav('market', this)"><i class="fas fa-shopping-cart"></i> Marketplace</div>
             <div class="nav-item" onclick="nav('afiliados', this)"><i class="fas fa-users-cog"></i> Meus Afiliados</div>
@@ -1857,6 +1931,17 @@ async function fazerLogout() {
             });
         }
     };
+
+
+
+function toggleSidebar(){
+
+    document.body.classList.toggle(
+        'sidebar-collapsed'
+    );
+
+}
+    
 </script>
 </body>
 </html>
