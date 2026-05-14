@@ -801,7 +801,10 @@ R$ 0
 
 </div>
 
-<button class="action-btn primary-btn">
+<button
+class="action-btn primary-btn"
+onclick="afiliarProduto()"
+>
 
 Quero me afiliar
 
@@ -928,6 +931,46 @@ const id = params.get('id');
 
 window.location.href =
 `pay.html?id=${id}`;
+
+}
+
+async function afiliarProduto(){
+
+const {
+data:{ user }
+} = await _supabase.auth.getUser();
+
+if(!user){
+
+alert('Faça login para se afiliar');
+return;
+
+}
+
+const params =
+new URLSearchParams(window.location.search);
+
+const produtoId = params.get('id');
+
+const { error } = await _supabase
+.from('afiliacoes')
+.insert({
+
+user_id:user.id,
+produto_id:produtoId
+
+});
+
+if(error){
+
+console.log(error);
+
+alert('Você já está afiliado ou ocorreu um erro');
+return;
+
+}
+
+alert('Afiliado com sucesso 😭🔥');
 
 }
 
