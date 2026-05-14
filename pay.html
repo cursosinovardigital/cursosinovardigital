@@ -470,6 +470,71 @@ body{
 .hidden{
     display:none !important;
 }
+
+    /* ===== CHECKOUT STEPS ===== */
+
+.checkout-steps{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:18px;
+
+    margin-bottom:32px;
+}
+
+.step{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.step-circle{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:14px;
+    font-weight:800;
+
+    background:#E5E7EB;
+    color:#64748B;
+
+    transition:.3s;
+}
+
+.step.active .step-circle{
+    background:linear-gradient(
+    135deg,
+    #FF6B00,
+    #FF8533
+    );
+
+    color:white;
+
+    box-shadow:
+    0 10px 25px rgba(255,107,0,.25);
+}
+
+.step-text{
+    font-size:14px;
+    font-weight:700;
+    color:#64748B;
+}
+
+.step.active .step-text{
+    color:#0F172A;
+}
+
+.step-line{
+    width:55px;
+    height:2px;
+    background:#E5E7EB;
+    border-radius:999px;
+}
     
 </style>
 
