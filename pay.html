@@ -1106,6 +1106,35 @@ btn.classList.remove('loading');
     settings
   );
 };
+    const nomeInput=document.getElementById('cust_name');
+const emailInput=document.getElementById('cust_email');
+
+function atualizarSteps(){
+
+const nome=nomeInput.value.trim();
+const email=emailInput.value.trim();
+
+const identificacao=document.getElementById('step-identificacao');
+
+if(nome && email){
+
+identificacao.classList.add('completed');
+
+document
+.getElementById('step-pagamento')
+.classList.add('active');
+
+}else{
+
+identificacao.classList.remove('completed');
+
+}
+
+}
+
+nomeInput.addEventListener('input',atualizarSteps);
+
+emailInput.addEventListener('input',atualizarSteps);
 
 window.onload=initCheckout;
 
