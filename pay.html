@@ -922,8 +922,6 @@ document.getElementById('product_image').innerHTML=`
 
 }
 
-async function processarPagamento(){
-
     async function finalizarCheckout(){
 
 const metodoAtivo=document.querySelector('.method.active');
@@ -932,13 +930,9 @@ const index=[...methods].indexOf(metodoAtivo);
 
 if(index===0){
 
-processarPagamento();
+await processarPagamento();
 
 }else{
-
-const brick=document.querySelector('#cardPaymentBrick_container iframe');
-
-if(brick){
 
 const submitBtn=document.querySelector(
 '#cardPaymentBrick_container button'
@@ -952,7 +946,7 @@ submitBtn.click();
 
 }
 
-}
+async function processarPagamento(){
 
 const nome=document.getElementById('cust_name').value;
 
@@ -1087,27 +1081,6 @@ cursor:pointer;
 Copiar código PIX
 </button>
 
-<a href="${data.ticket_url}" target="_blank">
-
-<button
-style="
-margin-top:12px;
-width:100%;
-height:58px;
-border:none;
-border-radius:16px;
-background:#111827;
-color:white;
-font-size:16px;
-font-weight:700;
-cursor:pointer;
-"
->
-Abrir página de pagamento
-</button>
-
-</a>
-
 </div>
 
 </div>
@@ -1120,7 +1093,7 @@ btn.disabled=false;
 
 btn.classList.remove('loading');
 
-    document
+document
 .getElementById('step-liberacao')
 .classList.add('completed');
 
