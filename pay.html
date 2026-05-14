@@ -12,6 +12,8 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+<script src="https://sdk.mercadopago.com/js/v2"></script>
 
 <style>
 
@@ -31,7 +33,7 @@
     padding:0;
     box-sizing:border-box;
 }
-
+    
 body{
     background:linear-gradient(to bottom,#F8FAFC,#EEF2F7);
     font-family:'Inter',sans-serif;
@@ -423,7 +425,7 @@ Preencha seus dados para receber acesso imediato.
 </div>
 
 <div class="card">
-
+<div id="cardPaymentBrick_container"></div>
 <h2>Forma de pagamento</h2>
 
 <div class="subtitle">
@@ -548,6 +550,13 @@ Finalizar Compra
 </div>
 
 <script>
+
+const mp = new MercadoPago(
+  'APP_USR-50665ab5-8c5c-4b1b-9f9b-2e708b8fbb50',
+  {
+    locale: 'pt-BR'
+  }
+);
 
 const SUPABASE_URL='https://onsbuazkqfehkudhladt.supabase.co';
 
@@ -783,6 +792,42 @@ btn.disabled=false;
 btn.classList.remove('loading');
 
 }
+
+    const renderCardBrick = async () => {
+
+  const settings = {
+    initialization: {
+      amount: 97,
+    },
+
+    callbacks: {
+      onReady: () => {
+        console.log('Brick carregado');
+      },
+
+      onSubmit: async (cardFormData) => {
+
+        console.log(cardFormData);
+
+        return new Promise((resolve, reject) => {
+          resolve();
+        });
+      },
+
+      onError: (error) => {
+        console.error(error);
+      }
+    }
+  };
+
+  window.cardBrickController = await mp.bricks().create(
+    'cardPayment',
+    'cardPaymentBrick_container',
+    settings
+  );
+};
+
+renderCardBrick();
 
 window.onload=initCheckout;
 
