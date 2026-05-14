@@ -1061,6 +1061,8 @@ btn.innerHTML = `
     <i class="fas fa-check-circle"></i>
     Aula Concluída
 `;
+        
+    }
 
     // ← AQUI FORA DO ELSE
 
@@ -1071,7 +1073,7 @@ btn.innerHTML = `
 
     atualizarProgresso(aulasAtualizadas);
 }
-
+    
     function toggleModule(id) {
         const el = document.getElementById(id);
         el.style.display = el.style.display === 'none' ? 'block' : 'none';
