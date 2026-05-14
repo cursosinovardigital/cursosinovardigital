@@ -469,8 +469,48 @@ else {
             const embed = url.includes('watch?v=') ? url.replace('watch?v=', 'embed/') : url.replace('youtu.be/', 'youtube.com/embed/');
             wrapper.innerHTML = `<iframe src="${embed}?autoplay=1" allow="autoplay; fullscreen" allowfullscreen></iframe>`;
         } else {
-            wrapper.innerHTML = `<video src="${url}" controls autoplay controlsList="nodownload"></video>`;
-        }
+            wrapper.innerHTML = `
+    <video id="video-player"
+           src="${url}"
+           controls
+           autoplay
+           controlsList="nodownload">
+    </video>
+`;
+
+const video =
+    document.getElementById('video-player');
+
+video.onended = async () => {
+
+    const { data: aulas } =
+        await _supabase
+            .from('aulas')
+            .select('*')
+            .order('ordem', { ascending: true });
+
+    if (!aulas) return;
+
+    const indexAtual =
+        aulas.findIndex(a => a.id == aulaAtualId);
+
+    const proxima =
+        aulas[indexAtual + 1];
+
+    if (proxima) {
+
+        assistir(
+            proxima.video_url,
+            proxima.titulo,
+            proxima.descricao,
+            proxima.categoria,
+            proxima.id,
+            proxima.material_url
+        );
+
+    }
+
+};
 
         document.getElementById('view-title').innerText = titulo;
         document.getElementById('view-desc').innerText = desc || 'Aproveite sua aula!';
