@@ -840,6 +840,84 @@ Especialista em marketing digital
 </div>
 
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
+<script>
+
+const SUPABASE_URL =
+'https://onsbuazkqfehkudhladt.supabase.co';
+
+const SUPABASE_KEY =
+'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9uc2J1YXprcWZlaGt1ZGhsYWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzNTI5OTgsImV4cCI6MjA5MzkyODk5OH0.ZypL6LHbPC_z971EDCTh6pVoA7g4qM6hWSWfWVO9a-M';
+
+const _supabase = supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
+
+async function carregarProduto(){
+
+const params =
+new URLSearchParams(window.location.search);
+
+const id = params.get('id');
+
+if(!id){
+
+alert('Produto não encontrado');
+return;
+
+}
+
+const { data,error } = await _supabase
+.from('produtos')
+.select('*')
+.eq('id',id)
+.single();
+
+if(error || !data){
+
+alert('Produto não encontrado');
+return;
+
+}
+
+document.getElementById(
+'produto_nome'
+).innerText = data.nome;
+
+document.getElementById(
+'produto_preco'
+).innerText =
+`R$ ${Number(data.preco)
+.toFixed(2)
+.replace('.',',')}`;
+
+const comissao =
+(Number(data.preco) * 0.65);
+
+document.getElementById(
+'produto_comissao'
+).innerText =
+`R$ ${comissao.toFixed(2).replace('.',',')}`;
+
+document.getElementById(
+'produto_comissao_sidebar'
+).innerText =
+`R$ ${comissao.toFixed(2).replace('.',',')}`;
+
+if(data.capa_url){
+
+document.getElementById(
+'produto_capa'
+).src = data.capa_url;
+
+}
+
+}
+
+window.onload = carregarProduto;
+
+</script>
 </body>
 </html>
