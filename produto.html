@@ -807,7 +807,10 @@ Quero me afiliar
 
 </button>
 
-<button class="action-btn secondary-btn">
+<button
+class="action-btn secondary-btn"
+onclick="irCheckout()"
+>
 
 Ir para checkout
 
@@ -913,6 +916,18 @@ document.getElementById(
 ).src = data.capa_url;
 
 }
+
+}
+
+function irCheckout(){
+
+const params =
+new URLSearchParams(window.location.search);
+
+const id = params.get('id');
+
+window.location.href =
+`pay.html?id=${id}`;
 
 }
 
