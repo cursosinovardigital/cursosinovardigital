@@ -229,6 +229,30 @@ if (assinaturaError || !assinatura) {
     return;
 }
 
+const { data: produto } = await _supabase
+    .from('produtos')
+    .select('*')
+    .eq('id', assinatura.produto_id)
+    .single();
+
+if (produto) {
+
+    document.getElementById('course-name').innerText =
+        produto.nome || 'Curso';
+
+    if (produto.capa_url) {
+
+        document.getElementById('course-thumb').src =
+            produto.capa_url;
+    }
+
+}
+        
+if (assinaturaError || !assinatura) {
+    alert('Você não possui acesso a nenhum curso.');
+    return;
+}
+
 // Buscar aulas apenas do curso comprado
 const { data: aulas, error } = await _supabase
     .from('aulas')
