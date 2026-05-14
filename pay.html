@@ -543,6 +543,25 @@ body{
 .step.completed .step-text{
     color:#10B981;
 }
+    .step.completed .step-circle{
+    animation:successPop .45s ease;
+}
+
+@keyframes successPop{
+
+0%{
+    transform:scale(.7);
+}
+
+60%{
+    transform:scale(1.12);
+}
+
+100%{
+    transform:scale(1);
+}
+
+}
     
 </style>
 
@@ -1070,6 +1089,14 @@ btn.innerHTML='Finalizar Compra';
 btn.disabled=false;
 
 btn.classList.remove('loading');
+
+    document
+.getElementById('step-liberacao')
+.classList.add('completed');
+
+document
+.getElementById('step-liberacao')
+.classList.add('active');
 
 }
 
