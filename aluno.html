@@ -247,11 +247,6 @@ if (produto) {
     }
 
 }
-        
-if (assinaturaError || !assinatura) {
-    alert('Você não possui acesso a nenhum curso.');
-    return;
-}
 
 // Buscar aulas apenas do curso comprado
 const { data: aulas, error } = await _supabase
