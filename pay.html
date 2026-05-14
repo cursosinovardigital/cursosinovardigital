@@ -239,6 +239,9 @@ body{
     transform:rotate(-2deg);
     transition:.35s;
 }
+    .product-image:hover{
+    transform:rotate(0deg) scale(1.03);
+}
 
 .product-image img{
     width:100%;
@@ -313,8 +316,10 @@ body{
 }
 
 .buy-btn:hover{
-    transform:translateY(-3px);
-    box-shadow:0 20px 40px rgba(15,23,42,.22);
+    transform:translateY(-4px) scale(1.01);
+
+    box-shadow:
+    0 30px 60px rgba(15,23,42,.28);
 }
 
 .badges{
@@ -433,6 +438,7 @@ body{
 }
 
 .buy-btn{
+    letter-spacing:.3px;
     position:relative;
     overflow:hidden;
 }
