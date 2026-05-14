@@ -425,12 +425,14 @@ Preencha seus dados para receber acesso imediato.
 </div>
 
 <div class="card">
-<div id="cardPaymentBrick_container"></div>
+
 <h2>Forma de pagamento</h2>
 
 <div class="subtitle">
 Escolha como deseja pagar.
 </div>
+
+<div id="cardPaymentBrick_container" style="margin-bottom:30px;"></div>
 
 <div class="methods">
 
@@ -605,6 +607,7 @@ return;
 }
 
 produtoAtual=data;
+renderCardBrick();   
 
 document.getElementById('prod_nome').innerText=data.nome;
 
@@ -797,7 +800,7 @@ btn.classList.remove('loading');
 
   const settings = {
     initialization: {
-      amount: 97,
+      amount: produtoAtual?.preco || 97,
     },
 
     callbacks: {
@@ -826,8 +829,6 @@ btn.classList.remove('loading');
     settings
   );
 };
-
-renderCardBrick();
 
 window.onload=initCheckout;
 
