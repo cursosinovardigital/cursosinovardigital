@@ -2259,6 +2259,22 @@ const {
     error: errVendas
 } = await queryVendas;
 
+        console.log('VENDAS COMPLETAS:', vendas);
+
+if(vendas && vendas.length > 0){
+
+    vendas.forEach(v => {
+
+        console.log({
+            status: v.status,
+            created_at: v.created_at,
+            valor: v.valor_total
+        });
+
+    });
+
+}
+
         console.log('VENDAS:', vendas);
 console.log('ERRO VENDAS:', errVendas);
 console.log('DATA ISO:', dataISO);
