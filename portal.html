@@ -1527,7 +1527,7 @@
                     <div class="market-grid" id="market-full-grid">
                         <div
     class="market-card glass-card"
-    onclick="abrirProdutoMarketplace(1)"
+    onclick="abrirProdutoMarketplace('${p.id}')"
     >
                             <div class="market-thumb"><img src="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?auto=format&fit=crop&w=400&q=80" alt="Violão" onerror="this.onerror=null; this.src='https://via.placeholder.com/400x140?text=Sem+Imagem'"></div>
     <div style="
@@ -3324,270 +3324,42 @@ function toggleSidebar(){
 
 }
 
-  function abrirProdutoMarketplace(id){
+function abrirProdutoMarketplace(id){
 
 const produto = produtosMarketplace.find(p => p.id == id);
 
 if(!produto){
-alert('Produto não encontrado');
-return;
+    alert('Produto não encontrado');
+    return;
 }
 
 const modal = document.getElementById('marketplaceModal');
 
+document.getElementById('modalProdutoCapa').src =
+produto.capa_url || '';
+
+document.getElementById('modalProdutoNome').innerText =
+produto.nome || 'Produto';
+
+document.getElementById('modalProdutoDescricao').innerText =
+produto.descricao || 'Sem descrição';
+
+document.getElementById('modalProdutoPreco').innerText =
+`R$ ${Number(produto.preco || 0).toFixed(2)}`;
+
+document.getElementById('modalProdutoComissao').innerText =
+`${produto.comissao_afiliado || 50}%`;
+
+document.getElementById('btnAfiliarProduto').onclick = function(){
+
+window.location.href =
+`vitrine.html?id=${produto.id}`;
+
+};
+
 modal.style.display = 'flex';
 
-document.getElementById('marketplaceModalBody').innerHTML = `
-
-<div style="
-width:100%;
-max-width:950px;
-background:#FFF;
-border-radius:28px;
-overflow:hidden;
-display:grid;
-grid-template-columns:320px 1fr;
-box-shadow:0 30px 80px rgba(0,0,0,.18);
-animation:modalShow .25s ease;
-">
-
-<div style="
-background:#FFF;
-padding:24px;
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:flex-start;
-border-right:1px solid #EEF2F7;
-">
-
-<div style="
-width:100%;
-background:rgba(255,255,255,.65);
-backdrop-filter:blur(18px);
-border-radius:24px;
-overflow:hidden;
-padding:12px;
-box-shadow:0 10px 30px rgba(0,0,0,.04);
-">
-
-<img
-src="${produto.capa_url || 'https://via.placeholder.com/600x400?text=Produto'}"
-style="
-width:100%;
-height:220px;
-object-fit:cover;
-display:block;
-border-radius:18px;
-transform:scale(1.02);
-transition:.4s ease;
-"
-/>
-
-</div>
-
-<div style="
-width:100%;
-margin-top:22px;
-">
-
-<h4 style="
-font-size:15px;
-font-weight:800;
-margin-bottom:12px;
-color:#0F172A;
-">
-Descrição
-</h4>
-
-<div style="
-min-height:180px;
-background:#F8FAFC;
-border-radius:18px;
-padding:18px;
-font-size:14px;
-line-height:1.8;
-color:#64748B;
-">
-${produto.descricao || 'Nenhuma descrição adicionada ainda.'}
-</div>
-
-</div>
-
-</div>
-
-<div style="
-padding:38px;
-display:flex;
-flex-direction:column;
-justify-content:space-between;
-">
-
-<div>
-
-<div style="
-display:flex;
-gap:12px;
-margin-bottom:18px;
-flex-wrap:wrap;
-">
-
-<div style="
-background:#EEF2FF;
-color:#5B5FF7;
-padding:8px 14px;
-border-radius:999px;
-font-size:12px;
-font-weight:800;
-">
-${produto.comissao_afiliado || 50}% comissão
-</div>
-
-<div style="
-background:#FFF7ED;
-color:#EA580C;
-padding:8px 14px;
-border-radius:999px;
-font-size:12px;
-font-weight:800;
-">
-🔥 Marketplace
-</div>
-
-</div>
-
-<h2 style="
-font-size:38px;
-font-weight:900;
-margin-bottom:15px;
-color:#0F172A;
-line-height:1.1;
-">
-${produto.nome || 'Produto'}
-</h2>
-
-<p style="
-font-size:16px;
-line-height:1.8;
-color:#64748B;
-margin-bottom:30px;
-">
-${produto.descricao || 'Produto disponível para afiliação.'}
-</p>
-
-<div style="
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:18px;
-margin-bottom:30px;
-">
-
-<div style="
-background:#F8FAFC;
-padding:22px;
-border-radius:20px;
-">
-
-<div style="
-font-size:13px;
-color:#64748B;
-margin-bottom:8px;
-">
-Comissão máxima
-</div>
-
-<div style="
-font-size:30px;
-font-weight:900;
-color:#16A34A;
-">
-R$ ${(
-(Number(produto.preco || 0) * Number(produto.comissao_afiliado || 0))
-/ 100
-).toFixed(0)}
-</div>
-
-</div>
-
-<div style="
-background:#F8FAFC;
-padding:22px;
-border-radius:20px;
-">
-
-<div style="
-font-size:13px;
-color:#64748B;
-margin-bottom:8px;
-">
-Preço do produto
-</div>
-
-<div style="
-font-size:30px;
-font-weight:900;
-color:#0F172A;
-">
-R$ ${Number(produto.preco || 0).toFixed(2)}
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<div style="
-display:flex;
-gap:15px;
-">
-
-<button
-onclick="fecharMarketplaceModal()"
-style="
-flex:1;
-height:58px;
-border:none;
-border-radius:18px;
-font-weight:800;
-font-size:15px;
-background:#E2E8F0;
-cursor:pointer;
-"
-
->
-
-Fechar </button>
-
-<button
-onclick="window.location.href='vitrine.html?id=${produto.id}'"
-style="
-flex:2;
-height:58px;
-border:none;
-border-radius:18px;
-font-weight:900;
-font-size:16px;
-background:linear-gradient(135deg,#FF7A1A,#FF9A3D);
-color:#FFF;
-cursor:pointer;
-box-shadow:0 15px 35px rgba(255,122,26,.35);
-"
-
->
-
-🚀 Afiliar-se agora </button>
-
-</div>
-
-</div>
-
-</div>
-
-`;
-
 }
-
 
 
 function fecharMarketplaceModal(){
@@ -3810,25 +3582,6 @@ animation:modalOpen .35s ease;
             >
 
                 Afiliar-se agora
-
-            </button>
-
-            <button
-            id="btnComprarProduto"
-            style="
-            width:100%;
-            height:58px;
-            border:none;
-            border-radius:18px;
-            background:#111827;
-            color:white;
-            font-size:17px;
-            font-weight:700;
-            cursor:pointer;
-            "
-            >
-
-                Comprar agora
 
             </button>
 
