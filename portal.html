@@ -3086,29 +3086,6 @@ async function fazerLogout() {
         carregarDadosDashboard();
         carregarMarketplaceReal();
 
-        const canvas =
-    document.getElementById('salesChart');
-            const ctx = canvas.getContext('2d');
-            salesChartInstance = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['V1', 'V2', 'V3', 'V4', 'V5', 'V6', 'V7'],
-                    datasets: [{
-                        data: [0, 0, 0, 0, 0, 0, 0],
-                        borderColor: '#5D5FEF',
-                        backgroundColor: 'rgba(93, 95, 239, 0.1)',
-                        fill: true,
-                        tension: 0.4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false }
-                    }
-                }
-            });
         }
 
 function closeMobileSidebar(){
