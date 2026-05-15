@@ -2319,11 +2319,19 @@ if(canvas){
 
     const vendasParaGrafico =
         vendas
-            .filter(
-                v =>
-                    String(v.status)
-                    .toLowerCase() === 'paga'
-            )
+.filter(v => {
+
+    const s =
+        String(v.status || '')
+        .toLowerCase();
+
+    return (
+        s === 'paga' ||
+        s === 'pago' ||
+        s === 'approved'
+    );
+
+})
             .slice(0,7)
             .reverse();
 
