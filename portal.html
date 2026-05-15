@@ -2355,11 +2355,37 @@ if(
             }
 
             // Gráfico
-            if (salesChartInstance && vendas.length > 0) {
-                const vendasParaGrafico = vendas.filter(v => String(v.status).toLowerCase() === 'paga').slice(0, 7).reverse();
-                salesChartInstance.data.datasets[0].data = vendasParaGrafico.map(v => v.valor_total);
-                salesChartInstance.update();
-            }
+            if (salesChartInstance) {
+    const vendasParaGrafico =
+        vendas
+        .filter(v => {
+
+            const status =
+                String(v.status || '')
+                .toLowerCase()
+                .trim();
+
+            return (
+                status === 'paga' ||
+                status === 'pago' ||
+                status === 'approved'
+            );
+
+        })
+        .slice(0, 7)
+        .reverse();
+
+    salesChartInstance.data.labels =
+        vendasParaGrafico.map((_, i) => `V${i + 1}`);
+
+    salesChartInstance.data.datasets[0].data =
+        vendasParaGrafico.map(v =>
+            Number(v.valor_total || 0)
+        );
+
+    salesChartInstance.update();
+
+}
 
         } catch (e) {
             console.error("Erro no dashboard:", e);
@@ -3042,13 +3068,12 @@ async function fazerLogout() {
     function closeRelat() { document.getElementById('relat-main-list').style.display = 'block'; document.getElementById('relat-detail').classList.remove('active'); }
 
     
-    // ✅ window.onload LIMPO - sem duplo carregamento, sem setTimeout desnecessário
     window.onload = function () {
-        // Define o avatar padrão imediatamente (sem depender de URL externa)
-        setProfilePhoto(null);
 
-        // Carrega os dados uma única vez
+        setProfilePhoto(null);
+        inicializarGrafico();
         carregarProdutos();
+       
         carregarDadosDashboard();
         carregarMarketplaceReal();
 
