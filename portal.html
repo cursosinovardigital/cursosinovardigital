@@ -125,7 +125,9 @@ header.maestro-top-bar {
 
     flex-shrink:0;
 
-    transition:.3s ease;
+    transition:
+    width .28s ease,
+    left .28s ease;
 
     overflow:hidden;
 }
@@ -259,6 +261,8 @@ header.maestro-top-bar {
 
         body.sidebar-collapsed nav{
     width:88px;
+            box-shadow:
+    4px 0 20px rgba(0,0,0,.04);
 }
 
 body.sidebar-collapsed .nav-item{
