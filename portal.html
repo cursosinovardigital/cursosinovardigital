@@ -2347,7 +2347,15 @@ if (
         ? totalBruto / vendas.length
         : 0;
 
-            // Barra de meta
+let totalGeral = 0;
+
+(vendasTotais || []).forEach(v => {
+
+    totalGeral +=
+        Number(v.valor_total || 0);
+
+});
+        
             const metaValor = 10000;
             const progresso = (totalBruto / metaValor) * 100;
             const barraFill = document.getElementById('bar-meta-fill');
