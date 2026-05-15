@@ -3338,6 +3338,9 @@ const { data: produto, error } = await _supabase
 .eq('id', id)
 .single();
 
+ console.log('PRODUTO:', produto);
+console.log('ERRO:', error);
+
 if(error || !produto){
 
 console.log(error);
