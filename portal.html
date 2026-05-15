@@ -1874,13 +1874,16 @@ function setProfilePhoto(url) {
 
     if(!img) return;
 
-    if(url && url !== 'undefined'){
+    img.onerror = () => {
 
-        img.onload = () => {
+        img.src = AVATAR_FALLBACK;
 
-            img.style.opacity = '1';
+    };
 
-        };
+    img.src =
+        url || AVATAR_FALLBACK;
+
+}
 
         img.onerror = () => {
 
