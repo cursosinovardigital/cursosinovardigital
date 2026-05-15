@@ -950,6 +950,52 @@ onclick="closeMobileSidebar()">
                         <div style="background:#FFF; border:1px solid var(--border); border-radius:12px; padding:20px; display:flex; align-items:center; gap:15px;">
                             <i class="fas fa-barcode" style="color:#718096; background:#F8F9FA; padding:12px; border-radius:50%; width:45px; height:45px; display:flex; align-items:center; justify-content:center;"></i>
                             <div><div style="font-size:12px; color:#718096; font-weight:600">Boletos gerados</div><div style="font-size:20px; font-weight:800">0</div></div>
+                            <div style="
+    background:#FFF;
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:20px;
+    display:flex;
+    align-items:center;
+    gap:15px;
+">
+
+    <i class="fas fa-chart-pie"
+       style="
+        color:#718096;
+        background:#F8F9FA;
+        padding:12px;
+        border-radius:50%;
+        width:45px;
+        height:45px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+    "></i>
+
+    <div>
+
+        <div style="
+            font-size:12px;
+            color:#718096;
+            font-weight:600;
+        ">
+            Ticket médio
+        </div>
+
+        <div
+            style="
+                font-size:20px;
+                font-weight:800;
+            "
+            id="dash-ticket-medio"
+        >
+            R$ 0,00
+        </div>
+
+    </div>
+
+</div>
                         </div>
                     </div>
                 </div>
@@ -1997,6 +2043,10 @@ if(
             });
 
             const lucroRealDono = totalLiquidoPago - totalComissoesAfiliadosPendente;
+        const ticketMedio =
+    vendas.length > 0
+        ? totalBruto / vendas.length
+        : 0;
 
             // Barra de meta
             const metaValor = 10000;
@@ -2010,6 +2060,20 @@ if(
             if (document.getElementById('dash-total-vendas')) document.getElementById('dash-total-vendas').innerText = `R$ ${totalBruto.toFixed(2).replace('.', ',')}`;
             if (document.getElementById('dash-valor-liquido')) document.getElementById('dash-valor-liquido').innerText = `R$ ${lucroRealDono.toFixed(2).replace('.', ',')}`;
             if (document.getElementById('dash-count-vendas')) document.getElementById('dash-count-vendas').innerText = vendas.length;
+        if(
+    document.getElementById(
+        'dash-ticket-medio'
+    )
+){
+
+    document.getElementById(
+        'dash-ticket-medio'
+    ).innerText =
+        `R$ ${ticketMedio
+            .toFixed(2)
+            .replace('.', ',')}`;
+
+}
 
             // Cards financeiro
             const cardFinDisponivel = document.getElementById('fin-disponivel');
