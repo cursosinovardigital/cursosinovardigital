@@ -262,6 +262,33 @@ body.sidebar-collapsed .nav-item i{
     font-size:18px;
 }
 
+.mobile-overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    background:
+        rgba(0,0,0,.45);
+
+    backdrop-filter:blur(3px);
+
+    z-index:2500;
+
+    opacity:0;
+
+    pointer-events:none;
+
+    transition:.25s ease;
+}
+
+body.mobile-nav-open .mobile-overlay{
+
+    opacity:1;
+
+    pointer-events:auto;
+}
+
 @media(max-width:768px){
 
     main > header{
@@ -537,6 +564,10 @@ header.maestro-top-bar{
         </div>
     </div>
 </header>
+
+<div class="mobile-overlay"
+onclick="closeMobileSidebar()">
+</div>
 
 <div class="maestro-wrapper">
     <nav>
@@ -2322,6 +2353,14 @@ async function fazerLogout() {
 
 
 function toggleSidebar(){
+
+function closeMobileSidebar(){
+
+    document.body.classList.remove(
+        'mobile-nav-open'
+    );
+
+}
 
     if(window.innerWidth <= 768){
 
