@@ -261,16 +261,7 @@ header.maestro-top-bar {
 
 body.sidebar-collapsed nav{ width:92px; box-shadow: 4px 0 20px rgba(0,0,0,.04); } body.sidebar-collapsed nav:hover{ width:260px; }
 
-body.sidebar-collapsed .nav-item{
-
-    justify-content:center;
-
-    align-items:center;
-
-    padding:16px 0;
-
-    width:100%;
-}
+body.sidebar-collapsed .nav-item{ justify-content:center; align-items:center; padding:16px 0; width:100%; overflow:hidden; }
        
 body.sidebar-collapsed .nav-scroll{
     display:flex;
@@ -278,9 +269,7 @@ body.sidebar-collapsed .nav-scroll{
     align-items:center;
 }
 
-body.sidebar-collapsed .nav-item span{
-    display:none;
-}
+body.sidebar-collapsed .nav-item span{ opacity:0; visibility:hidden; width:0; transition:.18s ease; } body.sidebar-collapsed nav:hover .nav-item span{ opacity:1; visibility:visible; width:auto; }
 
 body.sidebar-collapsed .nav-item i{
 
