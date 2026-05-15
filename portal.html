@@ -772,9 +772,6 @@ table{
 
 .feed-section{
     margin-top:32px;
-    max-width:1200px;
-    margin-left:auto;
-    margin-right:auto;
 }
 
 .feed-header{
@@ -798,10 +795,7 @@ table{
     display:grid;
 
     grid-template-columns:
-        repeat(3,minmax(0,1fr));
-
-    gap:22px;
-}
+        repeat(auto-fit,minmax(240px,1fr));
 
 .feed-card{
 
