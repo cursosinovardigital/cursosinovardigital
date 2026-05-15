@@ -2205,10 +2205,13 @@ const filtroProduto =
 
 let dataLimite = new Date();
 
-dataLimite.setHours(0);
-dataLimite.setMinutes(0);
-dataLimite.setSeconds(0);
-dataLimite.setMilliseconds(0);
+if(filtroData === 'hoje'){
+
+    dataLimite.setHours(
+        dataLimite.getHours() - 24
+    );
+
+}
 
 if(filtroData === '7dias'){
 
