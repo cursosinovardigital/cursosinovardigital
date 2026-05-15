@@ -2421,7 +2421,8 @@ if (
         vendasParaGrafico.map(v =>
             Number(v.valor_total || 0)
         );
-
+console.log('DADOS GRAFICO:', dadosGrafico);
+console.log('INSTANCE:', salesChartInstance);
     salesChartInstance.update();
 
 }
