@@ -1389,15 +1389,38 @@ if(window.innerWidth > 768){
     const AVATAR_FALLBACK = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='38' height='38' viewBox='0 0 38 38'%3E%3Ccircle cx='19' cy='19' r='19' fill='%23FF6600'/%3E%3Ctext x='19' y='24' text-anchor='middle' fill='white' font-size='16' font-family='sans-serif'%3EV%3C/text%3E%3C/svg%3E";
 
     // ✅ Função utilitária para setar foto de perfil com segurança
-    function setProfilePhoto(url) {
-        const img = document.getElementById('minha_foto_gmail');
-        if (!img) return;
-        if (url) {
-            img.src = url;
-        } else {
+function setProfilePhoto(url) {
+
+    const img =
+        document.getElementById(
+            'minha_foto_gmail'
+        );
+
+    if(!img) return;
+
+    if(url && url !== 'undefined'){
+
+        img.onload = () => {
+
+            img.style.opacity = '1';
+
+        };
+
+        img.onerror = () => {
+
             img.src = AVATAR_FALLBACK;
-        }
+
+        };
+
+        img.src = url;
+
+    }else{
+
+        img.src = AVATAR_FALLBACK;
+
     }
+
+}
 
     async function carregarProdutos() {
         const { data, error } = await _supabase.from('produtos').select('*').order('created_at', { ascending: false });
