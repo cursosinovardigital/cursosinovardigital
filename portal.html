@@ -2419,10 +2419,6 @@ if (
         vendasParaGrafico.map(v =>
             Number(v.valor_total || 0)
         );
-salesChartInstance.data.datasets[0].data =
-    vendasParaGrafico.map(v =>
-        Number(v.valor_total || 0)
-    );
                 
     salesChartInstance.update();
 
