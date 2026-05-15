@@ -2299,7 +2299,11 @@ if(
                             <td>${prod ? prod.nome : 'Produto'}</td>
                             <td style="font-weight:700">R$ ${Number(v.valor_total).toFixed(2).replace('.', ',')}</td>
                             <td>${new Date(v.created_at).toLocaleDateString('pt-BR')}</td>
-                            <td><span class="badge ${statusVenda === 'paga' ? 'badge-success' : 'badge-warning'}">${v.status}</span></td>
+                            <td><span class="badge ${(
+    statusVenda === 'paga' ||
+    statusVenda === 'pago' ||
+    statusVenda === 'approved'
+) ? 'badge-success' : 'badge-warning'}">${v.status}</span></td>
                         </tr>`;
                 }).join('');
             }
@@ -2335,15 +2339,27 @@ if(canvas){
             .slice(0,7)
             .reverse();
 
-    const labels =
+let labels = [];
+let valores = [];
+
+if(vendasParaGrafico.length > 0){
+
+    labels =
         vendasParaGrafico.map(
             (_,i) => `V${i+1}`
         );
 
-    const valores =
+    valores =
         vendasParaGrafico.map(
             v => Number(v.valor_total) || 0
         );
+
+}else{
+
+    labels = ['Sem vendas'];
+    valores = [0];
+
+}
 
 if (
     salesChartInstance &&
