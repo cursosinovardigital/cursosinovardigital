@@ -255,6 +255,9 @@ header.maestro-top-bar {
 
         .market-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 25px; }
         .market-card {
+
+    cursor:pointer;
+    transition:.28s ease;
     background: #FFF;
     border-radius: 18px;
     border: 1px solid var(--border);
@@ -1522,7 +1525,10 @@ if(document.getElementById('edit-prod-id').value){
             <section id="aba-market" class="aba-section">
                 <h2>Marketplace</h2>
                 <div class="market-grid" id="market-full-grid">
-                    <div class="market-card glass-card">
+                    <div
+class="market-card glass-card"
+onclick="abrirProdutoMarketplace(1)"
+>
                         <div class="market-thumb"><img src="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?auto=format&fit=crop&w=400&q=80" alt="Violão" onerror="this.onerror=null; this.src='https://via.placeholder.com/400x140?text=Sem+Imagem'"></div>
 <div style="
     position:absolute;
