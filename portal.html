@@ -2292,8 +2292,7 @@ if(
                 }).join('');
             }
 
-            // Gráfico
-// Gráfico
+// ===== GRÁFICO =====
 
 const canvas =
     document.getElementById(
@@ -2301,6 +2300,9 @@ const canvas =
     );
 
 if(canvas){
+
+    const ctx =
+        canvas.getContext('2d');
 
     const vendasParaGrafico =
         vendas
@@ -2329,37 +2331,41 @@ if(canvas){
     }
 
     salesChartInstance =
-        new Chart(
-            canvas,
-            {
-                type:'line',
+        new Chart(ctx,{
 
-                data:{
-                    labels,
+            type:'line',
 
-                    datasets:[{
-                        label:'Vendas',
+            data:{
 
-                        data:valores,
+                labels:labels,
 
-                        tension:.4
-                    }]
-                },
+                datasets:[{
 
-                options:{
-                    responsive:true,
-                    maintainAspectRatio:false
-                }
+                    label:'Vendas',
+
+                    data:valores,
+
+                    borderWidth:2,
+
+                    tension:.4,
+
+                    fill:false
+
+                }]
+
+            },
+
+            options:{
+
+                responsive:true,
+
+                maintainAspectRatio:false
+
             }
-        );
+
+        });
 
 }
-
-        } catch (e) {
-            console.error("Erro no dashboard:", e);
-        }
-    }
-
     async function simularVenda(prodId, preco) {
         const comissao = (preco * TAXA_PERCENTUAL) + TAXA_FIXA;
         const liquido = preco - comissao;
