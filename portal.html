@@ -3086,6 +3086,8 @@ async function fazerLogout() {
         carregarDadosDashboard();
         carregarMarketplaceReal();
 
+        const canvas =
+    document.getElementById('salesChart');
             const ctx = canvas.getContext('2d');
             salesChartInstance = new Chart(ctx, {
                 type: 'line',
