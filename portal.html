@@ -362,6 +362,17 @@ header.maestro-top-bar {
 }
 
         .report-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
+        .dashboard-main-grid{
+
+    display:grid;
+
+    grid-template-columns:2fr 1fr;
+
+    gap:20px;
+
+    align-items:start;
+
+}
         .report-card { background: #FFF; padding: 25px; border-radius: 12px; border: 1px solid var(--border); display: flex; align-items: center; gap: 20px; cursor: pointer; }
         .report-card:hover { border-color: var(--purple-kiwi); background: #F8F9FF; }
         .report-card i { font-size: 24px; color: var(--text); width: 30px; text-align: center; }
@@ -536,10 +547,15 @@ header.maestro-top-bar{
     display:none;
 }
 
-#aba-dash > div:nth-child(2){
-    grid-template-columns:1fr !important;
-}
+@media(max-width:768px){
 
+    .dashboard-main-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
 main,
 .content-area,
 .feed-section,
@@ -1134,7 +1150,7 @@ onclick="closeMobileSidebar()">
 </select>
                     <select class="search-input" style="width:160px; padding:10px 15px;"><option>BRL</option></select>
                 </div>
-                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
+                <<div class="dashboard-main-grid">
                     <div style="
 background:rgba(255,255,255,.88);
 backdrop-filter:blur(14px);
