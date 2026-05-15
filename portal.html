@@ -2412,6 +2412,16 @@ if (
         .slice(0, 7)
         .reverse();
 
+if(vendasParaGrafico.length === 0){
+
+    salesChartInstance.data.labels =
+        ['V1','V2','V3','V4','V5','V6','V7'];
+
+    salesChartInstance.data.datasets[0].data =
+        [0,0,0,0,0,0,0];
+
+}else{
+
     salesChartInstance.data.labels =
         vendasParaGrafico.map((_, i) => `V${i + 1}`);
 
@@ -2419,6 +2429,8 @@ if (
         vendasParaGrafico.map(v =>
             Number(v.valor_total || 0)
         );
+
+}
                 
     salesChartInstance.update();
 
