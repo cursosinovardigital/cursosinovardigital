@@ -2332,11 +2332,16 @@ if(canvas){
             v => Number(v.valor_total) || 0
         );
 
-    if(salesChartInstance){
+if (
+    salesChartInstance &&
+    typeof salesChartInstance.destroy === 'function'
+) {
 
-        salesChartInstance.destroy();
+    salesChartInstance.destroy();
 
-    }
+    salesChartInstance = null;
+
+}
 
     salesChartInstance =
         new Chart(ctx,{
