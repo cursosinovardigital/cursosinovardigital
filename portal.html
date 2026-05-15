@@ -1885,22 +1885,6 @@ function setProfilePhoto(url) {
 
 }
 
-        img.onerror = () => {
-
-            img.src = AVATAR_FALLBACK;
-
-        };
-
-        img.src = url;
-
-    }else{
-
-        img.src = AVATAR_FALLBACK;
-
-    }
-
-}
-
     async function carregarProdutos() {
         const { data, error } = await _supabase.from('produtos').select('*').order('created_at', { ascending: false });
         if (error) return;
@@ -2309,11 +2293,67 @@ if(
             }
 
             // Gráfico
-            if (salesChartInstance && vendas.length > 0) {
-                const vendasParaGrafico = vendas.filter(v => String(v.status).toLowerCase() === 'paga').slice(0, 7).reverse();
-                salesChartInstance.data.datasets[0].data = vendasParaGrafico.map(v => v.valor_total);
-                salesChartInstance.update();
+// Gráfico
+
+const canvas =
+    document.getElementById(
+        'salesChart'
+    );
+
+if(canvas){
+
+    const vendasParaGrafico =
+        vendas
+            .filter(
+                v =>
+                    String(v.status)
+                    .toLowerCase() === 'paga'
+            )
+            .slice(0,7)
+            .reverse();
+
+    const labels =
+        vendasParaGrafico.map(
+            (_,i) => `V${i+1}`
+        );
+
+    const valores =
+        vendasParaGrafico.map(
+            v => Number(v.valor_total) || 0
+        );
+
+    if(salesChartInstance){
+
+        salesChartInstance.destroy();
+
+    }
+
+    salesChartInstance =
+        new Chart(
+            canvas,
+            {
+                type:'line',
+
+                data:{
+                    labels,
+
+                    datasets:[{
+                        label:'Vendas',
+
+                        data:valores,
+
+                        tension:.4
+                    }]
+                },
+
+                options:{
+                    responsive:true,
+                    maintainAspectRatio:false
+                }
             }
+        );
+
+}
 
         } catch (e) {
             console.error("Erro no dashboard:", e);
