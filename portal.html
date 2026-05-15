@@ -243,7 +243,23 @@ header.maestro-top-bar {
         .aba-section.active { display: block; animation: fadeIn 0.3s ease; }
 
 
-        .table-container { background:#FFF; border:1px solid var(--border); border-radius:12px; overflow:hidden; }
+        .table-container{
+
+    background:#FFF;
+
+    border:1px solid var(--border);
+
+    border-radius:12px;
+
+    overflow-x:auto;
+
+    overflow-y:hidden;
+
+    width:100%;
+
+    max-width:100%;
+
+}
         table { width: 100%; border-collapse: collapse; }
         th { text-align: left; padding: 15px; background: #F8F9FA; color: #718096; font-size: 11px; text-transform: uppercase; border-bottom: 1px solid var(--border); }
         td { padding: 15px; border-bottom: 1px solid var(--border); font-size: 14px; color: #4A5568; }
@@ -510,13 +526,11 @@ header.maestro-top-bar{
 
 main,
 .content-area,
-.feed-section,
 .market-grid,
 .feed-grid,
 .members-grid{
 
     width:100%;
-
     min-width:0;
 
 }
