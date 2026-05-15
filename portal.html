@@ -2232,7 +2232,11 @@ if(
                 const valorTotal = Number(v.valor_total) || 0;
                 const statusLimpo = String(v.status || '').toLowerCase();
                 totalBruto += valorTotal;
-                if (statusLimpo === 'paga') {
+                if (
+    statusLimpo === 'paga' ||
+    statusLimpo === 'pago' ||
+    statusLimpo === 'approved'
+) {
                     totalLiquidoPago += Number(v.valor_liquido) || 0;
                     if (v.afiliado_id && v.comissao_paga === false) {
                         const prod = (produtos || []).find(p => String(p.id).trim() === String(v.produto_id).trim());
