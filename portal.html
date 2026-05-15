@@ -775,7 +775,7 @@ onclick="closeMobileSidebar()">
 
     <div class="feed-grid">
 
-        <div class="feed-card">
+        <div class="feed-card glass-card">
 
             <div class="feed-thumb">
 
@@ -806,7 +806,7 @@ onclick="closeMobileSidebar()">
 
         </div>
 
-        <div class="feed-card">
+        <div class="feed-card glass-card">
 
             <div class="feed-thumb">
 
@@ -837,7 +837,7 @@ onclick="closeMobileSidebar()">
 
         </div>
 
-        <div class="feed-card">
+        <div class="feed-card glass-card">
 
             <div class="feed-thumb">
 
@@ -987,7 +987,7 @@ if(document.getElementById('edit-prod-id').value){
             <section id="aba-market" class="aba-section">
                 <h2>Marketplace</h2>
                 <div class="market-grid" id="market-full-grid">
-                    <div class="market-card">
+                    <div class="market-card glass-card">
                         <div class="market-thumb"><img src="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?auto=format&fit=crop&w=400&q=80" alt="Violão" onerror="this.onerror=null; this.src='https://via.placeholder.com/400x140?text=Sem+Imagem'"></div>
 <div style="
     position:absolute;
@@ -1163,24 +1163,24 @@ if(document.getElementById('edit-prod-id').value){
                 <div id="relat-main-list">
                     <h2>Relatórios</h2>
                     <div class="report-grid">
-                        <div class="report-card" onclick="atualizarRelatoriosRapidos()">
+                        <div class="report-card glass-card" onclick="atualizarRelatoriosRapidos()">
                             <i class="fas fa-chart-line"></i>
                             <div>
                                 <span>Receita por produto</span>
                                 <small id="relat-receita-total" style="display:block; color:var(--green); font-weight:800;">R$ 0,00</small>
                             </div>
                         </div>
-                        <div class="report-card" onclick="atualizarRelatoriosRapidos()">
+                        <div class="report-card glass-card" onclick="atualizarRelatoriosRapidos()">
                             <i class="fas fa-shopping-cart"></i>
                             <div>
                                 <span>Vendas pendentes</span>
                                 <small id="relat-vendas-pendentes" style="display:block; color:var(--orange); font-weight:800;">0 vendas</small>
                             </div>
                         </div>
-                        <div class="report-card" onclick="openRelat('Receita de co-produção')"><i class="fas fa-users"></i><span>Receita de co-produção</span></div>
-                        <div class="report-card" onclick="openRelat('Vendas abandonadas')"><i class="fas fa-shopping-cart"></i><span>Vendas abandonadas</span></div>
-                        <div class="report-card" onclick="openRelat('Engajamento dos alunos')"><i class="far fa-smile"></i><span>Engajamento dos alunos</span></div>
-                        <div class="report-card" onclick="openRelat('Saldo a receber')"><i class="fas fa-wallet"></i><span>Saldo a receber</span></div>
+                        <div class="report-card glass-card" onclick="openRelat('Receita de co-produção')"><i class="fas fa-users"></i><span>Receita de co-produção</span></div>
+                        <div class="report-card glass-card" onclick="openRelat('Vendas abandonadas')"><i class="fas fa-shopping-cart"></i><span>Vendas abandonadas</span></div>
+                        <div class="report-card glass-card" onclick="openRelat('Engajamento dos alunos')"><i class="far fa-smile"></i><span>Engajamento dos alunos</span></div>
+                        <div class="report-card glass-card" onclick="openRelat('Saldo a receber')"><i class="fas fa-wallet"></i><span>Saldo a receber</span></div>
                     </div>
                 </div>
                 <div id="relat-detail" class="report-detail-view"><div class="back-link" onclick="closeRelat()"><i class="fas fa-arrow-left"></i> <span id="relat-title-display"></span></div><div class="card-stat" style="min-height:300px; display:flex; align-items:center; justify-content:center; color:#A0AEC0;"><p>Buscando informações em tempo real...</p></div></div>
@@ -2041,7 +2041,7 @@ function switchSubTab(tab, el) {
 
         // Card exemplo destaque
 const exemplo = `
-    <div class="market-card">
+    <div class="market-card glass-card">
         <div class="market-thumb">
             <img src="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?auto=format&fit=crop&w=400&q=80"
                  onerror="this.onerror=null; this.src='https://placehold.co/400x140?text=Sem+Imagem'">
@@ -2070,7 +2070,7 @@ const exemplo = `
             ).toFixed(2).replace('.', ',');
 
 return `
-    <div class="market-card"
+    <div class="market-card glass-card"
          onclick="window.location.href='pay.html?id=${p.id}'"
          style="cursor:pointer">
 
