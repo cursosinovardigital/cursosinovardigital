@@ -2241,7 +2241,7 @@ setProfilePhoto(avatar);
     _supabase
         .from('vendas')
         .select('*')
-        .gte('created_at', dataISO)
+        .gte('created_at', '2020-01-01')
         .order('created_at', { ascending:false });
 
 if(filtroProduto){
