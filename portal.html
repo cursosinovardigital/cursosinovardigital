@@ -3165,16 +3165,40 @@ async function fazerLogout() {
     function closeRelat() { document.getElementById('relat-main-list').style.display = 'block'; document.getElementById('relat-detail').classList.remove('active'); }
 
     
-    window.onload = function () {
+window.onload = async function () {
 
-        setProfilePhoto(null);
-        inicializarGrafico();
-        carregarProdutos();
-       
-        carregarDadosDashboard();
-        carregarMarketplaceReal();
+    const {
+        data: { session }
+    } = await _supabase.auth.getSession();
 
-        }
+    console.log('SESSION RESTAURADA:', session);
+
+    if (!session) {
+
+        window.location.href = 'login.html';
+
+        return;
+
+    }
+
+    const avatar =
+        session.user.user_metadata?.avatar_url
+        ||
+        session.user.user_metadata?.picture
+        ||
+        '';
+
+    setProfilePhoto(avatar);
+
+    inicializarGrafico();
+
+    await carregarProdutos();
+
+    await carregarDadosDashboard();
+
+    await carregarMarketplaceReal();
+
+}
 
 function closeMobileSidebar(){
 
