@@ -3008,50 +3008,7 @@ async function fazerLogout() {
       }
     
     }
-        function inicializarGrafico() {
-    
-        const ctx = document
-            .getElementById('salesChart');
-    
-        if (!ctx) return;
-    
-        if (salesChartInstance) {
-            salesChartInstance.destroy();
-        }
-    
-        salesChartInstance = new Chart(ctx, {
-    
-            type: 'line',
-    
-            data: {
-                labels: ['0h','4h','8h','12h','16h','20h','24h'],
-                datasets: [{
-                    label: 'Vendas',
-                    data: [0,0,0,0,0,0,0],
-                    borderWidth: 3,
-                    tension: .4,
-                    fill: true
-                }]
-            },
-    
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-    
-                plugins: {
-                    legend: {
-                        display:false
-                    }
-                },
-    
-                scales: {
-                    y: {
-                        beginAtZero:true
-                    }
-                }
-            }
-        });
-    }
+
         function openProductModal() { document.getElementById('modalProduct').classList.add('active'); }
         function closeProductModal() { document.getElementById('modalProduct').classList.remove('active'); document.getElementById('edit-prod-id').value = ''; }
         function deleteProductFromModal() { if (confirm("Deseja realmente excluir?")) alert("Em breve..."); }
@@ -3071,33 +3028,6 @@ async function fazerLogout() {
             carregarDadosDashboard();
             carregarMarketplaceReal();
             };
-    
-    
-    function closeMobileSidebar(){
-    
-        document.body.classList.remove(
-            'mobile-nav-open'
-        );
-    
-    }
-    
-    function toggleSidebar(){
-    
-        if(window.innerWidth <= 768){
-    
-            document.body.classList.toggle(
-                'mobile-nav-open'
-            );
-    
-        }else{
-    
-            document.body.classList.toggle(
-                'sidebar-collapsed'
-            );
-    
-        }
-    
-    }
     
     </script>
     </body>
