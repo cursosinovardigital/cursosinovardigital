@@ -1953,17 +1953,17 @@ const {
     error: errVendas
 } = await queryVendas;
             const { data: produtos } = await _supabase.from('produtos').select('id, nome, comissao_afiliado');
-        const filtroProduto =
+       const selectProduto =
     document.getElementById('filtro-produto');
 
 if(
-    filtroProduto &&
-    filtroProduto.options.length <= 1
+    selectProduto &&
+    selectProduto.options.length <= 1
 ){
 
     produtos.forEach(prod => {
 
-        filtroProduto.innerHTML += `
+        selectProduto.innerHTML += `
             <option value="${prod.id}">
                 ${prod.nome}
             </option>
