@@ -3325,22 +3325,41 @@ function toggleSidebar(){
 }
 
 
-function abrirProdutoMarketplace(id){
+async function abrirProdutoMarketplace(id){
 
-     alert(id)
+const modal =
+document.getElementById('marketplaceModal');
 
-const produto = produtos.find(p => p.id == id);
-
-if(!produto){
-    alert('Produto não encontrado');
-    return;
+if(modal){
+modal.style.display = 'flex';
 }
 
-const modal = document.getElementById('marketplaceModal');
+const {
+data: produto,
+error
+} = await _supabase
+.from('produtos')
+.select('*')
+.eq('id', id)
+.single();
 
-modal.style.display = 'flex';
+if(error || !produto){
 
-document.getElementById('marketplaceModalBody').innerHTML = `
+```
+alert('Produto não encontrado');
+
+if(modal){
+    modal.style.display = 'none';
+}
+
+return;
+```
+
+}
+
+document.getElementById(
+'marketplaceModalBody'
+).innerHTML = `
 
 <div style="
 width:100%;
@@ -3367,10 +3386,7 @@ width:100%;
 height:240px;
 border-radius:22px;
 overflow:hidden;
-background:rgba(255,255,255,.55);
-backdrop-filter:blur(18px);
-border:1px solid rgba(255,255,255,.6);
-box-shadow:0 10px 30px rgba(0,0,0,.05);
+background:#F8FAFC;
 ">
 
 <img
@@ -3379,7 +3395,6 @@ style="
 width:100%;
 height:100%;
 object-fit:cover;
-transform:scale(1.03);
 "
 />
 
@@ -3413,9 +3428,9 @@ ${produto.nome || 'Produto'}
 font-size:15px;
 line-height:1.8;
 color:#64748B;
-min-height:160px;
+min-height:120px;
 ">
-${produto.descricao || 'Descrição do produto ainda não cadastrada.'}
+${produto.descricao || 'Descrição não cadastrada.'}
 </div>
 
 </div>
@@ -3479,9 +3494,11 @@ Preço
 <div style="
 font-size:34px;
 font-weight:900;
-color:#0F172A;
+color:#111827;
 ">
-R$ ${Number(produto.preco || 0).toFixed(2)}
+R$ ${Number(produto.preco || 0)
+.toFixed(2)
+.replace('.', ',')}
 </div>
 
 </div>
@@ -3492,41 +3509,44 @@ R$ ${Number(produto.preco || 0).toFixed(2)}
 
 <div style="
 display:flex;
-gap:15px;
+gap:14px;
 ">
 
 <button
 onclick="fecharMarketplaceModal()"
 style="
 flex:1;
-height:58px;
+height:56px;
 border:none;
 border-radius:18px;
 font-weight:800;
-font-size:15px;
-background:#E2E8F0;
 cursor:pointer;
+background:#E2E8F0;
 "
+
 >
+
 Fechar
+
 </button>
 
 <button
-onclick="window.location.href='vitrine.html?id=${produto.id}'"
+onclick="window.location.href='produto.html?id=${produto.id}'"
 style="
 flex:2;
-height:58px;
+height:56px;
 border:none;
 border-radius:18px;
 font-weight:900;
-font-size:16px;
-background:linear-gradient(135deg,#FF6600,#FF8C3A);
-color:#FFF;
 cursor:pointer;
-box-shadow:0 15px 35px rgba(255,102,0,.25);
+background:linear-gradient(135deg,#FF6600,#FF8A00);
+color:white;
 "
+
 >
+
 🚀 Afiliar-se agora
+
 </button>
 
 </div>
@@ -3539,10 +3559,14 @@ box-shadow:0 15px 35px rgba(255,102,0,.25);
 
 }
 
-
 function fecharMarketplaceModal(){
 
-document.getElementById('marketplaceModal').style.display = 'none';
+const modal =
+document.getElementById('marketplaceModal');
+
+if(modal){
+modal.style.display = 'none';
+}
 
 }
 
