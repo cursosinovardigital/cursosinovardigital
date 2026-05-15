@@ -1953,6 +1953,25 @@ const {
     error: errVendas
 } = await queryVendas;
             const { data: produtos } = await _supabase.from('produtos').select('id, nome, comissao_afiliado');
+        const filtroProduto =
+    document.getElementById('filtro-produto');
+
+if(
+    filtroProduto &&
+    filtroProduto.options.length <= 1
+){
+
+    produtos.forEach(prod => {
+
+        filtroProduto.innerHTML += `
+            <option value="${prod.id}">
+                ${prod.nome}
+            </option>
+        `;
+
+    });
+
+}
 
             if (errVendas || !vendas) return;
 
