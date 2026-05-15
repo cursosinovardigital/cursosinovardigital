@@ -2361,7 +2361,8 @@ let totalGeral = 0;
             const barraFill = document.getElementById('bar-meta-fill');
             const textoMeta = document.getElementById('txt-meta');
             if (barraFill) barraFill.style.width = `${Math.min(progresso, 100)}%`;
-            if (textoMeta) textoMeta.innerText = `R$ ${totalBruto.toFixed(0)} / R$ 10K`;
+            if (textoMeta) textoMeta.innerText =
+`R$ ${totalGeral.toFixed(0)} / R$ 10K`;
 
             // Cards do dashboard
             if (document.getElementById('dash-total-vendas')) document.getElementById('dash-total-vendas').innerText = `R$ ${totalBruto.toFixed(2).replace('.', ',')}`;
