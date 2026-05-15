@@ -9,12 +9,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root { 
-            --orange: #FF6600; --side-black: #111418; --white: #FFFFFF; 
+            --orange: #FF6600; --side-black: #202532; --white: #FFFFFF; 
             --bg: #F4F7FA; --text: #1A1D23; --border: #E2E8F0; --green: #22C55E;
             --purple-kiwi: #5D5FEF;
         }
 
-        * { box-sizing: border-box; font-family: 'Inter', sans-serif; transition: 0.2s; }
+        * {
+    box-sizing:border-box;
+    font-family:'Inter',sans-serif;
+}
         
         body { 
             margin: 0; 
@@ -127,8 +130,18 @@ header.maestro-top-bar {
     overflow:hidden;
 }
         .nav-scroll { flex: 1; overflow-y: auto; padding: 10px 0; }
-        .nav-item { padding: 12px 25px; color: #A0AEC0; cursor: pointer; display: flex; align-items: center; font-size: 14px; border-left: 4px solid transparent; text-decoration: none; }
-        .nav-item i { margin-right: 15px; width: 18px; text-align: center; }
+        .nav-item { padding: 12px 25px; color: #A0AEC0; cursor: pointer; display: flex; align-items: center; font-size: 14px; border-left: 4px solid transparent; text-decoration: none;transition:.25s ease; }
+        .nav-item i {
+
+    margin-right:15px;
+
+    width:22px;
+
+    text-align:center;
+
+    font-size:18px;
+
+}
         .nav-item:hover, .nav-item.active { background: #1E2228; color: #FFF; border-left-color: var(--orange); }
 
         main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
@@ -220,7 +233,7 @@ header.maestro-top-bar {
         .fin-value { font-size: 32px; font-weight: 800; color: var(--text); }
         .select-currency { border: 1px solid var(--border); padding: 8px 15px; border-radius: 8px; font-weight: 600; color: #4A5568; outline: none; cursor: pointer; }
 
-        .card-stat { background: #FFF; padding: 25px; border-radius: 12px; border: 1px solid var(--border); }
+        .card-stat { background: #FFF; padding: 25px; border-radius: 12px; border: 1px solid var(--border);transition:.25s ease; }
 
         .report-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
         .report-card { background: #FFF; padding: 25px; border-radius: 12px; border: 1px solid var(--border); display: flex; align-items: center; gap: 20px; cursor: pointer; }
@@ -1287,6 +1300,14 @@ if(document.getElementById('edit-prod-id').value){
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9uc2J1YXprcWZlaGt1ZGhsYWR0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgzNTI5OTgsImV4cCI6MjA5MzkyODk5OH0.ZypL6LHbPC_z971EDCTh6pVoA7g4qM6hWSWfWVO9a-M';
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     let salesChartInstance = null;
+
+    if(window.innerWidth > 768){
+
+    document.body.classList.add(
+        'sidebar-collapsed'
+    );
+
+}
 
     const TAXA_PERCENTUAL = 0.079;
     const TAXA_FIXA = 1.00;
