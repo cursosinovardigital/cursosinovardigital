@@ -851,6 +851,12 @@ table{
     box-shadow:
         0 4px 20px rgba(0,0,0,.04);
 
+    height:100%;
+
+    display:flex;
+
+    flex-direction:column;
+
 }
 
 .glass-card{
@@ -899,28 +905,37 @@ table{
 }
 
 .feed-thumb{
+
     width:100%;
+
     height:180px;
 
     overflow:hidden;
 
     position:relative;
+
 }
 
 .feed-thumb img{
+
     width:100%;
+
     height:100%;
 
     object-fit:cover;
 
     transition:.4s ease;
+
 }
 
 .feed-card:hover .feed-thumb img{
+
     transform:scale(1.06);
+
 }
 
 .feed-thumb::after{
+
     content:'';
 
     position:absolute;
@@ -933,6 +948,7 @@ table{
         rgba(0,0,0,.65),
         rgba(0,0,0,.05)
     );
+
 }
 
 .feed-badge{
@@ -940,6 +956,7 @@ table{
     position:absolute;
 
     top:14px;
+
     left:14px;
 
     z-index:5;
@@ -954,19 +971,31 @@ table{
     border-radius:999px;
 
     font-size:10px;
+
     font-weight:900;
 
     color:var(--purple-kiwi);
 
     letter-spacing:.5px;
+
 }
 
 .feed-content{
+
     padding:22px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    flex:1;
+
 }
 
 .feed-card-title{
+
     font-size:18px;
+
     font-weight:800;
 
     line-height:1.4;
@@ -974,26 +1003,37 @@ table{
     margin-bottom:12px;
 
     color:var(--side-black);
+
 }
 
 .feed-card-desc{
+
     font-size:14px;
+
     line-height:1.7;
 
     color:#64748B;
 
     margin-bottom:18px;
+
 }
 
 .feed-link{
+
     display:flex;
+
     align-items:center;
+
     gap:8px;
 
     font-size:13px;
+
     font-weight:800;
 
     color:var(--purple-kiwi);
+
+    margin-top:auto;
+
 }
         
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
