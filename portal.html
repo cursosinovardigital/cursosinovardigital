@@ -1703,11 +1703,14 @@ const payload = {
 
     async function carregarDadosDashboard() {
         try {
-            // ✅ Busca a foto do usuário e usa setProfilePhoto (sem loop)
-            const { data: _userData } = await _supabase.auth.getUser();
-            if (_userData?.user?.user_metadata?.avatar_url) {
-                setProfilePhoto(_userData.user.user_metadata.avatar_url);
-            }
+
+const avatar =
+    _userData?.user?.user_metadata?.avatar_url
+    || _userData?.user?.identities?.[0]?.identity_data?.avatar_url
+    || _userData?.user?.user_metadata?.picture
+    || '';
+
+setProfilePhoto(avatar);
 
             const { data: vendas, error: errVendas } = await _supabase.from('vendas').select('*').order('created_at', { ascending: false });
             const { data: produtos } = await _supabase.from('produtos').select('id, nome, comissao_afiliado');
