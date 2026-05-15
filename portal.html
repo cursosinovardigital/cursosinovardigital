@@ -2258,6 +2258,12 @@ const {
     error: errVendas
 } = await queryVendas;
 
+const {
+    data: vendasTotais
+} = await _supabase
+    .from('vendas')
+    .select('valor_total');
+
         console.log('VENDAS COMPLETAS:', vendas);
 
 if(vendas && vendas.length > 0){
