@@ -2171,12 +2171,12 @@ const dataISO =
         const { data: _userData } =
             await _supabase.auth.getUser();
 
-        const avatar =
-            _userData?.user?.user_metadata?.avatar_url
-            || _userData?.user?.identities?.[0]?.identity_data?.avatar_url
-            || _userData?.user?.user_metadata?.picture
-            || '';
-
+const avatar =
+    _userData?.user?.user_metadata?.picture
+    || _userData?.user?.user_metadata?.avatar_url
+    || _userData?.user?.identities?.[0]?.identity_data?.picture
+    || _userData?.user?.identities?.[0]?.identity_data?.avatar_url
+    || '';
 setProfilePhoto(avatar);
 
             let queryVendas =
