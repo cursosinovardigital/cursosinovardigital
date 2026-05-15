@@ -2259,6 +2259,10 @@ const {
     data: vendas,
     error: errVendas
 } = await queryVendas;
+
+        console.log('VENDAS:', vendas);
+console.log('ERRO VENDAS:', errVendas);
+console.log('DATA ISO:', dataISO);
             const { data: produtos } = await _supabase.from('produtos').select('id, nome, comissao_afiliado');
        const selectProduto =
     document.getElementById('filtro-produto');
