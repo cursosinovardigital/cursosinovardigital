@@ -2357,7 +2357,7 @@ let totalGeral = 0;
 });
         
             const metaValor = 10000;
-            const progresso = (totalBruto / metaValor) * 100;
+            const progresso = (totalGeral / metaValor) * 100;
             const barraFill = document.getElementById('bar-meta-fill');
             const textoMeta = document.getElementById('txt-meta');
             if (barraFill) barraFill.style.width = `${Math.min(progresso, 100)}%`;
