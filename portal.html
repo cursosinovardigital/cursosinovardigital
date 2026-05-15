@@ -910,8 +910,24 @@ onclick="closeMobileSidebar()">
 
             <section id="aba-dash" class="aba-section active">
                 <div style="display:flex; gap:15px; margin-bottom:20px;">
-                    <select class="search-input" style="width:150px; padding:10px 15px;"><option>Hoje</option></select>
-                    <select class="search-input" style="width:260px; padding:10px 15px;"><option>Todos os produtos</option></select>
+                    <select
+    id="filtro-data"
+    class="search-input"
+    style="width:150px; padding:10px 15px;"
+    onchange="carregarDadosDashboard()"
+>
+    <option value="hoje">Hoje</option>
+    <option value="7dias">7 dias</option>
+    <option value="30dias">30 dias</option>
+</select>
+                    <select
+    id="filtro-produto"
+    class="search-input"
+    style="width:260px; padding:10px 15px;"
+    onchange="carregarDadosDashboard()"
+>
+    <option value="">Todos os produtos</option>
+</select>
                     <select class="search-input" style="width:160px; padding:10px 15px;"><option>BRL</option></select>
                 </div>
                 <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
@@ -1877,6 +1893,33 @@ async function carregarDadosDashboard() {
 
     try {
 
+        const filtroData =
+    document.getElementById('filtro-data')?.value || 'hoje';
+
+const filtroProduto =
+    document.getElementById('filtro-produto')?.value || '';
+
+let dataLimite = new Date();
+
+if(filtroData === '7dias'){
+
+    dataLimite.setDate(
+        dataLimite.getDate() - 7
+    );
+
+}
+
+if(filtroData === '30dias'){
+
+    dataLimite.setDate(
+        dataLimite.getDate() - 30
+    );
+
+}
+
+const dataISO =
+    dataLimite.toISOString();
+
         const { data: _userData } =
             await _supabase.auth.getUser();
 
@@ -1888,7 +1931,27 @@ async function carregarDadosDashboard() {
 
 setProfilePhoto(avatar);
 
-            const { data: vendas, error: errVendas } = await _supabase.from('vendas').select('*').order('created_at', { ascending: false });
+            let queryVendas =
+    _supabase
+        .from('vendas')
+        .select('*')
+        .gte('created_at', dataISO)
+        .order('created_at', { ascending:false });
+
+if(filtroProduto){
+
+    queryVendas =
+        queryVendas.eq(
+            'produto_id',
+            filtroProduto
+        );
+
+}
+
+const {
+    data: vendas,
+    error: errVendas
+} = await queryVendas;
             const { data: produtos } = await _supabase.from('produtos').select('id, nome, comissao_afiliado');
 
             if (errVendas || !vendas) return;
