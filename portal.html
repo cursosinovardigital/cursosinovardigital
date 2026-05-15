@@ -3323,13 +3323,312 @@ function toggleSidebar(){
     }
 
 }
-function abrirProdutoMarketplace(id){
+    
+async function abrirProdutoMarketplace(id){
 
-window.location.href =
-`produto.html?id=${id}`;
+const { data } = await supabase
+.from('produtos')
+.select('*')
+.eq('id',id)
+.single();
+
+if(!data) return;
+
+document.getElementById(
+'marketplaceModal'
+).style.display='flex';
+
+document.getElementById(
+'modalProdutoNome'
+).innerText=data.nome || 'Produto';
+
+document.getElementById(
+'modalProdutoDescricao'
+).innerText=
+data.descricao ||
+'Treinamento completo disponível na plataforma.';
+
+document.getElementById(
+'modalProdutoPreco'
+).innerText=
+`R$ ${Number(data.preco || 0).toFixed(2)}`;
+
+document.getElementById(
+'modalProdutoComissao'
+).innerText=
+`R$ ${Number(data.comissao || 0).toFixed(2)}`;
+
+document.getElementById(
+'modalProdutoCapa'
+).src=
+data.thumb || data.capa;
+
+document.getElementById(
+'btnComprarProduto'
+).onclick=()=>{
+
+window.location.href=
+`pay.html?id=${id}`;
+
+};
+
+document.getElementById(
+'btnAfiliarProduto'
+).onclick=()=>{
+
+alert(
+'Produto afiliado com sucesso!'
+);
+
+};
+
+}
+
+function fecharMarketplaceModal(){
+
+document.getElementById(
+'marketplaceModal'
+).style.display='none';
 
 }
 
 </script>
+
+<div
+id="marketplaceModal"
+style="
+position:fixed;
+inset:0;
+background:rgba(15,23,42,.72);
+backdrop-filter:blur(8px);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:99999;
+padding:30px;
+"
+>
+
+    <div
+    id="marketplaceModalBox"
+    style="
+    width:100%;
+    max-width:1100px;
+    background:white;
+    border-radius:32px;
+    overflow:hidden;
+    display:grid;
+    grid-template-columns:420px 1fr;
+    position:relative;
+    animation:modalOpen .35s ease;
+    "
+    >
+
+        <div
+        style="
+        background:#0F172A;
+        height:100%;
+        "
+        >
+
+            <img
+            id="modalProdutoCapa"
+            src=""
+            style="
+            width:100%;
+            height:100%;
+            object-fit:cover;
+            display:block;
+            "
+            >
+
+        </div>
+
+        <div
+        style="
+        padding:45px;
+        position:relative;
+        "
+        >
+
+            <button
+            onclick="fecharMarketplaceModal()"
+            style="
+            position:absolute;
+            top:20px;
+            right:20px;
+            border:none;
+            background:#F1F5F9;
+            width:42px;
+            height:42px;
+            border-radius:50%;
+            cursor:pointer;
+            font-size:18px;
+            "
+            >
+
+                ✕
+
+            </button>
+
+            <div
+            style="
+            display:inline-flex;
+            background:#EEF2FF;
+            color:#5B5FEF;
+            padding:10px 16px;
+            border-radius:999px;
+            font-size:12px;
+            font-weight:800;
+            margin-bottom:20px;
+            "
+            >
+
+                MARKETPLACE
+
+            </div>
+
+            <h1
+            id="modalProdutoNome"
+            style="
+            font-size:48px;
+            line-height:1.1;
+            margin-bottom:20px;
+            color:#111827;
+            "
+            >
+                Produto
+            </h1>
+
+            <div
+            id="modalProdutoDescricao"
+            style="
+            color:#64748B;
+            line-height:1.8;
+            font-size:17px;
+            margin-bottom:30px;
+            "
+            >
+                descrição
+            </div>
+
+            <div
+            style="
+            display:flex;
+            gap:18px;
+            margin-bottom:30px;
+            "
+            >
+
+                <div
+                style="
+                flex:1;
+                background:#F8FAFC;
+                border-radius:20px;
+                padding:22px;
+                "
+                >
+
+                    <div
+                    style="
+                    color:#64748B;
+                    font-size:13px;
+                    margin-bottom:8px;
+                    "
+                    >
+                        Comissão
+                    </div>
+
+                    <strong
+                    id="modalProdutoComissao"
+                    style="
+                    font-size:30px;
+                    "
+                    >
+                        R$ 0,00
+                    </strong>
+
+                </div>
+
+                <div
+                style="
+                flex:1;
+                background:#F8FAFC;
+                border-radius:20px;
+                padding:22px;
+                "
+                >
+
+                    <div
+                    style="
+                    color:#64748B;
+                    font-size:13px;
+                    margin-bottom:8px;
+                    "
+                    >
+                        Preço
+                    </div>
+
+                    <strong
+                    id="modalProdutoPreco"
+                    style="
+                    font-size:30px;
+                    "
+                    >
+                        R$ 0,00
+                    </strong>
+
+                </div>
+
+            </div>
+
+            <button
+            id="btnAfiliarProduto"
+            style="
+            width:100%;
+            height:64px;
+            border:none;
+            border-radius:18px;
+            background:linear-gradient(
+                135deg,
+                #16A34A,
+                #22C55E
+            );
+            color:white;
+            font-size:20px;
+            font-weight:800;
+            cursor:pointer;
+            margin-bottom:16px;
+            "
+            >
+
+                Afiliar-se agora
+
+            </button>
+
+            <button
+            id="btnComprarProduto"
+            style="
+            width:100%;
+            height:58px;
+            border:none;
+            border-radius:18px;
+            background:#111827;
+            color:white;
+            font-size:17px;
+            font-weight:700;
+            cursor:pointer;
+            "
+            >
+
+                Comprar agora
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
 </body>
 </html>
