@@ -1838,6 +1838,18 @@ if(document.getElementById('edit-prod-id').value){
 
     }
 );
+
+    _supabase.auth.onAuthStateChange(
+    async (event, session) => {
+
+        console.log(
+            'AUTH:',
+            event,
+            session
+        );
+
+    }
+);
     let salesChartInstance = null;
 
     function inicializarGrafico() {
