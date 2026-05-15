@@ -508,6 +508,27 @@ header.maestro-top-bar{
     grid-template-columns:1fr !important;
 }
 
+main,
+.content-area,
+.feed-section,
+.market-grid,
+.feed-grid,
+.members-grid{
+
+    width:100%;
+
+    min-width:0;
+
+}
+
+table{
+
+    display:block;
+
+    overflow-x:auto;
+
+}
+
 .feed-grid{
     grid-template-columns:1fr;
 }
@@ -552,7 +573,7 @@ header.maestro-top-bar{
     display:grid;
 
     grid-template-columns:
-        repeat(auto-fit,minmax(320px,1fr));
+        repeat(auto-fit,minmax(260px,1fr));
 
     gap:24px;
 
@@ -773,7 +794,7 @@ header.maestro-top-bar{
     display:grid;
 
     grid-template-columns:
-        repeat(auto-fit,minmax(280px,1fr));
+        repeat(auto-fit,minmax(240px,1fr));
 
     gap:22px;
 }
