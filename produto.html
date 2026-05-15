@@ -982,6 +982,7 @@ document.getElementById(
 }
 
 async function abrirProdutoMarketplace(id){
+console.log('MODAL ABRIU');
 
 const modal =
 document.getElementById('marketplaceModal');
@@ -993,6 +994,8 @@ const { data: produto, error } = await _supabase
 .select('*')
 .eq('id', id)
 .single();
+
+  console.log(produto);
 
 if(error || !produto){
 
