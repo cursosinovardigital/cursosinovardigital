@@ -1825,6 +1825,55 @@ if(document.getElementById('edit-prod-id').value){
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     let salesChartInstance = null;
 
+    function inicializarGrafico() {
+
+    const canvas =
+        document.getElementById('salesChart');
+
+    if (!canvas) return;
+
+    const ctx =
+        canvas.getContext('2d');
+
+    salesChartInstance =
+        new Chart(ctx, {
+
+            type: 'line',
+
+            data: {
+
+                labels: [],
+
+                datasets: [{
+
+                    label: 'Vendas',
+
+                    data: [],
+
+                    borderColor: '#5D5FEF',
+
+                    backgroundColor: 'rgba(93,95,239,0.15)',
+
+                    tension: 0.4,
+
+                    fill: true
+
+                }]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                maintainAspectRatio: false
+
+            }
+
+        });
+
+}
+
 function toggleSidebar(){
 
     if(window.innerWidth <= 768){
