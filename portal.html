@@ -2996,134 +2996,109 @@ async function fazerLogout() {
 
     localStorage.clear();
     sessionStorage.clear();
-
-    window.location.href = "login.html";
-
-  } catch (error) {
-
-    console.error(error);
-
-    alert("Erro ao sair");
-
-  }
-
-}
-    function inicializarGrafico() {
-
-    const ctx = document
-        .getElementById('salesChart');
-
-    if (!ctx) return;
-
-    if (salesChartInstance) {
-        salesChartInstance.destroy();
-    }
-
-    salesChartInstance = new Chart(ctx, {
-
-        type: 'line',
-
-        data: {
-            labels: ['0h','4h','8h','12h','16h','20h','24h'],
-            datasets: [{
-                label: 'Vendas',
-                data: [0,0,0,0,0,0,0],
-                borderWidth: 3,
-                tension: .4,
-                fill: true
-            }]
-        },
-
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-
-            plugins: {
-                legend: {
-                    display:false
-                }
-            },
-
-            scales: {
-                y: {
-                    beginAtZero:true
-                }
-            }
-        }
-    });
-}
-    function openProductModal() { document.getElementById('modalProduct').classList.add('active'); }
-    function closeProductModal() { document.getElementById('modalProduct').classList.remove('active'); document.getElementById('edit-prod-id').value = ''; }
-    function deleteProductFromModal() { if (confirm("Deseja realmente excluir?")) alert("Em breve..."); }
-    function openColabModal() { document.getElementById('modalColab').classList.add('active'); }
-    function closeColabModal() { document.getElementById('modalColab').classList.remove('active'); }
-    function openRelat(titulo) { document.getElementById('relat-main-list').style.display = 'none'; document.getElementById('relat-detail').classList.add('active'); document.getElementById('relat-title-display').innerText = titulo; }
-    function closeRelat() { document.getElementById('relat-main-list').style.display = 'block'; document.getElementById('relat-detail').classList.remove('active'); }
-
     
-    // ✅ window.onload LIMPO - sem duplo carregamento, sem setTimeout desnecessário
-    window.onload = function () {
-        // Define o avatar padrão imediatamente (sem depender de URL externa)
-        setProfilePhoto(null);
-
-        // Carrega os dados uma única vez
-        carregarProdutos();
-        carregarDadosDashboard();
-        carregarMarketplaceReal();
-
-        // Inicializa o gráfico separado dos dados (sem chamar dashboard de novo)
-        const canvas = document.getElementById('salesChart');
-        if (canvas) {
-            const ctx = canvas.getContext('2d');
-            salesChartInstance = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: ['V1', 'V2', 'V3', 'V4', 'V5', 'V6', 'V7'],
-                    datasets: [{
-                        data: [0, 0, 0, 0, 0, 0, 0],
-                        borderColor: '#5D5FEF',
-                        backgroundColor: 'rgba(93, 95, 239, 0.1)',
-                        fill: true,
-                        tension: 0.4
-                    }]
+        window.location.href = "login.html";
+    
+      } catch (error) {
+    
+        console.error(error);
+    
+        alert("Erro ao sair");
+    
+      }
+    
+    }
+        function inicializarGrafico() {
+    
+        const ctx = document
+            .getElementById('salesChart');
+    
+        if (!ctx) return;
+    
+        if (salesChartInstance) {
+            salesChartInstance.destroy();
+        }
+    
+        salesChartInstance = new Chart(ctx, {
+    
+            type: 'line',
+    
+            data: {
+                labels: ['0h','4h','8h','12h','16h','20h','24h'],
+                datasets: [{
+                    label: 'Vendas',
+                    data: [0,0,0,0,0,0,0],
+                    borderWidth: 3,
+                    tension: .4,
+                    fill: true
+                }]
+            },
+    
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+    
+                plugins: {
+                    legend: {
+                        display:false
+                    }
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false }
+    
+                scales: {
+                    y: {
+                        beginAtZero:true
                     }
                 }
-            });
-        }
-    };
-
-function closeMobileSidebar(){
-
-    document.body.classList.remove(
-        'mobile-nav-open'
-    );
-
-}
-
-function toggleSidebar(){
-
-    if(window.innerWidth <= 768){
-
-        document.body.classList.toggle(
+            }
+        });
+    }
+        function openProductModal() { document.getElementById('modalProduct').classList.add('active'); }
+        function closeProductModal() { document.getElementById('modalProduct').classList.remove('active'); document.getElementById('edit-prod-id').value = ''; }
+        function deleteProductFromModal() { if (confirm("Deseja realmente excluir?")) alert("Em breve..."); }
+        function openColabModal() { document.getElementById('modalColab').classList.add('active'); }
+        function closeColabModal() { document.getElementById('modalColab').classList.remove('active'); }
+        function openRelat(titulo) { document.getElementById('relat-main-list').style.display = 'none'; document.getElementById('relat-detail').classList.add('active'); document.getElementById('relat-title-display').innerText = titulo; }
+        function closeRelat() { document.getElementById('relat-main-list').style.display = 'block'; document.getElementById('relat-detail').classList.remove('active'); }
+    
+        
+        // ✅ window.onload LIMPO - sem duplo carregamento, sem setTimeout desnecessário
+        window.onload = function () {
+            // Define o avatar padrão imediatamente (sem depender de URL externa)
+            setProfilePhoto(null);
+    
+            // Carrega os dados uma única vez
+            carregarProdutos();
+            carregarDadosDashboard();
+            carregarMarketplaceReal();
+            };
+    
+    
+    function closeMobileSidebar(){
+    
+        document.body.classList.remove(
             'mobile-nav-open'
         );
-
-    }else{
-
-        document.body.classList.toggle(
-            'sidebar-collapsed'
-        );
-
+    
     }
-
-}
-
-</script>
-</body>
-</html>
+    
+    function toggleSidebar(){
+    
+        if(window.innerWidth <= 768){
+    
+            document.body.classList.toggle(
+                'mobile-nav-open'
+            );
+    
+        }else{
+    
+            document.body.classList.toggle(
+                'sidebar-collapsed'
+            );
+    
+        }
+    
+    }
+    
+    </script>
+    </body>
+    </html>
