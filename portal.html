@@ -2141,6 +2141,8 @@ async function carregarDadosDashboard() {
 
     try {
 
+        console.log('INICIO DASHBOARD');
+
         const filtroData =
     document.getElementById('filtro-data')?.value || 'hoje';
 
@@ -2200,6 +2202,8 @@ const {
     data: vendas,
     error: errVendas
 } = await queryVendas;
+        console.log('VENDAS:', vendas);
+console.log('ERRO:', errVendas);
             const { data: produtos } = await _supabase.from('produtos').select('id, nome, comissao_afiliado');
        const selectProduto =
     document.getElementById('filtro-produto');
@@ -2371,7 +2375,7 @@ if (
     salesChartInstance = null;
 
 }
-
+console.log('ANTES DO GRAFICO');
     salesChartInstance =
         new Chart(ctx,{
 
@@ -2406,17 +2410,17 @@ if (
             }
 
         });
-        }
+
+    }
 
 } catch(error){
+
+    console.error('ERRO REAL:', error);
 
     console.error(
         'Erro dashboard:',
         error
     );
-
-}
-
 
 }
     async function simularVenda(prodId, preco) {
