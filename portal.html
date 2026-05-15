@@ -2263,7 +2263,7 @@ if(
     selectProduto.options.length <= 1
 ){
 
-    produtos.forEach(prod => {
+    (produtos || []).forEach(prod => {
 
         selectProduto.innerHTML += `
             <option value="${prod.id}">
@@ -2275,7 +2275,15 @@ if(
 
 }
 
-            if (errVendas || !vendas) return;
+            if (errVendas) {
+    console.error(errVendas);
+    return;
+}
+
+if (!vendas) {
+    console.log('Nenhuma venda encontrada');
+    return;
+}
 
             let totalBruto = 0;
             let totalLiquidoPago = 0;
@@ -3077,9 +3085,6 @@ async function fazerLogout() {
         carregarDadosDashboard();
         carregarMarketplaceReal();
 
-        // Inicializa o gráfico separado dos dados (sem chamar dashboard de novo)
-        const canvas = document.getElementById('salesChart');
-        if (canvas) {
             const ctx = canvas.getContext('2d');
             salesChartInstance = new Chart(ctx, {
                 type: 'line',
