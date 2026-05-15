@@ -3328,6 +3328,11 @@ function abrirProdutoMarketplace(id){
 
 const produto = produtos.find(p => p.id == id);
 
+if(!produto){
+    alert('Produto não encontrado');
+    return;
+}
+
 const modal = document.getElementById('marketplaceModal');
 
 modal.style.display = 'flex';
@@ -3343,7 +3348,7 @@ overflow:hidden;
 display:grid;
 grid-template-columns:320px 1fr;
 box-shadow:0 30px 80px rgba(0,0,0,.18);
-animation:modalShow .25s ease;
+animation:fadeIn .25s ease;
 ">
 
 <div style="
@@ -3356,49 +3361,56 @@ align-items:center;
 
 <div style="
 width:100%;
-height:260px;
-border-radius:24px;
+height:240px;
+border-radius:22px;
 overflow:hidden;
-background:rgba(255,255,255,.7);
+background:rgba(255,255,255,.55);
 backdrop-filter:blur(18px);
-border:1px solid rgba(255,255,255,.8);
-box-shadow:0 10px 30px rgba(0,0,0,.06);
+border:1px solid rgba(255,255,255,.6);
+box-shadow:0 10px 30px rgba(0,0,0,.05);
 ">
 
 <img
-id="modalProdutoCapa"
-src="${produto.capa_url || ''}"
+src="${produto.capa_url || 'https://via.placeholder.com/600x400?text=Produto'}"
 style="
 width:100%;
 height:100%;
 object-fit:cover;
-display:block;
 transform:scale(1.03);
-transition:.4s ease;
 "
 />
 
 </div>
 
 <div style="
+margin-top:24px;
 width:100%;
-margin-top:25px;
 ">
 
 <div style="
-font-size:14px;
+font-size:13px;
 font-weight:800;
-color:#0F172A;
+color:#5B5FF7;
 margin-bottom:10px;
 ">
-Descrição
+MARKETPLACE
 </div>
 
 <div style="
-font-size:14px;
+font-size:34px;
+font-weight:900;
+color:#0F172A;
+line-height:1.1;
+margin-bottom:15px;
+">
+${produto.nome || 'Produto'}
+</div>
+
+<div style="
+font-size:15px;
 line-height:1.8;
 color:#64748B;
-min-height:180px;
+min-height:160px;
 ">
 ${produto.descricao || 'Descrição do produto ainda não cadastrada.'}
 </div>
@@ -3408,7 +3420,7 @@ ${produto.descricao || 'Descrição do produto ainda não cadastrada.'}
 </div>
 
 <div style="
-padding:40px;
+padding:38px;
 display:flex;
 flex-direction:column;
 justify-content:space-between;
@@ -3417,51 +3429,10 @@ justify-content:space-between;
 <div>
 
 <div style="
-display:flex;
-gap:12px;
-margin-bottom:20px;
-flex-wrap:wrap;
-">
-
-<div style="
-background:#FFF7ED;
-color:#EA580C;
-padding:8px 14px;
-border-radius:999px;
-font-size:12px;
-font-weight:800;
-">
-${produto.tipo_produto || 'Produto Digital'}
-</div>
-
-<div style="
-background:#EEF2FF;
-color:#5B5FF7;
-padding:8px 14px;
-border-radius:999px;
-font-size:12px;
-font-weight:800;
-">
-${produto.comissao_afiliado || 0}% comissão
-</div>
-
-</div>
-
-<h2 style="
-font-size:42px;
-font-weight:900;
-line-height:1.1;
-margin-bottom:18px;
-color:#0F172A;
-">
-${produto.nome || 'Produto'}
-</h2>
-
-<div style="
 display:grid;
 grid-template-columns:1fr 1fr;
 gap:18px;
-margin-top:35px;
+margin-bottom:28px;
 ">
 
 <div style="
@@ -3469,20 +3440,21 @@ background:#F8FAFC;
 padding:22px;
 border-radius:20px;
 ">
+
 <div style="
 font-size:13px;
 color:#64748B;
 margin-bottom:8px;
 ">
-Comissão máxima
+Comissão
 </div>
 
 <div style="
-font-size:32px;
+font-size:34px;
 font-weight:900;
-color:#16A34A;
+color:#FF6600;
 ">
-R$ ${Number(produto.comissao_afiliado || 0).toFixed(2)}
+${produto.comissao_afiliado || 0}%
 </div>
 
 </div>
@@ -3492,16 +3464,17 @@ background:#F8FAFC;
 padding:22px;
 border-radius:20px;
 ">
+
 <div style="
 font-size:13px;
 color:#64748B;
 margin-bottom:8px;
 ">
-Preço do produto
+Preço
 </div>
 
 <div style="
-font-size:32px;
+font-size:34px;
 font-weight:900;
 color:#0F172A;
 ">
@@ -3515,22 +3488,39 @@ R$ ${Number(produto.preco || 0).toFixed(2)}
 </div>
 
 <div style="
-margin-top:35px;
+display:flex;
+gap:15px;
 ">
+
+<button
+onclick="fecharMarketplaceModal()"
+style="
+flex:1;
+height:58px;
+border:none;
+border-radius:18px;
+font-weight:800;
+font-size:15px;
+background:#E2E8F0;
+cursor:pointer;
+"
+>
+Fechar
+</button>
 
 <button
 onclick="window.location.href='vitrine.html?id=${produto.id}'"
 style="
-width:100%;
-height:62px;
+flex:2;
+height:58px;
 border:none;
-border-radius:20px;
+border-radius:18px;
 font-weight:900;
-font-size:17px;
-background:linear-gradient(135deg,#FF7A1A,#FF9A3D);
+font-size:16px;
+background:linear-gradient(135deg,#FF6600,#FF8C3A);
 color:#FFF;
 cursor:pointer;
-box-shadow:0 18px 40px rgba(255,122,26,.28);
+box-shadow:0 15px 35px rgba(255,102,0,.25);
 "
 >
 🚀 Afiliar-se agora
@@ -3541,6 +3531,7 @@ box-shadow:0 18px 40px rgba(255,122,26,.28);
 </div>
 
 </div>
+
 `;
 
 }
