@@ -438,6 +438,54 @@ body.mobile-nav-open .mobile-overlay{
     pointer-events:auto;
 }
 
+.prod-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:15px;
+
+    margin-bottom:25px;
+
+}
+
+.prod-header-buttons{
+
+    display:flex;
+
+    gap:10px;
+
+}
+
+@media(max-width:768px){
+
+    .prod-header{
+
+        flex-direction:column;
+
+        align-items:stretch;
+
+    }
+
+    .prod-header-buttons{
+
+        width:100%;
+
+        flex-direction:column;
+
+    }
+
+    .prod-header-buttons .btn-primary{
+
+        width:100%;
+
+    }
+
+}
+
 @media(max-width:768px){
 
     main > header{
@@ -1002,9 +1050,9 @@ onclick="closeMobileSidebar()">
             </section>
 
             <section id="aba-prod" class="aba-section">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;">
+                   <div class="prod-header">
                     <h2 style="margin:0; font-weight: 800;">Produtos</h2>
-                    <div style="display: flex; gap: 10px;">
+                    <div class="prod-header-buttons">
 
     <button
         class="btn-primary btn-orange"
