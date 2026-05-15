@@ -264,6 +264,42 @@ body.sidebar-collapsed .nav-item i{
 
 @media(max-width:768px){
 
+    main > header{
+    padding:0 20px;
+}
+
+header.maestro-top-bar{
+    padding:0 20px;
+}
+
+.top-right{
+    gap:12px;
+}
+
+.goals-container{
+    display:none;
+}
+
+#aba-dash > div:nth-child(2){
+    grid-template-columns:1fr !important;
+}
+
+.feed-grid{
+    grid-template-columns:1fr;
+}
+
+.market-grid{
+    grid-template-columns:1fr;
+}
+
+.report-grid{
+    grid-template-columns:1fr;
+}
+
+.sales-filters{
+    grid-template-columns:1fr;
+}
+
     nav{
 
         position:fixed;
@@ -572,6 +608,7 @@ body.sidebar-collapsed .nav-item i{
         </header>
 
         <div class="content-area">
+
             <section id="aba-dash" class="aba-section active">
                 <div style="display:flex; gap:15px; margin-bottom:20px;">
                     <select class="search-input" style="width:150px; padding:10px 15px;"><option>Hoje</option></select>
@@ -601,6 +638,116 @@ body.sidebar-collapsed .nav-item i{
                         </div>
                     </div>
                 </div>
+
+                            <div class="feed-section">
+
+    <div class="feed-header">
+
+        <div class="feed-title">
+            Tendências do Mercado
+        </div>
+
+    </div>
+
+    <div class="feed-grid">
+
+        <div class="feed-card">
+
+            <div class="feed-thumb">
+
+                <div class="feed-badge">
+                    TRÁFEGO
+                </div>
+
+                <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200&auto=format&fit=crop">
+
+            </div>
+
+            <div class="feed-content">
+
+                <div class="feed-card-title">
+                    Como escalar campanhas de afiliados em 2026
+                </div>
+
+                <div class="feed-card-desc">
+                    Descubra as estratégias mais usadas pelos afiliados que estão aumentando ROI e EPC rapidamente.
+                </div>
+
+                <div class="feed-link">
+                    Ler matéria
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="feed-card">
+
+            <div class="feed-thumb">
+
+                <div class="feed-badge">
+                    COPY
+                </div>
+
+                <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=1200&auto=format&fit=crop">
+
+            </div>
+
+            <div class="feed-content">
+
+                <div class="feed-card-title">
+                    7 estruturas de copy que aumentam conversão
+                </div>
+
+                <div class="feed-card-desc">
+                    Modelos modernos utilizados em VSL, páginas de vendas e criativos de alta performance.
+                </div>
+
+                <div class="feed-link">
+                    Ler matéria
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="feed-card">
+
+            <div class="feed-thumb">
+
+                <div class="feed-badge">
+                    MARKETPLACE
+                </div>
+
+                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1200&auto=format&fit=crop">
+
+            </div>
+
+            <div class="feed-content">
+
+                <div class="feed-card-title">
+                    Os nichos mais lucrativos do mercado digital
+                </div>
+
+                <div class="feed-card-desc">
+                    Veja quais produtos estão dominando as vendas e atraindo mais afiliados este mês.
+                </div>
+
+                <div class="feed-link">
+                    Explorar
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+                
             </section>
 
             <section id="aba-prod" class="aba-section">
@@ -2004,6 +2151,8 @@ async function carregarAreasMembros() {
         if (id === 'prod') carregarProdutos();
         if (id === 'market') carregarMarketplaceReal();
         if (id === 'vendas' || id === 'dash' || id === 'finan') carregarDadosDashboard();
+        if(window.innerWidth <= 768){
+    document.body.classList.remove('mobile-nav-open');
     }
 
     async function atualizarRelatoriosRapidos() {
