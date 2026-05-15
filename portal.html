@@ -3330,9 +3330,6 @@ const produto = produtos.find(p => p.id == id);
 
 const modal = document.getElementById('marketplaceModal');
 
-document.getElementById('modalProdutoCapa').src =
-produto.capa_url || '';
-
 modal.style.display = 'flex';
 
 document.getElementById('marketplaceModalBody').innerHTML = `
