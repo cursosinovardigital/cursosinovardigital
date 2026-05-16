@@ -315,7 +315,49 @@
             .market-thumb img { width: 100%; height: 100%; object-fit: cover; }
             .market-info { padding: 15px; }
             .market-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
-            .market-commission { color: var(--green); font-size: 13px; font-weight: 700; }
+            .market-info {
+
+padding:20px;
+
+display:flex;
+flex-direction:column;
+gap:14px;
+
+}
+
+.market-title {
+
+font-size:18px;
+font-weight:800;
+line-height:1.4;
+color:#0F172A;
+
+letter-spacing:-0.5px;
+
+min-height:48px;
+
+}
+
+.market-commission {
+
+color:#16A34A;
+font-size:24px;
+font-weight:900;
+
+letter-spacing:-1px;
+
+}
+
+.market-commission span{
+
+font-size:13px;
+font-weight:700;
+color:#64748B;
+
+display:block;
+margin-bottom:4px;
+
+}
     
             .sales-filters { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 20px; }
             .filter-group { display: flex; flex-direction: column; gap: 5px; }
@@ -1301,6 +1343,108 @@ opacity:.5;
     </div>
                             </div>
                             </div>
+
+                 <div
+style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:18px;
+margin-bottom:28px;
+flex-wrap:wrap;
+"
+>
+
+<div>
+
+<h1
+style="
+font-size:42px;
+font-weight:900;
+letter-spacing:-2px;
+margin:0;
+color:#0F172A;
+"
+>
+Marketplace
+</h1>
+
+<div
+style="
+margin-top:8px;
+font-size:15px;
+color:#64748B;
+font-weight:500;
+"
+>
+Descubra produtos premium para promover e escalar suas comissões
+</div>
+
+</div>
+
+<div
+style="
+position:relative;
+width:380px;
+max-width:100%;
+"
+>
+
+<i
+class="fas fa-search"
+style="
+position:absolute;
+left:18px;
+top:50%;
+transform:translateY(-50%);
+color:#94A3B8;
+font-size:14px;
+"
+></i>
+
+<input
+type="text"
+placeholder="Buscar produtos, categorias..."
+style="
+width:100%;
+height:54px;
+padding:0 20px 0 50px;
+
+border:none;
+outline:none;
+
+border-radius:18px;
+
+background:
+rgba(255,255,255,.88);
+
+backdrop-filter:blur(14px);
+
+border:1px solid rgba(255,255,255,.7);
+
+box-shadow:
+0 10px 30px rgba(15,23,42,.05),
+0 2px 10px rgba(15,23,42,.04);
+
+font-size:14px;
+font-weight:600;
+color:#0F172A;
+
+transition:.25s ease;
+"
+onfocus="
+this.style.transform='translateY(-2px)';
+this.style.boxShadow='0 20px 40px rgba(91,95,247,.12)';
+"
+onblur="
+this.style.transform='translateY(0px)';
+this.style.boxShadow='0 10px 30px rgba(15,23,42,.05),0 2px 10px rgba(15,23,42,.04)';
+"
+/>
+
+</div>
+
+</div>
                         
                                 <div class="feed-section">
     
@@ -1606,7 +1750,53 @@ opacity:.5;
         </span>
     
     </div>
-                            <div class="market-info"><div class="market-title">Curso de Violão do Zero com Víctor</div><div class="market-commission">Até R$ 147,00 de comissão</div></div>
+                            <div class="market-info"><div class="market-title">Curso de Violão do Zero com Víctor</div><div class="market-commission">
+
+<span>
+Comissão de até
+</span>
+
+R$ ${valorComissao}
+
+</div>
+
+<div
+style="
+display:flex;
+gap:8px;
+flex-wrap:wrap;
+"
+>
+
+<div
+style="
+background:#F8FAFC;
+border:1px solid #E2E8F0;
+padding:7px 12px;
+border-radius:999px;
+font-size:11px;
+font-weight:800;
+color:#475569;
+"
+>
+🚀 Alta conversão
+</div>
+
+<div
+style="
+background:#ECFDF5;
+border:1px solid #BBF7D0;
+padding:7px 12px;
+border-radius:999px;
+font-size:11px;
+font-weight:800;
+color:#16A34A;
+"
+>
+💎 ${(p.comissao_afiliado || 0)}% comissão
+</div>
+
+</div></div>
                         </div>
                     </div>
                 </section>
