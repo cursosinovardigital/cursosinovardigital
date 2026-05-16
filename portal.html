@@ -698,78 +698,21 @@ font-weight:900;
     }
     
     .market-grid{
-        grid-template-columns:1fr;
-    }
-    
-    .report-grid{
-        grid-template-columns:1fr;
-    }
-    
-    .sales-filters{
-        grid-template-columns:1fr;
-    }
-    
-    .btn-primary{
-    
-        width:100%;
-    
-        justify-content:center;
-    
-        height:48px;
-    
-        font-size:14px;
-    
-    }
-    
-    .top-right{
-    
-        gap:10px;
-    
-    }
-    
-    .content-area{
-    
-        padding:15px;
-    
-    }
-    
-    .report-card{
-    
-        border-radius:20px;
-    
-    }
-    
-    .feed-title{
-    
-        font-size:20px;
-    
-    }
-    
-        nav{
-    
-            position:fixed;
-    
-            left:-260px;
-    
-            top:70px;
-    
-            height:calc(100vh - 70px);
-    
-            z-index:3000;
-    
-        }
-    
-        body.mobile-nav-open nav{
-            left:0;
-        }
-    
-        main{
-            width:100%;
-        }
-    
-        .content-area{
-            padding:20px;
-        }
+
+display:grid;
+
+grid-template-columns:
+repeat(4,minmax(0,1fr));
+
+gap:24px;
+
+max-width:1180px;
+
+margin:0 auto;
+
+align-items:start;
+
+}
     
         .market-grid{
             grid-template-columns:1fr;
@@ -1772,107 +1715,46 @@ this.style.boxShadow='0 10px 30px rgba(15,23,42,.05),0 2px 10px rgba(15,23,42,.0
                     <div class="table-container"><table><thead><tr><th>ID VENDA</th><th>PRODUTO</th><th>VALOR</th><th>DATA</th><th>STATUS</th></tr></thead><tbody id="sales-list-body"></tbody></table></div>
                 </section>
     
-                <section id="aba-market" class="aba-section">
-                    <h2>Marketplace</h2>
-                    <div class="market-grid" id="market-full-grid">
-                        <div
-    class="market-card glass-card"
-    onclick="abrirProdutoMarketplace(1)"
-    >
-                            <div class="market-thumb"><img src="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?auto=format&fit=crop&w=400&q=80" alt="Violão" onerror="this.onerror=null; this.src='https://via.placeholder.com/400x140?text=Sem+Imagem'"></div>
-                         <div class="market-favorite">
-<i class="far fa-heart"></i>
-</div>
-    <div style="
-        position:absolute;
-        top:12px;
-        left:12px;
-        z-index:5;
-        display:flex;
-        gap:8px;
-        flex-wrap:wrap;
-    ">
-    
-        <span style="
-            background:rgba(255,255,255,.95);
-            backdrop-filter:blur(8px);
-            color:#5D5FEF;
-            font-size:10px;
-            font-weight:900;
-            padding:6px 10px;
-            border-radius:999px;
-            text-transform:uppercase;
-            letter-spacing:.5px;
-            box-shadow:
-    0 10px 20px rgba(0,0,0,.05);
-        ">
-            CURSO
-        </span>
-    
-        <span style="
-            background:rgba(0,0,0,.55);
-            backdrop-filter:blur(8px);
-            color:#FFF;
-            font-size:10px;
-            font-weight:800;
-            padding:6px 10px;
-            border-radius:999px;
-            text-transform:uppercase;
-            letter-spacing:.5px;
-        ">
-            MÚSICA
-        </span>
-    
-    </div>
-                            <div class="market-info"><div class="market-title">Curso de Violão do Zero com Víctor</div><div class="market-commission">
-
-<span>
-Comissão de até
-</span>
-
-R$ 147,00
-</div>
+<section id="aba-market" class="aba-section">
 
 <div
 style="
-display:flex;
-gap:8px;
-flex-wrap:wrap;
+max-width:1180px;
+margin:0 auto 34px auto;
 "
 >
+
+<h1
+style="
+font-size:48px;
+font-weight:300;
+letter-spacing:-2px;
+line-height:1.1;
+margin:0;
+
+color:#0F172A;
+"
+>
+Mercado de Afiliados
+</h1>
 
 <div
 style="
-background:#F8FAFC;
-border:1px solid #E2E8F0;
-padding:7px 12px;
-border-radius:999px;
-font-size:11px;
-font-weight:800;
-color:#475569;
+margin-top:12px;
+font-size:18px;
+color:#64748B;
+font-weight:400;
 "
 >
-🚀 Alta conversão
+Os produtos mais quentes para você promover
 </div>
 
-<div
-style="
-background:#ECFDF5;
-border:1px solid #BBF7D0;
-padding:7px 12px;
-border-radius:999px;
-font-size:11px;
-font-weight:800;
-color:#16A34A;
-"
->
-💎 50% comissão
 </div>
 
-</div></div>
-                        </div>
-                    </div>
-                </section>
+<div class="market-grid" id="market-full-grid">
+</div>
+
+</section>
     
                 <section id="aba-afiliados" class="aba-section">
                     <h2>Meus Afiliados</h2>
