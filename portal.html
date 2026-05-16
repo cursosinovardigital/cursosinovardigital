@@ -3053,7 +3053,7 @@ async function carregarAreasMembros() {
     const { data: assinaturas } = await _supabase
         .from('assinaturas')
         .select('*')
-        .eq('afiliado_id', afiliadoId)
+        .eq('afiliado_id', userData.user.id)
         .eq('status', 'ativa');
 
     const tbody = document.getElementById('member-list-body');
