@@ -253,7 +253,12 @@
             .sub-nav-item { padding: 10px 5px; cursor: pointer; color: #718096; font-weight: 600; border-bottom: 3px solid transparent; }
             .sub-nav-item.active { color: var(--purple-kiwi); border-bottom-color: var(--purple-kiwi); }
     
-            .market-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
+           .market-grid {
+display:grid;
+grid-template-columns:
+repeat(auto-fill,minmax(240px,1fr));
+gap:22px;
+}
             .market-card {
     
         cursor:pointer;
@@ -301,13 +306,13 @@
         opacity: .85;
     }
     
-    .market-thumb img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    
-        transition: transform .4s ease;
-    }
+.market-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+
+    transition: transform .4s ease;
+}
     
     .market-card:hover .market-thumb img {
         transform: scale(1.06);
@@ -327,12 +332,18 @@ gap:18px;
 
 .market-title {
 
-font-size:17px;
-font-weight:700;
+font-size:22px;
+font-weight:800;
 
-line-height:1.5;
+line-height:1.3;
 
-color:#334155;
+color:#0F172A;
+
+letter-spacing:-1px;
+
+min-height:58px;
+
+}
 
 letter-spacing:-0.3px;
 
@@ -342,14 +353,18 @@ min-height:58px;
 
 .market-commission {
 
-font-size:46px;
-font-weight:300;
+font-size:34px;
+font-weight:500;
 
 line-height:1;
 
 color:#FF6B00;
 
-letter-spacing:-3px;
+letter-spacing:-2px;
+
+text-shadow:
+0 0 8px rgba(255,107,0,.35),
+0 0 18px rgba(255,107,0,.18);
 
 }
 
@@ -363,6 +378,61 @@ display:block;
 margin-bottom:10px;
 
 letter-spacing:0;
+
+}
+
+         .market-favorite{
+
+position:absolute;
+
+top:16px;
+right:16px;
+
+width:38px;
+height:38px;
+
+border-radius:50%;
+
+background:
+rgba(255,255,255,.92);
+
+backdrop-filter:blur(10px);
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+cursor:pointer;
+
+z-index:8;
+
+transition:.25s ease;
+
+box-shadow:
+0 8px 20px rgba(0,0,0,.08);
+
+}
+
+.market-favorite:hover{
+
+transform:scale(1.08);
+
+}
+
+.market-favorite i{
+
+color:#64748B;
+font-size:16px;
+
+transition:.25s ease;
+
+}
+
+.market-favorite.active i{
+
+color:#FF4D6D;
+
+font-weight:900;
 
 }
     
@@ -1716,6 +1786,9 @@ this.style.boxShadow='0 10px 30px rgba(15,23,42,.05),0 2px 10px rgba(15,23,42,.0
     onclick="abrirProdutoMarketplace(1)"
     >
                             <div class="market-thumb"><img src="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?auto=format&fit=crop&w=400&q=80" alt="Violão" onerror="this.onerror=null; this.src='https://via.placeholder.com/400x140?text=Sem+Imagem'"></div>
+                         <div class="market-favorite">
+<i class="far fa-heart"></i>
+</div>
     <div style="
         position:absolute;
         top:12px;
@@ -3091,6 +3164,10 @@ return `
                  onerror="this.onerror=null; this.src='https://placehold.co/400x140?text=${encodeURIComponent(p.nome)}'">
         </div>
 
+      <div class="market-favorite">
+<i class="far fa-heart"></i>
+</div>
+
         <div style="
             position:absolute;
             top:12px;
@@ -3600,6 +3677,33 @@ document.getElementById(
 ).style.display = 'none';
 
 }
+
+document.addEventListener('click', function(e){
+
+    const fav = e.target.closest('.market-favorite');
+
+    if(!fav) return;
+
+    e.stopPropagation();
+
+    fav.classList.toggle('active');
+
+    const icon = fav.querySelector('i');
+
+    if(fav.classList.contains('active')){
+
+        icon.classList.remove('far');
+        icon.classList.add('fas');
+
+    }else{
+
+        icon.classList.remove('fas');
+        icon.classList.add('far');
+
+    }
+
+});
+     
 </script>
 
 <div
