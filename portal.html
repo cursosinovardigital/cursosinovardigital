@@ -2189,7 +2189,77 @@ Descubra produtos premium para promover e escalar suas comissões
     
     </td>
                 </tr>`).join('');
-        }
+        
+
+     document.getElementById('market-full-grid').innerHTML =
+data.map(p => `
+
+<div class="market-card">
+
+    <div class="market-favorite"
+         onclick="this.classList.toggle('active')">
+
+        <i class="fa-regular fa-heart"></i>
+
+    </div>
+
+    <div class="market-thumb">
+
+        <img src="${p.capa_url || 'https://placehold.co/600x800'}">
+
+    </div>
+
+    <div class="market-info">
+
+        <div class="market-title">
+            ${p.nome}
+        </div>
+
+        <div class="market-commission">
+
+            <span>
+                Comissão de até
+            </span>
+
+            R$ ${Number(
+                ((p.preco || 0) * (p.comissao_afiliado || 0)) / 100
+            ).toFixed(2).replace('.', ',')}
+
+        </div>
+
+        <div
+        style="
+        font-size:13px;
+        color:#94A3B8;
+        line-height:1.6;
+        margin-top:-8px;
+        "
+        >
+            Esse produto pode gerar até
+            <strong style="color:#FF6B00;">
+                R$ ${Number(p.preco || 0)
+                    .toFixed(2)
+                    .replace('.', ',')}
+            </strong>
+            por venda.
+        </div>
+
+        <button
+        class="btn-primary btn-orange"
+        style="
+        width:100%;
+        margin-top:6px;
+        "
+        onclick="abrirMarketplaceModal('${p.id}')"
+        >
+            Ver detalhes
+        </button>
+
+    </div>
+
+</div>
+
+`).join('');
     document
         .getElementById('edit-prod-capa-file')
         .addEventListener('change', function(e) {
@@ -2278,6 +2348,10 @@ Descubra produtos premium para promover e escalar suas comissões
         });
     
     });
+
+         `).join('');
+
+}
         
         async function salvarProduto() {
             const inputNome = document.getElementById('ipt_nome');
