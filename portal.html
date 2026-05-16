@@ -2020,61 +2020,7 @@ Descubra produtos premium para promover e escalar suas comissões
         }
     );
         let salesChartInstance = null;
-    
-        function inicializarGrafico() {
-    
-        const canvas =
-            document.getElementById('salesChart');
-    
-        if (!canvas) return;
-    
-        const ctx =
-            canvas.getContext('2d');
-    
-        salesChartInstance =
-            new Chart(ctx, {
-    
-                type: 'line',
-    
-                data: {
-    
-                    labels: [],
-    
-                    datasets: [{
-    
-                        label: 'Vendas',
-    
-                        data: [],
-    
-                        borderColor: '#5D5FEF',
-    
-                        backgroundColor: 'rgba(93,95,239,0.15)',
-    
-                        tension: 0.4,
-    
-                        fill: true
-    
-                    }]
-    
-                },
-    
-                options: {
-    
-                    responsive: true,
-    
-                    maintainAspectRatio: false
-    
-                }
-    
-            });
-    
-    }
-    
-        const TAXA_PERCENTUAL = 0.079;
-        const TAXA_FIXA = 1.00;
-    
-        // ✅ AVATAR SVG INLINE - Fallback seguro, sem dependência de URL externa
-        const AVATAR_FALLBACK = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='38' height='38' viewBox='0 0 38 38'%3E%3Ccircle cx='19' cy='19' r='19' fill='%23FF6600'/%3E%3Ctext x='19' y='24' text-anchor='middle' fill='white' font-size='16' font-family='sans-serif'%3EV%3C/text%3E%3C/svg%3E";
+   
     
     function setProfilePhoto(url) {
     
