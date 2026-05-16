@@ -1150,7 +1150,7 @@ opacity:.5;
         <i class="fas fa-tag"></i>
         <span>Produtos</span>
     </div>
-    <div class="nav-item" onclick="nav('membro', this)">
+    <div class="nav-item" onclick="nav('membros', this)">
         <i class="fas fa-play-circle"></i>
         <span>Área de Membros</span>
     </div>
@@ -1488,7 +1488,7 @@ opacity:.5;
                     <div class="table-container"><table><thead><tr><th>NOME</th><th>PREÇO</th><th>STATUS</th><th style="text-align:right">AÇÕES</th></tr></thead><tbody id="product-list-body"></tbody></table></div>
                 </section>
     
-                <section id="aba-membro" class="aba-section">
+                <section id="aba-membros" class="aba-section">
                     <h2>Área de Membros</h2>
                     <div class="sub-nav"><div class="sub-nav-item active" onclick="switchSubTab('Cursos', this)">
         Cursos
@@ -3217,35 +3217,40 @@ async function carregarAreasMembros() {
         }
     }
 
-    function nav(id, el) {
-        document.querySelectorAll('.aba-section').forEach(s => s.classList.remove('active'));
-        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-        document.getElementById('aba-' + id).classList.add('active');
-        el.classList.add('active');
-        document.getElementById('header-path').innerHTML = `<strong>Maestro Console</strong> / ${el.innerText.trim()}`;
+function nav(id, el){
 
-        if (id === 'afiliados') carregarAfiliados();
-        if (id === 'membros') carregarAreasMembros();
-        if (id === 'relat') atualizarRelatoriosRapidos();
-        if (id === 'prod') carregarProdutos();
-        if (id === 'market') carregarMarketplaceReal();
-        if (id === 'vendas' || id === 'dash' || id === 'finan') carregarDadosDashboard();
-        if(window.innerWidth <= 768){ closeMobileSidebar(); } }
+    document.querySelectorAll('.aba-section')
+        .forEach(s => s.classList.remove('active'));
 
-    async function atualizarRelatoriosRapidos() {
-        const { data: vendas, error } = await _supabase.from('vendas').select('*');
-        if (error) return;
+    document.querySelectorAll('.nav-item')
+        .forEach(i => i.classList.remove('active'));
 
-        const receitaTotal = vendas.filter(v => v.status === 'Paga').reduce((sum, v) => sum + (v.valor_total || 0), 0);
-        const pendentes = vendas.filter(v => v.status === 'Pendente').length;
+    const aba = document.getElementById('aba-' + id);
 
-        const campoReceita = document.getElementById('relat-receita-total');
-        const campoPendentes = document.getElementById('relat-vendas-pendentes');
-        if (campoReceita) campoReceita.innerText = `R$ ${receitaTotal.toFixed(2).replace('.', ',')}`;
-        if (campoPendentes) campoPendentes.innerText = `${pendentes} vendas`;
-
-        alert("Relatórios atualizados com dados do banco!");
+    if(aba){
+        aba.classList.add('active');
     }
+
+    if(el){
+        el.classList.add('active');
+    }
+
+    document.getElementById('header-path').innerHTML =
+        `<strong>Maestro Console</strong> / ${el.innerText.trim()}`;
+
+    if(id === 'afiliados') carregarAfiliados();
+    if(id === 'membros') carregarAreasMembros();
+    if(id === 'relat') atualizarRelatoriosRapidos();
+    if(id === 'prod') carregarProdutos();
+    if(id === 'market') carregarMarketplaceReal();
+    if(id === 'vendas' || id === 'dash' || id === 'finan'){
+        carregarDadosDashboard();
+    }
+
+    if(window.innerWidth <= 768){
+        closeMobileSidebar();
+    }
+}
 
     function switchFinTab(tab, el) {
         document.querySelectorAll('.fin-tab-content').forEach(c => c.style.display = 'none');
