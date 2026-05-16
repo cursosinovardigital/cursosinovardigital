@@ -3066,27 +3066,6 @@ function switchSubTab(tab, el) {
         if (!grid) return;
 
         // Card exemplo destaque
-const exemplo = `
-    <div class="market-card glass-card">
-        <div class="market-thumb">
-            <img src="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?auto=format&fit=crop&w=400&q=80"
-                 onerror="this.onerror=null; this.src='https://placehold.co/400x140?text=Sem+Imagem'">
-        </div>
-
-        <div class="market-info">
-
-            <div class="market-title">
-                Curso de Violão do Zero com Víctor
-            </div>
-
-            <div class="market-commission">
-                Até R$ 147,00 de comissão
-            </div>
-
-        </div>
-
-    </div>
-`;
 
         // Produtos reais
         let htmlProdutos = (produtos || []).map(p => {
