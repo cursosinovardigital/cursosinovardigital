@@ -2352,7 +2352,6 @@ data.map(p => `
     
     });
 
-         `).join('');
 
 }
         
@@ -2365,7 +2364,9 @@ data.map(p => `
                 alert("Por favor, preencha o nome e o preço.");
                 return;
             }
-    const fileInput = document;
+            
+    const fileInput =
+    document.getElementById('edit-prod-capa-file');
     let capaUrl = null;
     
     if (fileInput.files.length > 0) {
