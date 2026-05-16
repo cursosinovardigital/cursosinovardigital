@@ -3653,8 +3653,11 @@ font-weight:700;
             <h1
             id="modalProdutoNome"
             style="
-            font-size:40px;    
-            line-height:1.1;
+            font-size:34px;    
+            line-height:1.2;
+             font-weight:800;
+letter-spacing:-1px;
+max-width:520px;
             margin-bottom:20px;
             color:#111827;
             "
@@ -3953,8 +3956,9 @@ color:#475569;
             <button
             id="btnAfiliarProduto"
             style="
-            width:100%;
-            height:56px;
+width:fit-content;
+min-width:260px;
+height:50px;
             border:none;
             border-radius:18px;
             background:linear-gradient(
@@ -3963,11 +3967,23 @@ color:#475569;
                 #22C55E
             );
             color:white;
-            font-size:17px;
+            font-size:15px;
             font-weight:800;
             cursor:pointer;
             margin-bottom:16px;
-            "
+             padding:0 28px;
+box-shadow:
+0 12px 30px rgba(34,197,94,.18);
+transition:.25s ease;
+
+             onmouseover="
+this.style.transform='translateY(-2px)';
+this.style.boxShadow='0 18px 40px rgba(34,197,94,.28)';
+
+onmouseout="
+this.style.transform='translateY(0px)';
+this.style.boxShadow='0 12px 30px rgba(34,197,94,.18)';
+         
             >
 
                 Afiliar-se agora
