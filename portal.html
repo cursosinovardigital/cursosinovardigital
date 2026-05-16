@@ -2260,6 +2260,9 @@ data.map(p => `
 </div>
 
 `).join('');
+
+        }
+     
     document
         .getElementById('edit-prod-capa-file')
         .addEventListener('change', function(e) {
@@ -2362,7 +2365,7 @@ data.map(p => `
                 alert("Por favor, preencha o nome e o preço.");
                 return;
             }
-    const fileInput = document.getElementById('edit-prod-capa-file');
+    const fileInput = document;
     let capaUrl = null;
     
     if (fileInput.files.length > 0) {
@@ -3066,7 +3069,7 @@ return `
 }).join('');
 
         // Render final
-        grid.innerHTML = exemplo + htmlProdutos;
+        grid.innerHTML = htmlProdutos;
 
     } catch (e) {
 
