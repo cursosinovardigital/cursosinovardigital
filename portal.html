@@ -1348,184 +1348,276 @@ opacity:.5;
                         <select class="search-input" style="width:160px; padding:10px 15px;"><option>BRL</option></select>
                     </div>
                  <div style="
-        display:grid;
-        grid-template-columns:repeat(4, 1fr);
-        gap:15px;
-    ">
-                            <div style="
-    background:rgba(255,255,255,.88);
-    backdrop-filter:blur(14px);
-    border:1px solid rgba(255,255,255,.7);
-    border-radius:18px;
-    padding:14px;
-    min-height:100px;
-    box-shadow:
-    0 10px 30px rgba(15,23,42,.05),
-    0 2px 10px rgba(15,23,42,.04);
-    ">
-                                <i class="fas fa-dollar-sign" style="color:#718096; background:#F8F9FA; padding:9px; border-radius:50%; width:38px; height:38px; display:flex; align-items:center; justify-content:center;"></i>
-                                <div><div style="font-size:12px; color:#718096; font-weight:600">Valor líquido</div><div style="font-size:20px; font-weight:800" id="dash-valor-liquido">R$ 0,00</div></div>
-                            </div>
+display:grid;
+grid-template-columns:repeat(4, 1fr);
+gap:12px;
+margin-bottom:14px;
+">
 
 <div style="
-    background:rgba(255,255,255,.88);
-    backdrop-filter:blur(14px);
-    border:1px solid rgba(255,255,255,.7);
-    border-radius:18px;
-    padding:14px;
-    min-height:100px;
-    box-shadow:
-    0 10px 30px rgba(15,23,42,.05),
-    0 2px 10px rgba(15,23,42,.04);
-    ">
-                                <i class="fas fa-shopping-cart" style="color:#718096; background:#F8F9FA; padding:12px; border-radius:50%; width:45px; height:45px; display:flex; align-items:center; justify-content:center;"></i>
-                                <div><div style="font-size:12px; color:#718096; font-weight:600">Vendas</div><div style="font-size:20px; font-weight:800" id="dash-count-vendas">0</div></div>
-                            </div>
+background:rgba(255,255,255,.88);
+backdrop-filter:blur(14px);
+border:1px solid rgba(255,255,255,.7);
+border-radius:16px;
+padding:12px;
+min-height:88px;
+box-shadow:
+0 10px 30px rgba(15,23,42,.05),
+0 2px 10px rgba(15,23,42,.04);
+">
+
+<i class="fas fa-dollar-sign"
+style="
+color:#718096;
+background:#F8F9FA;
+padding:8px;
+border-radius:50%;
+width:34px;
+height:34px;
+display:flex;
+align-items:center;
+justify-content:center;
+"></i>
+
+<div style="margin-top:8px;">
+<div style="font-size:11px; color:#718096; font-weight:600">
+Valor líquido
+</div>
+
+<div style="font-size:16px; font-weight:800"
+id="dash-valor-liquido">
+R$ 0,00
+</div>
+</div>
+</div>
 
 <div style="
-    background:rgba(255,255,255,.88);
-    backdrop-filter:blur(14px);
-    border:1px solid rgba(255,255,255,.7);
-    border-radius:18px;
-    padding:14px;
-    min-height:100px;
-    box-shadow:
-    0 10px 30px rgba(15,23,42,.05),
-    0 2px 10px rgba(15,23,42,.04);
-    ">
-                                <i class="fas fa-barcode" style="color:#718096; background:#F8F9FA; padding:12px; border-radius:50%; width:45px; height:45px; display:flex; align-items:center; justify-content:center;"></i>
-                                <div><div style="font-size:12px; color:#718096; font-weight:600">Boletos gerados</div><div style="font-size:20px; font-weight:800">0</div></div>
-                                </div>
+background:rgba(255,255,255,.88);
+backdrop-filter:blur(14px);
+border:1px solid rgba(255,255,255,.7);
+border-radius:16px;
+padding:12px;
+min-height:88px;
+box-shadow:
+0 10px 30px rgba(15,23,42,.05),
+0 2px 10px rgba(15,23,42,.04);
+">
+
+<i class="fas fa-shopping-cart"
+style="
+color:#718096;
+background:#F8F9FA;
+padding:8px;
+border-radius:50%;
+width:34px;
+height:34px;
+display:flex;
+align-items:center;
+justify-content:center;
+"></i>
+
+<div style="margin-top:8px;">
+<div style="font-size:11px; color:#718096; font-weight:600">
+Vendas
+</div>
+
+<div style="font-size:16px; font-weight:800"
+id="dash-count-vendas">
+0
+</div>
+</div>
+</div>
 
 <div style="
-    background:rgba(255,255,255,.88);
-    backdrop-filter:blur(14px);
-    border:1px solid rgba(255,255,255,.7);
-    border-radius:18px;
-    padding:14px;
-    min-height:100px;
-    box-shadow:
-    0 10px 30px rgba(15,23,42,.05),
-    0 2px 10px rgba(15,23,42,.04);
-    ">
-    
-        <i class="fas fa-chart-pie"
-           style="
-            color:#718096;
-            background:#F8F9FA;
-            padding:12px;
-            border-radius:50%;
-            width:45px;
-            height:45px;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-        "></i>
-    
-        <div>
-    
-            <div style="
-                font-size:12px;
-                color:#718096;
-                font-weight:600;
-            ">
-                Ticket médio
-            </div>
-    
-            <div
-                style="
-                    font-size:20px;
-                    font-weight:800;
-                "
-                id="dash-ticket-medio"
-            >
-                R$ 0,00
-            </div>
-    
-        </div>
-    
-    </div>
-                            </div>
-                    <div class="dashboard-main-grid">
-                        <div style="
-    background:rgba(255,255,255,.88);
-    backdrop-filter:blur(14px);
-    border:1px solid rgba(255,255,255,.7);
-    border-radius:22px;
-    padding:18px;
-    height:320px;
-    position:relative;
-    box-shadow:
-    0 10px 30px rgba(15,23,42,.05),
-    0 2px 10px rgba(15,23,42,.04);
-    ">
-                            <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
-                                <span style="font-weight:700; color:#718096">Vendas nas últimas 24h</span>
-                                <span style="font-size:24px; font-weight:800" id="dash-total-vendas">R$ 0,00</span>
-                            </div>
-                            <div style="height: 320px; width: 100%;"><canvas id="salesChart"></canvas></div>
-                        </div>
-                     <div>
+background:rgba(255,255,255,.88);
+backdrop-filter:blur(14px);
+border:1px solid rgba(255,255,255,.7);
+border-radius:16px;
+padding:12px;
+min-height:88px;
+box-shadow:
+0 10px 30px rgba(15,23,42,.05),
+0 2px 10px rgba(15,23,42,.04);
+">
 
-                     <div style="
+<i class="fas fa-barcode"
+style="
+color:#718096;
+background:#F8F9FA;
+padding:8px;
+border-radius:50%;
+width:34px;
+height:34px;
+display:flex;
+align-items:center;
+justify-content:center;
+"></i>
+
+<div style="margin-top:8px;">
+<div style="font-size:11px; color:#718096; font-weight:600">
+Boletos gerados
+</div>
+
+<div style="font-size:16px; font-weight:800">
+0
+</div>
+</div>
+</div>
+
+<div style="
+background:rgba(255,255,255,.88);
+backdrop-filter:blur(14px);
+border:1px solid rgba(255,255,255,.7);
+border-radius:16px;
+padding:12px;
+min-height:88px;
+box-shadow:
+0 10px 30px rgba(15,23,42,.05),
+0 2px 10px rgba(15,23,42,.04);
+">
+
+<i class="fas fa-chart-pie"
+style="
+color:#718096;
+background:#F8F9FA;
+padding:8px;
+border-radius:50%;
+width:34px;
+height:34px;
+display:flex;
+align-items:center;
+justify-content:center;
+"></i>
+
+<div style="margin-top:8px;">
+<div style="font-size:11px; color:#718096; font-weight:600">
+Ticket médio
+</div>
+
+<div style="font-size:16px; font-weight:800"
+id="dash-ticket-medio">
+R$ 0,00
+</div>
+</div>
+</div>
+
+</div>
+
+<div class="dashboard-main-grid">
+
+<div style="
+background:rgba(255,255,255,.88);
+backdrop-filter:blur(14px);
+border:1px solid rgba(255,255,255,.7);
+border-radius:22px;
+padding:18px;
+height:260px;
+position:relative;
+box-shadow:
+0 10px 30px rgba(15,23,42,.05),
+0 2px 10px rgba(15,23,42,.04);
+">
+
+<div style="
+display:flex;
+justify-content:space-between;
+margin-bottom:10px;
+">
+
+<span style="
+font-weight:700;
+color:#718096;
+font-size:14px;
+">
+Vendas nas últimas 24h
+</span>
+
+<span style="
+font-size:20px;
+font-weight:800;
+"
+id="dash-total-vendas">
+R$ 0,00
+</span>
+
+</div>
+
+<div style="
+height:200px;
+width:100%;
+">
+<canvas id="salesChart"></canvas>
+</div>
+
+</div>
+
+<div>
+
+<div style="
 background:linear-gradient(135deg,#6366F1,#8B5CF6);
-border-radius:28px;
-padding:28px;
+border-radius:22px;
+padding:22px;
 color:white;
-margin-bottom:20px;
+height:260px;
 position:relative;
 overflow:hidden;
 ">
 
-    <div style="
-    font-size:13px;
-    opacity:.8;
-    margin-bottom:8px;
-    ">
-        Minha evolução
-    </div>
+<div style="
+font-size:12px;
+opacity:.8;
+margin-bottom:6px;
+">
+Minha evolução
+</div>
 
-    <div style="
-    font-size:34px;
-    font-weight:900;
-    margin-bottom:8px;
-    ">
-        NÍVEL BRONZE
-    </div>
+<div style="
+font-size:28px;
+font-weight:900;
+line-height:1.1;
+margin-bottom:10px;
+">
+NÍVEL BRONZE
+</div>
 
-    <div style="
-    font-size:14px;
-    opacity:.9;
-    margin-bottom:20px;
-    ">
-        Fature R$ 10 mil para desbloquear o nível prata.
-    </div>
+<div style="
+font-size:13px;
+opacity:.9;
+margin-bottom:18px;
+">
+Fature R$ 10 mil para desbloquear o nível prata.
+</div>
 
-    <div style="
-    width:100%;
-    height:10px;
-    background:rgba(255,255,255,.2);
-    border-radius:999px;
-    overflow:hidden;
-    ">
-        <div style="
-        width:12%;
-        height:100%;
-        background:white;
-        border-radius:999px;
-        "></div>
-    </div>
+<div style="
+width:100%;
+height:8px;
+background:rgba(255,255,255,.2);
+border-radius:999px;
+overflow:hidden;
+">
 
-    <div style="
-    margin-top:14px;
-    font-size:13px;
-    opacity:.9;
-    ">
-        R$ 784 / R$ 10.000
-    </div>
+<div style="
+width:12%;
+height:100%;
+background:white;
+border-radius:999px;
+"></div>
 
 </div>
-                  </div>    
+
+<div style="
+margin-top:12px;
+font-size:12px;
+opacity:.9;
+">
+R$ 784 / R$ 10.000
+</div>
+
+</div>
+
+</div>
+
+</div> 
                     
                                 <div class="feed-section">
     
