@@ -2115,7 +2115,38 @@ Descubra produtos premium para promover e escalar suas comissões
 <section id="aba-ajuda" class="aba-section">
     <h2>Ajuda</h2>
 </section>
-    
+    <div class="modal-overlay" id="modalProduct">
+
+    <div class="modal-content"
+         style="
+            width:1000px;
+            max-width:95%;
+            height:85vh;
+            display:flex;
+            flex-direction:column;
+            padding:0;
+         ">
+
+        <div class="modal-header"
+             style="
+                padding:20px 30px;
+                border-bottom:1px solid var(--border);
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+             ">
+
+            <h3 id="modal-product-title"
+                style="margin:0; font-weight:800;">
+                Editar produto
+            </h3>
+
+            <i class="fas fa-times"
+               onclick="closeProductModal()"
+               style="cursor:pointer; color:#A0AEC0"></i>
+
+        </div>
+     
             <div class="modal-body" style="padding: 30px; flex: 1; overflow-y: auto;">
                 <input type="hidden" id="edit-prod-id">
                 
