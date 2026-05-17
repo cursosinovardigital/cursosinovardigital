@@ -1955,100 +1955,161 @@ Descubra produtos premium para promover e escalar suas comissões
                     <div class="apps-grid" style="margin-top:35px;">
 <div class="app-card glass-card">
 
+    <div class="app-card glass-card">
+
     <div class="app-icon" style="color:#FFE01B;">
         <i class="fab fa-mailchimp"></i>
     </div>
 
-    <div style="
-        font-weight:800;
-        font-size:20px;
-        margin-bottom:8px;
-    ">
-        MailChimp
+    <div style="font-weight:800; font-size:20px; margin-bottom:8px;">
+        Mailchimp
     </div>
 
-    <div style="
-        font-size:13px;
-        color:#718096;
-        line-height:1.6;
-        margin-bottom:18px;
-        text-align:center;
-        padding:0 10px;
-    ">
-        Automatize e-mails, funis e campanhas
-        para seus alunos e afiliados.
+    <div style="font-size:13px; color:#718096; line-height:1.6; margin-bottom:18px; text-align:center; padding:0 10px;">
+        Automatize e-mails, campanhas e funis para seus alunos.
     </div>
 
-    <div style="
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        gap:8px;
-        margin-bottom:18px;
-        font-size:12px;
-        font-weight:700;
-        color:#22C55E;
-    ">
-
-        <div style="
-            width:8px;
-            height:8px;
-            border-radius:50%;
-            background:#22C55E;
-        "></div>
-
+    <div style="display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:18px; font-size:12px; font-weight:700; color:#22C55E;">
+        <div style="width:8px; height:8px; border-radius:50%; background:#22C55E;"></div>
         Integração disponível
-
-    </div>
-
-    <button
-        class="btn-app-config"
-        onclick="abrirConfigApp('mailchimp')"
-    >
-        Conectar
-    </button>
-
-</div>
-                        <div class="app-card"><div class="app-icon" style="color:#22C55E;"><i class="fas fa-link"></i></div><div style="font-weight:800; font-size:18px;">Webhooks</div><button class="btn-app-config">Configurar</button></div>
-                        <div class="app-card"><div class="app-icon" style="color:#FF6600;"><i class="fas fa-bolt"></i></div><div style="font-weight:800; font-size:18px;">Zapier</div><button class="btn-app-config">Conectar</button></div>
-                        <div class="app-card"><div class="app-icon" style="color:#356ae6;"><i class="fas fa-envelope-open-text"></i></div><div style="font-weight:800; font-size:18px;">ActiveCampaign</div><button class="btn-app-config">Configurar</button></div>
-                        <div class="app-card">
-    <div class="app-icon" style="color:#FFE01B;">
-        <i class="fab fa-mailchimp"></i>
-    </div>
-
-    <div style="font-weight:800; font-size:18px;">
-        MailChimp
     </div>
 
     <button class="btn-app-config"
-        onclick="alert('Integração MailChimp em breve: Prepare sua API Key.')">
+        onclick="abrirConfigApp('mailchimp')">
         Conectar
     </button>
+
 </div>
-                    </div>
-                </section>
-    
-                <section id="aba-ajuda" class="aba-section"><h2>Ajuda</h2></section>
-            </div>
-        </main>
+
+<div class="app-card glass-card">
+
+    <div class="app-icon" style="color:#FF6600;">
+        <i class="fas fa-bolt"></i>
     </div>
-    
-    <div class="modal-overlay" id="modalProduct">
-        <div class="modal-content" style="width: 1000px; max-width: 95%; height: 85vh; display: flex; flex-direction: column; padding: 0;">
-            <div class="modal-header" style="padding: 20px 30px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
-                <h3 id="modal-product-title" style="margin:0; font-weight: 800;">Editar produto</h3>
-                <i class="fas fa-times" onclick="closeProductModal()" style="cursor:pointer; color:#A0AEC0"></i>
-            </div>
-            
-            <div style="padding: 20px 30px 0 30px;">
-                <div class="sub-nav" id="productModalNav">
-                    <div class="sub-nav-item active" onclick="switchProductTab('info', this)">Geral</div>
-                    <div class="sub-nav-item" onclick="switchProductTab('links', this)">Links</div>
-                    <div class="sub-nav-item" onclick="switchProductTab('config', this)">Configurações</div>
-                    <div class="sub-nav-item" onclick="switchProductTab('checkout', this)">Checkout</div>
-                    <div class="sub-nav-item" onclick="switchProductTab('afiliados', this)">Afiliados</div>
-                </div>
+
+    <div style="font-weight:800; font-size:20px; margin-bottom:8px;">
+        Zapier
+    </div>
+
+    <div style="font-size:13px; color:#718096; line-height:1.6; margin-bottom:18px; text-align:center; padding:0 10px;">
+        Automatize processos conectando milhares de aplicativos.
+    </div>
+
+    <div style="display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:18px; font-size:12px; font-weight:700; color:#22C55E;">
+        <div style="width:8px; height:8px; border-radius:50%; background:#22C55E;"></div>
+        Integração disponível
+    </div>
+
+    <button class="btn-app-config"
+        onclick="abrirConfigApp('zapier')">
+        Conectar
+    </button>
+
+</div>
+
+<div class="app-card glass-card">
+
+    <div class="app-icon" style="color:#22C55E;">
+        <i class="fas fa-link"></i>
+    </div>
+
+    <div style="font-weight:800; font-size:20px; margin-bottom:8px;">
+        Webhooks
+    </div>
+
+    <div style="font-size:13px; color:#718096; line-height:1.6; margin-bottom:18px; text-align:center; padding:0 10px;">
+        Receba eventos da plataforma em tempo real.
+    </div>
+
+    <div style="display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:18px; font-size:12px; font-weight:700; color:#22C55E;">
+        <div style="width:8px; height:8px; border-radius:50%; background:#22C55E;"></div>
+        Integração disponível
+    </div>
+
+    <button class="btn-app-config"
+        onclick="abrirConfigApp('webhooks')">
+        Configurar
+    </button>
+
+</div>
+
+<div class="app-card glass-card">
+
+    <div class="app-icon" style="color:#10A37F;">
+        <i class="fas fa-robot"></i>
+    </div>
+
+    <div style="font-weight:800; font-size:20px; margin-bottom:8px;">
+        OpenAI
+    </div>
+
+    <div style="font-size:13px; color:#718096; line-height:1.6; margin-bottom:18px; text-align:center; padding:0 10px;">
+        Use IA para automações, conteúdos e respostas inteligentes.
+    </div>
+
+    <div style="display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:18px; font-size:12px; font-weight:700; color:#22C55E;">
+        <div style="width:8px; height:8px; border-radius:50%; background:#22C55E;"></div>
+        Integração disponível
+    </div>
+
+    <button class="btn-app-config"
+        onclick="abrirConfigApp('openai')">
+        Conectar
+    </button>
+
+</div>
+
+<div class="app-card glass-card">
+
+    <div class="app-icon" style="color:#1877F2;">
+        <i class="fab fa-facebook"></i>
+    </div>
+
+    <div style="font-weight:800; font-size:20px; margin-bottom:8px;">
+        Meta Pixel
+    </div>
+
+    <div style="font-size:13px; color:#718096; line-height:1.6; margin-bottom:18px; text-align:center; padding:0 10px;">
+        Monitore conversões e campanhas do Facebook Ads.
+    </div>
+
+    <div style="display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:18px; font-size:12px; font-weight:700; color:#22C55E;">
+        <div style="width:8px; height:8px; border-radius:50%; background:#22C55E;"></div>
+        Integração disponível
+    </div>
+
+    <button class="btn-app-config"
+        onclick="abrirConfigApp('meta_pixel')">
+        Configurar
+    </button>
+
+</div>
+
+<div class="app-card glass-card">
+
+    <div class="app-icon" style="color:#4285F4;">
+        <i class="fab fa-google"></i>
+    </div>
+
+    <div style="font-weight:800; font-size:20px; margin-bottom:8px;">
+        Google Analytics
+    </div>
+
+    <div style="font-size:13px; color:#718096; line-height:1.6; margin-bottom:18px; text-align:center; padding:0 10px;">
+        Analise visitas, vendas e comportamento dos usuários.
+    </div>
+
+    <div style="display:flex; align-items:center; justify-content:center; gap:8px; margin-bottom:18px; font-size:12px; font-weight:700; color:#22C55E;">
+        <div style="width:8px; height:8px; border-radius:50%; background:#22C55E;"></div>
+        Integração disponível
+    </div>
+
+    <button class="btn-app-config"
+        onclick="abrirConfigApp('google_analytics')">
+        Configurar
+    </button>
+
+</div>
             </div>
     
             <div class="modal-body" style="padding: 30px; flex: 1; overflow-y: auto;">
