@@ -355,36 +355,41 @@ min-height:58px;
 
 }
 
-.market-commission {
-
-font-size:34px;
-font-weight:500;
-
-line-height:1;
-
-color:#FF6B00;
-
-letter-spacing:-2px;
-
-text-shadow:
-0 0 6px rgba(255,106,0,.55),
-0 0 12px rgba(255,106,0,.45),
-0 0 24px rgba(255,106,0,.35),
-0 0 42px rgba(255,106,0,.22);
-
+.market-commission{
+    margin-top:18px;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
 }
 
-.market-commission span{
+.commission-label{
+    font-size:15px;
+    color:#7B8190;
+    font-weight:500;
+}
 
-font-size:13px;
-font-weight:700;
-color:#94A3B8;
+.commission-value{
+    font-size:52px;
+    font-weight:800;
+    line-height:1;
+    color:#FF6600;
 
-display:block;
-margin-bottom:10px;
+    text-shadow:
+        0 0 6px rgba(255,106,0,.55),
+        0 0 12px rgba(255,106,0,.45),
+        0 0 24px rgba(255,106,0,.35),
+        0 0 42px rgba(255,106,0,.22);
+}
 
-letter-spacing:0;
+.commission-max{
+    font-size:14px;
+    color:#8C92A4;
+    line-height:1.5;
+}
 
+.commission-max strong{
+    color:#5B6172;
+    font-weight:700;
 }
 
          .market-favorite{
@@ -3610,9 +3615,27 @@ return `
                 ${p.nome}
             </div>
 
-            <div class="market-commission">
-                Até R$ ${valorComissao} de comissão
-            </div>
+<div class="market-commission">
+
+    <span class="commission-label">
+        Comissão de até
+    </span>
+
+    <div class="commission-value">
+        R$ ${valorComissao}
+    </div>
+
+    <div class="commission-max">
+        Preço máximo do produto:
+        <strong>
+            ${Number(p.preco || 0).toLocaleString('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            })}
+        </strong>
+    </div>
+
+</div>
 
         </div>
 
