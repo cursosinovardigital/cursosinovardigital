@@ -2742,34 +2742,61 @@ data.map(p => `
             ${p.nome}
         </div>
 
-        <div class="market-commission">
+<div
+style="
+display:flex;
+flex-direction:column;
+margin-top:8px;
+margin-bottom:8px;
+"
+>
 
-            <span>
-                Comissão de até
-            </span>
+    <div
+    style="
+    font-size:13px;
+    color:#94A3B8;
+    font-weight:600;
+    margin-bottom:4px;
+    "
+    >
+        Comissão de até
+    </div>
 
-            R$ ${Number(
-                ((p.preco || 0) * (p.comissao_afiliado || 0)) / 100
-            ).toFixed(2).replace('.', ',')}
+    <div
+    style="
+    font-size:52px;
+    font-weight:900;
+    line-height:1;
+    color:#FF6B00;
+    text-shadow:
+        0 0 8px rgba(255,107,0,.35),
+        0 0 18px rgba(255,107,0,.25);
+    letter-spacing:-2px;
+    "
+    >
+        R$ ${Number(
+            ((p.preco || 0) * (p.comissao_afiliado || 0)) / 100
+        ).toFixed(2).replace('.', ',')}
+    </div>
 
-        </div>
+    <div
+    style="
+    font-size:12px;
+    color:#94A3B8;
+    line-height:1.5;
+    margin-top:8px;
+    font-weight:500;
+    "
+    >
+        Valor máximo do produto:
+        <strong style="color:#64748B;">
+            R$ ${Number(p.preco || 0)
+                .toFixed(2)
+                .replace('.', ',')}
+        </strong>
+    </div>
 
-        <div
-        style="
-        font-size:13px;
-        color:#94A3B8;
-        line-height:1.6;
-        margin-top:-8px;
-        "
-        >
-            Esse produto pode gerar até
-            <strong style="color:#FF6B00;">
-                R$ ${Number(p.preco || 0)
-                    .toFixed(2)
-                    .replace('.', ',')}
-            </strong>
-            por venda.
-        </div>
+</div>
 
         <button
         class="btn-primary btn-orange"
